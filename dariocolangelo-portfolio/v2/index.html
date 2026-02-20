@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Darío Colángelo — E-Commerce Analyst</title>
+  <!-- 1) Variables y reset  2) Componentes globales  3) Estilos de esta página -->
+  <link rel="stylesheet" href="css/root.css" />
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo"><span>DC</span> · Portfolio</a>
+  <ul class="nav-links">
+    <li><a href="#sobre-mi" class="active">CV</a></li>
+    <li><a href="#experiencia">Experiencia</a></li>
+    <li><a href="#educacion">Educación</a></li>
+    <li><a href="lab.html" class="nav-lab-link">⚗ Lab</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+    <li><a href="http://localhost:3000/" target="_blank" class="nav-lab-link">📊 ML Dashboard</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#sobre-mi"    onclick="closeMobileMenu()">CV</a>
+  <a href="#experiencia" onclick="closeMobileMenu()">Experiencia</a>
+  <a href="#educacion"   onclick="closeMobileMenu()">Educación</a>
+  <a href="lab.html"     onclick="closeMobileMenu()">⚗ Lab</a>
+  <a href="#contacto"    onclick="closeMobileMenu()">Contacto</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-left">
+    <div class="hero-tag">Analista E-Commerce · Marketplace · MercadoLibre</div>
+    <h1 class="hero-name">Darío<br><span class="line2">Colángelo</span></h1>
+    <p class="hero-subtitle">Especialista en performance de Mercado Libre con foco en conversión, rentabilidad y crecimiento sostenido de marcas en el ecosistema digital.</p>
+    <div class="hero-cta">
+      <a href="#experiencia" class="btn-primary">Ver Experiencia</a>
+      <a href="https://www.linkedin.com/in/dariocolangelo/" target="_blank" class="btn-secondary">LinkedIn ↗</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="photo-container">
+      <img class="hero-photo" src="assets/foto.png" alt="Darío Colángelo" />
+      <div class="photo-badge">E-Commerce Manager - Mercado Libre</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR — grid 5 col desktop / 2 col mobile / 1 col xs -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-number">+3</div><div class="stat-label">Años de exp.</div></div>
+  <div class="stat"><div class="stat-number">+20</div><div class="stat-label">Cuentas gestionadas</div></div>
+  <div class="stat"><div class="stat-number">39.2%</div><div class="stat-label">↑ Facturación</div></div>
+  <div class="stat"><div class="stat-number">13%</div><div class="stat-label">ACOS final</div></div>
+  <div class="stat"><div class="stat-number">+1800</div><div class="stat-label">Publicaciones</div></div>
+</div>
+
+<!-- SOBRE MI -->
+<section id="sobre-mi">
+  <div class="section-label">01 — Perfil Profesional</div>
+  <h2 class="section-title">Quién soy</h2>
+  <div class="sobre-grid">
+    <div class="sobre-text reveal">
+      <p>Analista de E-Commerce y Marketplace especializado en Mercado Libre, con más de 3 años de experiencia en gestión operativa, catálogo, performance, pauta publicitaria, reputación y optimización de experiencia de usuario.</p>
+      <p>Perfil analítico y operativo con impacto directo en rentabilidad (ACOS), visibilidad y conversión. He trabajado con marcas premium, consultoras externas y plataformas como Mercado Libre y Tienda Nube.</p>
+      <p>Mi mayor fortaleza es el aprendizaje constante: crecer día a día y aplicar lo aprendido para mejorar procesos, performance y resultados comerciales.</p>
+    </div>
+    <div class="reveal">
+      <div class="skills-group-title">// Herramientas actuales</div>
+      <div>
+        <span class="skill-tag">Mercado Libre</span><span class="skill-tag">Tienda Nube</span><span class="skill-tag">Nubimetrics</span><span class="skill-tag">Real Trends</span><span class="skill-tag">UpSeller</span><span class="skill-tag">Administrado</span><span class="skill-tag">Tango</span><span class="skill-tag">AnswerThePublic</span><span class="skill-tag">Excel</span><span class="skill-tag">ChatGPT</span><span class="skill-tag">WordPress</span><span class="skill-tag">HTML/CSS/React</span>
+      </div>
+      <div class="skills-group-title" style="margin-top:2rem;">// Próximas herramientas</div>
+      <div>
+        <span class="skill-tag learning">Producteca</span><span class="skill-tag learning">VTEX</span><span class="skill-tag learning">SalesForce</span><span class="skill-tag learning">Odoo</span><span class="skill-tag learning">Sellerfy</span><span class="skill-tag learning">Amazon AWS</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCIA -->
+<section id="experiencia">
+  <div class="section-label">02 — Trayectoria</div>
+  <h2 class="section-title">Experiencia</h2>
+  <div class="exp-list">
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">Jun 2025 — Dic 2025</div>
+        <div class="exp-company">Vení A La Cocina</div>
+        <div class="exp-role">// Analista ML / E-Commerce</div>
+      </div>
+      <div class="exp-body">
+        <p class="exp-desc">Gestión operativa de cuatro Tiendas Oficiales (Borner, Lurch, Vacu Vin y Vení A La Cocina). Optimización completa de catálogo, campañas y Product Ads.</p>
+        <ul class="exp-bullets">
+          <li>Catalogación, optimización SEO y mejora continua de publicaciones.</li>
+          <li>Gestión y ejecución de ofertas del día y promociones mensuales.</li>
+          <li>Administración y optimización de campañas de Product Ads con responsabilidad sobre ACOS global.</li>
+          <li>Diseño visual y UX de fichas de producto orientadas a conversión.</li>
+          <li>Diseño de "Mi Página" en ML para Tiendas Oficiales y Tienda Nube para Borner.</li>
+          <li>Gestión de mensajes automatizados de postventa para incentivar reseñas.</li>
+        </ul>
+        <div class="exp-results">
+          <span class="result-pill highlight">+39.2% en facturación</span>
+          <span class="result-pill highlight">+32.6% en unidades vendidas</span>
+          <span class="result-pill highlight">ACOS 30% → 13%</span>
+          <span class="result-pill">+800 publicaciones creadas</span>
+          <span class="result-pill">+1000 publicaciones optimizadas</span>
+        </div>
+        <p class="tools-line"><span class="label">stack:</span> Mercado Libre · Tango · Administrado · UpSeller · Excel · ChatGPT · Tienda Nube</p>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">Ene 2025 — Jun 2025</div>
+        <div class="exp-company">DemasLed</div>
+        <div class="exp-role">// Analista de E-Commerce</div>
+      </div>
+      <div class="exp-body">
+        <p class="exp-desc">Catalogación de productos importados, campañas masivas y análisis de competencia con automatización de datos.</p>
+        <ul class="exp-bullets">
+          <li>Análisis técnico, redacción de títulos, descripciones y atributos clave.</li>
+          <li>Planificación e implementación de campañas masivas y promociones.</li>
+          <li>Extracción automatizada de datos de mercado y alertas de variaciones de precios.</li>
+        </ul>
+        <div class="exp-results">
+          <span class="result-pill">+200 publicaciones creadas</span>
+          <span class="result-pill">SEO con Nubimetrics</span>
+          <span class="result-pill">Automatización App Script</span>
+        </div>
+        <p class="tools-line"><span class="label">stack:</span> Nubimetrics · Real Trends · AnswerThePublic · App Script · ChatGPT · CRM</p>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">Mar 2023 — Ene 2024</div>
+        <div class="exp-company">Adamas Agencia</div>
+        <div class="exp-role">// Consultor ML · E-Commerce Manager</div>
+      </div>
+      <div class="exp-body">
+        <p class="exp-desc">Consultoría estratégica para más de 10 empresas simultáneas, optimizando catálogo, campañas, pricing y tiendas web.</p>
+        <ul class="exp-bullets">
+          <li>Desarrollo y optimización de tiendas en WordPress y Tienda Nube.</li>
+          <li>Optimización de catálogos orientados a conversión en múltiples verticales.</li>
+          <li>Administración y ajustes de campañas Product Ads con análisis de rentabilidad.</li>
+        </ul>
+        <div class="exp-results">
+          <span class="result-pill">+10 cuentas simultáneas</span>
+          <span class="result-pill">Multi-vertical</span>
+        </div>
+        <p class="tools-line"><span class="label">stack:</span> Mercado Libre · Nubimetrics · Real Trends · Excel · Tienda Nube · WordPress · Google Analytics</p>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">Oct 2018 — Feb 2021</div>
+        <div class="exp-company">Min. Educación</div>
+        <div class="exp-role">// Asistente Jornada Extendida</div>
+      </div>
+      <div class="exp-body">
+        <p class="exp-desc">Organización de actividades escolares, acompañamiento de alumnos y desarrollo de habilidades de comunicación y liderazgo.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- LAB PROMO -->
+<section id="lab-promo">
+  <div class="section-label">03 — Recursos y Estrategias</div>
+  <h2 class="section-title">El Laboratorio</h2>
+  <div class="lab-promo-inner">
+    <p class="lab-promo-desc reveal">Un espacio donde documento todo lo que aprendo y aplico en el ecosistema de Mercado Libre: estrategias probadas, frameworks de conversión, herramientas automatizadas y mucho más.</p>
+    <div class="lab-cards-preview reveal">
+      <div class="lab-preview-card"><div class="lab-preview-icon">📸</div><div class="lab-preview-title">Anatomía de Publicación</div><div class="lab-preview-sub">Las 4 capas + secuencia de 7 fotos</div></div>
+      <div class="lab-preview-card"><div class="lab-preview-icon">📈</div><div class="lab-preview-title">ACOS & Product Ads</div><div class="lab-preview-sub">Rentabilidad y campañas</div></div>
+      <div class="lab-preview-card"><div class="lab-preview-icon">🔍</div><div class="lab-preview-title">SEO de Títulos</div><div class="lab-preview-sub">Visibilidad orgánica en ML</div></div>
+      <div class="lab-preview-card"><div class="lab-preview-icon">📑</div><div class="lab-preview-title">Excels Automatizados</div><div class="lab-preview-sub">Herramientas para analistas</div></div>
+      <div class="lab-preview-card"><div class="lab-preview-icon">🎨</div><div class="lab-preview-title">Imágenes con IA</div><div class="lab-preview-sub">Generación de contenido visual</div></div>
+      <div class="lab-preview-card"><div class="lab-preview-icon">💰</div><div class="lab-preview-title">Pricing & Competencia</div><div class="lab-preview-sub">Estrategia de precios</div></div>
+      <div class="lab-preview-card fr3"><div class="lab-preview-icon">📊</div><div class="lab-preview-title">ML DASHBOARD</div><div class="lab-preview-sub">Seguimiento y optimización</div></div>
+    </div>
+    <a href="lab.html" class="btn-primary">Entrar al Lab ⚗</a>
+  </div>
+</section>
+
+<!-- EDUCACIÓN -->
+<section id="educacion">
+  <div class="section-label">04 — Formación</div>
+  <h2 class="section-title">Educación</h2>
+  <div class="edu-grid reveal">
+    <div class="edu-card"><div class="edu-institution">UTN E-Learning</div><div class="edu-title">Experto Univ. en Comercio Exterior</div><div class="edu-detail">Clasificación Arancelaria · Valoración Aduanera · Operativa del Comercio Exterior</div><div class="edu-status">En Curso</div></div>
+    <div class="edu-card"><div class="edu-institution">UTN E-Learning</div><div class="edu-title">Desarrollador Web Full-Stack</div><div class="edu-detail">HTML · CSS · JavaScript · React · Node.js · MySQL · MongoDB</div></div>
+    <div class="edu-card"><div class="edu-institution">Smartbeemo</div><div class="edu-title">Diplomado en E-Commerce ML</div><div class="edu-detail">Gestión de ventas · Product Ads · Brand Building · ACOS · Conversión · Integradores</div></div>
+    <div class="edu-card"><div class="edu-institution">ICB</div><div class="edu-title">Inversiones — 186 hs.</div><div class="edu-detail">Asesor Global · Mercado de Valores · Matemática Financiera</div></div>
+    <div class="edu-card"><div class="edu-institution">Coder House</div><div class="edu-title">Marketing Digital</div><div class="edu-detail">Community Manager · Publicidad Digital</div></div>
+    <div class="edu-card"><div class="edu-institution">Dr. D. Vélez Sarsfield</div><div class="edu-title">Bachillerato</div><div class="edu-detail">Orientación en Deporte y Recreación</div></div>
+  </div>
+</section>
+
+<!-- CERTIFICADOS -->
+<section id="certificados">
+  <div class="section-label">05 — Acreditaciones</div>
+  <h2 class="section-title">Certificados</h2>
+  <div class="cert-list reveal">
+    <div class="cert-item"><div class="cert-name">Diplomado E-Commerce — Mercado Libre (Smartbeemo)</div><a href="https://miportal.smartbeemo.com/certificado/6732ebab232d7905d4c24f6d" target="_blank" class="cert-link">Verificar →</a></div>
+    <div class="cert-item"><div class="cert-name">Diplomado E-Commerce — Tienda Nube (Smartbeemo)</div><a href="https://miportal.smartbeemo.com/certificado/673fb27a88fbfc7099a0840c" target="_blank" class="cert-link">Verificar →</a></div>
+    <div class="cert-item"><div class="cert-name">Real Trends — Certificación (Smartbeemo)</div><a href="https://miportal.smartbeemo.com/certificado/674141eac59c9835911a492f" target="_blank" class="cert-link">Verificar →</a></div>
+    <div class="cert-item"><div class="cert-name">Nubimetrics — Certificación (Smartbeemo)</div><a href="https://miportal.smartbeemo.com/certificado/6740d37fd12c6311d88a4fe1" target="_blank" class="cert-link">Verificar →</a></div>
+    <div class="cert-item"><div class="cert-name">Amazon Creative: Imágenes Ganadoras (Smartbeemo)</div><a href="https://miportal.smartbeemo.com/certificado/67332faf7f13286b8c3a6d9c" target="_blank" class="cert-link">Verificar →</a></div>
+    <div class="cert-item"><div class="cert-name">Desarrollador Web Full-Stack — UTN E-Learning</div><a href="https://validator.centrodeelearning.com/validator/83f1a29e-46e8-40ec-8a39-cf48b074748b" target="_blank" class="cert-link">Verificar →</a></div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="section-label" style="justify-content:center;">06 — Hablemos</div>
+  <h2 class="section-title">Contacto</h2>
+  <p class="contact-sub">¿Tenés una propuesta o querés trabajar juntos? Escribime.</p>
+  <div class="contact-links reveal">
+    <a href="mailto:daricolangelo@gmail.com" class="contact-link">✉ daricolangelo@gmail.com</a>
+    <a href="https://www.linkedin.com/in/dariocolangelo/" target="_blank" class="contact-link">in LinkedIn</a>
+    <a href="tel:+541144474507" class="contact-link">☎ (+54) 11-4447-4507</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-name">Darío Colángelo</div>
+  <div class="footer-note">La Paternal, CABA · Argentina · 2025</div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

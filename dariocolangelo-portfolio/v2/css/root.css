@@ -1,0 +1,48 @@
+/* ============================================================
+   ROOT.CSS — Variables globales, reset y tipografía base
+   Cargar PRIMERO en todos los HTML
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg:     #060810;
+  --bg2:    #0b0f1a;
+  --bg3:    #0f1520;
+  --white:  #e8edf5;
+  --muted:  #6b7a99;
+  --border: rgba(99, 132, 255, 0.15);
+  --blue:   #4f7dff;
+  --cyan:   #00d4ff;
+  --cyan2:  #00ffcc;
+  --accent: #6366f1;
+  --red:    #ff6b6b;
+
+  --grad-brand:  linear-gradient(90deg, var(--blue), var(--cyan));
+  --grad-button: linear-gradient(135deg, var(--blue), var(--accent));
+  --shadow-btn:       0 4px 20px rgba(79,125,255,0.30);
+  --shadow-btn-hover: 0 8px 30px rgba(79,125,255,0.50);
+
+  --font-sans:    'Space Grotesk', sans-serif;
+  --font-display: 'Syne', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,212,255,.012) 2px, rgba(0,212,255,.012) 4px);
+  pointer-events: none;
+  z-index: 9998;
+}

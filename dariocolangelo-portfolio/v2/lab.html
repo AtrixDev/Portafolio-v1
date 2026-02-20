@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>El Laboratorio — Darío Colángelo</title>
+  <link rel="stylesheet" href="css/root.css" />
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/lab.css" />
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo"><span>DC</span> · Portfolio</a>
+  <ul class="nav-links">
+    <li><a href="index.html">CV</a></li>
+    <li><a href="lab.html" class="nav-lab-link active">⚗ Lab</a></li>
+    <li><a href="index.html#contacto">Contacto</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">CV</a>
+  <a href="lab.html"   onclick="closeMobileMenu()">⚗ Lab</a>
+  <a href="index.html#contacto" onclick="closeMobileMenu()">Contacto</a>
+</div>
+<div class="lab-hero">
+  <div class="lab-hero-bg"></div>
+  <div class="lab-hero-grid"></div>
+  <div class="lab-hero-content">
+    <div class="lab-hero-tag">Knowledge Base · E-Commerce · Mercado Libre</div>
+    <h1 class="lab-hero-title">El <span class="grad">Laboratorio</span></h1>
+    <p class="lab-hero-sub">Estrategias probadas, frameworks de conversión, herramientas automatizadas y recursos que aplico día a día en el ecosistema de Mercado Libre.</p>
+  </div>
+</div>
+
+<div class="lab-grid-section">
+  <div class="section-label" style="margin-bottom:2rem;">// Módulos disponibles</div>
+  <div class="lab-grid">
+    <a href="anatomia.html" class="lab-card featured reveal">
+      <div>
+        <div class="lab-card-badge">✓ Completo</div>
+        <div class="lab-card-icon">📸</div>
+        <h2 class="lab-card-title">Anatomía de una Publicación Exitosa</h2>
+        <p class="lab-card-desc">El framework completo: 4 capas de conversión, secuencia de 7 fotos, estructura de descripción y estrategias avanzadas de contenido.</p>
+        <div class="lab-card-tags"><span class="lab-card-tag">Conversión</span><span class="lab-card-tag">Fotos</span><span class="lab-card-tag">UX</span><span class="lab-card-tag">CTR</span></div>
+      </div>
+      <div style="text-align:center;font-size:6rem;opacity:.12;">📸</div>
+      <div class="lab-card-arrow">Leer →</div>
+    </a>
+    <a href="acos.html" class="lab-card reveal"><div class="lab-card-badge">✓ Completo</div><div class="lab-card-icon">📊</div><h2 class="lab-card-title">ACOS & Product Ads</h2><p class="lab-card-desc">Cómo bajar el ACOS sin matar la visibilidad. Estrategias de bidding, estructura de campañas y análisis de rentabilidad.</p><div class="lab-card-tags"><span class="lab-card-tag">ACOS</span><span class="lab-card-tag">Product Ads</span><span class="lab-card-tag">Rentabilidad</span></div><div class="lab-card-arrow">Leer →</div></a>
+    <a href="seo.html" class="lab-card reveal"><div class="lab-card-badge">✓ Completo</div><div class="lab-card-icon">🔍</div><h2 class="lab-card-title">SEO de Títulos en ML</h2><p class="lab-card-desc">Cómo construir títulos que rankean y convierten. Estructura, palabras clave y herramientas.</p><div class="lab-card-tags"><span class="lab-card-tag">SEO</span><span class="lab-card-tag">Títulos</span><span class="lab-card-tag">Nubimetrics</span></div><div class="lab-card-arrow">Leer →</div></a>
+    <a href="pricing.html" class="lab-card reveal"><div class="lab-card-badge">✓ Completo</div><div class="lab-card-icon">💰</div><h2 class="lab-card-title">Pricing & Competencia</h2><p class="lab-card-desc">Estrategia de precios inteligente: monitorear competidores, detectar oportunidades y proteger margen.</p><div class="lab-card-tags"><span class="lab-card-tag">Pricing</span><span class="lab-card-tag">Competencia</span><span class="lab-card-tag">Margen</span></div><div class="lab-card-arrow">Leer →</div></a>
+    <a href="reputacion.html" class="lab-card reveal"><div class="lab-card-badge">✓ Completo</div><div class="lab-card-icon">⭐</div><h2 class="lab-card-title">Reputación & Postventa</h2><p class="lab-card-desc">Construir y proteger la reputación en ML. Mensajes automatizados, reclamos y reseñas con foto.</p><div class="lab-card-tags"><span class="lab-card-tag">Reputación</span><span class="lab-card-tag">Reseñas</span><span class="lab-card-tag">Postventa</span></div><div class="lab-card-arrow">Leer →</div></a>
+    <a href="metricas.html" class="lab-card reveal"><div class="lab-card-badge">✓ Completo</div><div class="lab-card-icon">📈</div><h2 class="lab-card-title">Dashboard de Métricas</h2><p class="lab-card-desc">Los KPIs que todo analista debe dominar. CTR, conversión, ACOS y cómo interpretarlos.</p><div class="lab-card-tags"><span class="lab-card-tag">KPIs</span><span class="lab-card-tag">Métricas</span><span class="lab-card-tag">Análisis</span></div><div class="lab-card-arrow">Leer →</div></a>
+    <a href="excels.html" class="lab-card reveal"><div class="lab-card-badge">✓ Completo</div><div class="lab-card-icon">📑</div><h2 class="lab-card-title">Excels Automatizados</h2><p class="lab-card-desc">Plantillas para analistas: seguimiento de ACOS, competencia, inventario y control de publicaciones.</p><div class="lab-card-tags"><span class="lab-card-tag">Excel</span><span class="lab-card-tag">App Script</span><span class="lab-card-tag">Automatización</span></div><div class="lab-card-arrow">Leer →</div></a>
+    <a href="imagenes.html" class="lab-card reveal"><div class="lab-card-badge">✓ Completo</div><div class="lab-card-icon">🎨</div><h2 class="lab-card-title">Imágenes con IA</h2><p class="lab-card-desc">Cómo usar IA generativa para crear contenido visual: fondos, infografías y mockups.</p><div class="lab-card-tags"><span class="lab-card-tag">IA</span><span class="lab-card-tag">Imágenes</span><span class="lab-card-tag">Canva</span></div><div class="lab-card-arrow">Leer →</div></a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-name">Darío Colángelo</div>
+  <div class="footer-note">La Paternal, CABA · Argentina · 2025</div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>

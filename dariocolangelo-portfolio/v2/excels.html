@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excels Automatizados — Darío Colángelo</title>
+  <link rel="stylesheet" href="css/root.css" />
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/page.css" />
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo"><span>DC</span> · Portfolio</a>
+  <ul class="nav-links">
+    <li><a href="index.html">CV</a></li>
+    <li><a href="lab.html" class="nav-lab-link active">⚗ Lab</a></li>
+    <li><a href="index.html#contacto">Contacto</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">CV</a>
+  <a href="lab.html"   onclick="closeMobileMenu()">⚗ Lab</a>
+  <a href="index.html#contacto" onclick="closeMobileMenu()">Contacto</a>
+</div>
+<div class="ph">
+  <div class="ph-bg"></div>
+  <div class="ph-grid"></div>
+  <div class="ph-c">
+    <a href="lab.html" class="btn-back">← Volver al Lab</a>
+    <div class="ph-tag">📑 Excel · App Script · Automatización</div>
+    <h1 class="ph-title">Excels<br><span class='grad'>Automatizados</span></h1>
+    <p class="ph-sub">Herramientas y plantillas para analistas de E-Commerce: seguimiento de ACOS, monitoreo de competencia y control operativo completo.</p>
+  </div>
+</div>
+
+<div class="cs reveal">
+  <div class="section-label">01 — Por qué automatizar</div>
+  <div class="ct">El tiempo del analista es su activo más valioso</div>
+  <p class="ctxt">Un analista que completa planillas manualmente pierde entre 5 y 10 horas semanales en tareas que una herramienta bien construida puede hacer en minutos. La automatización libera tiempo para análisis y estrategia.</p>
+  <div class="g3 reveal">
+    <div class="card"><div class="card-icon">⚡</div><div class="card-title">Velocidad</div><div class="card-desc">Datos que tardaban horas en consolidar, disponibles en segundos. Más tiempo para interpretar, menos para copiar.</div></div>
+    <div class="card"><div class="card-icon">🎯</div><div class="card-title">Precisión</div><div class="card-desc">Eliminar errores humanos en el ingreso de datos. Un error de pricing puede costar decenas de miles en ventas perdidas.</div></div>
+    <div class="card"><div class="card-icon">📡</div><div class="card-title">Alertas</div><div class="card-desc">Recibir notificaciones automáticas cuando un KPI supera el umbral definido. Actuar antes de que sea un problema grave.</div></div>
+  </div>
+</div>
+<div class="cs alt reveal">
+  <div class="section-label">02 — Las 5 planillas esenciales</div>
+  <div class="ct">Las que uso siempre</div>
+  <div class="step-list reveal">
+    <div class="step-row"><div class="step-n">01</div><div class="step-b"><div class="step-t">Tracker de ACOS por publicación</div><div class="step-d">Columnas: ID publicación · Nombre · Gasto pub. · Ventas pub. · ACOS actual · ACOS objetivo · Acción recomendada. Actualización semanal.</div></div></div>
+    <div class="step-row"><div class="step-n">02</div><div class="step-b"><div class="step-t">Monitor de precios de competidores</div><div class="step-d">Registro semanal de precios de top 10 competidores por categoría. Fórmula que alerta si alguien baja más del 10%.</div></div></div>
+    <div class="step-row"><div class="step-n">03</div><div class="step-b"><div class="step-t">Calculadora de margen real</div><div class="step-d">Ingresás costo del producto y calcula automáticamente: precio mínimo viable, precio recomendado y margen neto post-ML.</div></div></div>
+    <div class="step-row"><div class="step-n">04</div><div class="step-b"><div class="step-t">Dashboard de métricas semanales</div><div class="step-d">Consolida ventas, CTR, conversión y ACOS en un solo panel. Gráfico de tendencias para ver evolución mes a mes.</div></div></div>
+    <div class="step-row"><div class="step-n">05</div><div class="step-b"><div class="step-t">Control de publicaciones activas</div><div class="step-d">Estado de cada publicación: activa, pausada, sin stock, en catálogo, penalizada. Con fechas de última optimización.</div></div></div>
+  </div>
+</div>
+<div class="cs reveal">
+  <div class="section-label">03 — App Script</div>
+  <div class="ct">Automatización avanzada con Google Sheets</div>
+  <div class="hbox"><div class="hbox-title">Casos de uso reales</div><div class="hbox-body"><ul class="blist"><li>Extracción de precios públicos de competidores y carga automática en la planilla semanal</li><li>Envío de alerta por email cuando el ACOS de una campaña supera el umbral definido</li><li>Generación automática de reporte semanal con los KPIs principales del período</li><li>Consolidación de datos de múltiples cuentas de ML en un solo dashboard centralizado</li></ul></div></div>
+  <div class="g2 reveal">
+    <div class="card"><div class="card-n">Nivel básico</div><div class="card-title">Fórmulas avanzadas</div><div class="card-desc">QUERY, IMPORTDATA, IF anidados, ARRAYFORMULA. Sin programar, pero con lógica potente.</div></div>
+    <div class="card"><div class="card-n">Nivel avanzado</div><div class="card-title">App Script (JavaScript)</div><div class="card-desc">Funciones personalizadas, triggers automáticos, conexión con APIs externas y envío de alertas por email.</div></div>
+  </div>
+</div>
+<div class="nb">
+  <a href="metricas.html">← Dashboard de Métricas</a>
+  <a href="imagenes.html">Imágenes con IA →</a>
+</div>
+<footer>
+  <div class="footer-name">Darío Colángelo</div>
+  <div class="footer-note">La Paternal, CABA · Argentina · 2025</div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>

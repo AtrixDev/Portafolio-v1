@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ACOS & Product Ads — Darío Colángelo</title>
+  <link rel="stylesheet" href="css/root.css" />
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/page.css" />
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo"><span>DC</span> · Portfolio</a>
+  <ul class="nav-links">
+    <li><a href="index.html">CV</a></li>
+    <li><a href="lab.html" class="nav-lab-link active">⚗ Lab</a></li>
+    <li><a href="index.html#contacto">Contacto</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">CV</a>
+  <a href="lab.html"   onclick="closeMobileMenu()">⚗ Lab</a>
+  <a href="index.html#contacto" onclick="closeMobileMenu()">Contacto</a>
+</div>
+<div class="ph">
+  <div class="ph-bg"></div>
+  <div class="ph-grid"></div>
+  <div class="ph-c">
+    <a href="lab.html" class="btn-back">← Volver al Lab</a>
+    <div class="ph-tag">📊 Rentabilidad · Campañas · Bidding</div>
+    <h1 class="ph-title">ACOS &<br><span class='grad'>Product Ads</span></h1>
+    <p class="ph-sub">Cómo bajar el ACOS sin matar la visibilidad. Estrategia de campañas, bidding y análisis de rentabilidad aplicado.</p>
+  </div>
+</div>
+
+<div class="cs reveal">
+  <div class="section-label">01 — Fundamentos</div>
+  <div class="ct">¿Qué es el ACOS y por qué importa?</div>
+  <p class="ctxt">El ACOS (Advertising Cost of Sale) mide cuánto gastás en publicidad por cada peso que vendés. Es EL KPI central de toda campaña en Mercado Libre.</p>
+  <div class="formula">ACOS = Gasto publicitario ÷ Ingresos × 100</div>
+  <div class="hbox"><div class="hbox-title">Break-Even ACOS</div><div class="hbox-body">Si tu margen neto es 40%, podés tolerar hasta un 40% de ACOS antes de perder dinero. Siempre calculá el break-even antes de definir el objetivo.</div></div>
+  <div class="g3 reveal">
+    <div class="card"><div class="card-n">ACOS bajo</div><div class="card-title">Alta eficiencia</div><div class="card-desc">Alta rentabilidad. Riesgo: puede indicar baja inversión y pérdida de visibilidad frente a competidores agresivos.</div></div>
+    <div class="card"><div class="card-n">ACOS objetivo</div><div class="card-title">Equilibrio</div><div class="card-desc">Visibilidad sostenida + margen positivo. El punto al que apuntamos con optimización progresiva.</div></div>
+    <div class="card"><div class="card-n">ACOS alto</div><div class="card-title">Zona de riesgo</div><div class="card-desc">Normal en lanzamiento. Sostenido en el tiempo = pérdida real de margen.</div></div>
+  </div>
+</div>
+<div class="cs alt reveal">
+  <div class="section-label">02 — Estructura de Campañas</div>
+  <div class="ct">Cómo organizar tus campañas</div>
+  <div class="step-list reveal">
+    <div class="step-row"><div class="step-n">01</div><div class="step-b"><div class="step-t">Campaña Broad (Visibilidad)</div><div class="step-d">Red amplia para captar tráfico. ACOS tolerado más alto. Objetivo: descubrir qué palabras y publicaciones convierten.</div></div></div>
+    <div class="step-row"><div class="step-n">02</div><div class="step-b"><div class="step-t">Campaña Exact (Conversión)</div><div class="step-d">Solo palabras clave probadas. ACOS objetivo bajo. Máxima rentabilidad con tráfico calificado.</div></div></div>
+    <div class="step-row"><div class="step-n">03</div><div class="step-b"><div class="step-t">Defensa de Marca</div><div class="step-d">Aparecer cuando buscan tu marca. Evitar que un competidor se lleve tu tráfico más caliente.</div></div></div>
+    <div class="step-row"><div class="step-n">04</div><div class="step-b"><div class="step-t">Ataque a Competidores</div><div class="step-d">Aparecer cuando buscan productos del competidor. Alta agresividad, costo más alto, gran oportunidad de robar market share.</div></div></div>
+  </div>
+</div>
+<div class="cs reveal">
+  <div class="section-label">03 — Optimización Progresiva</div>
+  <div class="ct">El método que usé para bajar de 30% a 13%</div>
+  <div class="g2 reveal">
+    <div class="card"><div class="card-n">Semana 1-2</div><div class="card-title">Diagnóstico</div><div class="card-desc">Identificar publicaciones con ACOS por encima del break-even. Analizar términos que generan clics sin conversión.</div></div>
+    <div class="card"><div class="card-n">Semana 3-4</div><div class="card-title">Poda</div><div class="card-desc">Pausar palabras clave ineficientes. Reducir bids gradualmente. Nunca bajar presupuesto más del 20% por semana.</div></div>
+    <div class="card"><div class="card-n">Semana 5-6</div><div class="card-title">Escala</div><div class="card-desc">Aumentar inversión en campañas con ACOS bajo objetivo. Duplicar lo que funciona.</div></div>
+    <div class="card"><div class="card-n">Continuo</div><div class="card-title">Monitoreo</div><div class="card-desc">Revisar métricas semanalmente. El ACOS varía por temporada, competencia y cambios en el catálogo.</div></div>
+  </div>
+  <div class="hbox"><div class="hbox-title">💡 Regla de oro</div><div class="hbox-body">Nunca bajes el presupuesto más del 20% por semana. Los cambios bruscos desestabilizan el aprendizaje del algoritmo y hacen perder posición orgánica ganada.</div></div>
+</div>
+<div class="cs alt reveal">
+  <div class="section-label">04 — Métricas de Control</div>
+  <div class="ct">Qué mirar y cuándo actuar</div>
+  <div class="g4 reveal">
+    <div class="card"><div class="card-icon">📊</div><div class="card-title">ACOS</div><div class="card-desc">Revisar semanalmente. Si supera break-even por 2 semanas seguidas → intervenir.</div></div>
+    <div class="card"><div class="card-icon">💰</div><div class="card-title">CPC</div><div class="card-desc">Costo por click. Si es muy alto → bajar bid o mejorar CTR primero.</div></div>
+    <div class="card"><div class="card-icon">👁️</div><div class="card-title">CTR</div><div class="card-desc">Si el CTR es bajo, el problema es la foto o el título, no el bid.</div></div>
+    <div class="card"><div class="card-icon">🛒</div><div class="card-title">Conversión</div><div class="card-desc">Clicks sin ventas → problema en el contenido de la publicación, no en la campaña.</div></div>
+  </div>
+</div>
+<div class="nb">
+  <a href="anatomia.html">← Anatomía de Publicación</a>
+  <a href="seo.html">SEO de Títulos →</a>
+</div>
+<footer>
+  <div class="footer-name">Darío Colángelo</div>
+  <div class="footer-note">La Paternal, CABA · Argentina · 2025</div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>
