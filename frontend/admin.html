@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin | Darío Colángelo</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ffe14a'/><text x='50%25' y='54%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%23141207'>DC</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Geist:wght@400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+  <link rel="stylesheet" href="css/root.css">
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/admin.css?v=4">
+  <link rel="stylesheet" href="css/tracker-app.css?v=5">
+  <link rel="stylesheet" href="css/academia.css?v=4">
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div id="login-screen" class="cp-login">
+  <form class="cp-login-card" id="login-form" novalidate>
+    <span class="nav-mark cp-login-mark" aria-hidden="true">DC</span>
+    <h1>Panel de administración</h1>
+    <p>Entrá para editar la web, leer mensajes y manejar la cuenta de Mercado Libre.</p>
+    <label class="cp-field"><span>Usuario</span><input id="li-user" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required autofocus></label>
+    <label class="cp-field"><span>Contraseña</span><input id="li-pass" name="password" type="password" autocomplete="current-password" required></label>
+    <button type="submit" class="btn-primary cp-login-btn">Ingresar <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></button>
+    <p class="cp-login-error" id="li-err" role="alert" hidden></p>
+    <a class="cp-back" href="index.html"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg>Volver a la web</a>
+  </form>
+</div>
+
+<!-- ═══ PANEL ═══ -->
+<div id="panel" class="cp-panel" hidden>
+  <aside class="cp-side">
+    <a class="cp-brand" href="index.html" target="_blank" rel="noopener"><span class="nav-mark" aria-hidden="true">DC</span><span><strong>Admin</strong><small>Ver la web</small></span></a>
+    <nav class="cp-nav" id="sidebar-nav" aria-label="Secciones">
+      <p class="cp-nav-group">Mercado Libre</p>
+      <a href="#" data-s="tracker"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-activity"/></svg>ML Tracker</a>
+      <a href="#" data-s="ml"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-link"/></svg>Cuentas <span id="ml-dot" class="cp-dot" hidden></span></a>
+      <a href="#" data-s="academia"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-sparkles"/></svg>Mi carrera</a>
+      <a href="#" data-s="guia"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-book"/></svg>Cómo se usa</a>
+      <p class="cp-nav-group">Contenido</p>
+      <a href="#" data-s="hero" class="active"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-layout"/></svg>Portada</a>
+      <a href="#" data-s="stats"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-chart"/></svg>Resultados</a>
+      <a href="#" data-s="sobre"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-user"/></svg>Sobre mí</a>
+      <a href="#" data-s="contacto"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-mail"/></svg>Contacto</a>
+      <a href="#" data-s="portfolio"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-image"/></svg>Historial de publicaciones</a>
+      <p class="cp-nav-group">Actividad</p>
+      <a href="#" data-s="mensajes"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-message"/></svg>Mensajes <span id="msg-unread" class="cp-badge" hidden></span></a>
+    </nav>
+    <div class="cp-side-foot">
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+        <svg class="icon icon-sun" aria-hidden="true"><use href="assets/icons.svg#i-sun"/></svg>
+        <svg class="icon icon-moon" aria-hidden="true"><use href="assets/icons.svg#i-moon"/></svg>
+      </button>
+      <button type="button" class="cp-logout" id="logout-btn"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-up"/></svg>Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <main class="cp-main">
+
+    <!-- PORTADA -->
+    <section class="cp-sec active" id="ps-hero">
+      <header class="cp-head"><h2>Portada</h2><p>Los textos del inicio de la web. Si un campo queda vacío, se usa el texto que ya trae la página.</p></header>
+      <div class="cp-card">
+        <label class="cp-field"><span>Línea chica de arriba</span><input id="h-tag" type="text" placeholder="Analista E-Commerce · Mercado Libre"></label>
+        <div class="cp-row">
+          <label class="cp-field"><span>Nombre</span><input id="h-n1" type="text" placeholder="Darío"></label>
+          <label class="cp-field"><span>Apellido</span><input id="h-n2" type="text" placeholder="Colángelo"></label>
+        </div>
+        <label class="cp-field"><span>Frase principal <small>(ideal: menos de 20 palabras)</small></span><textarea id="h-sub" rows="3" placeholder="Ordeno catálogos, bajo el ACOS y construyo mis propias herramientas para vender más en Mercado Libre."></textarea></label>
+        <div class="cp-row">
+          <label class="cp-field"><span>Link "Ver experiencia"</span><input id="h-btn1" type="text" placeholder="Ver experiencia"></label>
+          <label class="cp-field"><span>Texto debajo de la foto</span><input id="h-badge" type="text" placeholder="E-Commerce Manager · Mercado Libre"></label>
+        </div>
+      </div>
+      <div class="cp-actions"><button type="button" class="btn-primary" data-save="hero">Guardar portada</button></div>
+    </section>
+
+    <!-- RESULTADOS -->
+    <section class="cp-sec" id="ps-stats">
+      <header class="cp-head"><h2>Resultados</h2><p>Los 5 números grandes debajo de la portada. El 3.º y el 4.º van resaltados.</p></header>
+      <div class="cp-stats" id="stats-editor"></div>
+      <div class="cp-actions"><button type="button" class="btn-primary" data-save="stats">Guardar resultados</button></div>
+    </section>
+
+    <!-- SOBRE MÍ -->
+    <section class="cp-sec" id="ps-sobre">
+      <header class="cp-head"><h2>Sobre mí</h2><p>El primer párrafo se muestra más grande.</p></header>
+      <div class="cp-card">
+        <label class="cp-field"><span>Párrafo 1</span><textarea id="s-p1" rows="4"></textarea></label>
+        <label class="cp-field"><span>Párrafo 2</span><textarea id="s-p2" rows="4"></textarea></label>
+        <label class="cp-field"><span>Párrafo 3</span><textarea id="s-p3" rows="4"></textarea></label>
+      </div>
+      <div class="cp-actions"><button type="button" class="btn-primary" data-save="sobre">Guardar sobre mí</button></div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section class="cp-sec" id="ps-contacto">
+      <header class="cp-head"><h2>Contacto</h2><p>El texto del cierre del inicio.</p></header>
+      <div class="cp-card">
+        <label class="cp-field"><span>Texto del cierre</span><textarea id="c-sub" rows="3"></textarea></label>
+        <div class="cp-row">
+          <label class="cp-field"><span>Email</span><input id="c-email" type="email"></label>
+          <label class="cp-field"><span>Teléfono</span><input id="c-tel" type="text"></label>
+        </div>
+        <label class="cp-field"><span>LinkedIn</span><input id="c-linkedin" type="url"></label>
+      </div>
+      <div class="cp-actions"><button type="button" class="btn-primary" data-save="contacto">Guardar contacto</button></div>
+    </section>
+
+    <!-- HISTORIAL DE PUBLICACIONES -->
+    <section class="cp-sec" id="ps-portfolio">
+      <header class="cp-head"><h2>Historial de publicaciones</h2><p>Se muestran arriba de todo en el panel "Historial de publicaciones" del inicio.</p></header>
+      <div class="cp-card">
+        <label class="cp-field"><span>Link de Mercado Libre</span>
+          <span class="cp-inline"><input id="pf-url" type="url" placeholder="https://articulo.mercadolibre.com.ar/MLA-..."><button type="button" class="btn-secondary" id="pf-scrape"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-zap"/></svg>Completar solo</button></span>
+        </label>
+        <div class="cp-row">
+          <label class="cp-field"><span>Título</span><input id="pf-title" type="text"></label>
+          <label class="cp-field"><span>URL de la imagen</span><input id="pf-image" type="url" placeholder="https://http2.mlstatic.com/..."></label>
+          <label class="cp-field"><span>Marca / tienda</span><input id="pf-brand" type="text" placeholder="Borner"></label>
+          <label class="cp-field"><span>Empleador</span><input id="pf-employer" type="text" placeholder="Vení A La Cocina"></label>
+          <label class="cp-field"><span>Categoría</span><input id="pf-category" type="text" placeholder="Mandolinas · Cocina"></label>
+          <label class="cp-field"><span>Logro</span><input id="pf-metrics" type="text" placeholder="+39,2% facturación"></label>
+        </div>
+        <label class="cp-field"><span>Notas internas <small>(no se muestran)</small></span><input id="pf-notes" type="text"></label>
+        <div class="cp-preview" id="pf-preview" hidden><img id="pf-preview-img" src="" alt=""><span id="pf-preview-title"></span></div>
+        <div class="cp-actions cp-actions-in"><button type="button" class="btn-primary" id="pf-add"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-plus"/></svg>Agregar publicación</button><span class="cp-status" id="pf-status" aria-live="polite"></span></div>
+      </div>
+      <h3 class="cp-subhead">Publicaciones guardadas</h3>
+      <div class="cp-list" id="pf-list"><p class="cp-empty">Cargando…</p></div>
+    </section>
+
+    <!-- MENSAJES -->
+    <section class="cp-sec" id="ps-mensajes">
+      <header class="cp-head"><h2>Mensajes</h2><p>Lo que llega desde Contacto y desde "Armá tu web". Los no leídos aparecen resaltados.</p></header>
+      <div class="cp-toolbar">
+        <div class="cp-filters" role="group" aria-label="Filtrar">
+          <button type="button" data-filter="todos" aria-pressed="true">Todos</button>
+          <button type="button" data-filter="freelance" aria-pressed="false">Pedidos de webs</button>
+          <button type="button" data-filter="oferta" aria-pressed="false">Ofertas laborales</button>
+          <button type="button" data-filter="noleidos" aria-pressed="false">No leídos</button>
+        </div>
+        <button type="button" class="btn-secondary" id="msg-reload"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-refresh"/></svg>Actualizar</button>
+      </div>
+      <div class="cp-list" id="msg-list"></div>
+    </section>
+
+    <!-- ML TRACKER -->
+    <section class="cp-sec" id="ps-tracker"><div id="tk-app"></div></section>
+
+    <!-- ACADEMIA IA -->
+    <section class="cp-sec" id="ps-academia"><div id="ac-app"></div></section>
+
+
+    <!-- GUÍA DE USO -->
+    <section class="cp-sec" id="ps-guia">
+      <header class="cp-head"><h2>Cómo se usa ML Tracker</h2><p>Qué hace cada herramienta, cómo se calcula y en qué momento conviene usarla. En cada bloque del tracker también tenés un <span class="gd-q">?</span> con la explicación corta.</p></header>
+
+      <nav class="gd-index" aria-label="Contenido de la guía">
+        <a href="#gd-arranque">Primeros pasos</a><a href="#gd-rutina">Rutina de trabajo</a><a href="#gd-resumen">Resumen y alertas</a><a href="#gd-clases">Clasificación</a>
+        <a href="#gd-diagnostico">Diagnóstico</a><a href="#gd-precio">Precio</a><a href="#gd-stock">Stock</a><a href="#gd-rent">Rentabilidad y ABC</a>
+        <a href="#gd-calidad">Calidad</a><a href="#gd-comp">Competencia</a><a href="#gd-preguntas">Preguntas</a><a href="#gd-reporte">Reporte y Excel</a><a href="#gd-limites">Límites</a>
+      </nav>
+
+      <article class="gd-block" id="gd-arranque">
+        <h3>1. Primeros pasos</h3>
+        <ol>
+          <li><b>Vinculá la cuenta.</b> En <em>Cuentas</em>: tu cuenta con «Vincular»; la de un cliente con «Generar link para un cliente» (se lo mandás, entra con su usuario de Mercado Libre y autoriza). No necesitás contraseñas.</li>
+          <li><b>Traé los datos.</b> En <em>ML Tracker</em>, elegí la cuenta y tocá «Traer los datos». La primera vez baja publicaciones, 150 días de visitas y las ventas del mismo período. Después se actualiza sola todos los días a las 7 y podés forzarlo con «Actualizar datos».</li>
+          <li><b>Cargá los costos.</b> En la pestaña <em>Rentabilidad</em>, escribí el costo unitario de cada producto o pegalo desde Excel (columna con el código MLA y columna con el costo). Cargá también el % de impuestos sobre el precio (Ingresos Brutos, etc.).</li>
+          <li><b>Probá con la cuenta demo</b> si querés ver todos los casos: tiene publicaciones que crecen, que se caen, que pierden plata y que se quedan sin stock.</li>
+        </ol>
+      </article>
+
+      <article class="gd-block" id="gd-rutina">
+        <h3>2. Rutina de trabajo</h3>
+        <div class="gd-cols">
+          <div><h4>Todos los días · 5 minutos</h4><ul><li><em>Qué mirar hoy</em>: resolvé lo rojo (catálogo perdido, stock por agotarse, publicaciones que pierden plata).</li><li><em>Preguntas</em>: respondé las que pasan las 24 horas.</li></ul></div>
+          <div><h4>Una vez por semana</h4><ul><li>Tabla ordenada por <em>Prioridad</em>: revisá «Perdiendo tracción» y «Visitas sin ventas» y leé el diagnóstico.</li><li>Aplicá los <em>precios sugeridos</em> que tengan sentido y anotá la fecha: el tracker mide el efecto solo.</li><li>Ordená por <em>Menos stock</em> y pedí reposición.</li></ul></div>
+          <div><h4>Una vez por mes</h4><ul><li><em>Reporte</em>: guardalo en PDF y mandáselo al cliente.</li><li><em>Rentabilidad</em>: revisá margen y ACOS máximo antes de tocar la publicidad.</li><li><em>Calidad</em>: completá lo que falta en las publicaciones de curva A.</li></ul></div>
+        </div>
+      </article>
+
+      <article class="gd-block" id="gd-resumen">
+        <h3>3. Resumen, alertas y evolución</h3>
+        <p>Los números de arriba son la suma de la cuenta en los <b>últimos 28 días</b> contra los <b>28 anteriores</b>. Se comparan períodos iguales para que el día de la semana no distorsione.</p>
+        <p><b>Qué mirar hoy</b> junta las alertas de todas las publicaciones y las ordena: <span class="gd-dot is-bad"></span>rojo es urgente, <span class="gd-dot is-warn"></span>amarillo es para la semana, <span class="gd-dot is-ok"></span>verde son oportunidades (por ejemplo, subir un precio).</p>
+        <p>En la tabla, una variación en <b>gris</b> está dentro de lo normal (ruido); en <b>verde o rojo</b> es un cambio real, medido con un test estadístico sobre visitas y ventas. Así no reaccionás a una semana floja.</p>
+      </article>
+
+      <article class="gd-block" id="gd-clases">
+        <h3>4. Clasificación de publicaciones</h3>
+        <dl class="gd-dl">
+          <div><dt><span class="tk-chip" data-tono="accent">Estrella</span></dt><dd>Está en el 20% que más factura y convierte arriba del promedio de la cuenta. Cuidala: stock, precio y preguntas al día.</dd></div>
+          <div><dt><span class="tk-chip" data-tono="ok">En alza</span></dt><dd>Visitas y ventas creciendo de forma significativa contra el mes anterior (o publicación nueva que viene subiendo). Momento de empujarla.</dd></div>
+          <div><dt><span class="tk-chip" data-tono="bad">Perdiendo tracción</span></dt><dd>Cayeron las visitas (20% o más), las ventas (30% o más) o la conversión, y la caída no es ruido.</dd></div>
+          <div><dt><span class="tk-chip" data-tono="warn">Visitas sin ventas</span></dt><dd>150 visitas o más en 28 días y ninguna venta, o una conversión menor a la cuarta parte del promedio.</dd></div>
+          <div><dt><span class="tk-chip" data-tono="muted">Dormida</span></dt><dd>Menos de 30 visitas y como mucho una venta en 28 días. El problema es de exposición, no de precio.</dd></div>
+          <div><dt><span class="tk-chip" data-tono="neutral">Estable</span></dt><dd>Se mueve dentro de lo normal.</dd></div>
+          <div><dt><span class="tk-chip" data-tono="bad">Sin stock</span> <span class="tk-chip" data-tono="muted">Pausada</span></dt><dd>Estados operativos: van primero porque no están vendiendo.</dd></div>
+        </dl>
+      </article>
+
+      <article class="gd-block" id="gd-diagnostico">
+        <h3>5. Diagnóstico: exposición u oferta</h3>
+        <p>Cuando una publicación se cae, el tracker separa las dos causas posibles:</p>
+        <ul>
+          <li><b>Problema de exposición</b>: bajaron las visitas. La encuentran menos. Causas que revisa solo: pérdida del primer lugar del catálogo y días sin stock. Si no es eso, revisá posición, publicidad, título y categoría.</li>
+          <li><b>Problema de oferta</b>: las visitas siguen igual pero cayó la conversión. La ven y no la compran. Causas que revisa solo: suba de precio y competidores más baratos en el catálogo. Si no es eso, compará envío, cuotas, fotos y opiniones.</li>
+        </ul>
+      </article>
+
+      <article class="gd-block" id="gd-precio">
+        <h3>6. Cuándo subir o bajar el precio</h3>
+        <div class="gd-cols">
+          <div><h4>Sugiere subir cuando…</h4><ul><li>Convierte arriba del promedio y el stock no llega a 3 semanas.</li><li>La última suba no le movió la conversión.</li><li>Ganás el catálogo con margen: Mercado Libre informa hasta qué precio seguís primero.</li><li>Hoy perdés plata en cada venta (sugiere 10% arriba del precio mínimo).</li><li><em>Probar suba</em>: convierte 50% más que el promedio y nunca se probó subir. Subí 3-5% dos semanas y medí.</li></ul></div>
+          <div><h4>Sugiere bajar cuando…</h4><ul><li>Perdiste el catálogo: usa el precio exacto que Mercado Libre indica para volver a ganar.</li><li>La conversión cayó después de una suba de 5% o más.</li><li>Hay stock para más de 90 días y convierte por debajo del promedio.</li></ul><h4>Y frena cuando…</h4><ul><li>El precio sugerido te haría perder plata con tus costos: lo marca como «Revisar oferta».</li><li>Tiene visitas sin ventas: primero revisá la oferta completa, no solo el precio.</li></ul></div>
+        </div>
+        <p><b>Cambios de precio</b>: cada vez que el precio se movió 3% o más y se sostuvo una semana, el tracker compara hasta 21 días antes y después (conversión, ventas por día, facturación por día). Con eso sabés cuánto aguanta cada publicación una suba.</p>
+      </article>
+
+      <article class="gd-block" id="gd-stock">
+        <h3>7. Stock</h3>
+        <p><b>Ritmo de venta</b> = unidades vendidas en los últimos 28 días ÷ 28. <b>Alcanza para</b> = stock ÷ ritmo. Alertas: <b>menos de 7 días</b> reponé ya · <b>menos de 15</b> planificá · <b>más de 90</b> stock inmovilizado (evaluá promo o baja de precio) · con visitas y sin ventas en 28 días, sin rotación.</p>
+      </article>
+
+      <article class="gd-block" id="gd-rent">
+        <h3>8. Rentabilidad, ACOS máximo y curva ABC</h3>
+        <p class="gd-formula">Margen por unidad = Precio − Comisión de ML − Envío gratis − Impuestos − Costo del producto</p>
+        <ul>
+          <li><b>Comisión</b>: se trae de Mercado Libre según precio, tipo de publicación (Clásica o Premium) y categoría.</li>
+          <li><b>Envío</b>: si la publicación tiene envío gratis, se trae el costo de lista que informa Mercado Libre. Con buena reputación el costo real es menor, así que el margen real es igual o mejor.</li>
+          <li><b>ACOS máximo</b> = margen ÷ precio. Es lo máximo que podés gastar en Product Ads por venta sin perder plata. Si tu ACOS real está arriba, la publicidad te hace perder.</li>
+          <li><b>Precio mínimo</b>: el precio en el que el margen da cero.</li>
+          <li><b>Curva ABC</b>: <b>A</b> son las publicaciones que juntas hacen el 80% de la facturación, <b>B</b> el 15% siguiente y <b>C</b> el resto. Tu tiempo va primero a las A.</li>
+        </ul>
+      </article>
+
+      <article class="gd-block" id="gd-calidad">
+        <h3>9. Calidad de publicación</h3>
+        <p>Es el puntaje oficial de Mercado Libre (0 a 100) con la lista de lo que pide completar: características, código universal, fotos, cuotas, etc. Mejorarlo sube la exposición. La pestaña <em>Calidad</em> las ordena de peor a mejor; empezá por las de curva A.</p>
+      </article>
+
+      <article class="gd-block" id="gd-comp">
+        <h3>10. Competencia en catálogo</h3>
+        <p>En las publicaciones de catálogo, «Ver competidores» consulta en vivo quién más vende ese producto: precio y diferencia con el más barato, envío gratis, Full, tienda oficial y reputación. Tu publicación aparece marcada. Sirve para decidir si competir por precio o por servicio.</p>
+      </article>
+
+      <article class="gd-block" id="gd-preguntas">
+        <h3>11. Preguntas sin responder</h3>
+        <p>Lista de preguntas pendientes, las más viejas primero, con la publicación a la que pertenecen. Después de 24 horas se marcan en amarillo y aparecen en las alertas. Se responden desde Mercado Libre (Ventas → Preguntas).</p>
+      </article>
+
+      <article class="gd-block" id="gd-reporte">
+        <h3>12. Reporte para el cliente y Excel</h3>
+        <p>La pestaña <em>Reporte</em> arma un resumen listo para mandar: facturación, unidades, visitas y conversión contra el mes anterior, la evolución de las visitas, las publicaciones que más facturaron y los próximos pasos recomendados. «Imprimir o guardar PDF» → elegí «Guardar como PDF».</p>
+        <p>«Exportar a Excel» en la tabla baja todas las publicaciones con sus métricas, margen, calidad y precio sugerido.</p>
+      </article>
+
+      <article class="gd-block" id="gd-limites">
+        <h3>13. Límites que conviene saber</h3>
+        <ul>
+          <li>Mercado Libre da hasta <b>150 días</b> de visitas para atrás. Desde que vinculás la cuenta, el tracker guarda todo y la historia crece.</li>
+          <li>El <b>historial de precios</b> se arma con el precio de cada venta y con una foto diaria del precio desde la vinculación.</li>
+          <li><b>Product Ads</b> (ACOS real por publicación) todavía no está conectado: la API de publicidad exige un permiso aparte y no hay una cuenta con publicidad vinculada para probarlo. Mientras tanto, usá el ACOS máximo de Rentabilidad contra el ACOS del panel de Mercado Libre.</li>
+          <li>Las preguntas se leen, pero se responden desde Mercado Libre.</li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- CUENTAS DE MERCADO LIBRE -->
+    <section class="cp-sec" id="ps-ml">
+      <header class="cp-head"><h2>Cuentas de Mercado Libre</h2><p>ML Tracker lee publicaciones, visitas y ventas de cada cuenta vinculada y las actualiza solo todos los días.</p></header>
+      <h3 class="cp-subhead">Tu cuenta</h3>
+      <div class="cp-card cp-ml" id="ml-status">Consultando…</div>
+      <div class="cp-actions">
+        <button type="button" class="btn-primary" id="ml-link">Vincular o volver a vincular</button>
+        <button type="button" class="btn-secondary cp-danger" id="ml-unlink">Desvincular</button>
+      </div>
+      <h3 class="cp-subhead">Todas las cuentas</h3>
+      <div class="cp-list" id="tk-cuentas"></div>
+      <h3 class="cp-subhead">Sumar la cuenta de un cliente</h3>
+      <div class="cp-card">
+        <p class="cp-status">Generá un link y mandáselo. El cliente entra con su usuario de Mercado Libre y autoriza la lectura: no necesitás su contraseña ni que entre al panel.</p>
+        <div class="cp-actions"><button type="button" class="btn-secondary" id="tk-invite-btn"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-link"/></svg>Generar link para un cliente</button></div>
+        <div id="tk-invite" class="cp-actions-in" hidden></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="cp-toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/main.js"></script>
+<script src="js/tracker-app.js?v=5"></script>
+<script src="js/academia.js?v=4"></script>
+<script src="js/admin.js?v=6"></script>
+</body>
+</html>

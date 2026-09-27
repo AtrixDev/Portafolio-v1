@@ -1,0 +1,113 @@
+/* ============================================================
+   IA.CSS — "IA aplicada a Mercado Libre" (ia.html)
+   Base: shared.css + page.css. Prefijo ia-.
+   ============================================================ */
+
+/* Hero */
+.ia-stats { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; animation: fadeUp .6s .25s var(--ease-out) both; }
+.ia-stats > div { min-width: 132px; padding: .8rem 1.1rem; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--edge); }
+.ia-stats dt { font-size: .76rem; color: var(--muted); }
+.ia-stats dd { margin-top: .15rem; font-family: var(--font-display); font-size: 1.9rem; font-weight: 750; letter-spacing: -.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+.ia-stats > div:last-child:not([hidden]) dd { color: var(--accent-text); }
+
+.ia-loading { color: var(--muted); font-size: .92rem; }
+.ctxt code, .ia-pbody pre, .ia-tool code { font-family: var(--font-mono); }
+.ctxt code { font-size: .88em; padding: .05em .35em; border-radius: 6px; background: var(--surface-2); color: var(--text); }
+
+/* Filtros */
+.ia-toolbar { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin: 0 0 1.5rem; }
+.ia-seg, .ia-cats { display: inline-flex; flex-wrap: wrap; gap: .35rem; }
+.ia-seg button, .ia-cats button {
+  min-height: 40px; padding: .4rem 1rem; border-radius: var(--r-pill); border: 1px solid var(--line-strong);
+  background: transparent; color: var(--text-2); font: inherit; font-size: .88rem; cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.ia-seg button:hover, .ia-cats button:hover { color: var(--text); border-color: var(--text-2); }
+.ia-seg button[aria-pressed="true"], .ia-cats button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.ia-seg button:focus-visible, .ia-cats button:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
+.ia-search { display: flex; align-items: center; gap: .5rem; flex: 1 1 260px; max-width: 360px; padding: 0 .9rem; border-radius: var(--r-pill); border: 1px solid var(--line-strong); background: var(--surface); color: var(--muted); }
+.ia-search:focus-within { border-color: var(--accent-text); box-shadow: 0 0 0 4px var(--accent-soft); }
+.ia-search input { flex: 1; min-width: 0; min-height: 44px; border: 0; background: none; color: var(--text); font: inherit; font-size: .95rem; }
+.ia-search input:focus { outline: none; }
+
+/* Skills */
+.ia-skills { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; align-items: start; }
+.ia-skill { border-radius: var(--r-card); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--edge); transition: border-color var(--t-base); }
+.ia-skill:hover, .ia-skill[open] { border-color: var(--line-strong); }
+.ia-skill summary { display: flex; flex-direction: column; gap: .55rem; padding: 1.4rem; list-style: none; cursor: pointer; border-radius: var(--r-card); }
+.ia-skill summary::-webkit-details-marker { display: none; }
+.ia-skill summary:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
+.ia-skill-top { display: flex; align-items: center; gap: .7rem; }
+.ia-tier { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; font-size: .82rem; font-weight: 700; background: var(--surface-2); color: var(--text-2); border: 1px solid var(--line-strong); }
+.ia-tier[data-tier="S"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.ia-tier[data-tier="A"] { background: var(--accent-soft); color: var(--accent-text); border-color: var(--accent-line); }
+.ia-dots { font-size: .55rem; letter-spacing: .18em; color: var(--accent-text); }
+.ia-dots i { font-style: normal; color: var(--line-strong); }
+.ia-estado { margin-left: auto; padding: .15rem .6rem; border-radius: var(--r-pill); font-size: .74rem; font-weight: 600; }
+.ia-estado[data-tono="ok"] { color: var(--ok); background: var(--ok-soft); }
+.ia-estado[data-tono="accent"] { color: var(--accent-ink); background: var(--accent); }
+.ia-estado[data-tono="warn"] { color: var(--warn); background: var(--warn-soft); }
+.ia-skill-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; }
+.ia-skill-desc { font-size: .92rem; color: var(--text-2); line-height: 1.6; }
+.ia-more { display: inline-flex; align-items: center; gap: .35rem; font-size: .76rem; color: var(--muted); }
+.ia-more .icon { width: 12px; height: 12px; transition: transform var(--t-base) var(--ease-out); }
+.ia-skill[open] .ia-more .icon { transform: rotate(90deg); }
+.ia-skill summary:hover .ia-more { color: var(--accent-text); }
+.ia-skill-body { padding: 0 1.4rem 1.4rem; border-top: 1px solid var(--line); padding-top: 1.1rem; }
+.ia-why { font-size: .92rem; color: var(--text); line-height: 1.6; margin-bottom: .8rem; }
+.ia-skill-body ul { padding-left: 1.1rem; display: flex; flex-direction: column; gap: .45rem; font-size: .9rem; color: var(--text-2); line-height: 1.55; }
+.ia-skill-body li::marker { color: var(--accent-text); }
+.ia-kpis { display: flex; flex-wrap: wrap; gap: .35rem; margin: 1rem 0 .4rem; }
+.ia-kpis .skill-tag { font-size: .78rem; padding: .28rem .65rem; }
+.ia-logro { display: flex; gap: .55rem; align-items: flex-start; margin-top: .9rem; padding: .8rem .9rem; border-radius: 12px; background: var(--accent-soft); border: 1px solid var(--accent-line); font-size: .9rem; line-height: 1.5; }
+.ia-logro .icon { flex-shrink: 0; margin-top: .15rem; color: var(--accent-text); }
+
+/* Sistemas */
+.ia-sistemas { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: .5rem 2rem; margin-top: 2rem; counter-reset: none; }
+.ia-sis { display: flex; gap: 1rem; padding: 1.1rem 0; border-top: 1px solid var(--line); }
+.ia-sis-n { flex-shrink: 0; width: 2.2rem; font-size: .9rem; font-weight: 700; color: var(--accent-text); padding-top: .15rem; }
+.ia-sis h3 { font-size: 1.02rem; font-weight: 650; margin-bottom: .3rem; }
+.ia-sis p { font-size: .9rem; color: var(--text-2); line-height: 1.55; }
+.ia-sis-meta { display: flex; flex-direction: column; gap: .2rem; margin-top: .5rem; font-size: .8rem !important; }
+.ia-sis-meta b { font-family: var(--font-mono); font-size: .7rem; font-weight: 600; color: var(--muted); margin-right: .35rem; text-transform: uppercase; letter-spacing: .04em; }
+
+/* Prompts */
+.ia-prompts { display: flex; flex-direction: column; gap: .6rem; }
+.ia-prompt { border-radius: 14px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--edge); }
+.ia-prompt[open] { border-color: var(--line-strong); }
+.ia-prompt summary { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: .15rem 1rem; padding: 1rem 1.2rem; cursor: pointer; list-style: none; border-radius: 14px; }
+.ia-prompt summary::-webkit-details-marker { display: none; }
+.ia-prompt summary:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
+.ia-prompt summary:hover .ia-ptitle { color: var(--accent-text); }
+.ia-pcat { grid-row: span 2; font-size: .72rem; color: var(--muted); padding-top: .2rem; }
+.ia-ptitle { font-weight: 650; font-size: 1rem; transition: color var(--t-fast); }
+.ia-pdesc { font-size: .88rem; color: var(--text-2); }
+.ia-pbody { padding: 0 1.2rem 1.2rem; }
+.ia-pbody pre { max-height: 420px; overflow: auto; padding: 1rem 1.1rem; border-radius: 12px; background: var(--bg2); border: 1px solid var(--line); font-size: .8rem; line-height: 1.6; color: var(--text); white-space: pre-wrap; overflow-wrap: anywhere; }
+.ia-copy { margin-top: .8rem; min-height: 42px; padding: .5rem 1rem; font-size: .88rem; }
+
+/* Stack */
+.ia-stack { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; margin-top: 2rem; }
+.ia-tool { display: flex; flex-direction: column; gap: .45rem; padding: 1.3rem; border-radius: var(--r-card); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--edge); color: var(--text); text-decoration: none; transition: border-color var(--t-base), transform var(--t-base) var(--ease-out); }
+.ia-tool:hover { border-color: var(--accent-line); transform: translateY(-2px); }
+.ia-tool:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
+.ia-tool-top { display: flex; justify-content: space-between; align-items: center; color: var(--muted); }
+.ia-tool-top .ia-pcat { grid-row: auto; padding: 0; }
+.ia-tool-name { font-family: var(--font-display); font-size: 1.08rem; font-weight: 700; letter-spacing: -.02em; }
+.ia-tool-desc { font-size: .88rem; color: var(--text-2); line-height: 1.55; }
+.ia-tool code { margin-top: .3rem; padding: .5rem .6rem; border-radius: 8px; background: var(--bg2); font-size: .7rem; color: var(--text-2); overflow-wrap: anywhere; }
+
+/* Cierre */
+.ia-cta-in { display: flex; flex-wrap: wrap; gap: 1.5rem 3rem; align-items: center; justify-content: space-between; }
+.ia-cta-in .ctxt { margin-bottom: 0; }
+.ia-cta-btns { display: flex; flex-wrap: wrap; gap: .75rem; }
+.ia-credit { margin-top: 2.5rem; font-size: .8rem; color: var(--muted); max-width: 80ch; }
+.ia-credit a { color: var(--text-2); }
+
+@media (max-width: 560px) {
+  .ia-prompt summary { grid-template-columns: 1fr; }
+  .ia-pcat { grid-row: auto; }
+  .ia-sistemas { grid-template-columns: 1fr; }
+  .ia-skills { grid-template-columns: 1fr; }
+  .ia-stats > div { min-width: calc(50% - .4rem); flex: 1; }
+}

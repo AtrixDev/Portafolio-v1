@@ -1,0 +1,73 @@
+/* ============================================================
+   LAB.CSS — Índice del Lab de Mercado Libre (lab.html)
+   El hero usa .ph de shared.css
+   ============================================================ */
+
+.lab-main { padding: clamp(2.5rem, 5vw, 4rem) var(--pad-x) var(--pad-y); }
+
+.lab-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.lab-card {
+  position: relative; display: flex; flex-direction: column; gap: .6rem;
+  padding: 1.6rem; border-radius: var(--r-card);
+  background: var(--surface); border: 1px solid var(--line); box-shadow: var(--edge);
+  color: var(--text); text-decoration: none;
+  transition: border-color var(--t-base), transform var(--t-base) var(--ease-out), box-shadow var(--t-base);
+}
+.lab-card:hover { border-color: var(--accent-line); transform: translateY(-3px); box-shadow: var(--edge), var(--shadow-md); }
+.lab-card > .icon {
+  width: 42px; height: 42px; padding: 10px; border-radius: 12px; margin-bottom: 1.25rem;
+  color: var(--accent-text); background: var(--accent-soft);
+  transition: transform var(--t-base) var(--ease-spring);
+}
+.lab-card:hover > .icon { transform: rotate(-8deg) scale(1.06); }
+.lab-card::after {
+  content: '↗'; position: absolute; top: 1.4rem; right: 1.5rem; color: var(--muted);
+  transition: transform var(--t-base) var(--ease-out), color var(--t-fast);
+}
+.lab-card:hover::after { color: var(--accent-text); transform: translate(2px, -2px); }
+.lab-card-title { font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; letter-spacing: -.03em; line-height: 1.1; }
+.lab-card-desc { font-size: .93rem; color: var(--text-2); line-height: 1.6; }
+.lab-card-tags { margin-top: auto; padding-top: .75rem; font-size: .74rem; color: var(--muted); }
+
+.lab-featured {
+  grid-column: span 2; grid-row: span 2; min-height: 460px; justify-content: flex-end;
+  overflow: hidden; isolation: isolate; border-color: transparent; padding: 2rem;
+}
+.lab-featured img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform .8s var(--ease-out); }
+.lab-featured::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(8,8,9,.05) 15%, rgba(8,8,9,.9) 85%); }
+.lab-featured:hover img { transform: scale(1.04); }
+.lab-featured-body { display: flex; flex-direction: column; gap: .6rem; color: #f2f2ef; max-width: 52ch; }
+.lab-featured .lab-card-title { font-size: clamp(1.9rem, 3.4vw, 2.8rem); font-weight: 750; letter-spacing: -.045em; line-height: 1; }
+.lab-featured .lab-card-desc { color: rgba(242,242,239,.8); }
+.lab-featured .lab-card-tags { color: rgba(242,242,239,.6); }
+.lab-kicker { font-size: .78rem; color: #ffe14a; }
+.lab-featured::after { color: rgba(242,242,239,.7); }
+
+.lab-tools { margin-top: clamp(4rem, 8vw, 6rem); padding-top: clamp(3rem, 6vw, 4.5rem); border-top: 1px solid var(--line); }
+.lab-tools-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+.lab-tool {
+  display: flex; flex-direction: column; gap: .7rem; padding: 1.75rem; border-radius: var(--r-card);
+  background: var(--surface); border: 1px solid var(--line); color: var(--text); text-decoration: none;
+  transition: border-color var(--t-base), transform var(--t-base) var(--ease-out);
+}
+.lab-tool:first-child { border-color: var(--accent-line); background: radial-gradient(90% 80% at 100% 0%, var(--accent-soft), transparent 70%), var(--surface); }
+.lab-tool:hover { transform: translateY(-3px); border-color: var(--accent-line); }
+.lab-tool-top { display: flex; justify-content: space-between; align-items: center; }
+.lab-tool-top > .icon { color: var(--muted); transition: transform var(--t-base) var(--ease-out), color var(--t-fast); }
+.lab-tool:hover .lab-tool-top > .icon { color: var(--accent-text); transform: translateX(3px); }
+.lab-live { display: inline-flex; align-items: center; gap: .5rem; font-size: .82rem; font-weight: 600; }
+.lab-live.is-muted { font-family: var(--font-mono); font-weight: 400; color: var(--muted); }
+.lab-tool-title { font-family: var(--font-display); font-size: clamp(1.7rem, 3vw, 2.3rem); font-weight: 750; letter-spacing: -.045em; line-height: 1; margin-top: .5rem; }
+
+/* 1 destacada (2x2) + 7 guías: la última ocupa 2 columnas para cerrar la grilla sin huecos */
+.lab-grid > .lab-card:last-child { grid-column: span 2; }
+
+@media (max-width: 1080px) {
+  .lab-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lab-featured { grid-row: auto; min-height: 400px; }
+}
+@media (max-width: 768px) {
+  .lab-grid, .lab-tools-grid { grid-template-columns: 1fr; }
+  .lab-grid > .lab-card:last-child { grid-column: auto; }
+  .lab-featured { grid-column: auto; min-height: 360px; padding: 1.5rem; }
+}

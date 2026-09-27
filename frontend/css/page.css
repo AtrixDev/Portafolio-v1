@@ -1,0 +1,30 @@
+/* ============================================================
+   PAGE.CSS — Componentes propios de las guías del Lab
+   (anatomia, acos, seo, pricing, reputacion, metricas, excels, imagenes)
+   La base (.cs, .ct, .card, .g2…) está en shared.css
+   ============================================================ */
+
+/* ── Secuencia de fotos (anatomia.html) ── */
+.foto-sequence { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin: 2rem 0; }
+/* 7 fotos en 4 columnas: la foto héroe (la más importante) ocupa 2 y la grilla cierra justa */
+@media (min-width: 1180px) {
+  .foto-sequence { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .foto-sequence .foto-row:first-child { grid-column: span 2; border-color: var(--accent-line); }
+}
+.foto-row {
+  position: relative; display: flex; flex-direction: column; gap: .6rem;
+  padding: 1.4rem 1.4rem 1.5rem; border-radius: var(--r-card);
+  background: var(--surface); border: 1px solid var(--line); box-shadow: var(--edge);
+  transition: border-color var(--t-base), transform var(--t-base) var(--ease-out);
+}
+.foto-row:hover { border-color: var(--accent-line); transform: translateY(-2px); }
+.foto-num {
+  font-family: var(--font-display); font-size: 2.6rem; font-weight: 800; letter-spacing: -.05em; line-height: .9;
+  color: var(--accent-text);
+}
+.foto-header { display: flex; flex-direction: column; gap: .2rem; }
+.foto-label { font-weight: 650; font-size: 1.05rem; }
+.foto-obj   { font-family: var(--font-mono); font-size: .74rem; color: var(--muted); }
+.foto-body  { display: flex; flex-direction: column; gap: .6rem; padding-top: .7rem; border-top: 1px solid var(--line); }
+.foto-desc  { font-size: .92rem; color: var(--text-2); line-height: 1.6; }
+.foto-ex    { font-family: var(--font-mono); font-size: .76rem; color: var(--text); line-height: 1.55; }

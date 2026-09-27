@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab de Programación | Base de conocimiento para construir webs | Darío Colángelo</title>
+  <meta name="description" content="Base de conocimiento para construir webs: tipos de sitio, arquitecturas, stacks, servicios, estilos de diseño, tipografías, paletas y buenas prácticas de UX.">
+  <meta name="author" content="Darío Colángelo">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#efefec" media="(prefers-color-scheme: light)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Lab de Programación | Base de conocimiento para construir webs | Darío Colángelo">
+  <meta property="og:description" content="Base de conocimiento para construir webs: tipos de sitio, arquitecturas, stacks, servicios, estilos de diseño, tipografías, paletas y buenas prácticas de UX.">
+  <meta property="og:locale" content="es_AR">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ffe14a'/><text x='50%25' y='54%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%23141207'>DC</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Geist:wght@400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+  <link rel="stylesheet" href="css/root.css">
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/programacion.css">
+  <link rel="stylesheet" href="css/surfaces.css">
+</head>
+<body>
+
+<!-- NAV:start -->
+<a href="#contenido" class="skip-link">Saltar al contenido</a>
+<nav id="site-nav" aria-label="Principal">
+  <a href="index.html" class="nav-logo" aria-label="Darío Colángelo, inicio"><span class="nav-mark" aria-hidden="true">DC</span><span class="nav-name">Darío Colángelo</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">CV</a></li>
+    <li><a href="lab.html">Lab ML</a></li>
+    <li><a href="programacion.html" class="active" aria-current="page">Programación</a></li>
+    <li><a href="armar.html">Armá tu web</a></li>
+    <li><a href="contacto.html" class="nav-cta">Contacto</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Cambiar tema">
+      <svg class="icon icon-sun" aria-hidden="true"><use href="assets/icons.svg#i-sun"/></svg>
+      <svg class="icon icon-moon" aria-hidden="true"><use href="assets/icons.svg#i-moon"/></svg>
+    </button>
+    <button class="hamburger" id="hamburger" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu" aria-label="Menú">
+  <a href="index.html">CV</a>
+  <a href="lab.html">Lab ML</a>
+  <a href="programacion.html" class="active" aria-current="page">Programación</a>
+  <a href="armar.html">Armá tu web</a>
+  <a href="contacto.html">Contacto</a>
+</div>
+<!-- NAV:end -->
+
+
+<main id="contenido">
+
+<section class="wl-hero" aria-labelledby="wl-title">
+  <div class="wl-hero-bg" aria-hidden="true"></div>
+  <p class="section-label">Lab de Programación</p>
+  <h1 class="wl-title" id="wl-title">Todo para construir <span class="grad">una web</span></h1>
+  <p class="wl-sub">Mi base de conocimiento: qué tipo de web conviene, cómo se arma por dentro, qué servicios usar y cómo diseñarla. Buscá, explorá y armá la receta de tu próximo proyecto.</p>
+
+  <div class="wl-search" role="search">
+    <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-search"/></svg>
+    <label for="wl-q" class="sr-only">Buscar en el Lab</label>
+    <input id="wl-q" type="search" placeholder="Buscar: “serverless”, “e-commerce”, “glassmorphism”, “contraste”…" autocomplete="off" spellcheck="false">
+    <kbd aria-hidden="true">/</kbd>
+  </div>
+  <p class="wl-stats" id="wl-stats" aria-live="polite">Cargando la base…</p>
+</section>
+
+<div class="wl-app">
+  <aside class="wl-side" aria-label="Categorías">
+    <nav id="wl-cats"></nav>
+    <button type="button" class="wl-recipe-btn" id="wl-recipe-open" aria-haspopup="dialog">
+      <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-bookmark"/></svg>
+      <span>Mi receta</span><span class="wl-badge" id="wl-recipe-count">0</span>
+    </button>
+  </aside>
+
+  <section class="wl-main" aria-live="polite" aria-busy="true" id="wl-main">
+    <header class="wl-cat-head" id="wl-cat-head"></header>
+    <div class="wl-filters" id="wl-filters" role="group" aria-label="Filtrar por etiqueta"></div>
+    <p class="wl-count" id="wl-count"></p>
+    <div class="wl-grid" id="wl-grid"></div>
+  </section>
+</div>
+
+</main>
+
+<!-- Ficha -->
+<div class="wl-drawer" id="wl-drawer" role="dialog" aria-modal="true" aria-labelledby="wl-d-title" hidden>
+  <div class="wl-drawer-panel">
+    <div class="wl-drawer-top">
+      <span class="wl-d-cat" id="wl-d-cat"></span>
+      <div class="wl-drawer-tools">
+        <button type="button" class="wl-tool" id="wl-d-link" aria-label="Copiar link a esta ficha"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-link"/></svg></button>
+        <button type="button" class="wl-tool" id="wl-d-close" aria-label="Cerrar ficha"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-x"/></svg></button>
+      </div>
+    </div>
+    <div class="wl-drawer-body" id="wl-d-body"></div>
+  </div>
+</div>
+
+<!-- Receta -->
+<div class="wl-drawer" id="wl-recipe" role="dialog" aria-modal="true" aria-labelledby="wl-r-title" hidden>
+  <div class="wl-drawer-panel">
+    <div class="wl-drawer-top">
+      <h2 class="wl-r-title" id="wl-r-title">Mi receta</h2>
+      <div class="wl-drawer-tools">
+        <button type="button" class="wl-tool" id="wl-r-close" aria-label="Cerrar receta"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-x"/></svg></button>
+      </div>
+    </div>
+    <div class="wl-drawer-body">
+      <p class="wl-r-intro">Sumá fichas con <strong>“Agregar a mi receta”</strong> y armá el plan de una web: qué tipo es, cómo se construye, con qué servicios y cómo se ve. Se guarda en este navegador.</p>
+      <div id="wl-r-slots"></div>
+      <div class="wl-r-actions">
+        <button type="button" class="btn-primary" id="wl-r-copy"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-copy"/></svg><span>Copiar como Markdown</span></button>
+        <button type="button" class="btn-secondary" id="wl-r-clear"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-trash"/></svg>Vaciar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p class="footer-name">Darío Colángelo<span>.</span></p>
+  <ul class="footer-links">
+    <li><a href="assets/Dario-Colangelo-CV.pdf" download><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-download"/></svg>CV en PDF</a></li>
+    <li><a href="https://www.linkedin.com/in/dariocolangelo/" target="_blank" rel="noopener">LinkedIn</a></li>
+    <li><a href="https://wa.me/541144474507" target="_blank" rel="noopener">WhatsApp</a></li>
+    <li><a href="mailto:daricolangelo@gmail.com">daricolangelo@gmail.com</a></li>
+  </ul>
+  <div class="footer-note">
+    <span>Analista de E-Commerce · CABA, Argentina</span>
+    <a href="#contenido" class="footer-top"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-up"/></svg>Volver arriba</a>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/programacion-ejemplos.js"></script>
+<script src="js/programacion.js"></script>
+</body>
+</html>

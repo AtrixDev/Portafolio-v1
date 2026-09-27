@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cuenta vinculada | Darío Colángelo</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#efefec" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ffe14a'/><text x='50%25' y='54%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%23141207'>DC</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Geist:wght@400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+  <link rel="stylesheet" href="css/root.css">
+  <link rel="stylesheet" href="css/shared.css">
+  <style>
+    body { background: var(--bg); }
+    .vk { min-height: 100dvh; display: grid; place-items: center; padding: 1.5rem; }
+    .vk-card { width: min(480px, 100%); padding: 2.25rem 2rem; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--edge), var(--shadow-lg); }
+    .vk-ic { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 14px; font-size: 1.5rem; background: var(--ok-soft); color: var(--ok); }
+    .vk[data-estado="error"] .vk-ic, .vk[data-estado="cancelado"] .vk-ic { background: var(--bad-soft); color: var(--bad); }
+    .vk h1 { margin-top: 1.25rem; font-family: var(--font-display); font-size: clamp(1.6rem, 5vw, 2.1rem); font-weight: 750; letter-spacing: -.04em; line-height: 1.1; }
+    .vk p { margin-top: .75rem; color: var(--text-2); line-height: 1.6; }
+    .vk ul { margin: 1rem 0 0 1.1rem; color: var(--text-2); font-size: .92rem; line-height: 1.6; }
+    .vk .btn-primary { margin-top: 1.5rem; }
+  </style>
+  <link rel="stylesheet" href="css/surfaces.css">
+</head>
+<body>
+<main class="vk" id="vk" data-estado="ok">
+  <div class="vk-card">
+    <span class="vk-ic" id="vk-ic" aria-hidden="true"><svg class="icon"><use href="assets/icons.svg#i-check"/></svg></span>
+    <h1 id="vk-title">Listo, tu cuenta quedó vinculada</h1>
+    <p id="vk-text">Gracias. Ya puedo analizar tus publicaciones, visitas y ventas para armarte el plan de acción.</p>
+    <ul id="vk-list">
+      <li>Solo se leen datos: no se modifica nada de tu cuenta.</li>
+      <li>Podés quitar el acceso cuando quieras desde Mercado Libre: Mi perfil → Seguridad → Aplicaciones conectadas.</li>
+    </ul>
+    <a class="btn-primary" href="https://wa.me/541144474507" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-message"/></svg>Escribirle a Darío</a>
+  </div>
+</main>
+<script>
+  (function () {
+    var p = new URLSearchParams(location.search), e = p.get('estado') || 'ok', nick = p.get('nick');
+    var box = document.getElementById('vk'); box.dataset.estado = e;
+    if (e === 'ok' && nick) document.getElementById('vk-title').textContent = 'Listo, ' + nick + ' quedó vinculada';
+    if (e !== 'ok') {
+      document.getElementById('vk-ic').innerHTML = '<svg class="icon"><use href="assets/icons.svg#i-x"/></svg>';
+      document.getElementById('vk-title').textContent = e === 'cancelado' ? 'No se vinculó la cuenta' : 'No pudimos vincular la cuenta';
+      document.getElementById('vk-text').textContent = e === 'cancelado' ? 'Cancelaste la autorización en Mercado Libre. Si fue sin querer, volvé a abrir el link que te pasé.' : 'Algo falló del lado de Mercado Libre. Probá abrir el link otra vez; si sigue pasando, avisame.';
+      document.getElementById('vk-list').hidden = true;
+    }
+  })();
+</script>
+</body>
+</html>

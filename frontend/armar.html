@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Armá tu web | Darío Colángelo</title>
+  <meta name="description" content="Elegí tu rubro, tu estilo y lo que necesitás: ves tu web armándose en vivo y me la pedís con un clic. Webs profesionales para negocios de Argentina.">
+  <meta name="author" content="Darío Colángelo">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#efefec" media="(prefers-color-scheme: light)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Armá tu web | Darío Colángelo">
+  <meta property="og:description" content="Elegí tu rubro, tu estilo y lo que necesitás: ves tu web armándose en vivo y me la pedís con un clic. Webs profesionales para negocios de Argentina.">
+  <meta property="og:locale" content="es_AR">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ffe14a'/><text x='50%25' y='54%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%23141207'>DC</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Geist:wght@400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+  <link rel="stylesheet" href="css/root.css">
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/armar.css">
+  <link rel="stylesheet" href="css/surfaces.css">
+</head>
+<body>
+
+<!-- NAV:start -->
+<a href="#contenido" class="skip-link">Saltar al contenido</a>
+<nav id="site-nav" aria-label="Principal">
+  <a href="index.html" class="nav-logo" aria-label="Darío Colángelo, inicio"><span class="nav-mark" aria-hidden="true">DC</span><span class="nav-name">Darío Colángelo</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">CV</a></li>
+    <li><a href="lab.html">Lab ML</a></li>
+    <li><a href="programacion.html">Programación</a></li>
+    <li><a href="armar.html" class="active" aria-current="page">Armá tu web</a></li>
+    <li><a href="contacto.html" class="nav-cta">Contacto</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Cambiar tema">
+      <svg class="icon icon-sun" aria-hidden="true"><use href="assets/icons.svg#i-sun"/></svg>
+      <svg class="icon icon-moon" aria-hidden="true"><use href="assets/icons.svg#i-moon"/></svg>
+    </button>
+    <button class="hamburger" id="hamburger" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu" aria-label="Menú">
+  <a href="index.html">CV</a>
+  <a href="lab.html">Lab ML</a>
+  <a href="programacion.html">Programación</a>
+  <a href="armar.html" class="active" aria-current="page">Armá tu web</a>
+  <a href="contacto.html">Contacto</a>
+</div>
+<!-- NAV:end -->
+
+
+<main id="contenido">
+
+<section class="ab-hero" aria-labelledby="ab-title">
+  <div class="ab-hero-copy">
+    <p class="section-label">Webs para negocios</p>
+    <h1 class="ab-title" id="ab-title">Armá tu <span class="grad">web</span></h1>
+    <p class="ab-sub">Elegí tu rubro y lo que necesitás. En dos minutos ves cómo quedaría tu web, y si te gusta me la pedís con un clic.</p>
+  </div>
+  <ol class="ab-how" aria-label="Cómo funciona">
+    <li><strong>Elegí</strong><span>rubro, estilo y funcionalidades</span></li>
+    <li><strong>Mirá</strong><span>tu web en escritorio y celular</span></li>
+    <li><strong>Pedila</strong><span>te llega el diseño y lo hacemos real</span></li>
+  </ol>
+</section>
+
+<section class="ab-app" aria-label="Constructor">
+  <div class="ab-controls">
+
+    <fieldset class="ab-step">
+      <legend><span class="ab-n">1</span>Tu negocio</legend>
+      <div class="ab-choices" id="ab-negocios" role="group" aria-label="Rubro"></div>
+      <label class="ab-field"><span>Nombre del negocio</span><input id="ab-nombre" type="text" maxlength="40" autocomplete="organization" placeholder="Ej: Almacén Doña Rosa"></label>
+    </fieldset>
+
+    <fieldset class="ab-step">
+      <legend><span class="ab-n">2</span>¿Qué querés lograr?</legend>
+      <div class="ab-opts" id="ab-objetivos"></div>
+    </fieldset>
+
+    <fieldset class="ab-step">
+      <legend><span class="ab-n">3</span>Estilo</legend>
+      <div class="ab-styles" id="ab-estilos"></div>
+      <p class="ab-sublegend">Colores</p>
+      <div class="ab-pals" id="ab-paletas"></div>
+      <p class="ab-sublegend">Tipografía</p>
+      <div class="ab-fonts" id="ab-fuentes"></div>
+      <button type="button" class="ab-link" id="ab-random"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-refresh"/></svg><span>Probar otra combinación</span></button>
+    </fieldset>
+
+    <fieldset class="ab-step">
+      <legend><span class="ab-n">4</span>Secciones</legend>
+      <div class="ab-checks" id="ab-secciones"></div>
+    </fieldset>
+
+    <fieldset class="ab-step">
+      <legend><span class="ab-n">5</span>Funcionalidades</legend>
+      <div class="ab-feats" id="ab-funciones"></div>
+    </fieldset>
+  </div>
+
+  <div class="ab-preview">
+    <div class="ab-preview-sticky">
+      <div class="ab-toolbar">
+        <div class="ab-devices" role="group" aria-label="Vista">
+          <button type="button" data-device="desktop" aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-layout"/></svg>Escritorio</button>
+          <button type="button" data-device="mobile" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-phone"/></svg>Celular</button>
+        </div>
+        <button type="button" class="ab-link" id="ab-share"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-link"/></svg><span>Copiar link del diseño</span></button>
+      </div>
+      <div class="ab-frame" id="ab-frame" data-device="desktop">
+        <div class="ab-chrome" aria-hidden="true"><i></i><i></i><i></i><span id="ab-url">tunegocio.com.ar</span></div>
+        <div class="ab-screen"><div class="site" id="ab-site" aria-label="Vista previa de tu web"></div></div>
+      </div>
+      <p class="ab-disclaimer">Vista previa con textos e imágenes de ejemplo. Tu web va con tus fotos, tus textos y tu marca.</p>
+    </div>
+  </div>
+</section>
+
+<section class="ab-order" id="pedido" aria-labelledby="ab-order-title">
+  <div class="ab-sum" id="ab-sum" aria-live="polite"></div>
+  <div class="ab-request">
+    <h2 class="ab-order-title" id="ab-order-title">¿Te gusta? <span class="grad">Hagámosla.</span></h2>
+    <p class="ab-order-sub">Te llega este diseño con todo lo que elegiste. Te respondo con los próximos pasos y el presupuesto.</p>
+    <form class="ab-form" id="ab-form" novalidate>
+      <label class="ab-field"><span>Tu nombre</span><input name="name" type="text" autocomplete="name" maxlength="80" required></label>
+      <label class="ab-field"><span>Email</span><input name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" required></label>
+      <label class="ab-field ab-field-wide"><span>¿Algo más que quieras contarme? <small>(opcional)</small></span><textarea name="message" rows="3" maxlength="1500" placeholder="Ej: ya tengo logo y fotos, necesito que esté lista antes de fin de mes."></textarea></label>
+      <div class="ab-form-actions">
+        <button type="submit" class="btn-primary"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-send"/></svg>Quiero esta web</button>
+        <button type="button" class="btn-secondary" id="ab-wa"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-message"/></svg>Mandarla por WhatsApp</button>
+      </div>
+      <div id="ab-form-status" aria-live="polite"></div>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p class="footer-name">Darío Colángelo<span>.</span></p>
+  <ul class="footer-links">
+    <li><a href="assets/Dario-Colangelo-CV.pdf" download><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-download"/></svg>CV en PDF</a></li>
+    <li><a href="https://www.linkedin.com/in/dariocolangelo/" target="_blank" rel="noopener">LinkedIn</a></li>
+    <li><a href="https://wa.me/541144474507" target="_blank" rel="noopener">WhatsApp</a></li>
+    <li><a href="mailto:daricolangelo@gmail.com">daricolangelo@gmail.com</a></li>
+  </ul>
+  <div class="footer-note">
+    <span>Analista de E-Commerce · CABA, Argentina</span>
+    <a href="#contenido" class="footer-top"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-up"/></svg>Volver arriba</a>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/armar.js"></script>
+</body>
+</html>

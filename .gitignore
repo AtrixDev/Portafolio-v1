@@ -1,0 +1,20 @@
+# ── Secretos: nunca se suben ──
+.env
+.env.*
+!.env.example
+
+# Autoevaluación y precios (se publican en Vercel, no en GitHub)
+backend/lib/privado/
+
+# CV en PDF: tiene datos personales; se sirve desde la web, no desde el repo
+frontend/assets/*.pdf
+
+# ── Generados y dependencias ──
+node_modules/
+.deploy/
+.vercel/
+__pycache__/
+*.pyc
+
+# Copias de seguridad viejas
+_backup-*/
