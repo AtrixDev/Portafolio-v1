@@ -18,3 +18,6 @@ __pycache__/
 
 # Copias de seguridad viejas
 _backup-*/
+
+# Sesión de Mercado Libre del extractor (cookies): nunca se sube
+tools/.ml-perfil/

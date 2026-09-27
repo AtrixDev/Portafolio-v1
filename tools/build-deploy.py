@@ -40,7 +40,7 @@ NO_STORE = [{"key": "Cache-Control", "value": "no-store"}]
         {"source": "/(css|js)/(admin|tracker-app).(.*)", "headers": NO_STORE},
     ],
     # ML Tracker: la sincronización puede tardar; el cron la corre todos los días a las 7 (hora argentina)
-    "functions": {"api/tracker.js": {"maxDuration": 60}},
+    "functions": {"api/tracker.js": {"maxDuration": 60}, "api/portfolio.js": {"maxDuration": 30}},
     "crons": [{"path": "/api/tracker?action=cron", "schedule": "0 10 * * *"}],
 }, indent=2) + "\n")
 files = sum(1 for _ in OUT.rglob("*") if _.is_file())

@@ -100,6 +100,42 @@ document.querySelectorAll('.ce-thumb').forEach(thumb => {
 });
 
 
+// ── PUBLICACIONES DESTACADAS (/api/portfolio) ──
+// Una sola llamada para la tira de la portada y el modal del historial
+let _pfPromise = null;
+function getPortfolio() {
+  _pfPromise ||= fetch('/api/portfolio').then(r => (r.ok ? r.json() : { items: [] })).then(d => d.items || []).catch(() => []);
+  return _pfPromise;
+}
+
+function pmCard(item) {
+  const img = safeUrl(item.image), url = safeUrl(item.url);
+  const tag = item.category || (item.clase === 'creado' ? 'Catálogo creado' : item.clase === 'rehecho' ? 'Publicación rehecha' : '');
+  const inner = `
+    ${img ? `<span class="pm-case-img"><img src="${img}" alt="${esc(item.title)}" loading="lazy"></span>` : ''}
+    <span class="pm-case-body">
+      ${tag ? `<span class="pm-case-tag">${esc(tag)}</span>` : ''}
+      <span class="pm-case-title">${esc(item.title || item.brand)}</span>
+      ${item.brand ? `<span class="pm-case-brand">${esc(item.brand)}</span>` : ''}
+      ${item.metrics ? `<span class="pm-case-metric">${esc(item.metrics)}</span>` : ''}
+    </span>`;
+  return url ? `<a class="pm-case" href="${url}" target="_blank" rel="noopener">${inner}<span class="sr-only">(se abre en otra pestaña)</span></a>` : `<div class="pm-case">${inner}</div>`;
+}
+
+(function () {
+  const box = document.getElementById('ce-pubs'), grid = document.getElementById('ce-pubs-grid');
+  if (!box || !grid) return;
+  getPortfolio().then(items => {
+    const veni = items.filter(i => /veni a la cocina/i.test(String(i.employer || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '')));
+    if (!veni.length) return;
+    grid.innerHTML = veni.slice(0, 4).map(pmCard).join('');
+    box.hidden = false;
+    const txt = document.getElementById('btn-open-portfolio-txt');
+    if (txt && veni.length > 4) txt.textContent = `Ver las ${veni.length} publicaciones destacadas`;
+  });
+})();
+
+
 // ── MODAL DE PORTFOLIO ──
 (function () {
   const modal = document.getElementById('portfolio-modal');
@@ -143,37 +179,40 @@ document.querySelectorAll('.ce-thumb').forEach(thumb => {
   // Items dinámicos desde la API, antes de los estáticos
   async function loadPortfolioAPI() {
     try {
-      const res = await fetch('/api/portfolio');
-      if (!res.ok) return;
-      const { items } = await res.json();
-      if (items && items.length) renderDynamicPortfolio(items);
+      const items = await getPortfolio();
+      if (items.length) renderDynamicPortfolio(items);
     } catch (e) { /* offline o sin backend — quedan los items estáticos */ }
   }
 
+  // Las publicaciones destacadas se muestran como tarjetas dentro del bloque de su empleador
+  // (si ya existe en el HTML); las de otros empleadores arman su propio bloque arriba.
   function renderDynamicPortfolio(items) {
     const container = document.getElementById('pm-dynamic-items');
     if (!container) return;
+    const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().split('·')[0].trim();
+    const bloques = [...document.querySelectorAll('#portfolio-modal .pm-employer')];
     const byEmployer = {};
-    items.forEach(item => {
-      const key = item.employer || 'Sin empresa';
-      (byEmployer[key] ||= []).push(item);
+    items.forEach(item => { (byEmployer[item.employer || 'Otras publicaciones'] ||= []).push(item); });
+
+    const card = pmCard;
+    const grilla = list => `
+      <p class="pm-cases-head">Publicaciones destacadas <small>vendidos = total histórico de cada publicación</small></p>
+      <div class="pm-cases">${list.map(card).join('')}</div>`;
+
+    let nuevos = '';
+    Object.entries(byEmployer).forEach(([employer, list]) => {
+      const bloque = bloques.find(b => norm(b.querySelector('.pm-employer-label span')?.textContent) === norm(employer));
+      if (bloque) {
+        bloque.querySelector('.pm-cases-wrap')?.remove();
+        const wrap = document.createElement('div');
+        wrap.className = 'pm-cases-wrap';
+        wrap.innerHTML = grilla(list);
+        bloque.querySelector('.pm-employer-label').after(wrap);
+      } else {
+        nuevos += `<div class="pm-employer"><div class="pm-employer-label"><span>${esc(employer)}</span></div>${grilla(list)}</div>`;
+      }
     });
-    container.innerHTML = Object.entries(byEmployer).map(([employer, empItems]) => `
-      <div class="pm-employer">
-        <div class="pm-employer-label"><span>${esc(employer)}</span></div>
-        <div class="pm-brands">${empItems.map(item => {
-          const img = safeUrl(item.image), url = safeUrl(item.url);
-          return `
-          <div class="pm-brand">
-            ${img ? `<div class="pm-gal-item" style="margin-bottom:.8rem;"><img src="${img}" alt="${esc(item.title)}" loading="lazy"></div>` : ''}
-            <div class="pm-brand-name">${esc(item.brand || (item.title || '').slice(0, 40))}</div>
-            <div class="pm-brand-cat">${esc(item.category)}</div>
-            ${item.metrics ? `<span class="pm-brand-pill">${esc(item.metrics)}</span>` : ''}
-            ${url ? `<br><a href="${url}" target="_blank" rel="noopener" class="cert-link" style="margin-top:.6rem;">Ver en ML ${icon('external')}</a>` : ''}
-          </div>`;
-        }).join('')}
-        </div>
-      </div>`).join('') + '<hr class="pm-sep">';
+    container.innerHTML = nuevos;
   }
 })();
 

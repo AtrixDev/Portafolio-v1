@@ -12,7 +12,7 @@
   <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
   <link rel="stylesheet" href="css/root.css">
   <link rel="stylesheet" href="css/shared.css">
-  <link rel="stylesheet" href="css/admin.css?v=4">
+  <link rel="stylesheet" href="css/admin.css?v=5">
   <link rel="stylesheet" href="css/tracker-app.css?v=5">
   <link rel="stylesheet" href="css/academia.css?v=4">
 </head>
@@ -114,24 +114,40 @@
 
     <!-- HISTORIAL DE PUBLICACIONES -->
     <section class="cp-sec" id="ps-portfolio">
-      <header class="cp-head"><h2>Historial de publicaciones</h2><p>Se muestran arriba de todo en el panel "Historial de publicaciones" del inicio.</p></header>
+      <header class="cp-head"><h2>Historial de publicaciones</h2><p>Las marcadas con <b>★ Destacada</b> se muestran en el panel "Historial de publicaciones" del inicio. El resto queda guardado acá como respaldo.</p></header>
       <div class="cp-card">
         <label class="cp-field"><span>Link de Mercado Libre</span>
-          <span class="cp-inline"><input id="pf-url" type="url" placeholder="https://articulo.mercadolibre.com.ar/MLA-..."><button type="button" class="btn-secondary" id="pf-scrape"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-zap"/></svg>Completar solo</button></span>
+          <span class="cp-inline"><input id="pf-url" type="url" placeholder="https://www.mercadolibre.com.ar/.../p/MLA... o /up/MLAU..."><button type="button" class="btn-secondary" id="pf-scrape"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-zap"/></svg>Extraer datos</button></span>
         </label>
+        <div class="cp-row pf-periodo">
+          <label class="cp-field"><span>Trabajé ahí desde</span><input id="pf-desde" type="month" value="2025-06"></label>
+          <label class="cp-field"><span>Hasta</span><input id="pf-hasta" type="month" value="2025-12"></label>
+        </div>
+        <div class="pf-evid" id="pf-evid" hidden></div>
         <div class="cp-row">
           <label class="cp-field"><span>Título</span><input id="pf-title" type="text"></label>
           <label class="cp-field"><span>URL de la imagen</span><input id="pf-image" type="url" placeholder="https://http2.mlstatic.com/..."></label>
-          <label class="cp-field"><span>Marca / tienda</span><input id="pf-brand" type="text" placeholder="Borner"></label>
-          <label class="cp-field"><span>Empleador</span><input id="pf-employer" type="text" placeholder="Vení A La Cocina"></label>
-          <label class="cp-field"><span>Categoría</span><input id="pf-category" type="text" placeholder="Mandolinas · Cocina"></label>
-          <label class="cp-field"><span>Logro</span><input id="pf-metrics" type="text" placeholder="+39,2% facturación"></label>
+          <label class="cp-field"><span>Marca</span><input id="pf-brand" type="text" placeholder="Microplane"></label>
+          <label class="cp-field"><span>Empleador</span><input id="pf-employer" type="text" value="Vení A La Cocina · Tiendas Oficiales"></label>
+          <label class="cp-field"><span>Qué hiciste</span><input id="pf-category" type="text" placeholder="Publicación rehecha"></label>
+          <label class="cp-field"><span>Logro (se muestra en la web)</span><input id="pf-metrics" type="text" placeholder="+5 mil vendidos · ★ 4,8 (1.142 opiniones)"></label>
+          <label class="cp-field"><span>Vendidos</span><input id="pf-vendidos" type="number" min="0" inputmode="numeric"></label>
+          <label class="cp-field"><span>Opiniones · calificación</span><span class="cp-inline"><input id="pf-opiniones" type="number" min="0" inputmode="numeric" placeholder="Opiniones"><input id="pf-rating" type="number" min="0" max="5" step="0.1" inputmode="decimal" placeholder="4,8"></span></label>
         </div>
         <label class="cp-field"><span>Notas internas <small>(no se muestran)</small></span><input id="pf-notes" type="text"></label>
+        <label class="pf-check"><input id="pf-destacada" type="checkbox" checked> Destacar en la web</label>
         <div class="cp-preview" id="pf-preview" hidden><img id="pf-preview-img" src="" alt=""><span id="pf-preview-title"></span></div>
         <div class="cp-actions cp-actions-in"><button type="button" class="btn-primary" id="pf-add"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-plus"/></svg>Agregar publicación</button><span class="cp-status" id="pf-status" aria-live="polite"></span></div>
       </div>
-      <h3 class="cp-subhead">Publicaciones guardadas</h3>
+
+      <h3 class="cp-subhead">Publicaciones guardadas <small class="pf-count" id="pf-count"></small></h3>
+      <div class="pf-tools">
+        <label class="cp-field"><span>Buscar</span><input id="pf-q" type="search" placeholder="Título o marca"></label>
+        <label class="cp-field"><span>Marca</span><select id="pf-f-marca"><option value="">Todas</option></select></label>
+        <label class="cp-field"><span>Qué hiciste</span><select id="pf-f-clase"><option value="">Todo</option><option value="creado">Catálogo creado</option><option value="rehecho">Publicación rehecha</option><option value="retocado">Retocada</option><option value="ninguna">Sin evidencia</option></select></label>
+        <label class="cp-field"><span>En la web</span><select id="pf-f-dest"><option value="">Todas</option><option value="1">Solo destacadas</option><option value="0">No destacadas</option></select></label>
+      </div>
+      <div class="pf-bulk" id="pf-bulk" hidden><span id="pf-bulk-txt"></span><button type="button" class="btn-secondary cp-sm cp-danger-txt" id="pf-del-filtradas"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-trash"/></svg>Eliminar las filtradas</button></div>
       <div class="cp-list" id="pf-list"><p class="cp-empty">Cargando…</p></div>
     </section>
 
@@ -299,6 +315,6 @@
 <script src="js/main.js"></script>
 <script src="js/tracker-app.js?v=5"></script>
 <script src="js/academia.js?v=4"></script>
-<script src="js/admin.js?v=6"></script>
+<script src="js/admin.js?v=7"></script>
 </body>
 </html>

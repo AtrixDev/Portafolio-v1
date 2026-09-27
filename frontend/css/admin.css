@@ -147,3 +147,34 @@
   .cp-row { grid-template-columns: 1fr; }
   .cp-inline { flex-direction: column; }
 }
+
+/* ── Historial de publicaciones: extracción, filtros y destacadas ── */
+.cp-field select {
+  width: 100%; min-height: 44px; padding: .6rem .8rem; border-radius: var(--r-md);
+  border: 1px solid var(--line-strong); background: var(--bg2); color: var(--text); font: inherit; font-size: .95rem;
+}
+.pf-periodo { margin-top: .25rem; }
+.pf-check { display: inline-flex; align-items: center; gap: .5rem; margin-top: 1rem; font-size: .9rem; cursor: pointer; }
+.pf-check input { width: 18px; height: 18px; accent-color: var(--accent); }
+.pf-evid { margin-top: 1rem; padding: .85rem 1rem; border-radius: 12px; background: var(--bg2); border: 1px solid var(--line); font-size: .86rem; line-height: 1.55; }
+.pf-evid[hidden] { display: none; }
+.pf-evid strong { font-size: .95rem; }
+.pf-evid ul { margin: .35rem 0 0; padding-left: 1.1rem; color: var(--text-2); }
+.pf-evid .pf-warn { color: var(--bad); }
+.pf-meses { display: flex; flex-wrap: wrap; gap: .25rem; margin-top: .45rem; }
+.pf-meses span { padding: .05rem .4rem; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: .72rem; border: 1px solid var(--line-strong); color: var(--muted); }
+.pf-meses span.is-in { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.pf-count { font-size: .85rem; font-weight: 400; color: var(--muted); margin-left: .35rem; }
+.pf-tools { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: .75rem; margin-bottom: .9rem; }
+.pf-tools .cp-field { margin-top: 0; }
+.pf-bulk { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .6rem; margin-bottom: .9rem; padding: .6rem .9rem; border-radius: 12px; border: 1px dashed var(--line-strong); font-size: .86rem; color: var(--text-2); }
+.pf-bulk[hidden] { display: none; }
+.cp-danger-txt { color: var(--bad) !important; }
+.pf-item-acts { display: flex; gap: .4rem; }
+.pf-star[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.pf-item.is-off { opacity: .72; }
+.pf-item .pf-ev { color: var(--muted); font-size: .76rem; }
+@media (max-width: 860px) {
+  .pf-tools { grid-template-columns: 1fr 1fr; }
+  .pf-tools .cp-field:first-child { grid-column: 1 / -1; }
+}

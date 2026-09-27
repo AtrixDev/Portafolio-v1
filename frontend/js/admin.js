@@ -126,56 +126,158 @@
   document.querySelectorAll('[data-save]').forEach(b => b.addEventListener('click', () => save(b.dataset.save)));
 
   // ── Historial de publicaciones ──
+  // "Extraer datos" lee el link (catálogo por API + extracción guardada) y estima qué hiciste
+  // vos según el mes de subida de cada foto. Lo que no se pudo leer se completa a mano.
+  const CLASE_TXT = { creado: 'Catálogo creado', rehecho: 'Publicación rehecha', retocado: 'Retocada', ninguna: 'Sin evidencia' };
+  let PF_EXTRA = {};   // datos de la extracción que no tienen campo en el formulario
+  let PF_ITEMS = [];
+
   $('pf-scrape').addEventListener('click', async () => {
     const url = $('pf-url').value.trim(); if (!url) { $('pf-url').focus(); return; }
-    const st = $('pf-status'); st.textContent = 'Buscando datos…';
+    const st = $('pf-status'); st.textContent = 'Leyendo la publicación…';
+    const btn = $('pf-scrape'); btn.disabled = true;
     try {
-      const r = await api(`/api/portfolio?scrape=1&url=${encodeURIComponent(url)}`);
+      const qs = new URLSearchParams({ scrape: 1, url, desde: $('pf-desde').value, hasta: $('pf-hasta').value });
+      const r = await api(`/api/portfolio?${qs}`);
       const d = await r.json();
-      if (d.title) $('pf-title').value = d.title;
-      if (d.image) { $('pf-image').value = d.image; preview(d.title, d.image); }
-      st.textContent = d.title ? 'Listo, revisá los datos.' : 'No se pudo leer todo: completalo a mano.';
-    } catch (e) { st.textContent = 'No se pudo leer: completalo a mano.'; }
+      if (!r.ok) { st.textContent = d.error || 'No se pudo leer el link.'; return; }
+      const set = (id, v) => { if (v != null && v !== '') $(id).value = v; };
+      set('pf-url', d.url); set('pf-title', d.titulo); set('pf-image', d.imagen); set('pf-brand', d.marca);
+      set('pf-category', CLASE_TXT[d.clase]); set('pf-metrics', d.logro);
+      set('pf-vendidos', d.vendidos); set('pf-opiniones', d.opiniones); set('pf-rating', d.rating);
+      PF_EXTRA = { clase: d.clase, fotosPeriodo: d.fotosPeriodo, catalogoCreado: d.catalogoCreado, meses: d.meses, galeria: d.galeria };
+      if (d.imagen) preview(d.titulo, d.imagen);
+      renderEvid(d);
+      st.textContent = d.yaCargada ? 'Ojo: esta publicación ya está en tu lista.' : (d.titulo ? 'Listo, revisá los datos.' : 'No se pudo leer todo: completalo a mano.');
+    } catch (e) { if (e.message !== '401') st.textContent = 'No se pudo leer: completalo a mano.'; }
+    finally { btn.disabled = false; }
   });
+
+  function renderEvid(d) {
+    const desde = $('pf-desde').value, hasta = $('pf-hasta').value;
+    const en = m => m && m >= desde && m <= hasta;
+    const meses = d.meses || [];
+    const box = $('pf-evid');
+    box.innerHTML = `
+      <strong>${esc(CLASE_TXT[d.clase] || 'Sin evidencia')}</strong>
+      <ul>
+        <li>${meses.length ? `${d.fotosPeriodo} de ${meses.length} fotos subidas en tu período` : 'No se pudieron leer las fotos'}${meses.length ? ' (la portada no cuenta: ML la reprocesa sola)' : ''}</li>
+        ${d.catalogoCreado ? `<li>Catálogo creado el ${esc(new Date(d.catalogoCreado + 'T12:00').toLocaleDateString('es-AR'))}${en(d.catalogoCreado.slice(0, 7)) ? ' — <b>en tu período</b>' : ''}</li>` : ''}
+        ${d.fuentes?.length ? `<li>Datos de: ${esc(d.fuentes.join(', '))}</li>` : ''}
+        ${(d.faltan || []).map(f => `<li class="pf-warn">Falta: ${esc(f)}</li>`).join('')}
+      </ul>
+      ${meses.length ? `<div class="pf-meses" aria-label="Mes de subida de cada foto">${meses.map(m => `<span class="${en(m) ? 'is-in' : ''}">${esc(m ? m.slice(5) + '/' + m.slice(2, 4) : '?')}</span>`).join('')}</div>` : ''}`;
+    box.hidden = false;
+  }
+
   function preview(title, img) { $('pf-preview').hidden = false; $('pf-preview-img').src = img; $('pf-preview-title').textContent = title || ''; }
   $('pf-image').addEventListener('change', () => { const u = $('pf-image').value.trim(); if (/^https?:/.test(u)) preview($('pf-title').value, u); });
 
-  const PF = ['pf-url', 'pf-title', 'pf-image', 'pf-brand', 'pf-employer', 'pf-category', 'pf-metrics', 'pf-notes'];
+  const PF = ['pf-url', 'pf-title', 'pf-image', 'pf-brand', 'pf-employer', 'pf-category', 'pf-metrics', 'pf-notes', 'pf-vendidos', 'pf-opiniones', 'pf-rating'];
+  function resetForm() {
+    PF.filter(id => id !== 'pf-employer').forEach(id => { $(id).value = ''; });
+    $('pf-preview').hidden = true; $('pf-evid').hidden = true; $('pf-destacada').checked = true; PF_EXTRA = {};
+  }
   $('pf-add').addEventListener('click', async () => {
     const st = $('pf-status');
-    const body = Object.fromEntries(PF.map(id => [id.slice(3), $(id).value.trim()]));
+    const body = { ...PF_EXTRA, ...Object.fromEntries(PF.map(id => [id.slice(3), $(id).value.trim()])) };
+    body.destacada = $('pf-destacada').checked;
     body.skipScrape = true;
     if (!body.url && !body.title) { st.textContent = 'Poné al menos el link o el título.'; return; }
     st.textContent = 'Guardando…';
     try {
       const r = await api('/api/portfolio', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-      if (!r.ok) throw new Error(r.status);
-      PF.forEach(id => { $(id).value = ''; }); $('pf-preview').hidden = true;
-      st.textContent = ''; toast('Publicación agregada.'); loadPortfolio();
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) { st.textContent = d.error || 'No se pudo guardar.'; return; }
+      resetForm(); st.textContent = ''; toast(body.destacada ? 'Agregada: ya se ve en la web.' : 'Agregada (sin destacar).'); loadPortfolio();
     } catch (e) { if (e.message !== '401') st.textContent = 'No se pudo guardar.'; }
   });
 
   async function loadPortfolio() {
-    const list = $('pf-list');
     try {
-      const { items } = await (await fetch('/api/portfolio')).json();
-      if (!items?.length) { list.innerHTML = '<p class="cp-empty">Todavía no agregaste publicaciones. El inicio muestra las que vienen de fábrica.</p>'; return; }
-      list.innerHTML = items.map(it => `
-        <article class="cp-item">
-          ${safeUrl(it.image) ? `<img src="${safeUrl(it.image)}" alt="">` : '<span class="cp-item-noimg">Sin imagen</span>'}
+      const r = await api('/api/portfolio?all=1'); if (!r.ok) throw new Error(r.status);
+      PF_ITEMS = (await r.json()).items || [];
+      const marcas = [...new Set(PF_ITEMS.map(i => i.brand).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es'));
+      const sel = $('pf-f-marca'), actual = sel.value;
+      sel.innerHTML = '<option value="">Todas</option>' + marcas.map(m => `<option${m === actual ? ' selected' : ''}>${esc(m)}</option>`).join('')
+        + (PF_ITEMS.some(i => !i.brand) ? `<option value="__sin"${actual === '__sin' ? ' selected' : ''}>(sin marca)</option>` : '');
+      renderPortfolio();
+    } catch (e) { if (e.message !== '401') $('pf-list').innerHTML = '<p class="cp-empty">No se pudo cargar la lista.</p>'; }
+  }
+
+  function filtradas() {
+    const q = $('pf-q').value.trim().toLowerCase(), marca = $('pf-f-marca').value, clase = $('pf-f-clase').value, dest = $('pf-f-dest').value;
+    return PF_ITEMS.filter(i =>
+      (!q || `${i.title} ${i.brand}`.toLowerCase().includes(q)) &&
+      (!marca || (marca === '__sin' ? !i.brand : i.brand === marca)) &&
+      (!clase || (i.clase || 'ninguna') === clase) &&
+      (!dest || (dest === '1') === (i.destacada !== false)));
+  }
+
+  function renderPortfolio() {
+    const list = $('pf-list');
+    const items = filtradas();
+    const nDest = PF_ITEMS.filter(i => i.destacada !== false).length;
+    $('pf-count').textContent = PF_ITEMS.length ? `${PF_ITEMS.length} en total · ${nDest} en la web` : '';
+    const hayFiltro = ['pf-q', 'pf-f-marca', 'pf-f-clase', 'pf-f-dest'].some(id => $(id).value);
+    $('pf-bulk').hidden = !(hayFiltro && items.length);
+    $('pf-bulk-txt').textContent = `${items.length} publicaci${items.length === 1 ? 'ón' : 'ones'} con este filtro. Si son falsos positivos (ej. una marca que no trabajaste), podés borrarlas juntas.`;
+    if (!PF_ITEMS.length) { list.innerHTML = '<p class="cp-empty">Todavía no agregaste publicaciones. El inicio muestra las que vienen de fábrica.</p>'; return; }
+    if (!items.length) { list.innerHTML = '<p class="cp-empty">Nada coincide con el filtro.</p>'; return; }
+    list.innerHTML = items.slice(0, 300).map(it => {
+      const on = it.destacada !== false;
+      const ev = [it.fotosPeriodo != null && it.meses?.length ? `${it.fotosPeriodo}/${it.meses.length} fotos en tu período` : '', it.catalogoCreado ? `catálogo ${it.catalogoCreado}` : ''].filter(Boolean).join(' · ');
+      return `
+        <article class="cp-item pf-item${on ? '' : ' is-off'}">
+          ${safeUrl(it.image) ? `<img src="${safeUrl(it.image)}" alt="" loading="lazy">` : '<span class="cp-item-noimg">Sin imagen</span>'}
           <div>
             <strong>${esc(it.title || it.brand || 'Sin título')}</strong>
-            <small>${esc([it.employer, it.category].filter(Boolean).join(' · '))}</small>
+            <small>${esc([it.brand, CLASE_TXT[it.clase] || it.category, it.employer].filter(Boolean).join(' · '))}</small>
             ${it.metrics ? `<small class="cp-hl">${esc(it.metrics)}</small>` : ''}
+            ${ev ? `<small class="pf-ev">${esc(ev)}</small>` : ''}
             ${safeUrl(it.url) ? `<a href="${safeUrl(it.url)}" target="_blank" rel="noopener">Ver en Mercado Libre</a>` : ''}
           </div>
-          <button type="button" class="cp-icon-btn cp-danger" data-del-pf="${esc(it._id)}" aria-label="Eliminar">${icon('trash')}</button>
-        </article>`).join('');
-    } catch (e) { list.innerHTML = '<p class="cp-empty">No se pudo cargar la lista.</p>'; }
+          <div class="pf-item-acts">
+            <button type="button" class="cp-icon-btn pf-star" data-star="${esc(it._id)}" aria-pressed="${on}" aria-label="${on ? 'Quitar de la web' : 'Destacar en la web'}" title="${on ? 'Se ve en la web: tocá para ocultarla' : 'Oculta: tocá para mostrarla en la web'}">${icon('star')}</button>
+            <button type="button" class="cp-icon-btn cp-danger" data-del-pf="${esc(it._id)}" aria-label="Eliminar">${icon('trash')}</button>
+          </div>
+        </article>`;
+    }).join('') + (items.length > 300 ? `<p class="cp-empty">Se muestran 300 de ${items.length}: usá los filtros.</p>` : '');
   }
+  ['pf-q', 'pf-f-marca', 'pf-f-clase', 'pf-f-dest'].forEach(id => $(id).addEventListener('input', renderPortfolio));
+
   $('pf-list').addEventListener('click', async e => {
+    const star = e.target.closest('[data-star]');
+    if (star) {
+      const it = PF_ITEMS.find(i => i._id === star.dataset.star); if (!it) return;
+      const nuevo = it.destacada === false;
+      star.disabled = true;
+      try {
+        const r = await api(`/api/portfolio?id=${encodeURIComponent(it._id)}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ destacada: nuevo }) });
+        if (!r.ok) throw new Error(r.status);
+        it.destacada = nuevo; renderPortfolio(); toast(nuevo ? 'Ahora se ve en la web.' : 'Oculta de la web.');
+      } catch (e2) { if (e2.message !== '401') toast('No se pudo cambiar.', true); star.disabled = false; }
+      return;
+    }
     const b = e.target.closest('[data-del-pf]'); if (!b || !confirm('¿Eliminar esta publicación del historial?')) return;
-    try { await api(`/api/portfolio?id=${encodeURIComponent(b.dataset.delPf)}`, { method: 'DELETE' }); loadPortfolio(); } catch (e2) {}
+    try {
+      const r = await api(`/api/portfolio?id=${encodeURIComponent(b.dataset.delPf)}`, { method: 'DELETE' });
+      if (!r.ok) throw new Error(r.status);
+      PF_ITEMS = PF_ITEMS.filter(i => i._id !== b.dataset.delPf); renderPortfolio();
+    } catch (e2) { if (e2.message !== '401') toast('No se pudo eliminar.', true); }
+  });
+
+  $('pf-del-filtradas').addEventListener('click', async () => {
+    const items = filtradas(); if (!items.length) return;
+    if (!confirm(`¿Eliminar ${items.length} publicaci${items.length === 1 ? 'ón' : 'ones'} del historial? No se puede deshacer.`)) return;
+    try {
+      const ids = items.map(i => i._id);
+      for (let k = 0; k < ids.length; k += 100) {
+        const r = await api(`/api/portfolio?ids=${ids.slice(k, k + 100).join(',')}`, { method: 'DELETE' });
+        if (!r.ok) throw new Error(r.status);
+      }
+      toast(`Eliminadas: ${ids.length}.`); loadPortfolio();
+    } catch (e) { if (e.message !== '401') toast('No se pudieron eliminar todas.', true); loadPortfolio(); }
   });
 
   // ── Mensajes ──

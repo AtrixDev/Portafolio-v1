@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="css/root.css">
   <link rel="stylesheet" href="css/shared.css">
   <link rel="stylesheet" href="css/simulador.css">
-  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/index.css?v=4">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -374,9 +374,16 @@
     <img src="" alt="">
   </dialog>
 
+  <!-- Publicaciones destacadas (se cargan desde /api/portfolio; si no hay, el bloque no aparece) -->
+  <div class="ce-pubs" id="ce-pubs" hidden>
+    <p class="proof-k">Publicaciones que creé o rehíce, entre las más vendidas de la tienda</p>
+    <div class="pm-cases ce-pubs-grid" id="ce-pubs-grid"></div>
+    <p class="proof-note">Fotos, ficha técnica y descripción hechas por mí. Los vendidos son el total histórico que muestra Mercado Libre en cada publicación.</p>
+  </div>
+
   <div class="ce-cta-row">
     <a href="https://www.mercadolibre.com.ar/p/MLA27077244" target="_blank" rel="noopener" class="btn-secondary">Ver la publicación en ML <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-external"/></svg><span class="sr-only">(se abre en otra pestaña)</span></a>
-    <button type="button" class="link-arrow btn-portfolio" id="btn-open-portfolio" aria-haspopup="dialog">Historial de publicaciones <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></button>
+    <button type="button" class="link-arrow btn-portfolio" id="btn-open-portfolio" aria-haspopup="dialog"><span id="btn-open-portfolio-txt">Historial de publicaciones</span> <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></button>
   </div>
 </section>
 
@@ -719,6 +726,6 @@
 <script src="js/main.js"></script>
 <script src="js/score.js"></script>
 <script src="js/simulador.js"></script>
-<script src="js/index.js"></script>
+<script src="js/index.js?v=3"></script>
 </body>
 </html>
