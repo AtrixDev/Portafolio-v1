@@ -1,516 +1,1367 @@
 {
-  "version": "2026-09-27",
-  "credito": {
-    "txt": "Prompts y mapa de sistemas adaptados de la biblioteca pública de TRAID (Recursos Ecommerce MELI 2026). Frameworks de análisis basados en SKILL.md de ecommerce.",
-    "url": "https://traidai.com/recursos-page"
+ "version": "2026-09-27",
+ "credito": {
+  "txt": "Prompts y mapa de sistemas adaptados de la biblioteca pública de TRAID (Recursos Ecommerce MELI 2026). Frameworks de análisis basados en SKILL.md de ecommerce.",
+  "url": "https://traidai.com/recursos-page"
+ },
+ "principios": [
+  {
+   "t": "Ningún dato inventado",
+   "d": "Si falta el GTIN, una medida o una compatibilidad, se marca FALTA_DATO y la acción se bloquea. La IA ordena y redacta; no completa por intuición."
   },
-
-  "principios": [
-    { "t": "Ningún dato inventado", "d": "Si falta el GTIN, una medida o una compatibilidad, se marca FALTA_DATO y la acción se bloquea. La IA ordena y redacta; no completa por intuición." },
-    { "t": "La API es la fuente de verdad", "d": "Categoría, atributos, comisiones y reglas se consultan en la API vigente de Mercado Libre, no se recuerdan. Lo que no se puede verificar queda como REQUIERE_VALIDACION_API." },
-    { "t": "Números calculados, no narrados", "d": "Margen, ACOS y cobertura se calculan con fórmulas deterministas (planilla o código). La IA explica los números; no los estima desde texto libre." },
-    { "t": "Lectura por defecto", "d": "Todo arranca en solo lectura. Cualquier cambio de precio, stock o publicación pasa por snapshot, diff, margen mínimo y aprobación explícita." },
-    { "t": "Piloto antes que lote", "d": "Un cambio se prueba en 1 publicación, después en 5 y recién entonces en 20. Cada paso guarda el valor anterior para poder volver atrás." },
-    { "t": "Medir contra un KPI", "d": "Una automatización vale si mueve un número: conversión, margen, días sin stock o tiempo de respuesta. Si solo es una demo vistosa, no es un sistema." }
-  ],
-
-  "estados": {
-    "pendiente":   { "txt": "Pendiente",   "tono": "muted" },
-    "aprendiendo": { "txt": "Aprendiendo", "tono": "warn" },
-    "aplicada":    { "txt": "Aplicada",    "tono": "ok" },
-    "dominada":    { "txt": "Dominada",    "tono": "accent" }
+  {
+   "t": "La API es la fuente de verdad",
+   "d": "Categoría, atributos, comisiones y reglas se consultan en la API vigente de Mercado Libre, no se recuerdan. Lo que no se puede verificar queda como REQUIERE_VALIDACION_API."
   },
-
-  "skills": [
+  {
+   "t": "Números calculados, no narrados",
+   "d": "Margen, ACOS y cobertura se calculan con fórmulas deterministas (planilla o código). La IA explica los números; no los estima desde texto libre."
+  },
+  {
+   "t": "Lectura por defecto",
+   "d": "Todo arranca en solo lectura. Cualquier cambio de precio, stock o publicación pasa por snapshot, diff, margen mínimo y aprobación explícita."
+  },
+  {
+   "t": "Piloto antes que lote",
+   "d": "Un cambio se prueba en 1 publicación, después en 5 y recién entonces en 20. Cada paso guarda el valor anterior para poder volver atrás."
+  },
+  {
+   "t": "Medir contra un KPI",
+   "d": "Una automatización vale si mueve un número: conversión, margen, días sin stock o tiempo de respuesta. Si solo es una demo vistosa, no es un sistema."
+  }
+ ],
+ "estados": {
+  "pendiente": {
+   "txt": "Pendiente",
+   "tono": "muted"
+  },
+  "aprendiendo": {
+   "txt": "Aprendiendo",
+   "tono": "warn"
+  },
+  "aplicada": {
+   "txt": "Aplicada",
+   "tono": "ok"
+  },
+  "dominada": {
+   "txt": "Dominada",
+   "tono": "accent"
+  }
+ },
+ "skills": [
+  {
+   "id": "publicaciones",
+   "tier": "S",
+   "valor": 5,
+   "nivel": "Intermedio",
+   "nombre": "Auditoría y optimización de publicaciones",
+   "resumen": "Categoría hoja, atributos obligatorios, título desde hechos, variaciones e imágenes fieles: fichas que Mercado Libre valida y que convierten.",
+   "porque": "Es el núcleo del puesto y lo que más se ve en un portfolio: cada publicación mejorada es un caso antes/después con números.",
+   "conceptos": [
+    "Ficha maestra antes del texto: SKU, marca, modelo, GTIN, medidas del paquete, variaciones y evidencia.",
+    "Atributos por attribute_id y value_id: obligatorios, condicionales y recomendados según la categoría.",
+    "Título = tipo de producto + marca + modelo + diferencial verificable. Sin adjetivos vacíos ni largo fijo de memoria.",
+    "User Products y variaciones: una relación inequívoca entre SKU, variación, stock y foto.",
+    "Calidad de publicación (score de ML) como backlog de mejoras, no como nota."
+   ],
+   "kpis": [
+    "Score de calidad",
+    "Conversión",
+    "Preguntas repetidas",
+    "Publicaciones rechazadas o moderadas"
+   ],
+   "practica": {
+    "txt": "Abrí una publicación en ML Tracker → pestaña Calidad, y pasala por el prompt Auditor con sus datos reales.",
+    "vista": "tracker"
+   },
+   "lab": "anatomia.html",
+   "claude": [
+    "bestseller-pattern-decoder",
+    "product-attribute-analyzer"
+   ],
+   "prompts": [
+    "auditor",
+    "titulos",
+    "atributos",
+    "optimizar-ficha",
+    "brief-imagenes"
+   ],
+   "cv": "Audité {n} publicaciones con validación de atributos y evidencia, y subí la calidad promedio de {antes} a {despues}.",
+   "campos": [
+    "n",
+    "antes",
+    "despues"
+   ]
+  },
+  {
+   "id": "rentabilidad",
+   "tier": "S",
+   "valor": 5,
+   "nivel": "Intermedio",
+   "nombre": "Rentabilidad real por SKU",
+   "resumen": "Margen de contribución por publicación: precio menos comisión, envío, cuotas, impuestos, publicidad y costo del producto.",
+   "porque": "Es lo que más escasea: casi todos miran facturación y pocos saben qué SKU pierde plata en cada venta.",
+   "conceptos": [
+    "Cascada: precio − comisión − envío − costo de cuotas − impuestos (IIBB) − Ads − devoluciones − costo = contribución.",
+    "Precio de equilibrio: el mínimo al que se vende sin perder plata.",
+    "Contribución no es ganancia neta: faltan gastos fijos. Nombrar cada número por lo que es.",
+    "No restar dos veces descuentos o devoluciones que ya vienen descontados del ingreso."
+   ],
+   "kpis": [
+    "Margen de contribución %",
+    "SKU con margen negativo",
+    "Ganancia del período",
+    "Precio de equilibrio"
+   ],
+   "practica": {
+    "txt": "Cargá costos en ML Tracker → Rentabilidad y buscá las publicaciones que venden a pérdida.",
+    "vista": "tracker"
+   },
+   "lab": "pricing.html",
+   "claude": [
+    "profit-margin-analyzer"
+   ],
+   "prompts": [
+    "contribucion"
+   ],
+   "cv": "Construí un modelo de margen de contribución por SKU que detectó {n} publicaciones con margen negativo y recuperó {pct} de margen.",
+   "campos": [
+    "n",
+    "pct"
+   ]
+  },
+  {
+   "id": "pricing",
+   "tier": "S",
+   "valor": 5,
+   "nivel": "Avanzado",
+   "nombre": "Pricing y competencia en catálogo",
+   "resumen": "Estado ganador o perdedor en catálogo, price-to-win y reglas de precio con piso de margen.",
+   "porque": "En catálogo el primer lugar se lleva casi todas las ventas: entender por qué se pierde vale plata directa.",
+   "conceptos": [
+    "Estados de catálogo: ganando, compartiendo o perdiendo, y los motivos (precio, envío, reputación, stock).",
+    "Price-to-win: el precio que devuelve la API para ganar, y cuándo no conviene seguirlo.",
+    "Nunca igualar precios en automático: piso de margen, límites y valor anterior guardado.",
+    "Precio ancla, penetración y premium: el precio comunica posicionamiento."
+   ],
+   "kpis": [
+    "% de publicaciones ganando catálogo",
+    "Margen tras el cambio de precio",
+    "Ventas incrementales"
+   ],
+   "practica": {
+    "txt": "En ML Tracker → Competencia revisá cada publicación de catálogo y compará el price-to-win con tu precio de equilibrio.",
+    "vista": "tracker"
+   },
+   "lab": "pricing.html",
+   "claude": [
+    "dynamic-pricing-engine",
+    "competitor-deep-analysis"
+   ],
+   "prompts": [
+    "competencia",
+    "cambio-masivo"
+   ],
+   "cv": "Implementé reglas de pricing con piso de margen para catálogo y pasé de {antes} a {despues} de publicaciones ganadoras.",
+   "campos": [
+    "antes",
+    "despues"
+   ]
+  },
+  {
+   "id": "ads",
+   "tier": "S",
+   "valor": 5,
+   "nivel": "Intermedio",
+   "nombre": "Optimización de Product Ads",
+   "resumen": "ACOS, ROAS y TACOS leídos contra el margen: cuánto se puede invertir por publicación sin perder plata.",
+   "porque": "Es de lo más pedido en los avisos de trabajo y se mide con números claros.",
+   "conceptos": [
+    "ACOS = inversión ÷ ventas atribuidas. ROAS = 1 ÷ ACOS.",
+    "TACOS = inversión ÷ ventas totales: muestra si la publicidad empuja el orgánico o lo reemplaza.",
+    "ACOS de equilibrio = margen antes de publicidad: por encima de ese valor cada venta pierde plata.",
+    "Agrupar campañas por desempeño y mover presupuesto hacia las publicaciones con margen."
+   ],
+   "kpis": [
+    "ACOS vs. ACOS de equilibrio",
+    "TACOS",
+    "Margen después de Ads",
+    "Ventas incrementales"
+   ],
+   "practica": {
+    "txt": "Tomá el ACOS de equilibrio que calcula ML Tracker para cada publicación y armá con el prompt de Ads las reglas de puja.",
+    "vista": "tracker"
+   },
+   "lab": "acos.html",
+   "claude": [
+    "ads-math",
+    "ads-budget",
+    "ads-test"
+   ],
+   "prompts": [
+    "ads"
+   ],
+   "cv": "Optimicé Product Ads con ACOS de equilibrio por SKU y bajé el TACOS de {antes} a {despues} manteniendo las ventas.",
+   "campos": [
+    "antes",
+    "despues"
+   ]
+  },
+  {
+   "id": "reporting",
+   "tier": "S",
+   "valor": 4,
+   "nivel": "Intermedio",
+   "nombre": "Reporting y diagnóstico de cuenta",
+   "resumen": "Informe semanal con ventas comparables, margen, stock, preguntas y 5 acciones con responsable y criterio de éxito.",
+   "porque": "Es lo que ve un jefe o un cliente: convierte el análisis en decisiones.",
+   "conceptos": [
+    "Comparar períodos equivalentes y considerar quiebres de stock y promociones antes de explicar una tendencia.",
+    "Separar hechos, cálculos e hipótesis; no atribuir causalidad a cambios que solo coinciden en el tiempo.",
+    "Segmentar: mucho tráfico y poca conversión, poca visibilidad y buena conversión, margen alto con stock bajo.",
+    "Cada recomendación cita el dato que la sostiene."
+   ],
+   "kpis": [
+    "Decisiones ejecutadas por semana",
+    "Alertas accionables",
+    "Horas ahorradas en armar el reporte"
+   ],
+   "practica": {
+    "txt": "Generá el reporte PDF de ML Tracker y pasá el resumen de la cuenta por el prompt de informe semanal.",
+    "vista": "tracker"
+   },
+   "lab": "metricas.html",
+   "claude": [
+    "ecommerce-financial-dashboard"
+   ],
+   "prompts": [
+    "diagnostico",
+    "informe-semanal",
+    "plan-accion"
+   ],
+   "cv": "Diseñé un reporte ejecutivo semanal (ventas, margen, stock y preguntas) que redujo {horas} h por semana de armado manual.",
+   "campos": [
+    "horas"
+   ]
+  },
+  {
+   "id": "mcp",
+   "tier": "S",
+   "valor": 4,
+   "nivel": "Avanzado",
+   "nombre": "Claude + API y MCP de Mercado Libre",
+   "resumen": "Conectar Claude a la cuenta con permisos mínimos: descubrir herramientas, leer, preparar un dry-run y recién ahí escribir con aprobación.",
+   "porque": "Es lo más nuevo (el MCP oficial es de septiembre de 2026) y todavía pocos analistas lo dominan.",
+   "conceptos": [
+    "MCP oficial DevSite (OAuth): consulta documentación de la API, no opera la cuenta.",
+    "Para leer ventas, stock o preguntas hace falta una integración operativa autorizada, empezando en solo lectura.",
+    "Secuencia: descubrir → solo lectura → dry-run → aprobación explícita → 1 ítem → lote.",
+    "Roles: el MCP da acceso, la skill enseña el proceso, CLAUDE.md guarda las reglas y una persona aprueba."
+   ],
+   "kpis": [
+    "Tareas resueltas sin tocar producción",
+    "Cambios con rollback documentado"
+   ],
+   "practica": {
+    "txt": "Conectá el MCP oficial en Claude Code y corré las pruebas de descubrimiento y de solo lectura.",
+    "vista": null
+   },
+   "lab": null,
+   "claude": [],
+   "prompts": [
+    "mcp-prueba",
+    "maestro"
+   ],
+   "cv": "Integré Claude con la API y el MCP de Mercado Libre en modo lectura y dry-run para auditar publicaciones y preparar cambios masivos con aprobación y rollback.",
+   "campos": []
+  },
+  {
+   "id": "promociones",
+   "tier": "A",
+   "valor": 4,
+   "nivel": "Intermedio",
+   "nombre": "Promociones sin destruir margen",
+   "resumen": "Elegir candidatos, simular el precio final con el aporte de cada parte y activar solo lo que respeta el margen mínimo.",
+   "porque": "Las promociones son la palanca de volumen más usada y la que más margen destruye cuando se activa a ciegas.",
+   "conceptos": [
+    "Separar aporte del vendedor y aporte de Mercado Libre.",
+    "Descuento máximo compatible con el margen = margen actual − margen mínimo.",
+    "Revisar stock comprometido y riesgo de quiebre antes de entrar.",
+    "Medir incremental: ventas con promo contra una línea base, no contra cero."
+   ],
+   "kpis": [
+    "Contribución con y sin promo",
+    "Ventas incrementales",
+    "Quiebres causados por promos"
+   ],
+   "practica": {
+    "txt": "Elegí una publicación con margen cargado y simulá una promo del 15% con el prompt de promociones.",
+    "vista": "tracker"
+   },
+   "lab": "pricing.html",
+   "claude": [
+    "profit-margin-analyzer"
+   ],
+   "prompts": [
+    "promo"
+   ],
+   "cv": "Evalué {n} promociones con simulación de margen y descarté las que vendían a pérdida, sosteniendo {pct} de contribución.",
+   "campos": [
+    "n",
+    "pct"
+   ]
+  },
+  {
+   "id": "stock",
+   "tier": "A",
+   "valor": 4,
+   "nivel": "Intermedio",
+   "nombre": "Stock, cobertura y reposición",
+   "resumen": "Días de cobertura por SKU, punto de pedido con lead time y colchón, y alertas de quiebre o stock inmovilizado.",
+   "porque": "Un quiebre en una publicación estrella hace perder posición, no solo las ventas de esos días.",
+   "conceptos": [
+    "Cobertura = stock vendible ÷ unidades por día. Sin ventas no se divide: es SIN_ROTACION.",
+    "Punto de pedido = consumo diario × (lead time + colchón).",
+    "Separar Full y depósito; no contar dos veces stock reservado o en tránsito.",
+    "Descontar los días sin stock del cálculo de ritmo."
+   ],
+   "kpis": [
+    "Días sin stock",
+    "Ventas perdidas estimadas",
+    "Rotación",
+    "Stock inmovilizado"
+   ],
+   "practica": {
+    "txt": "Revisá la pestaña Stock de ML Tracker y armá el pedido de reposición con el prompt de cobertura.",
+    "vista": "tracker"
+   },
+   "lab": "excels.html",
+   "claude": [
+    "inventory-demand-forecaster"
+   ],
+   "prompts": [
+    "stock"
+   ],
+   "cv": "Implementé alertas de cobertura por SKU que redujeron los días sin stock de {antes} a {despues}.",
+   "campos": [
+    "antes",
+    "despues"
+   ]
+  },
+  {
+   "id": "carga-masiva",
+   "tier": "A",
+   "valor": 3,
+   "nivel": "Avanzado",
+   "nombre": "Carga masiva de publicaciones",
+   "resumen": "Pasar de un CSV o ERP a publicaciones validadas: READY, REVIEW y BLOCKED, piloto 1 → 5 → 20.",
+   "porque": "Las cuentas grandes cargan cientos de SKU; hacerlo sin errores ahorra días y evita moderaciones.",
+   "conceptos": [
+    "Preservar el archivo original y la fila de origen.",
+    "Detectar duplicados por SKU, GTIN y marca/modelo.",
+    "Solo transformaciones deterministas (espacios, unidades); nunca completar celdas por inferencia.",
+    "Validar contra el schema y la categoría antes de cualquier POST."
+   ],
+   "kpis": [
+    "Tiempo por SKU",
+    "% listo al primer intento",
+    "Rechazos"
+   ],
+   "practica": {
+    "txt": "Pasá la plantilla CSV del kit por el prompt normalizador y revisá qué filas quedan bloqueadas y por qué.",
+    "vista": null
+   },
+   "lab": "excels.html",
+   "claude": [],
+   "prompts": [
+    "csv",
+    "qa-payload"
+   ],
+   "cv": "Preparé la carga de {n} SKU desde el ERP con validación por lotes y logré {pct} de publicaciones aprobadas al primer intento.",
+   "campos": [
+    "n",
+    "pct"
+   ]
+  },
+  {
+   "id": "mercado",
+   "tier": "A",
+   "valor": 3,
+   "nivel": "Intermedio",
+   "nombre": "Análisis de mercado y selección de producto",
+   "resumen": "Decidir qué vender con evidencia: demanda, competencia, margen, logística y riesgo, con un go/no-go explícito.",
+   "porque": "Sumás valor antes de publicar: evitar un producto malo ahorra más que optimizarlo después.",
+   "conceptos": [
+    "Filtros de exclusión primero: regulación, propiedad intelectual y margen no demostrable.",
+    "Separar demanda observada, proxy de demanda e hipótesis.",
+    "Landed cost con supuestos visibles.",
+    "No presentar una muestra parcial como el mercado completo."
+   ],
+   "kpis": [
+    "Score de oportunidad",
+    "Margen esperado",
+    "Tiempo de validación"
+   ],
+   "practica": {
+    "txt": "Elegí una categoría que conozcas y corré el prompt de oportunidades con fuentes públicas.",
+    "vista": null
+   },
+   "lab": null,
+   "claude": [
+    "market-viability-logic-auditor",
+    "market-insight-product-selection",
+    "product-selection"
+   ],
+   "prompts": [
+    "mercado"
+   ],
+   "cv": "Evalué {n} productos candidatos con un framework de viabilidad (demanda, competencia y margen) y seleccioné {m} para lanzar.",
+   "campos": [
+    "n",
+    "m"
+   ]
+  },
+  {
+   "id": "voc",
+   "tier": "A",
+   "valor": 3,
+   "nivel": "Inicial",
+   "nombre": "Voz del cliente: preguntas y reclamos",
+   "resumen": "Convertir preguntas, reseñas y reclamos en cambios de la ficha, y responder rápido sin inventar datos.",
+   "porque": "Las preguntas repetidas muestran exactamente qué le falta a la publicación.",
+   "conceptos": [
+    "Clasificar: información disponible, falta de dato, riesgo comercial o requiere una persona.",
+    "Responder solo con datos confirmados; nunca compatibilidades, entregas o garantías inventadas.",
+    "Cada pregunta repetida es un atributo, una foto o una línea de descripción que falta."
+   ],
+   "kpis": [
+    "Tiempo de respuesta",
+    "Conversión tras la pregunta",
+    "Preguntas repetidas"
+   ],
+   "practica": {
+    "txt": "En ML Tracker → Preguntas tomá las pendientes y pasalas por el prompt de preventa.",
+    "vista": "tracker"
+   },
+   "lab": "reputacion.html",
+   "claude": [
+    "review-analyst-agent"
+   ],
+   "prompts": [
+    "preventa"
+   ],
+   "cv": "Reduje el tiempo de respuesta de preguntas de {antes} a {despues} con borradores basados en la ficha y derivación de casos sensibles.",
+   "campos": [
+    "antes",
+    "despues"
+   ]
+  },
+  {
+   "id": "conciliacion",
+   "tier": "A",
+   "valor": 3,
+   "nivel": "Avanzado",
+   "nombre": "Conciliación Mercado Libre ↔ Mercado Pago",
+   "resumen": "Cruzar órdenes, cobros, comisiones, retenciones y liberaciones para saber el neto real de cada venta.",
+   "porque": "Una venta aprobada no es dinero disponible: la diferencia suele esconder costos que nadie mira.",
+   "conceptos": [
+    "Claves de vínculo: order_id, payment_id, pack_id y external_reference.",
+    "Estados: MATCHED, TIMING, PARTIAL, DUPLICATE, MISSING y NEEDS_REVIEW.",
+    "Los reportes de facturación no son una fuente de ventas en tiempo real."
+   ],
+   "kpis": [
+    "Diferencias no conciliadas",
+    "Tiempo de cierre",
+    "Margen neto real"
+   ],
+   "practica": {
+    "txt": "Bajá el reporte de liquidaciones de un mes y conciliá 20 operaciones con el prompt.",
+    "vista": null
+   },
+   "lab": null,
+   "claude": [
+    "ecommerce-budget-forecaster"
+   ],
+   "prompts": [
+    "conciliacion"
+   ],
+   "cv": "Armé la conciliación mensual entre Mercado Libre, Mercado Pago y el ERP, y bajé las diferencias sin explicar a {pct}.",
+   "campos": [
+    "pct"
+   ]
+  },
+  {
+   "id": "imagenes",
+   "tier": "B",
+   "valor": 3,
+   "nivel": "Inicial",
+   "nombre": "Imágenes de producto con IA",
+   "resumen": "Briefs de 8 fotos y edición de fondo o luz sin alterar el producto real.",
+   "porque": "Suma a la conversión, pero el valor diferencial está en el criterio, no en la herramienta.",
+   "conceptos": [
+    "La imagen principal representa el producto real: nada de accesorios o logos agregados.",
+    "rembg para fondos, Upscayl para resolución; revisar textos y packaging después.",
+    "Aprobar un SKU y una plantilla antes de producir en lote."
+   ],
+   "kpis": [
+    "CTR",
+    "Tasa de aprobación",
+    "Costo por pieza"
+   ],
+   "practica": {
+    "txt": "Armá el brief de 8 imágenes de una publicación del Tracker.",
+    "vista": "tracker"
+   },
+   "lab": "imagenes.html",
+   "claude": [
+    "image-prompt-guide"
+   ],
+   "prompts": [
+    "brief-imagenes"
+   ],
+   "cv": "Rediseñé las imágenes de {n} publicaciones con un brief fiel al producto y subí el CTR {pct}.",
+   "campos": [
+    "n",
+    "pct"
+   ]
+  },
+  {
+   "id": "automatizacion",
+   "tier": "B",
+   "valor": 3,
+   "nivel": "Avanzado",
+   "nombre": "Automatización con n8n",
+   "resumen": "Orquestar alertas de stock, preguntas y reportes con reintentos, estados y respaldo humano.",
+   "porque": "Es el paso siguiente cuando un análisis se repite todas las semanas.",
+   "conceptos": [
+    "n8n-MCP y n8n Skills para no inventar configuraciones de nodos.",
+    "Nunca editar producción con IA: copiar, probar en desarrollo y exportar backups.",
+    "Los exports de workflows pueden llevar credenciales: sanitizar antes de compartir."
+   ],
+   "kpis": [
+    "Horas ahorradas",
+    "Errores de ejecución",
+    "Alertas atendidas"
+   ],
+   "practica": {
+    "txt": "Diseñá con el prompt de monitor de competencia un flujo que te avise cuando un rival baja el precio.",
+    "vista": null
+   },
+   "lab": null,
+   "claude": [],
+   "prompts": [
+    "monitor"
+   ],
+   "cv": "Automaticé {n} rutinas de monitoreo con n8n y ahorré {horas} h por semana.",
+   "campos": [
+    "n",
+    "horas"
+   ]
+  },
+  {
+   "id": "estrategia",
+   "tier": "B",
+   "valor": 2,
+   "nivel": "Intermedio",
+   "nombre": "Estrategia competitiva y lanzamientos",
+   "resumen": "Porter, Blue Ocean y matriz de competencia para posicionar una marca o planificar un lanzamiento.",
+   "porque": "Suma para puestos de Key Account o Category Manager.",
+   "conceptos": [
+    "Matriz competitiva con hechos observables: precio, envío, atributos y reputación.",
+    "Huecos de oferta: atributos, contenido o servicio que nadie cubre.",
+    "Lanzamiento por fases con medición en cada etapa."
+   ],
+   "kpis": [
+    "Participación en la categoría",
+    "Ventas del lanzamiento"
+   ],
+   "practica": {
+    "txt": "Corré la matriz competitiva sobre tu publicación con más visitas.",
+    "vista": "tracker"
+   },
+   "lab": null,
+   "claude": [
+    "competitive-landscape",
+    "launch-strategy"
+   ],
+   "prompts": [
+    "competencia"
+   ],
+   "cv": "Definí el posicionamiento de {marca} con una matriz competitiva de {n} rivales.",
+   "campos": [
+    "marca",
+    "n"
+   ]
+  },
+  {
+   "id": "sourcing",
+   "tier": "B",
+   "valor": 2,
+   "nivel": "Intermedio",
+   "nombre": "Proveedores y landed cost",
+   "resumen": "Comparar proveedores con costo puesto en destino, riesgos y condiciones de compra.",
+   "porque": "Útil en cuentas que importan o revenden; menos central para un analista puro.",
+   "conceptos": [
+    "Landed cost = producto + flete + seguro + aranceles + impuestos + gastos locales.",
+    "Señales de proveedor poco confiable y cómo protegerse.",
+    "Negociación: ancla, BATNA y concesiones planificadas."
+   ],
+   "kpis": [
+    "Costo unitario puesto",
+    "Tiempo de reposición"
+   ],
+   "practica": {
+    "txt": "Compará tres proveedores de un producto que vendas con la planilla de landed cost.",
+    "vista": null
+   },
+   "lab": null,
+   "claude": [
+    "aliexpress-supplier-evaluator",
+    "product-supplier-sourcing",
+    "sales-negotiator"
+   ],
+   "prompts": [],
+   "cv": "Bajé el costo unitario de {producto} un {pct} comparando proveedores por landed cost.",
+   "campos": [
+    "producto",
+    "pct"
+   ]
+  }
+ ],
+ "descartadas": [
+  {
+   "nombre": "alibaba-amazon-market-intel · jungle-scout-deep-dive-analyzer · cross-border-selection",
+   "motivo": "Solo Amazon, API paga o scraping con riesgo de términos de uso."
+  },
+  {
+   "nombre": "dcf-valuation",
+   "motivo": "Valuación de acciones: no aplica a operar una cuenta."
+  },
+  {
+   "nombre": "sales-tax-vat-automator · international-shipping-customs",
+   "motivo": "Fiscalidad de EE. UU./UE y aduana; solo sirve para CBT o Global Selling."
+  },
+  {
+   "nombre": "higgsfield-guide · company-research",
+   "motivo": "Dependen de herramientas pagas o genéricas que no suman al rol."
+  },
+  {
+   "nombre": "influencer-campaign-manager · self-improvement",
+   "motivo": "Marketing de creadores y mejora del propio agente: fuera del foco del analista."
+  }
+ ],
+ "plan": [
+  {
+   "n": 1,
+   "titulo": "Publicaciones",
+   "skills": [
+    "publicaciones"
+   ],
+   "tareas": [
     {
-      "id": "publicaciones", "tier": "S", "valor": 5, "nivel": "Intermedio",
-      "nombre": "Auditoría y optimización de publicaciones",
-      "resumen": "Categoría hoja, atributos obligatorios, título desde hechos, variaciones e imágenes fieles: fichas que Mercado Libre valida y que convierten.",
-      "porque": "Es el núcleo del puesto y lo que más se ve en un portfolio: cada publicación mejorada es un caso antes/después con números.",
-      "conceptos": [
-        "Ficha maestra antes del texto: SKU, marca, modelo, GTIN, medidas del paquete, variaciones y evidencia.",
-        "Atributos por attribute_id y value_id: obligatorios, condicionales y recomendados según la categoría.",
-        "Título = tipo de producto + marca + modelo + diferencial verificable. Sin adjetivos vacíos ni largo fijo de memoria.",
-        "User Products y variaciones: una relación inequívoca entre SKU, variación, stock y foto.",
-        "Calidad de publicación (score de ML) como backlog de mejoras, no como nota."
-      ],
-      "kpis": ["Score de calidad", "Conversión", "Preguntas repetidas", "Publicaciones rechazadas o moderadas"],
-      "practica": { "txt": "Abrí una publicación en ML Tracker → pestaña Calidad, y pasala por el prompt Auditor con sus datos reales.", "vista": "tracker" },
-      "lab": "anatomia.html",
-      "claude": ["bestseller-pattern-decoder", "product-attribute-analyzer"],
-      "prompts": ["auditor", "titulos", "atributos", "optimizar-ficha", "brief-imagenes"],
-      "cv": "Audité {n} publicaciones con validación de atributos y evidencia, y subí la calidad promedio de {antes} a {despues}.",
-      "campos": ["n", "antes", "despues"]
+     "id": "p1-1",
+     "txt": "Leer Anatomía de una publicación y la API de Atributos",
+     "prompt": null
     },
     {
-      "id": "rentabilidad", "tier": "S", "valor": 5, "nivel": "Intermedio",
-      "nombre": "Rentabilidad real por SKU",
-      "resumen": "Margen de contribución por publicación: precio menos comisión, envío, cuotas, impuestos, publicidad y costo del producto.",
-      "porque": "Es lo que más escasea: casi todos miran facturación y pocos saben qué SKU pierde plata en cada venta.",
-      "conceptos": [
-        "Cascada: precio − comisión − envío − costo de cuotas − impuestos (IIBB) − Ads − devoluciones − costo = contribución.",
-        "Precio de equilibrio: el mínimo al que se vende sin perder plata.",
-        "Contribución no es ganancia neta: faltan gastos fijos. Nombrar cada número por lo que es.",
-        "No restar dos veces descuentos o devoluciones que ya vienen descontados del ingreso."
-      ],
-      "kpis": ["Margen de contribución %", "SKU con margen negativo", "Ganancia del período", "Precio de equilibrio"],
-      "practica": { "txt": "Cargá costos en ML Tracker → Rentabilidad y buscá las publicaciones que venden a pérdida.", "vista": "tracker" },
-      "lab": "pricing.html",
-      "claude": ["profit-margin-analyzer"],
-      "prompts": ["contribucion"],
-      "cv": "Construí un modelo de margen de contribución por SKU que detectó {n} publicaciones con margen negativo y recuperó {pct} de margen.",
-      "campos": ["n", "pct"]
+     "id": "p1-2",
+     "txt": "Auditar 5 publicaciones con el prompt Auditor usando datos del Tracker",
+     "prompt": "auditor"
     },
     {
-      "id": "pricing", "tier": "S", "valor": 5, "nivel": "Avanzado",
-      "nombre": "Pricing y competencia en catálogo",
-      "resumen": "Estado ganador o perdedor en catálogo, price-to-win y reglas de precio con piso de margen.",
-      "porque": "En catálogo el primer lugar se lleva casi todas las ventas: entender por qué se pierde vale plata directa.",
-      "conceptos": [
-        "Estados de catálogo: ganando, compartiendo o perdiendo, y los motivos (precio, envío, reputación, stock).",
-        "Price-to-win: el precio que devuelve la API para ganar, y cuándo no conviene seguirlo.",
-        "Nunca igualar precios en automático: piso de margen, límites y valor anterior guardado.",
-        "Precio ancla, penetración y premium: el precio comunica posicionamiento."
-      ],
-      "kpis": ["% de publicaciones ganando catálogo", "Margen tras el cambio de precio", "Ventas incrementales"],
-      "practica": { "txt": "En ML Tracker → Competencia revisá cada publicación de catálogo y compará el price-to-win con tu precio de equilibrio.", "vista": "tracker" },
-      "lab": "pricing.html",
-      "claude": ["dynamic-pricing-engine", "competitor-deep-analysis"],
-      "prompts": ["competencia", "cambio-masivo"],
-      "cv": "Implementé reglas de pricing con piso de margen para catálogo y pasé de {antes} a {despues} de publicaciones ganadoras.",
-      "campos": ["antes", "despues"]
+     "id": "p1-3",
+     "txt": "Mapear los atributos de 1 categoría completa",
+     "prompt": "atributos"
     },
     {
-      "id": "ads", "tier": "S", "valor": 5, "nivel": "Intermedio",
-      "nombre": "Optimización de Product Ads",
-      "resumen": "ACOS, ROAS y TACOS leídos contra el margen: cuánto se puede invertir por publicación sin perder plata.",
-      "porque": "Es de lo más pedido en los avisos de trabajo y se mide con números claros.",
-      "conceptos": [
-        "ACOS = inversión ÷ ventas atribuidas. ROAS = 1 ÷ ACOS.",
-        "TACOS = inversión ÷ ventas totales: muestra si la publicidad empuja el orgánico o lo reemplaza.",
-        "ACOS de equilibrio = margen antes de publicidad: por encima de ese valor cada venta pierde plata.",
-        "Agrupar campañas por desempeño y mover presupuesto hacia las publicaciones con margen."
-      ],
-      "kpis": ["ACOS vs. ACOS de equilibrio", "TACOS", "Margen después de Ads", "Ventas incrementales"],
-      "practica": { "txt": "Tomá el ACOS de equilibrio que calcula ML Tracker para cada publicación y armá con el prompt de Ads las reglas de puja.", "vista": "tracker" },
-      "lab": "acos.html",
-      "claude": ["ads-math", "ads-budget", "ads-test"],
-      "prompts": ["ads"],
-      "cv": "Optimicé Product Ads con ACOS de equilibrio por SKU y bajé el TACOS de {antes} a {despues} manteniendo las ventas.",
-      "campos": ["antes", "despues"]
+     "id": "p1-4",
+     "txt": "Proponer títulos basados en evidencia para 5 publicaciones",
+     "prompt": "titulos"
     },
     {
-      "id": "reporting", "tier": "S", "valor": 4, "nivel": "Intermedio",
-      "nombre": "Reporting y diagnóstico de cuenta",
-      "resumen": "Informe semanal con ventas comparables, margen, stock, preguntas y 5 acciones con responsable y criterio de éxito.",
-      "porque": "Es lo que ve un jefe o un cliente: convierte el análisis en decisiones.",
-      "conceptos": [
-        "Comparar períodos equivalentes y considerar quiebres de stock y promociones antes de explicar una tendencia.",
-        "Separar hechos, cálculos e hipótesis; no atribuir causalidad a cambios que solo coinciden en el tiempo.",
-        "Segmentar: mucho tráfico y poca conversión, poca visibilidad y buena conversión, margen alto con stock bajo.",
-        "Cada recomendación cita el dato que la sostiene."
-      ],
-      "kpis": ["Decisiones ejecutadas por semana", "Alertas accionables", "Horas ahorradas en armar el reporte"],
-      "practica": { "txt": "Generá el reporte PDF de ML Tracker y pasá el resumen de la cuenta por el prompt de informe semanal.", "vista": "tracker" },
-      "lab": "metricas.html",
-      "claude": ["ecommerce-financial-dashboard"],
-      "prompts": ["diagnostico", "informe-semanal", "plan-accion"],
-      "cv": "Diseñé un reporte ejecutivo semanal (ventas, margen, stock y preguntas) que redujo {horas} h por semana de armado manual.",
-      "campos": ["horas"]
-    },
-    {
-      "id": "mcp", "tier": "S", "valor": 4, "nivel": "Avanzado",
-      "nombre": "Claude + API y MCP de Mercado Libre",
-      "resumen": "Conectar Claude a la cuenta con permisos mínimos: descubrir herramientas, leer, preparar un dry-run y recién ahí escribir con aprobación.",
-      "porque": "Es lo más nuevo (el MCP oficial es de septiembre de 2026) y todavía pocos analistas lo dominan.",
-      "conceptos": [
-        "MCP oficial DevSite (OAuth): consulta documentación de la API, no opera la cuenta.",
-        "Para leer ventas, stock o preguntas hace falta una integración operativa autorizada, empezando en solo lectura.",
-        "Secuencia: descubrir → solo lectura → dry-run → aprobación explícita → 1 ítem → lote.",
-        "Roles: el MCP da acceso, la skill enseña el proceso, CLAUDE.md guarda las reglas y una persona aprueba."
-      ],
-      "kpis": ["Tareas resueltas sin tocar producción", "Cambios con rollback documentado"],
-      "practica": { "txt": "Conectá el MCP oficial en Claude Code y corré las pruebas de descubrimiento y de solo lectura.", "vista": null },
-      "lab": null,
-      "claude": [],
-      "prompts": ["mcp-prueba", "maestro"],
-      "cv": "Integré Claude con la API y el MCP de Mercado Libre en modo lectura y dry-run para auditar publicaciones y preparar cambios masivos con aprobación y rollback.",
-      "campos": []
-    },
-
-    {
-      "id": "promociones", "tier": "A", "valor": 4, "nivel": "Intermedio",
-      "nombre": "Promociones sin destruir margen",
-      "resumen": "Elegir candidatos, simular el precio final con el aporte de cada parte y activar solo lo que respeta el margen mínimo.",
-      "porque": "Las promociones son la palanca de volumen más usada y la que más margen destruye cuando se activa a ciegas.",
-      "conceptos": [
-        "Separar aporte del vendedor y aporte de Mercado Libre.",
-        "Descuento máximo compatible con el margen = margen actual − margen mínimo.",
-        "Revisar stock comprometido y riesgo de quiebre antes de entrar.",
-        "Medir incremental: ventas con promo contra una línea base, no contra cero."
-      ],
-      "kpis": ["Contribución con y sin promo", "Ventas incrementales", "Quiebres causados por promos"],
-      "practica": { "txt": "Elegí una publicación con margen cargado y simulá una promo del 15% con el prompt de promociones.", "vista": "tracker" },
-      "lab": "pricing.html",
-      "claude": ["profit-margin-analyzer"],
-      "prompts": ["promo"],
-      "cv": "Evalué {n} promociones con simulación de margen y descarté las que vendían a pérdida, sosteniendo {pct} de contribución.",
-      "campos": ["n", "pct"]
-    },
-    {
-      "id": "stock", "tier": "A", "valor": 4, "nivel": "Intermedio",
-      "nombre": "Stock, cobertura y reposición",
-      "resumen": "Días de cobertura por SKU, punto de pedido con lead time y colchón, y alertas de quiebre o stock inmovilizado.",
-      "porque": "Un quiebre en una publicación estrella hace perder posición, no solo las ventas de esos días.",
-      "conceptos": [
-        "Cobertura = stock vendible ÷ unidades por día. Sin ventas no se divide: es SIN_ROTACION.",
-        "Punto de pedido = consumo diario × (lead time + colchón).",
-        "Separar Full y depósito; no contar dos veces stock reservado o en tránsito.",
-        "Descontar los días sin stock del cálculo de ritmo."
-      ],
-      "kpis": ["Días sin stock", "Ventas perdidas estimadas", "Rotación", "Stock inmovilizado"],
-      "practica": { "txt": "Revisá la pestaña Stock de ML Tracker y armá el pedido de reposición con el prompt de cobertura.", "vista": "tracker" },
-      "lab": "excels.html",
-      "claude": ["inventory-demand-forecaster"],
-      "prompts": ["stock"],
-      "cv": "Implementé alertas de cobertura por SKU que redujeron los días sin stock de {antes} a {despues}.",
-      "campos": ["antes", "despues"]
-    },
-    {
-      "id": "carga-masiva", "tier": "A", "valor": 3, "nivel": "Avanzado",
-      "nombre": "Carga masiva de publicaciones",
-      "resumen": "Pasar de un CSV o ERP a publicaciones validadas: READY, REVIEW y BLOCKED, piloto 1 → 5 → 20.",
-      "porque": "Las cuentas grandes cargan cientos de SKU; hacerlo sin errores ahorra días y evita moderaciones.",
-      "conceptos": [
-        "Preservar el archivo original y la fila de origen.",
-        "Detectar duplicados por SKU, GTIN y marca/modelo.",
-        "Solo transformaciones deterministas (espacios, unidades); nunca completar celdas por inferencia.",
-        "Validar contra el schema y la categoría antes de cualquier POST."
-      ],
-      "kpis": ["Tiempo por SKU", "% listo al primer intento", "Rechazos"],
-      "practica": { "txt": "Pasá la plantilla CSV del kit por el prompt normalizador y revisá qué filas quedan bloqueadas y por qué.", "vista": null },
-      "lab": "excels.html",
-      "claude": [],
-      "prompts": ["csv", "qa-payload"],
-      "cv": "Preparé la carga de {n} SKU desde el ERP con validación por lotes y logré {pct} de publicaciones aprobadas al primer intento.",
-      "campos": ["n", "pct"]
-    },
-    {
-      "id": "mercado", "tier": "A", "valor": 3, "nivel": "Intermedio",
-      "nombre": "Análisis de mercado y selección de producto",
-      "resumen": "Decidir qué vender con evidencia: demanda, competencia, margen, logística y riesgo, con un go/no-go explícito.",
-      "porque": "Sumás valor antes de publicar: evitar un producto malo ahorra más que optimizarlo después.",
-      "conceptos": [
-        "Filtros de exclusión primero: regulación, propiedad intelectual y margen no demostrable.",
-        "Separar demanda observada, proxy de demanda e hipótesis.",
-        "Landed cost con supuestos visibles.",
-        "No presentar una muestra parcial como el mercado completo."
-      ],
-      "kpis": ["Score de oportunidad", "Margen esperado", "Tiempo de validación"],
-      "practica": { "txt": "Elegí una categoría que conozcas y corré el prompt de oportunidades con fuentes públicas.", "vista": null },
-      "lab": null,
-      "claude": ["market-viability-logic-auditor", "market-insight-product-selection", "product-selection"],
-      "prompts": ["mercado"],
-      "cv": "Evalué {n} productos candidatos con un framework de viabilidad (demanda, competencia y margen) y seleccioné {m} para lanzar.",
-      "campos": ["n", "m"]
-    },
-    {
-      "id": "voc", "tier": "A", "valor": 3, "nivel": "Inicial",
-      "nombre": "Voz del cliente: preguntas y reclamos",
-      "resumen": "Convertir preguntas, reseñas y reclamos en cambios de la ficha, y responder rápido sin inventar datos.",
-      "porque": "Las preguntas repetidas muestran exactamente qué le falta a la publicación.",
-      "conceptos": [
-        "Clasificar: información disponible, falta de dato, riesgo comercial o requiere una persona.",
-        "Responder solo con datos confirmados; nunca compatibilidades, entregas o garantías inventadas.",
-        "Cada pregunta repetida es un atributo, una foto o una línea de descripción que falta."
-      ],
-      "kpis": ["Tiempo de respuesta", "Conversión tras la pregunta", "Preguntas repetidas"],
-      "practica": { "txt": "En ML Tracker → Preguntas tomá las pendientes y pasalas por el prompt de preventa.", "vista": "tracker" },
-      "lab": "reputacion.html",
-      "claude": ["review-analyst-agent"],
-      "prompts": ["preventa"],
-      "cv": "Reduje el tiempo de respuesta de preguntas de {antes} a {despues} con borradores basados en la ficha y derivación de casos sensibles.",
-      "campos": ["antes", "despues"]
-    },
-    {
-      "id": "conciliacion", "tier": "A", "valor": 3, "nivel": "Avanzado",
-      "nombre": "Conciliación Mercado Libre ↔ Mercado Pago",
-      "resumen": "Cruzar órdenes, cobros, comisiones, retenciones y liberaciones para saber el neto real de cada venta.",
-      "porque": "Una venta aprobada no es dinero disponible: la diferencia suele esconder costos que nadie mira.",
-      "conceptos": [
-        "Claves de vínculo: order_id, payment_id, pack_id y external_reference.",
-        "Estados: MATCHED, TIMING, PARTIAL, DUPLICATE, MISSING y NEEDS_REVIEW.",
-        "Los reportes de facturación no son una fuente de ventas en tiempo real."
-      ],
-      "kpis": ["Diferencias no conciliadas", "Tiempo de cierre", "Margen neto real"],
-      "practica": { "txt": "Bajá el reporte de liquidaciones de un mes y conciliá 20 operaciones con el prompt.", "vista": null },
-      "lab": null,
-      "claude": ["ecommerce-budget-forecaster"],
-      "prompts": ["conciliacion"],
-      "cv": "Armé la conciliación mensual entre Mercado Libre, Mercado Pago y el ERP, y bajé las diferencias sin explicar a {pct}.",
-      "campos": ["pct"]
-    },
-
-    {
-      "id": "imagenes", "tier": "B", "valor": 3, "nivel": "Inicial",
-      "nombre": "Imágenes de producto con IA",
-      "resumen": "Briefs de 8 fotos y edición de fondo o luz sin alterar el producto real.",
-      "porque": "Suma a la conversión, pero el valor diferencial está en el criterio, no en la herramienta.",
-      "conceptos": [
-        "La imagen principal representa el producto real: nada de accesorios o logos agregados.",
-        "rembg para fondos, Upscayl para resolución; revisar textos y packaging después.",
-        "Aprobar un SKU y una plantilla antes de producir en lote."
-      ],
-      "kpis": ["CTR", "Tasa de aprobación", "Costo por pieza"],
-      "practica": { "txt": "Armá el brief de 8 imágenes de una publicación del Tracker.", "vista": "tracker" },
-      "lab": "imagenes.html",
-      "claude": ["image-prompt-guide"],
-      "prompts": ["brief-imagenes"],
-      "cv": "Rediseñé las imágenes de {n} publicaciones con un brief fiel al producto y subí el CTR {pct}.",
-      "campos": ["n", "pct"]
-    },
-    {
-      "id": "automatizacion", "tier": "B", "valor": 3, "nivel": "Avanzado",
-      "nombre": "Automatización con n8n",
-      "resumen": "Orquestar alertas de stock, preguntas y reportes con reintentos, estados y respaldo humano.",
-      "porque": "Es el paso siguiente cuando un análisis se repite todas las semanas.",
-      "conceptos": [
-        "n8n-MCP y n8n Skills para no inventar configuraciones de nodos.",
-        "Nunca editar producción con IA: copiar, probar en desarrollo y exportar backups.",
-        "Los exports de workflows pueden llevar credenciales: sanitizar antes de compartir."
-      ],
-      "kpis": ["Horas ahorradas", "Errores de ejecución", "Alertas atendidas"],
-      "practica": { "txt": "Diseñá con el prompt de monitor de competencia un flujo que te avise cuando un rival baja el precio.", "vista": null },
-      "lab": null,
-      "claude": [],
-      "prompts": ["monitor"],
-      "cv": "Automaticé {n} rutinas de monitoreo con n8n y ahorré {horas} h por semana.",
-      "campos": ["n", "horas"]
-    },
-    {
-      "id": "estrategia", "tier": "B", "valor": 2, "nivel": "Intermedio",
-      "nombre": "Estrategia competitiva y lanzamientos",
-      "resumen": "Porter, Blue Ocean y matriz de competencia para posicionar una marca o planificar un lanzamiento.",
-      "porque": "Suma para puestos de Key Account o Category Manager.",
-      "conceptos": [
-        "Matriz competitiva con hechos observables: precio, envío, atributos y reputación.",
-        "Huecos de oferta: atributos, contenido o servicio que nadie cubre.",
-        "Lanzamiento por fases con medición en cada etapa."
-      ],
-      "kpis": ["Participación en la categoría", "Ventas del lanzamiento"],
-      "practica": { "txt": "Corré la matriz competitiva sobre tu publicación con más visitas.", "vista": "tracker" },
-      "lab": null,
-      "claude": ["competitive-landscape", "launch-strategy"],
-      "prompts": ["competencia"],
-      "cv": "Definí el posicionamiento de {marca} con una matriz competitiva de {n} rivales.",
-      "campos": ["marca", "n"]
-    },
-    {
-      "id": "sourcing", "tier": "B", "valor": 2, "nivel": "Intermedio",
-      "nombre": "Proveedores y landed cost",
-      "resumen": "Comparar proveedores con costo puesto en destino, riesgos y condiciones de compra.",
-      "porque": "Útil en cuentas que importan o revenden; menos central para un analista puro.",
-      "conceptos": [
-        "Landed cost = producto + flete + seguro + aranceles + impuestos + gastos locales.",
-        "Señales de proveedor poco confiable y cómo protegerse.",
-        "Negociación: ancla, BATNA y concesiones planificadas."
-      ],
-      "kpis": ["Costo unitario puesto", "Tiempo de reposición"],
-      "practica": { "txt": "Compará tres proveedores de un producto que vendas con la planilla de landed cost.", "vista": null },
-      "lab": null,
-      "claude": ["aliexpress-supplier-evaluator", "product-supplier-sourcing", "sales-negotiator"],
-      "prompts": [],
-      "cv": "Bajé el costo unitario de {producto} un {pct} comparando proveedores por landed cost.",
-      "campos": ["producto", "pct"]
+     "id": "p1-5",
+     "txt": "Documentar un caso antes/después para el portfolio",
+     "prompt": null
     }
-  ],
-
-  "descartadas": [
-    { "nombre": "alibaba-amazon-market-intel · jungle-scout-deep-dive-analyzer · cross-border-selection", "motivo": "Solo Amazon, API paga o scraping con riesgo de términos de uso." },
-    { "nombre": "dcf-valuation", "motivo": "Valuación de acciones: no aplica a operar una cuenta." },
-    { "nombre": "sales-tax-vat-automator · international-shipping-customs", "motivo": "Fiscalidad de EE. UU./UE y aduana; solo sirve para CBT o Global Selling." },
-    { "nombre": "higgsfield-guide · company-research", "motivo": "Dependen de herramientas pagas o genéricas que no suman al rol." },
-    { "nombre": "influencer-campaign-manager · self-improvement", "motivo": "Marketing de creadores y mejora del propio agente: fuera del foco del analista." }
-  ],
-
-  "plan": [
-    { "n": 1, "titulo": "Publicaciones", "skills": ["publicaciones"], "tareas": [
-      { "id": "p1-1", "txt": "Leer Anatomía de una publicación y la API de Atributos", "prompt": null },
-      { "id": "p1-2", "txt": "Auditar 5 publicaciones con el prompt Auditor usando datos del Tracker", "prompt": "auditor" },
-      { "id": "p1-3", "txt": "Mapear los atributos de 1 categoría completa", "prompt": "atributos" },
-      { "id": "p1-4", "txt": "Proponer títulos basados en evidencia para 5 publicaciones", "prompt": "titulos" },
-      { "id": "p1-5", "txt": "Documentar un caso antes/después para el portfolio", "prompt": null }
-    ]},
-    { "n": 2, "titulo": "Rentabilidad", "skills": ["rentabilidad"], "tareas": [
-      { "id": "p2-1", "txt": "Cargar costos de al menos 10 publicaciones en ML Tracker", "prompt": null },
-      { "id": "p2-2", "txt": "Calcular contribución por SKU y detectar las que pierden plata", "prompt": "contribucion" },
-      { "id": "p2-3", "txt": "Calcular el precio de equilibrio de las 5 más vendidas", "prompt": null },
-      { "id": "p2-4", "txt": "Instalar la skill profit-margin-analyzer en Claude Code y probarla", "prompt": null }
-    ]},
-    { "n": 3, "titulo": "Precio y promociones", "skills": ["pricing", "promociones"], "tareas": [
-      { "id": "p3-1", "txt": "Revisar el estado de catálogo y el price-to-win de cada publicación", "prompt": "competencia" },
-      { "id": "p3-2", "txt": "Definir el piso de margen de la cuenta", "prompt": null },
-      { "id": "p3-3", "txt": "Simular una promoción del 15% y decidir con números", "prompt": "promo" },
-      { "id": "p3-4", "txt": "Preparar un cambio de precio en dry-run con diff y rollback", "prompt": "cambio-masivo" }
-    ]},
-    { "n": 4, "titulo": "Product Ads", "skills": ["ads"], "tareas": [
-      { "id": "p4-1", "txt": "Calcular el ACOS de equilibrio de cada publicación", "prompt": "ads" },
-      { "id": "p4-2", "txt": "Leer la guía de ACOS del Lab y la documentación de Product Ads", "prompt": null },
-      { "id": "p4-3", "txt": "Escribir las reglas de puja y presupuesto por grupo de campañas", "prompt": "ads" },
-      { "id": "p4-4", "txt": "Diseñar un test A/B de presupuesto con criterio de éxito", "prompt": null }
-    ]},
-    { "n": 5, "titulo": "Claude + MCP", "skills": ["mcp"], "tareas": [
-      { "id": "p5-1", "txt": "Instalar Claude Code y crear un CLAUDE.md con las reglas de la cuenta", "prompt": null },
-      { "id": "p5-2", "txt": "Conectar el MCP oficial de Mercado Libre (OAuth)", "prompt": null },
-      { "id": "p5-3", "txt": "Correr las pruebas de descubrimiento, solo lectura y dry-run", "prompt": "mcp-prueba" },
-      { "id": "p5-4", "txt": "Grabar un video corto del flujo para el portfolio", "prompt": null }
-    ]},
-    { "n": 6, "titulo": "Reporting", "skills": ["reporting", "stock"], "tareas": [
-      { "id": "p6-1", "txt": "Diagnóstico de la cuenta completa con el resumen del Tracker", "prompt": "diagnostico" },
-      { "id": "p6-2", "txt": "Plan de reposición con cobertura por SKU", "prompt": "stock" },
-      { "id": "p6-3", "txt": "Informe semanal con 5 acciones y responsables", "prompt": "informe-semanal" },
-      { "id": "p6-4", "txt": "Cargar los logros con números en la pestaña CV", "prompt": null }
-    ]}
-  ],
-
-  "sistemas": [
-    { "n": 1,  "nombre": "Auditor de publicaciones", "que": "Detecta atributos faltantes, errores de categoría, imágenes débiles y datos sin evidencia.", "kpi": "Publicaciones profesionales, conversión, preguntas repetidas", "cuidado": "Piloto con los 20 SKU de más tráfico." },
-    { "n": 2,  "nombre": "Fábrica de publicaciones", "que": "Convierte fichas de proveedor en borradores estructurados y lotes READY/REVIEW/BLOCKED.", "kpi": "Tiempo por SKU, % listo al primer intento", "cuidado": "Categoría, GTIN, precio y claims requieren aprobación." },
-    { "n": 3,  "nombre": "Monitor de catálogo", "que": "Indica si una oferta gana, comparte o pierde el catálogo y qué factor puede mejorar.", "kpi": "Participación ganadora, margen, ventas incrementales", "cuidado": "No igualar precios en automático sin margen mínimo." },
-    { "n": 4,  "nombre": "Motor de precio y margen", "que": "Calcula el margen neto antes de recomendar un precio o una promoción.", "kpi": "Contribución, ventas con pérdida", "cuidado": "Toda escritura muestra valor anterior, nuevo, motivo y rollback." },
-    { "n": 5,  "nombre": "Alertas de stock", "que": "Predice faltantes, detecta stock inconsistente y propone reposición.", "kpi": "Días sin stock, ventas perdidas, rotación", "cuidado": "Separar disponible, reservado, en tránsito y devuelto." },
-    { "n": 6,  "nombre": "Preventa inteligente", "que": "Clasifica preguntas, consulta la ficha real, sugiere respuesta y deriva casos sensibles.", "kpi": "Tiempo de respuesta, conversión tras pregunta", "cuidado": "Compatibilidades y garantías siempre con aprobación." },
-    { "n": 7,  "nombre": "Postventa y reclamos", "que": "Reúne orden, envío y mensajes, y propone el próximo paso para el equipo.", "kpi": "Tiempo de resolución, reclamos, reputación", "cuidado": "Reembolsos y cancelaciones siempre con flujo humano." },
-    { "n": 8,  "nombre": "Conciliación financiera", "que": "Cruza ventas, cobros, comisiones, impuestos y notas de crédito.", "kpi": "Diferencias no conciliadas, tiempo de cierre", "cuidado": "Los reportes de facturación no son fuente de ventas en tiempo real." },
-    { "n": 9,  "nombre": "Optimización de Product Ads", "que": "Agrupa anuncios, compara inversión y resultado, y recomienda presupuesto.", "kpi": "ROAS, ACOS, TACOS, margen después de Ads", "cuidado": "Pausas masivas y cambios de presupuesto con aprobación." },
-    { "n": 10, "nombre": "Imágenes y video por producto", "que": "Crea imágenes secundarias, lifestyle y videos desde assets reales.", "kpi": "CTR, conversión, costo por pieza", "cuidado": "No inventar accesorios, logos, textos ni certificaciones." },
-    { "n": 11, "nombre": "WhatsApp comercial", "que": "Califica leads, responde, consulta estados y deriva a una persona.", "kpi": "Primera respuesta, conversión, derivaciones correctas", "cuidado": "El bot se silencia cuando una persona toma la conversación." },
-    { "n": 12, "nombre": "Centro de conocimiento", "que": "Centraliza SOP, políticas y fichas con respuestas citadas (NotebookLM).", "kpi": "Tiempo de onboarding, errores repetidos", "cuidado": "Solo documentos sanitizados y con fecha de vigencia." },
-    { "n": 13, "nombre": "QA visual y funcional", "que": "Prueba dashboards, formularios y flujos con Playwright.", "kpi": "Bugs antes del cliente, regresiones", "cuidado": "Perfil aislado y sin sesiones sensibles." },
-    { "n": 14, "nombre": "Reporte ejecutivo semanal", "que": "Resume ventas, margen, stock, Ads, reputación y anomalías.", "kpi": "Decisiones ejecutadas, tiempo ahorrado", "cuidado": "La IA narra números calculados; no los calcula desde texto." }
-  ],
-
-  "stack": [
-    { "nombre": "Claude Code", "tipo": "Agente", "uso": "Trabajo con archivos, skills, MCP y reglas del proyecto (CLAUDE.md).", "url": "https://docs.anthropic.com/en/docs/claude-code/quickstart" },
-    { "nombre": "MCP oficial de Mercado Libre", "tipo": "MCP", "uso": "Documentación vigente de la API desde Claude (OAuth).", "url": "https://developers.mercadolibre.com.ar/es_ar/descripcion-de-articulos/mcp-server", "cmd": "claude mcp add --transport http mercadolibre-devsite-mcp https://mcp.mercadolibre.com/devsite/v1/mcp -s user" },
-    { "nombre": "API de Mercado Libre", "tipo": "API", "uso": "Ítems, atributos, catálogo, visitas, órdenes, preguntas y comisiones. La base de ML Tracker.", "url": "https://developers.mercadolibre.com.ar/es_ar/api-docs-es" },
-    { "nombre": "Skills de Claude", "tipo": "Skill", "uso": "Paquetes de instrucciones que enseñan un proceso repetible: margen, pricing, stock, Ads.", "url": "https://docs.anthropic.com/en/docs/claude-code/skills" },
-    { "nombre": "n8n + n8n-MCP", "tipo": "Automatización", "uso": "Orquestar alertas y rutinas con reintentos y respaldo humano.", "url": "https://github.com/czlonkowski/n8n-mcp" },
-    { "nombre": "NotebookLM", "tipo": "Conocimiento", "uso": "Base de políticas, fichas y SOP con respuestas citadas.", "url": "https://support.google.com/notebooklm/" },
-    { "nombre": "Playwright MCP", "tipo": "QA", "uso": "Probar dashboards y flujos de punta a punta.", "url": "https://github.com/microsoft/playwright-mcp" },
-    { "nombre": "rembg + Upscayl", "tipo": "Imagen", "uso": "Fondos y resolución de fotos de producto, gratis y local.", "url": "https://github.com/danielgatis/rembg" }
-  ],
-
-  "prompts": [
+   ]
+  },
+  {
+   "n": 2,
+   "titulo": "Rentabilidad",
+   "skills": [
+    "rentabilidad"
+   ],
+   "tareas": [
     {
-      "id": "maestro", "titulo": "Bloque maestro de seguridad", "cat": "Base", "alcance": "libre", "skill": "mcp",
-      "desc": "Pegalo al principio de cualquier conversación operativa: fija las reglas de lectura, verificación y aprobación.",
-      "texto": "Antes de trabajar:\n1. Listá las herramientas disponibles y marcá READ o WRITE.\n2. Confirmá SITE_ID, cuenta autorizada, ambiente y fuente de verdad.\n3. Consultá la documentación oficial vigente antes de usar endpoints o campos.\n4. Si no podés verificar una regla, escribí REQUIERE_VALIDACION_API.\n5. Si falta un dato crítico, escribí FALTA_DATO y bloqueá la acción.\n6. MODO por defecto: READ_ONLY.\n7. Para toda escritura exigí: snapshot, diff, fórmula, margen, rollback, piloto y frase exacta de aprobación.\n8. No muestres ni registres secretos.\n9. No eludas 401/403, captcha, rate limits, moderaciones ni permisos.\n10. No confundas \"preparé\" con \"ejecuté\"; confirmá cambios leyendo el estado real.\n11. Detené el proceso ante respuesta ambigua, cambio concurrente o riesgo no aprobado.\nPrimero devolvé el plan, los datos faltantes y el nivel de riesgo. No ejecutes nada todavía."
+     "id": "p2-1",
+     "txt": "Cargar costos de al menos 10 publicaciones en ML Tracker",
+     "prompt": null
     },
     {
-      "id": "auditor", "titulo": "Auditor de una publicación", "cat": "Publicaciones", "alcance": "publicacion", "skill": "publicaciones",
-      "desc": "Detecta errores, datos faltantes y riesgos de rechazo sin inventar información.",
-      "texto": "Actuá como auditor técnico de publicaciones de Mercado Libre para el site [SITE_ID].\nObjetivo: detectar errores, datos faltantes y mejoras sin inventar información.\nReglas obligatorias:\n1. Usá únicamente los datos y fuentes que te entrego.\n2. Si falta un dato, escribí FALTA_DATO.\n3. No inventes categoría, GTIN, marca, modelo, compatibilidad, garantía, medidas, stock ni precio.\n4. Separá hechos confirmados de recomendaciones.\n5. No asumas que una regla histórica de Mercado Libre sigue vigente: indicá qué debe validarse en la documentación o la API actual.\nEntregá:\nA. Resumen ejecutivo.\nB. Tabla de datos confirmados.\nC. Datos faltantes ordenados por criticidad.\nD. Riesgos de rechazo o mala catalogación.\nE. Propuesta de título conservadora.\nF. Matriz de atributos: confirmado / falta / requiere validación API.\nG. Plan de imágenes.\nH. Checklist final antes de publicar.\n\nDatos del producto:\n{{DATOS}}"
+     "id": "p2-2",
+     "txt": "Calcular contribución por SKU y detectar las que pierden plata",
+     "prompt": "contribucion"
     },
     {
-      "id": "titulos", "titulo": "Títulos basados en evidencia", "cat": "Publicaciones", "alcance": "publicacion", "skill": "publicaciones",
-      "desc": "Cinco títulos armados solo con hechos confirmados, con la intención de búsqueda que cubre cada uno.",
-      "texto": "Generá 5 opciones de título para Mercado Libre usando exclusivamente los hechos confirmados de la ficha.\nPriorizá: tipo de producto + marca + modelo + atributo diferenciador verificable.\nEvitá: emojis, mayúsculas innecesarias, claims no demostrables, palabras de relleno, precio, promociones y datos que no estén confirmados.\nPara cada opción devolvé:\n- título\n- intención de búsqueda que cubre\n- datos utilizados\n- posible riesgo o dato a validar\nNo apliques una longitud fija sin consultar la regla actual de la categoría. Si no podés validarla, mantené el título conservador y marcá REQUIERE_VALIDACION_API.\n\nFicha confirmada:\n{{DATOS}}"
+     "id": "p2-3",
+     "txt": "Calcular el precio de equilibrio de las 5 más vendidas",
+     "prompt": null
     },
     {
-      "id": "atributos", "titulo": "Mapeo de atributos", "cat": "Publicaciones", "alcance": "publicacion", "skill": "publicaciones",
-      "desc": "Cruza la ficha del proveedor con los atributos que exige la categoría y devuelve un JSON ordenado.",
-      "texto": "Vas a mapear una ficha de producto contra los atributos de una categoría de Mercado Libre.\nReglas:\n- Usá los attribute_id y value_id exactos cuando existan.\n- No crees atributos que la categoría no admite.\n- No conviertas unidades sin mostrar la fórmula.\n- Si hay más de una interpretación posible, marcá REVISION_HUMANA.\n- Si el dato fuente no existe, marcá FALTA_DATO.\nSalida JSON:\n{\n  \"ready\": [],\n  \"missing\": [],\n  \"ambiguous\": [],\n  \"rejected_source_values\": [],\n  \"questions_for_supplier\": []\n}\n\nFicha y atributos de la categoría:\n{{DATOS}}"
-    },
-    {
-      "id": "optimizar-ficha", "titulo": "Optimizar una ficha según métricas", "cat": "Publicaciones", "alcance": "publicacion", "skill": "publicaciones",
-      "desc": "Separa problemas de descubrimiento, de conversión y de postventa, y prioriza los 5 cambios de más impacto.",
-      "texto": "Analizá una publicación existente de Mercado Libre y proponé mejoras basadas en evidencia.\nObjetivo: detectar por qué la ficha no convierte o genera fricción y proponer el menor conjunto de cambios con mayor impacto.\nSepará:\n- Problemas de descubrimiento: categoría, título, atributos y catálogo.\n- Problemas de conversión: precio, envío, reputación, imágenes, claridad y stock.\n- Problemas de postventa: expectativa incorrecta, compatibilidad, medidas, contenido o garantía.\n- Hipótesis sin evidencia.\nEntregá:\n1. Diagnóstico con evidencia y nivel de confianza.\n2. Top 5 cambios priorizados por impacto, esfuerzo y riesgo.\n3. Texto, atributos e imágenes propuestos.\n4. Campos que no deben tocarse.\n5. Diseño de prueba antes/después con ventana, métricas y criterio de éxito.\n6. Datos para rollback.\nNo atribuyas causalidad solo por correlación y no ejecutes cambios.\n\nDatos de la publicación:\n{{DATOS}}"
-    },
-    {
-      "id": "brief-imagenes", "titulo": "Brief de 8 imágenes", "cat": "Publicaciones", "alcance": "publicacion", "skill": "imagenes",
-      "desc": "Qué foto tomar, cuál se puede editar y qué controles evitan alucinaciones visuales.",
-      "texto": "Creá un brief de 8 imágenes para una publicación de Mercado Libre.\nIncluye exactamente: [CONTENIDO_DEL_PAQUETE]\nNo incluye: [ACCESORIOS_NO_INCLUIDOS]\nReglas:\n- La imagen principal debe representar fielmente el producto real.\n- No agregues logos, certificaciones, accesorios, funciones ni texto que no estén confirmados.\n- Indicá qué fotos deben tomarse de forma real y cuáles admiten solo edición de fondo o luz.\n- Incluí una vista de escala o medidas cuando sea útil.\n- Para cada imagen definí objetivo, encuadre, fondo, iluminación, elementos permitidos, elementos prohibidos y texto opcional.\n- Cerrá con una lista de controles para detectar alucinaciones visuales.\n\nProducto:\n{{DATOS}}"
-    },
-    {
-      "id": "contribucion", "titulo": "Contribución por SKU", "cat": "Rentabilidad", "alcance": "publicacion", "skill": "rentabilidad",
-      "desc": "Cascada de margen con fórmula, faltantes y supuestos, sin llamar ganancia a lo que no lo es.",
-      "texto": "Calculá la contribución de esta publicación de Mercado Libre.\nDescontá los costos variables conocidos del ingreso del mismo período y moneda.\nNo vuelvas a restar descuentos o devoluciones que ya estén descontados del ingreso.\nMostrá la fórmula, los componentes disponibles, los faltantes y los supuestos.\nNo llames ganancia neta a una contribución que excluye gastos fijos, impuestos u otros conceptos pendientes.\nMarcá FALTA_DATO si no se puede sostener el cálculo.\nAgregá:\n- precio de equilibrio y cuánto margen queda para publicidad (ACOS de equilibrio)\n- qué pasa con la contribución si el precio baja 5%, 10% y 15%\n- 3 palancas para mejorar el margen, ordenadas por impacto\nMi margen mínimo es [MARGEN_MINIMO].\n\nDatos:\n{{DATOS}}"
-    },
-    {
-      "id": "competencia", "titulo": "Competencia comparable", "cat": "Precio", "alcance": "publicacion", "skill": "pricing",
-      "desc": "Compara solo alternativas equivalentes y separa hecho, inferencia e hipótesis.",
-      "texto": "Compará mi publicación con alternativas realmente equivalentes a partir de fuentes accesibles.\nMostrá URL, fecha, producto, variante, contenido del pack, precio, moneda y condiciones visibles (envío, cuotas, reputación, Full).\nNo compares un pack con una unidad ni productos de prestaciones distintas como si fueran iguales.\nNo inventes ventas, costos, stock privado ni conversión de competidores.\nSi la publicación está en catálogo, explicá su estado y qué factor confirmado puede mejorar (precio, envío, reputación, stock).\nNo recomiendes igualar precio por debajo de mi precio de equilibrio.\nEntregá 5 oportunidades apoyadas por evidencia y marcá qué información no está disponible.\n\nMi publicación:\n{{DATOS}}"
-    },
-    {
-      "id": "promo", "titulo": "Evaluar una promoción", "cat": "Precio", "alcance": "publicacion", "skill": "promociones",
-      "desc": "Escenario con y sin promo, descuento máximo compatible con el margen y riesgo de quiebre.",
-      "texto": "Evaluá esta publicación para una promoción de [DESCUENTO] de descuento.\nUsá precio actual, costo y cargos reales; separá el aporte del vendedor y el aporte de Mercado Libre.\nCalculá la contribución actual y la propuesta, y compará contra mi mínimo de [MARGEN_MINIMO].\nRevisá elegibilidad solo si una fuente o herramienta la confirma; si no, marcá PENDIENTE_VALIDAR.\nIncluí:\n- escenario sin promo vs. con promo\n- descuento máximo compatible con el margen\n- unidades extra necesarias para ganar lo mismo que sin promo\n- riesgo de quiebre con el stock actual\n- cómo medir el resultado incremental\nEntregá la recomendación con supuestos, sin activar promociones.\n\nDatos:\n{{DATOS}}"
-    },
-    {
-      "id": "ads", "titulo": "Reglas de Product Ads", "cat": "Publicidad", "alcance": "publicacion", "skill": "ads",
-      "desc": "ACOS objetivo a partir del margen, reglas de puja y criterio para pausar o escalar.",
-      "texto": "Actuá como analista de Product Ads de Mercado Libre.\nCon los datos de la publicación, definí cuánto puedo invertir sin perder plata.\n1. Calculá el ACOS de equilibrio (margen antes de publicidad ÷ precio) y un ACOS objetivo que deje [MARGEN_OBJETIVO] de margen.\n2. Explicá la diferencia entre ACOS y TACOS y cuál conviene mirar para esta publicación.\n3. Definí reglas: cuándo subir presupuesto, cuándo bajarlo y cuándo pausar, con umbrales numéricos.\n4. Si la publicación tiene problemas de conversión o stock, decí si conviene arreglarlos antes de invertir.\n5. Diseñá una prueba de 14 días con métrica principal y criterio de éxito.\nSi falta el costo o la comisión, marcá FALTA_DATO y no inventes el margen.\nMis datos de campaña (si los tengo): [ACOS_ACTUAL_E_INVERSION]\n\nDatos:\n{{DATOS}}"
-    },
-    {
-      "id": "diagnostico", "titulo": "Diagnóstico inicial de la cuenta", "cat": "Reporting", "alcance": "cuenta", "skill": "reporting",
-      "desc": "Los 10 hallazgos que más afectan ventas, contribución o carga operativa.",
-      "texto": "Trabajá como analista de mi operación de Mercado Libre.\nSepará hechos, cálculos e hipótesis. Cuando falte información, marcá FALTA_DATO.\nPriorizá 10 hallazgos que afecten ventas, contribución o carga operativa.\nEntregá: hallazgo, evidencia, publicaciones afectadas, impacto estimado con supuestos, esfuerzo y siguiente acción.\nNo proyectes mejoras porcentuales sin explicar de dónde salen.\nEn esta etapa entregá análisis y borradores: no cambies precios, stock, publicaciones ni campañas.\n\nDatos de la cuenta:\n{{DATOS}}"
-    },
-    {
-      "id": "plan-accion", "titulo": "Diagnóstico y plan de acción", "cat": "Reporting", "alcance": "cuenta", "skill": "reporting",
-      "desc": "Árbol de causas, segmentación, top oportunidades y acciones a 7, 30 y 90 días.",
-      "texto": "Actuá como analista de performance de Mercado Libre.\nEntregá:\nA. Resumen ejecutivo de máximo 10 líneas.\nB. Árbol de causas por cada caída o mejora relevante.\nC. Segmentación: alto tráfico y baja conversión, baja visibilidad y buena conversión, margen alto y stock bajo.\nD. Top 10 oportunidades con impacto estimado, fórmula, esfuerzo y confianza.\nE. Top 10 riesgos.\nF. Acciones para 7, 30 y 90 días.\nG. Alertas con umbral y responsable.\nH. Preguntas que los datos todavía no responden.\nReglas:\n- Compará períodos equivalentes.\n- Considerá quiebres de stock y promociones antes de explicar tendencias.\n- No mezcles facturación con utilidad.\n- Toda recomendación debe citar el dato que la sostiene.\n\nDatos de la cuenta:\n{{DATOS}}"
-    },
-    {
-      "id": "informe-semanal", "titulo": "Informe semanal", "cat": "Reporting", "alcance": "cuenta", "skill": "reporting",
-      "desc": "Ventas comparables, destacados, riesgos y 5 acciones con responsable y criterio de éxito.",
-      "texto": "Armá el informe semanal de [TIENDA].\nIncluí: ventas comparables, publicaciones destacadas, contribución disponible, riesgos de stock y preguntas pendientes.\nElegí 5 acciones con responsable, fecha, evidencia, criterio de éxito y dato faltante.\nCompará contra el período anterior sin atribuir causalidad a cambios que solo coinciden en el tiempo.\nCerrá con una tabla de fuentes y la cobertura del análisis.\nEscribilo para alguien que lo lee en 3 minutos.\n\nDatos de la cuenta:\n{{DATOS}}"
-    },
-    {
-      "id": "stock", "titulo": "Cobertura de stock y reposición", "cat": "Operación", "alcance": "cuenta", "skill": "stock",
-      "desc": "Días de cobertura, SIN_ROTACION y prioridad de reposición con lead time y colchón.",
-      "texto": "Con los datos de stock y ventas de la cuenta, estimá unidades por día y días de cobertura de cada publicación.\nMarcá los períodos sin stock que distorsionen el cálculo.\nPriorizá la reposición con lead time de [LEAD_TIME_DIAS] días y colchón de [COLCHON_DIAS] días, identificados como supuestos del negocio.\nSi no hubo ventas, no dividas por cero: marcá SIN_ROTACION.\nSeñalá el stock inmovilizado (más de 90 días de cobertura) y proponé qué hacer con él.\nEntregá recomendaciones; no actualices stock.\n\nDatos de la cuenta:\n{{DATOS}}"
-    },
-    {
-      "id": "preventa", "titulo": "Borradores de preguntas de preventa", "cat": "Operación", "alcance": "cuenta", "skill": "voc",
-      "desc": "Respuestas basadas solo en la ficha, con motivo de derivación cuando falta evidencia.",
-      "texto": "Revisá las preguntas pendientes y prepará borradores usando solo fichas y políticas confirmadas.\nDevolvé: ID de pregunta, producto, intención, respuesta sugerida, fuente y motivo de derivación cuando corresponda.\nNo inventes disponibilidad, entregas, garantías ni compatibilidades.\nNo compartas teléfonos ni links externos.\nSeñalá las preguntas que necesitan respuesta humana y qué dato de la ficha falta para que no se repitan.\nNo publiques las respuestas.\nMis políticas: [GARANTIA_Y_ENVIO]\n\nDatos:\n{{DATOS}}"
-    },
-    {
-      "id": "cambio-masivo", "titulo": "Preparar un cambio masivo (dry-run)", "cat": "Operación", "alcance": "cuenta", "skill": "pricing",
-      "desc": "Snapshot, diff, margen nuevo, READY/REVIEW/BLOCKED y plan piloto, sin ejecutar nada.",
-      "texto": "Actuá como auditor técnico de publicaciones de Mercado Libre para una cuenta propia.\nCAMBIO_SOLICITADO: [CAMBIO]\nMARGEN_MINIMO: [MARGEN_MINIMO]\nMODO: READ_ONLY\nReglas:\n1. Inventariá las publicaciones alcanzadas y guardá un snapshot de los campos que podrían cambiar.\n2. No supongas que un campo es editable: señalá lo que hay que verificar.\n3. Calculá el valor propuesto con una regla determinista y mostrá la fórmula.\n4. No prepares un cambio si el margen, el stock o la fuente no son confiables.\n5. No ejecutes cambios.\nSalida:\nA. Alcance y cantidad de publicaciones.\nB. Tabla: item_id, valor_actual, valor_propuesto, regla, margen_actual, margen_nuevo, riesgo y estado.\nC. READY / REVIEW / BLOCKED.\nD. Datos de rollback.\nE. Plan piloto: 1 publicación, luego 5, luego el lote.\nF. Criterios automáticos de detención.\n\nDatos de la cuenta:\n{{DATOS}}"
-    },
-    {
-      "id": "csv", "titulo": "Normalizador de CSV por lote", "cat": "Operación", "alcance": "libre", "skill": "carga-masiva",
-      "desc": "Separa filas READY, REVIEW y BLOCKED sin completar celdas por inferencia.",
-      "texto": "Analizá este CSV de productos sin modificar el archivo original.\nObjetivo: producir tres archivos lógicos:\n1. READY: filas completas y coherentes.\n2. REVIEW: filas con ambigüedades.\n3. BLOCKED: filas que no se pueden publicar por falta de datos críticos.\nReglas:\n- No completes celdas faltantes por inferencia.\n- Conservá SKU y valores originales.\n- Normalizá espacios, mayúsculas y unidades solo cuando la transformación sea determinista.\n- Agregá columnas reason_code, reason_detail y source_row.\n- Detectá duplicados por SKU, GTIN y combinación marca/modelo.\n- No generes payloads de publicación hasta que la categoría y sus atributos hayan sido consultados.\nPrimero explicá el plan y los controles. Luego procesá el archivo.\n\nCSV:\n[PEGAR_CSV]"
-    },
-    {
-      "id": "qa-payload", "titulo": "QA final de un payload", "cat": "Operación", "alcance": "libre", "skill": "carga-masiva",
-      "desc": "Control de calidad previo a producción: blockers, warnings, diff y datos de rollback.",
-      "texto": "Revisá este payload de Mercado Libre como un control de calidad previo a producción.\nNo ejecutes ninguna publicación.\nValidaciones:\n- campos obligatorios y tipos\n- categoría y atributos vigentes\n- consistencia entre SKU, variaciones y stock\n- medidas y peso del paquete\n- precio, moneda y margen mínimo [MARGEN_MINIMO]\n- imágenes y correspondencia con la variación\n- claims, garantía, compatibilidad y contenido incluido\n- datos inventados o sin evidencia\n- diferencias contra el payload anterior\nSalida:\n- APPROVED_FOR_PILOT: true/false\n- blockers\n- warnings\n- diff_summary\n- manual_checks\n- rollback_data_required\nPayload nuevo:\n[PAYLOAD_NUEVO]\nPayload anterior:\n[PAYLOAD_ANTERIOR]"
-    },
-    {
-      "id": "mercado", "titulo": "Detectar oportunidades de mercado", "cat": "Mercado", "alcance": "libre", "skill": "mercado",
-      "desc": "Score de oportunidad con demanda, competencia, margen, logística y regulación.",
-      "texto": "Realizá un análisis de mercado para vender [PRODUCTO_O_CATEGORIA] en Mercado Libre Argentina usando solo fuentes públicas permitidas y datos propios.\nReglas:\n1. Si una fuente devuelve 401/403/captcha, no la evadas: registrá la limitación.\n2. No presentes una muestra parcial como el mercado completo.\n3. Separá demanda observada, proxy de demanda e hipótesis.\n4. Excluí oportunidades con riesgo regulatorio, propiedad intelectual dudosa o margen no demostrable.\n5. Calculá landed cost solo con supuestos visibles.\nEntregá:\nA. Mapa de subcategorías e intención de compra.\nB. Rango de precios y propuesta dominante.\nC. Señales de demanda, estacionalidad y competencia.\nD. Dolores extraídos de preguntas y reseñas.\nE. Huecos de oferta.\nF. Score de oportunidad: demanda, competencia, margen, logística, regulación y diferenciación.\nG. Top 10 oportunidades con evidencia.\nH. Plan de validación de bajo costo.\nNo recomiendes un producto solo por volumen si no puede sostener margen y abastecimiento."
-    },
-    {
-      "id": "conciliacion", "titulo": "Conciliación ML ↔ Mercado Pago", "cat": "Finanzas", "alcance": "libre", "skill": "conciliacion",
-      "desc": "Tabla conciliada por operación con estados MATCHED, TIMING, PARTIAL y NEEDS_REVIEW.",
-      "texto": "Diseñá y ejecutá en modo READ_ONLY una conciliación entre Mercado Libre, Mercado Pago y [ERP_O_BANCO] para el período [PERIODO].\nReglas:\n1. Conservá cada archivo y respuesta cruda.\n2. Normalizá moneda y fechas sin perder zona horaria.\n3. Definí las claves de vínculo: order_id, payment_id, external_reference, pack_id.\n4. No fuerces coincidencias por monto y fecha si hay múltiples candidatos.\n5. Separá venta, liberación de dinero, devolución, contracargo, retención, bonificación y retiro.\n6. Una venta aprobada no equivale a dinero disponible.\n7. Explicá cada cálculo de neto.\n8. Marcá diferencias como MATCHED, TIMING, PARTIAL, DUPLICATE, MISSING o NEEDS_REVIEW.\nEntregá: tabla conciliada, resumen por día y concepto, diferencias y monto afectado, operaciones no vinculadas y rutina de cierre.\nNo realices devoluciones, cancelaciones ni movimientos de dinero.\n\nArchivos:\n[PEGAR_REPORTES]"
-    },
-    {
-      "id": "monitor", "titulo": "Monitor de competencia (n8n)", "cat": "Automatización", "alcance": "libre", "skill": "automatizacion",
-      "desc": "Arquitectura de snapshots, diffs y alertas sin tocar tus precios en automático.",
-      "texto": "Diseñá un monitor de competencia para [LISTA_DE_URLS_O_SKUS] sin ejecutar acciones sobre Mercado Libre.\nObjetivo: detectar cambios relevantes en precio, promociones, disponibilidad observable y contenido.\n1. Definí fuentes autorizadas y frecuencia razonable.\n2. Guardá snapshot versionado con URL, timestamp y hash.\n3. Calculá diffs por campo y evitá falsas alertas por variaciones, packs o errores temporales.\n4. Ante bloqueo, pausá y alertá; no lo evadas.\n5. No modifiques nuestros precios automáticamente.\n6. Reglas: cambio de precio mayor a [UMBRAL], nueva promoción, cambio de título o atributos, competidor nuevo.\n7. Para cada alerta, agregá impacto probable y decisión humana requerida.\nEntregá: arquitectura n8n, esquema de snapshot, reglas de deduplicación, casos de prueba y el prompt de resumen diario."
-    },
-    {
-      "id": "mcp-prueba", "titulo": "Pruebas de un MCP nuevo", "cat": "Base", "alcance": "libre", "skill": "mcp",
-      "desc": "Cuatro pruebas en orden: descubrimiento, solo lectura, dry-run y frase de aprobación.",
-      "texto": "PRUEBA 1 — Descubrimiento\nListá todas las herramientas disponibles de este MCP. Para cada una indicá si es lectura o escritura, datos sensibles que toca, argumentos requeridos y riesgo. No ejecutes ninguna.\n\nPRUEBA 2 — Solo lectura\nUsá únicamente herramientas de lectura. Mostrame 5 publicaciones activas con su ID, SKU, precio y stock. No modifiques nada. Si una herramienta pudiera escribir, no la uses.\n\nPRUEBA 3 — Dry-run\nPrepará un dry-run para cambiar el precio del ítem [ITEM_ID] de [VALOR_ACTUAL] a [VALOR_NUEVO]. Mostrá validaciones, margen, payload, diff, riesgos y datos necesarios para rollback. No ejecutes el cambio.\n\nPRUEBA 4 — Aprobación\nNo ejecutes escrituras hasta recibir exactamente APROBAR CAMBIO [ITEM_ID]. Si faltan precio actual, margen mínimo o backup, bloqueá la acción."
+     "id": "p2-4",
+     "txt": "Instalar la skill profit-margin-analyzer en Claude Code y probarla",
+     "prompt": null
     }
-  ]
+   ]
+  },
+  {
+   "n": 3,
+   "titulo": "Precio y promociones",
+   "skills": [
+    "pricing",
+    "promociones"
+   ],
+   "tareas": [
+    {
+     "id": "p3-1",
+     "txt": "Revisar el estado de catálogo y el price-to-win de cada publicación",
+     "prompt": "competencia"
+    },
+    {
+     "id": "p3-2",
+     "txt": "Definir el piso de margen de la cuenta",
+     "prompt": null
+    },
+    {
+     "id": "p3-3",
+     "txt": "Simular una promoción del 15% y decidir con números",
+     "prompt": "promo"
+    },
+    {
+     "id": "p3-4",
+     "txt": "Preparar un cambio de precio en dry-run con diff y rollback",
+     "prompt": "cambio-masivo"
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "titulo": "Product Ads",
+   "skills": [
+    "ads"
+   ],
+   "tareas": [
+    {
+     "id": "p4-1",
+     "txt": "Calcular el ACOS de equilibrio de cada publicación",
+     "prompt": "ads"
+    },
+    {
+     "id": "p4-2",
+     "txt": "Leer la guía de ACOS del Lab y la documentación de Product Ads",
+     "prompt": null
+    },
+    {
+     "id": "p4-3",
+     "txt": "Escribir las reglas de puja y presupuesto por grupo de campañas",
+     "prompt": "ads"
+    },
+    {
+     "id": "p4-4",
+     "txt": "Diseñar un test A/B de presupuesto con criterio de éxito",
+     "prompt": null
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "titulo": "Claude + MCP",
+   "skills": [
+    "mcp"
+   ],
+   "tareas": [
+    {
+     "id": "p5-1",
+     "txt": "Instalar Claude Code y crear un CLAUDE.md con las reglas de la cuenta",
+     "prompt": null
+    },
+    {
+     "id": "p5-2",
+     "txt": "Conectar el MCP oficial de Mercado Libre (OAuth)",
+     "prompt": null
+    },
+    {
+     "id": "p5-3",
+     "txt": "Correr las pruebas de descubrimiento, solo lectura y dry-run",
+     "prompt": "mcp-prueba"
+    },
+    {
+     "id": "p5-4",
+     "txt": "Grabar un video corto del flujo para el portfolio",
+     "prompt": null
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "titulo": "Reporting",
+   "skills": [
+    "reporting",
+    "stock"
+   ],
+   "tareas": [
+    {
+     "id": "p6-1",
+     "txt": "Diagnóstico de la cuenta completa con el resumen del Tracker",
+     "prompt": "diagnostico"
+    },
+    {
+     "id": "p6-2",
+     "txt": "Plan de reposición con cobertura por SKU",
+     "prompt": "stock"
+    },
+    {
+     "id": "p6-3",
+     "txt": "Informe semanal con 5 acciones y responsables",
+     "prompt": "informe-semanal"
+    },
+    {
+     "id": "p6-4",
+     "txt": "Cargar los logros con números en la pestaña CV",
+     "prompt": null
+    }
+   ]
+  }
+ ],
+ "sistemas": [
+  {
+   "n": 1,
+   "nombre": "Auditor de publicaciones",
+   "que": "Detecta atributos faltantes, errores de categoría, imágenes débiles y datos sin evidencia.",
+   "kpi": "Publicaciones profesionales, conversión, preguntas repetidas",
+   "cuidado": "Piloto con los 20 SKU de más tráfico."
+  },
+  {
+   "n": 2,
+   "nombre": "Fábrica de publicaciones",
+   "que": "Convierte fichas de proveedor en borradores estructurados y lotes READY/REVIEW/BLOCKED.",
+   "kpi": "Tiempo por SKU, % listo al primer intento",
+   "cuidado": "Categoría, GTIN, precio y claims requieren aprobación."
+  },
+  {
+   "n": 3,
+   "nombre": "Monitor de catálogo",
+   "que": "Indica si una oferta gana, comparte o pierde el catálogo y qué factor puede mejorar.",
+   "kpi": "Participación ganadora, margen, ventas incrementales",
+   "cuidado": "No igualar precios en automático sin margen mínimo."
+  },
+  {
+   "n": 4,
+   "nombre": "Motor de precio y margen",
+   "que": "Calcula el margen neto antes de recomendar un precio o una promoción.",
+   "kpi": "Contribución, ventas con pérdida",
+   "cuidado": "Toda escritura muestra valor anterior, nuevo, motivo y rollback."
+  },
+  {
+   "n": 5,
+   "nombre": "Alertas de stock",
+   "que": "Predice faltantes, detecta stock inconsistente y propone reposición.",
+   "kpi": "Días sin stock, ventas perdidas, rotación",
+   "cuidado": "Separar disponible, reservado, en tránsito y devuelto."
+  },
+  {
+   "n": 6,
+   "nombre": "Preventa inteligente",
+   "que": "Clasifica preguntas, consulta la ficha real, sugiere respuesta y deriva casos sensibles.",
+   "kpi": "Tiempo de respuesta, conversión tras pregunta",
+   "cuidado": "Compatibilidades y garantías siempre con aprobación."
+  },
+  {
+   "n": 7,
+   "nombre": "Postventa y reclamos",
+   "que": "Reúne orden, envío y mensajes, y propone el próximo paso para el equipo.",
+   "kpi": "Tiempo de resolución, reclamos, reputación",
+   "cuidado": "Reembolsos y cancelaciones siempre con flujo humano."
+  },
+  {
+   "n": 8,
+   "nombre": "Conciliación financiera",
+   "que": "Cruza ventas, cobros, comisiones, impuestos y notas de crédito.",
+   "kpi": "Diferencias no conciliadas, tiempo de cierre",
+   "cuidado": "Los reportes de facturación no son fuente de ventas en tiempo real."
+  },
+  {
+   "n": 9,
+   "nombre": "Optimización de Product Ads",
+   "que": "Agrupa anuncios, compara inversión y resultado, y recomienda presupuesto.",
+   "kpi": "ROAS, ACOS, TACOS, margen después de Ads",
+   "cuidado": "Pausas masivas y cambios de presupuesto con aprobación."
+  },
+  {
+   "n": 10,
+   "nombre": "Imágenes y video por producto",
+   "que": "Crea imágenes secundarias, lifestyle y videos desde assets reales.",
+   "kpi": "CTR, conversión, costo por pieza",
+   "cuidado": "No inventar accesorios, logos, textos ni certificaciones."
+  },
+  {
+   "n": 11,
+   "nombre": "WhatsApp comercial",
+   "que": "Califica leads, responde, consulta estados y deriva a una persona.",
+   "kpi": "Primera respuesta, conversión, derivaciones correctas",
+   "cuidado": "El bot se silencia cuando una persona toma la conversación."
+  },
+  {
+   "n": 12,
+   "nombre": "Centro de conocimiento",
+   "que": "Centraliza SOP, políticas y fichas con respuestas citadas (NotebookLM).",
+   "kpi": "Tiempo de onboarding, errores repetidos",
+   "cuidado": "Solo documentos sanitizados y con fecha de vigencia."
+  },
+  {
+   "n": 13,
+   "nombre": "QA visual y funcional",
+   "que": "Prueba dashboards, formularios y flujos con Playwright.",
+   "kpi": "Bugs antes del cliente, regresiones",
+   "cuidado": "Perfil aislado y sin sesiones sensibles."
+  },
+  {
+   "n": 14,
+   "nombre": "Reporte ejecutivo semanal",
+   "que": "Resume ventas, margen, stock, Ads, reputación y anomalías.",
+   "kpi": "Decisiones ejecutadas, tiempo ahorrado",
+   "cuidado": "La IA narra números calculados; no los calcula desde texto."
+  }
+ ],
+ "stack": [
+  {
+   "nombre": "Claude Code",
+   "tipo": "Agente",
+   "uso": "Trabajo con archivos, skills, MCP y reglas del proyecto (CLAUDE.md).",
+   "url": "https://docs.anthropic.com/en/docs/claude-code/quickstart"
+  },
+  {
+   "nombre": "MCP oficial de Mercado Libre",
+   "tipo": "MCP",
+   "uso": "Documentación vigente de la API desde Claude (OAuth).",
+   "url": "https://developers.mercadolibre.com.ar/es_ar/descripcion-de-articulos/mcp-server",
+   "cmd": "claude mcp add --transport http mercadolibre-devsite-mcp https://mcp.mercadolibre.com/devsite/v1/mcp -s user"
+  },
+  {
+   "nombre": "API de Mercado Libre",
+   "tipo": "API",
+   "uso": "Ítems, atributos, catálogo, visitas, órdenes, preguntas y comisiones. La base de ML Tracker.",
+   "url": "https://developers.mercadolibre.com.ar/es_ar/api-docs-es"
+  },
+  {
+   "nombre": "Skills de Claude",
+   "tipo": "Skill",
+   "uso": "Paquetes de instrucciones que enseñan un proceso repetible: margen, pricing, stock, Ads.",
+   "url": "https://docs.anthropic.com/en/docs/claude-code/skills"
+  },
+  {
+   "nombre": "n8n + n8n-MCP",
+   "tipo": "Automatización",
+   "uso": "Orquestar alertas y rutinas con reintentos y respaldo humano.",
+   "url": "https://github.com/czlonkowski/n8n-mcp"
+  },
+  {
+   "nombre": "NotebookLM",
+   "tipo": "Conocimiento",
+   "uso": "Base de políticas, fichas y SOP con respuestas citadas.",
+   "url": "https://support.google.com/notebooklm/"
+  },
+  {
+   "nombre": "Playwright MCP",
+   "tipo": "QA",
+   "uso": "Probar dashboards y flujos de punta a punta.",
+   "url": "https://github.com/microsoft/playwright-mcp"
+  },
+  {
+   "nombre": "rembg + Upscayl",
+   "tipo": "Imagen",
+   "uso": "Fondos y resolución de fotos de producto, gratis y local.",
+   "url": "https://github.com/danielgatis/rembg"
+  }
+ ],
+ "prompts": [
+  {
+   "id": "maestro",
+   "titulo": "Bloque maestro de seguridad",
+   "cat": "Base",
+   "alcance": "libre",
+   "skill": "mcp",
+   "desc": "Pegalo al principio de cualquier conversación operativa: fija las reglas de lectura, verificación y aprobación.",
+   "texto": "Antes de trabajar:\n1. Listá las herramientas disponibles y marcá READ o WRITE.\n2. Confirmá SITE_ID, cuenta autorizada, ambiente y fuente de verdad.\n3. Consultá la documentación oficial vigente antes de usar endpoints o campos.\n4. Si no podés verificar una regla, escribí REQUIERE_VALIDACION_API.\n5. Si falta un dato crítico, escribí FALTA_DATO y bloqueá la acción.\n6. MODO por defecto: READ_ONLY.\n7. Para toda escritura exigí: snapshot, diff, fórmula, margen, rollback, piloto y frase exacta de aprobación.\n8. No muestres ni registres secretos.\n9. No eludas 401/403, captcha, rate limits, moderaciones ni permisos.\n10. No confundas \"preparé\" con \"ejecuté\"; confirmá cambios leyendo el estado real.\n11. Detené el proceso ante respuesta ambigua, cambio concurrente o riesgo no aprobado.\nPrimero devolvé el plan, los datos faltantes y el nivel de riesgo. No ejecutes nada todavía."
+  },
+  {
+   "id": "auditor",
+   "titulo": "Auditor de una publicación",
+   "cat": "Publicaciones",
+   "alcance": "publicacion",
+   "skill": "publicaciones",
+   "desc": "Detecta errores, datos faltantes y riesgos de rechazo sin inventar información.",
+   "texto": "Actuá como auditor técnico de publicaciones de Mercado Libre para el site [SITE_ID].\nObjetivo: detectar errores, datos faltantes y mejoras sin inventar información.\nReglas obligatorias:\n1. Usá únicamente los datos y fuentes que te entrego.\n2. Si falta un dato, escribí FALTA_DATO.\n3. No inventes categoría, GTIN, marca, modelo, compatibilidad, garantía, medidas, stock ni precio.\n4. Separá hechos confirmados de recomendaciones.\n5. No asumas que una regla histórica de Mercado Libre sigue vigente: indicá qué debe validarse en la documentación o la API actual.\nEntregá:\nA. Resumen ejecutivo.\nB. Tabla de datos confirmados.\nC. Datos faltantes ordenados por criticidad.\nD. Riesgos de rechazo o mala catalogación.\nE. Propuesta de título conservadora.\nF. Matriz de atributos: confirmado / falta / requiere validación API.\nG. Plan de imágenes.\nH. Checklist final antes de publicar.\n\nDatos del producto:\n{{DATOS}}"
+  },
+  {
+   "id": "titulos",
+   "titulo": "Títulos basados en evidencia",
+   "cat": "Publicaciones",
+   "alcance": "publicacion",
+   "skill": "publicaciones",
+   "desc": "Cinco títulos armados solo con hechos confirmados, con la intención de búsqueda que cubre cada uno.",
+   "texto": "Generá 5 opciones de título para Mercado Libre usando exclusivamente los hechos confirmados de la ficha.\nPriorizá: tipo de producto + marca + modelo + atributo diferenciador verificable.\nEvitá: emojis, mayúsculas innecesarias, claims no demostrables, palabras de relleno, precio, promociones y datos que no estén confirmados.\nPara cada opción devolvé:\n- título\n- intención de búsqueda que cubre\n- datos utilizados\n- posible riesgo o dato a validar\nNo apliques una longitud fija sin consultar la regla actual de la categoría. Si no podés validarla, mantené el título conservador y marcá REQUIERE_VALIDACION_API.\n\nFicha confirmada:\n{{DATOS}}"
+  },
+  {
+   "id": "atributos",
+   "titulo": "Mapeo de atributos",
+   "cat": "Publicaciones",
+   "alcance": "publicacion",
+   "skill": "publicaciones",
+   "desc": "Cruza la ficha del proveedor con los atributos que exige la categoría y devuelve un JSON ordenado.",
+   "texto": "Vas a mapear una ficha de producto contra los atributos de una categoría de Mercado Libre.\nReglas:\n- Usá los attribute_id y value_id exactos cuando existan.\n- No crees atributos que la categoría no admite.\n- No conviertas unidades sin mostrar la fórmula.\n- Si hay más de una interpretación posible, marcá REVISION_HUMANA.\n- Si el dato fuente no existe, marcá FALTA_DATO.\nSalida JSON:\n{\n  \"ready\": [],\n  \"missing\": [],\n  \"ambiguous\": [],\n  \"rejected_source_values\": [],\n  \"questions_for_supplier\": []\n}\n\nFicha y atributos de la categoría:\n{{DATOS}}"
+  },
+  {
+   "id": "optimizar-ficha",
+   "titulo": "Optimizar una ficha según métricas",
+   "cat": "Publicaciones",
+   "alcance": "publicacion",
+   "skill": "publicaciones",
+   "desc": "Separa problemas de descubrimiento, de conversión y de postventa, y prioriza los 5 cambios de más impacto.",
+   "texto": "Analizá una publicación existente de Mercado Libre y proponé mejoras basadas en evidencia.\nObjetivo: detectar por qué la ficha no convierte o genera fricción y proponer el menor conjunto de cambios con mayor impacto.\nSepará:\n- Problemas de descubrimiento: categoría, título, atributos y catálogo.\n- Problemas de conversión: precio, envío, reputación, imágenes, claridad y stock.\n- Problemas de postventa: expectativa incorrecta, compatibilidad, medidas, contenido o garantía.\n- Hipótesis sin evidencia.\nEntregá:\n1. Diagnóstico con evidencia y nivel de confianza.\n2. Top 5 cambios priorizados por impacto, esfuerzo y riesgo.\n3. Texto, atributos e imágenes propuestos.\n4. Campos que no deben tocarse.\n5. Diseño de prueba antes/después con ventana, métricas y criterio de éxito.\n6. Datos para rollback.\nNo atribuyas causalidad solo por correlación y no ejecutes cambios.\n\nDatos de la publicación:\n{{DATOS}}"
+  },
+  {
+   "id": "brief-imagenes",
+   "titulo": "Brief de 8 imágenes",
+   "cat": "Publicaciones",
+   "alcance": "publicacion",
+   "skill": "imagenes",
+   "desc": "Qué foto tomar, cuál se puede editar y qué controles evitan alucinaciones visuales.",
+   "texto": "Creá un brief de 8 imágenes para una publicación de Mercado Libre.\nIncluye exactamente: [CONTENIDO_DEL_PAQUETE]\nNo incluye: [ACCESORIOS_NO_INCLUIDOS]\nReglas:\n- La imagen principal debe representar fielmente el producto real.\n- No agregues logos, certificaciones, accesorios, funciones ni texto que no estén confirmados.\n- Indicá qué fotos deben tomarse de forma real y cuáles admiten solo edición de fondo o luz.\n- Incluí una vista de escala o medidas cuando sea útil.\n- Para cada imagen definí objetivo, encuadre, fondo, iluminación, elementos permitidos, elementos prohibidos y texto opcional.\n- Cerrá con una lista de controles para detectar alucinaciones visuales.\n\nProducto:\n{{DATOS}}"
+  },
+  {
+   "id": "contribucion",
+   "titulo": "Contribución por SKU",
+   "cat": "Rentabilidad",
+   "alcance": "publicacion",
+   "skill": "rentabilidad",
+   "desc": "Cascada de margen con fórmula, faltantes y supuestos, sin llamar ganancia a lo que no lo es.",
+   "texto": "Calculá la contribución de esta publicación de Mercado Libre.\nDescontá los costos variables conocidos del ingreso del mismo período y moneda.\nNo vuelvas a restar descuentos o devoluciones que ya estén descontados del ingreso.\nMostrá la fórmula, los componentes disponibles, los faltantes y los supuestos.\nNo llames ganancia neta a una contribución que excluye gastos fijos, impuestos u otros conceptos pendientes.\nMarcá FALTA_DATO si no se puede sostener el cálculo.\nAgregá:\n- precio de equilibrio y cuánto margen queda para publicidad (ACOS de equilibrio)\n- qué pasa con la contribución si el precio baja 5%, 10% y 15%\n- 3 palancas para mejorar el margen, ordenadas por impacto\nMi margen mínimo es [MARGEN_MINIMO].\n\nDatos:\n{{DATOS}}"
+  },
+  {
+   "id": "competencia",
+   "titulo": "Competencia comparable",
+   "cat": "Precio",
+   "alcance": "publicacion",
+   "skill": "pricing",
+   "desc": "Compara solo alternativas equivalentes y separa hecho, inferencia e hipótesis.",
+   "texto": "Compará mi publicación con alternativas realmente equivalentes a partir de fuentes accesibles.\nMostrá URL, fecha, producto, variante, contenido del pack, precio, moneda y condiciones visibles (envío, cuotas, reputación, Full).\nNo compares un pack con una unidad ni productos de prestaciones distintas como si fueran iguales.\nNo inventes ventas, costos, stock privado ni conversión de competidores.\nSi la publicación está en catálogo, explicá su estado y qué factor confirmado puede mejorar (precio, envío, reputación, stock).\nNo recomiendes igualar precio por debajo de mi precio de equilibrio.\nEntregá 5 oportunidades apoyadas por evidencia y marcá qué información no está disponible.\n\nMi publicación:\n{{DATOS}}"
+  },
+  {
+   "id": "promo",
+   "titulo": "Evaluar una promoción",
+   "cat": "Precio",
+   "alcance": "publicacion",
+   "skill": "promociones",
+   "desc": "Escenario con y sin promo, descuento máximo compatible con el margen y riesgo de quiebre.",
+   "texto": "Evaluá esta publicación para una promoción de [DESCUENTO] de descuento.\nUsá precio actual, costo y cargos reales; separá el aporte del vendedor y el aporte de Mercado Libre.\nCalculá la contribución actual y la propuesta, y compará contra mi mínimo de [MARGEN_MINIMO].\nRevisá elegibilidad solo si una fuente o herramienta la confirma; si no, marcá PENDIENTE_VALIDAR.\nIncluí:\n- escenario sin promo vs. con promo\n- descuento máximo compatible con el margen\n- unidades extra necesarias para ganar lo mismo que sin promo\n- riesgo de quiebre con el stock actual\n- cómo medir el resultado incremental\nEntregá la recomendación con supuestos, sin activar promociones.\n\nDatos:\n{{DATOS}}"
+  },
+  {
+   "id": "ads",
+   "titulo": "Reglas de Product Ads",
+   "cat": "Publicidad",
+   "alcance": "publicacion",
+   "skill": "ads",
+   "desc": "ACOS objetivo a partir del margen, reglas de puja y criterio para pausar o escalar.",
+   "texto": "Actuá como analista de Product Ads de Mercado Libre.\nCon los datos de la publicación, definí cuánto puedo invertir sin perder plata.\n1. Calculá el ACOS de equilibrio (margen antes de publicidad ÷ precio) y un ACOS objetivo que deje [MARGEN_OBJETIVO] de margen.\n2. Explicá la diferencia entre ACOS y TACOS y cuál conviene mirar para esta publicación.\n3. Definí reglas: cuándo subir presupuesto, cuándo bajarlo y cuándo pausar, con umbrales numéricos.\n4. Si la publicación tiene problemas de conversión o stock, decí si conviene arreglarlos antes de invertir.\n5. Diseñá una prueba de 14 días con métrica principal y criterio de éxito.\nSi falta el costo o la comisión, marcá FALTA_DATO y no inventes el margen.\nMis datos de campaña (si los tengo): [ACOS_ACTUAL_E_INVERSION]\n\nDatos:\n{{DATOS}}"
+  },
+  {
+   "id": "diagnostico",
+   "titulo": "Diagnóstico inicial de la cuenta",
+   "cat": "Reporting",
+   "alcance": "cuenta",
+   "skill": "reporting",
+   "desc": "Los 10 hallazgos que más afectan ventas, contribución o carga operativa.",
+   "texto": "Trabajá como analista de mi operación de Mercado Libre.\nSepará hechos, cálculos e hipótesis. Cuando falte información, marcá FALTA_DATO.\nPriorizá 10 hallazgos que afecten ventas, contribución o carga operativa.\nEntregá: hallazgo, evidencia, publicaciones afectadas, impacto estimado con supuestos, esfuerzo y siguiente acción.\nNo proyectes mejoras porcentuales sin explicar de dónde salen.\nEn esta etapa entregá análisis y borradores: no cambies precios, stock, publicaciones ni campañas.\n\nDatos de la cuenta:\n{{DATOS}}"
+  },
+  {
+   "id": "plan-accion",
+   "titulo": "Diagnóstico y plan de acción",
+   "cat": "Reporting",
+   "alcance": "cuenta",
+   "skill": "reporting",
+   "desc": "Árbol de causas, segmentación, top oportunidades y acciones a 7, 30 y 90 días.",
+   "texto": "Actuá como analista de performance de Mercado Libre.\nEntregá:\nA. Resumen ejecutivo de máximo 10 líneas.\nB. Árbol de causas por cada caída o mejora relevante.\nC. Segmentación: alto tráfico y baja conversión, baja visibilidad y buena conversión, margen alto y stock bajo.\nD. Top 10 oportunidades con impacto estimado, fórmula, esfuerzo y confianza.\nE. Top 10 riesgos.\nF. Acciones para 7, 30 y 90 días.\nG. Alertas con umbral y responsable.\nH. Preguntas que los datos todavía no responden.\nReglas:\n- Compará períodos equivalentes.\n- Considerá quiebres de stock y promociones antes de explicar tendencias.\n- No mezcles facturación con utilidad.\n- Toda recomendación debe citar el dato que la sostiene.\n\nDatos de la cuenta:\n{{DATOS}}"
+  },
+  {
+   "id": "informe-semanal",
+   "titulo": "Informe semanal",
+   "cat": "Reporting",
+   "alcance": "cuenta",
+   "skill": "reporting",
+   "desc": "Ventas comparables, destacados, riesgos y 5 acciones con responsable y criterio de éxito.",
+   "texto": "Armá el informe semanal de [TIENDA].\nIncluí: ventas comparables, publicaciones destacadas, contribución disponible, riesgos de stock y preguntas pendientes.\nElegí 5 acciones con responsable, fecha, evidencia, criterio de éxito y dato faltante.\nCompará contra el período anterior sin atribuir causalidad a cambios que solo coinciden en el tiempo.\nCerrá con una tabla de fuentes y la cobertura del análisis.\nEscribilo para alguien que lo lee en 3 minutos.\n\nDatos de la cuenta:\n{{DATOS}}"
+  },
+  {
+   "id": "stock",
+   "titulo": "Cobertura de stock y reposición",
+   "cat": "Operación",
+   "alcance": "cuenta",
+   "skill": "stock",
+   "desc": "Días de cobertura, SIN_ROTACION y prioridad de reposición con lead time y colchón.",
+   "texto": "Con los datos de stock y ventas de la cuenta, estimá unidades por día y días de cobertura de cada publicación.\nMarcá los períodos sin stock que distorsionen el cálculo.\nPriorizá la reposición con lead time de [LEAD_TIME_DIAS] días y colchón de [COLCHON_DIAS] días, identificados como supuestos del negocio.\nSi no hubo ventas, no dividas por cero: marcá SIN_ROTACION.\nSeñalá el stock inmovilizado (más de 90 días de cobertura) y proponé qué hacer con él.\nEntregá recomendaciones; no actualices stock.\n\nDatos de la cuenta:\n{{DATOS}}"
+  },
+  {
+   "id": "preventa",
+   "titulo": "Borradores de preguntas de preventa",
+   "cat": "Operación",
+   "alcance": "cuenta",
+   "skill": "voc",
+   "desc": "Respuestas basadas solo en la ficha, con motivo de derivación cuando falta evidencia.",
+   "texto": "Revisá las preguntas pendientes y prepará borradores usando solo fichas y políticas confirmadas.\nDevolvé: ID de pregunta, producto, intención, respuesta sugerida, fuente y motivo de derivación cuando corresponda.\nNo inventes disponibilidad, entregas, garantías ni compatibilidades.\nNo compartas teléfonos ni links externos.\nSeñalá las preguntas que necesitan respuesta humana y qué dato de la ficha falta para que no se repitan.\nNo publiques las respuestas.\nMis políticas: [GARANTIA_Y_ENVIO]\n\nDatos:\n{{DATOS}}"
+  },
+  {
+   "id": "cambio-masivo",
+   "titulo": "Preparar un cambio masivo (dry-run)",
+   "cat": "Operación",
+   "alcance": "cuenta",
+   "skill": "pricing",
+   "desc": "Snapshot, diff, margen nuevo, READY/REVIEW/BLOCKED y plan piloto, sin ejecutar nada.",
+   "texto": "Actuá como auditor técnico de publicaciones de Mercado Libre para una cuenta propia.\nCAMBIO_SOLICITADO: [CAMBIO]\nMARGEN_MINIMO: [MARGEN_MINIMO]\nMODO: READ_ONLY\nReglas:\n1. Inventariá las publicaciones alcanzadas y guardá un snapshot de los campos que podrían cambiar.\n2. No supongas que un campo es editable: señalá lo que hay que verificar.\n3. Calculá el valor propuesto con una regla determinista y mostrá la fórmula.\n4. No prepares un cambio si el margen, el stock o la fuente no son confiables.\n5. No ejecutes cambios.\nSalida:\nA. Alcance y cantidad de publicaciones.\nB. Tabla: item_id, valor_actual, valor_propuesto, regla, margen_actual, margen_nuevo, riesgo y estado.\nC. READY / REVIEW / BLOCKED.\nD. Datos de rollback.\nE. Plan piloto: 1 publicación, luego 5, luego el lote.\nF. Criterios automáticos de detención.\n\nDatos de la cuenta:\n{{DATOS}}"
+  },
+  {
+   "id": "csv",
+   "titulo": "Normalizador de CSV por lote",
+   "cat": "Operación",
+   "alcance": "libre",
+   "skill": "carga-masiva",
+   "desc": "Separa filas READY, REVIEW y BLOCKED sin completar celdas por inferencia.",
+   "texto": "Analizá este CSV de productos sin modificar el archivo original.\nObjetivo: producir tres archivos lógicos:\n1. READY: filas completas y coherentes.\n2. REVIEW: filas con ambigüedades.\n3. BLOCKED: filas que no se pueden publicar por falta de datos críticos.\nReglas:\n- No completes celdas faltantes por inferencia.\n- Conservá SKU y valores originales.\n- Normalizá espacios, mayúsculas y unidades solo cuando la transformación sea determinista.\n- Agregá columnas reason_code, reason_detail y source_row.\n- Detectá duplicados por SKU, GTIN y combinación marca/modelo.\n- No generes payloads de publicación hasta que la categoría y sus atributos hayan sido consultados.\nPrimero explicá el plan y los controles. Luego procesá el archivo.\n\nCSV:\n[PEGAR_CSV]"
+  },
+  {
+   "id": "qa-payload",
+   "titulo": "QA final de un payload",
+   "cat": "Operación",
+   "alcance": "libre",
+   "skill": "carga-masiva",
+   "desc": "Control de calidad previo a producción: blockers, warnings, diff y datos de rollback.",
+   "texto": "Revisá este payload de Mercado Libre como un control de calidad previo a producción.\nNo ejecutes ninguna publicación.\nValidaciones:\n- campos obligatorios y tipos\n- categoría y atributos vigentes\n- consistencia entre SKU, variaciones y stock\n- medidas y peso del paquete\n- precio, moneda y margen mínimo [MARGEN_MINIMO]\n- imágenes y correspondencia con la variación\n- claims, garantía, compatibilidad y contenido incluido\n- datos inventados o sin evidencia\n- diferencias contra el payload anterior\nSalida:\n- APPROVED_FOR_PILOT: true/false\n- blockers\n- warnings\n- diff_summary\n- manual_checks\n- rollback_data_required\nPayload nuevo:\n[PAYLOAD_NUEVO]\nPayload anterior:\n[PAYLOAD_ANTERIOR]"
+  },
+  {
+   "id": "mercado",
+   "titulo": "Detectar oportunidades de mercado",
+   "cat": "Mercado",
+   "alcance": "libre",
+   "skill": "mercado",
+   "desc": "Score de oportunidad con demanda, competencia, margen, logística y regulación.",
+   "texto": "Realizá un análisis de mercado para vender [PRODUCTO_O_CATEGORIA] en Mercado Libre Argentina usando solo fuentes públicas permitidas y datos propios.\nReglas:\n1. Si una fuente devuelve 401/403/captcha, no la evadas: registrá la limitación.\n2. No presentes una muestra parcial como el mercado completo.\n3. Separá demanda observada, proxy de demanda e hipótesis.\n4. Excluí oportunidades con riesgo regulatorio, propiedad intelectual dudosa o margen no demostrable.\n5. Calculá landed cost solo con supuestos visibles.\nEntregá:\nA. Mapa de subcategorías e intención de compra.\nB. Rango de precios y propuesta dominante.\nC. Señales de demanda, estacionalidad y competencia.\nD. Dolores extraídos de preguntas y reseñas.\nE. Huecos de oferta.\nF. Score de oportunidad: demanda, competencia, margen, logística, regulación y diferenciación.\nG. Top 10 oportunidades con evidencia.\nH. Plan de validación de bajo costo.\nNo recomiendes un producto solo por volumen si no puede sostener margen y abastecimiento."
+  },
+  {
+   "id": "conciliacion",
+   "titulo": "Conciliación ML ↔ Mercado Pago",
+   "cat": "Finanzas",
+   "alcance": "libre",
+   "skill": "conciliacion",
+   "desc": "Tabla conciliada por operación con estados MATCHED, TIMING, PARTIAL y NEEDS_REVIEW.",
+   "texto": "Diseñá y ejecutá en modo READ_ONLY una conciliación entre Mercado Libre, Mercado Pago y [ERP_O_BANCO] para el período [PERIODO].\nReglas:\n1. Conservá cada archivo y respuesta cruda.\n2. Normalizá moneda y fechas sin perder zona horaria.\n3. Definí las claves de vínculo: order_id, payment_id, external_reference, pack_id.\n4. No fuerces coincidencias por monto y fecha si hay múltiples candidatos.\n5. Separá venta, liberación de dinero, devolución, contracargo, retención, bonificación y retiro.\n6. Una venta aprobada no equivale a dinero disponible.\n7. Explicá cada cálculo de neto.\n8. Marcá diferencias como MATCHED, TIMING, PARTIAL, DUPLICATE, MISSING o NEEDS_REVIEW.\nEntregá: tabla conciliada, resumen por día y concepto, diferencias y monto afectado, operaciones no vinculadas y rutina de cierre.\nNo realices devoluciones, cancelaciones ni movimientos de dinero.\n\nArchivos:\n[PEGAR_REPORTES]"
+  },
+  {
+   "id": "monitor",
+   "titulo": "Monitor de competencia (n8n)",
+   "cat": "Automatización",
+   "alcance": "libre",
+   "skill": "automatizacion",
+   "desc": "Arquitectura de snapshots, diffs y alertas sin tocar tus precios en automático.",
+   "texto": "Diseñá un monitor de competencia para [LISTA_DE_URLS_O_SKUS] sin ejecutar acciones sobre Mercado Libre.\nObjetivo: detectar cambios relevantes en precio, promociones, disponibilidad observable y contenido.\n1. Definí fuentes autorizadas y frecuencia razonable.\n2. Guardá snapshot versionado con URL, timestamp y hash.\n3. Calculá diffs por campo y evitá falsas alertas por variaciones, packs o errores temporales.\n4. Ante bloqueo, pausá y alertá; no lo evadas.\n5. No modifiques nuestros precios automáticamente.\n6. Reglas: cambio de precio mayor a [UMBRAL], nueva promoción, cambio de título o atributos, competidor nuevo.\n7. Para cada alerta, agregá impacto probable y decisión humana requerida.\nEntregá: arquitectura n8n, esquema de snapshot, reglas de deduplicación, casos de prueba y el prompt de resumen diario."
+  },
+  {
+   "id": "mcp-prueba",
+   "titulo": "Pruebas de un MCP nuevo",
+   "cat": "Base",
+   "alcance": "libre",
+   "skill": "mcp",
+   "desc": "Cuatro pruebas en orden: descubrimiento, solo lectura, dry-run y frase de aprobación.",
+   "texto": "PRUEBA 1 — Descubrimiento\nListá todas las herramientas disponibles de este MCP. Para cada una indicá si es lectura o escritura, datos sensibles que toca, argumentos requeridos y riesgo. No ejecutes ninguna.\n\nPRUEBA 2 — Solo lectura\nUsá únicamente herramientas de lectura. Mostrame 5 publicaciones activas con su ID, SKU, precio y stock. No modifiques nada. Si una herramienta pudiera escribir, no la uses.\n\nPRUEBA 3 — Dry-run\nPrepará un dry-run para cambiar el precio del ítem [ITEM_ID] de [VALOR_ACTUAL] a [VALOR_NUEVO]. Mostrá validaciones, margen, payload, diff, riesgos y datos necesarios para rollback. No ejecutes el cambio.\n\nPRUEBA 4 — Aprobación\nNo ejecutes escrituras hasta recibir exactamente APROBAR CAMBIO [ITEM_ID]. Si faltan precio actual, margen mínimo o backup, bloqueá la acción."
+  }
+ ],
+ "diagnostico": [
+  {
+   "id": "exposicion",
+   "titulo": "Pierde exposición",
+   "grupo": "Visibilidad",
+   "regla": "Las visitas de los últimos 28 días cayeron 20% o más contra los 28 anteriores, y la caída es estadísticamente significativa (z ≤ −2,5), no ruido.",
+   "causas": [
+    "Perdió el primer lugar del catálogo",
+    "Estuvo 3 o más días sin stock",
+    "Bajó la inversión en publicidad",
+    "Cambió el título o la categoría"
+   ],
+   "solucion": [
+    "Revisar si perdió el catálogo y a qué precio se recupera",
+    "Reponer stock antes que nada: un quiebre hace perder posición",
+    "Comparar el título contra las búsquedas que más traen tráfico",
+    "Si el margen da, reforzar Product Ads mientras se recupera"
+   ],
+   "kpi": "Visitas diarias de vuelta al nivel anterior en 2 a 3 semanas",
+   "demo": "MLA2000000003"
+  },
+  {
+   "id": "catalogo",
+   "titulo": "Perdió el primer lugar del catálogo",
+   "grupo": "Visibilidad",
+   "regla": "Mercado Libre informa el estado \"competing\" en la publicación de catálogo: otro vendedor ganó el primer lugar.",
+   "causas": [
+    "Precio por encima del price-to-win",
+    "Peor envío (sin Full o sin envío gratis)",
+    "Reputación o medalla inferior"
+   ],
+   "solucion": [
+    "Ver el price-to-win y compararlo con tu precio de equilibrio",
+    "Si no conviene bajar, competir con envío, cuotas o Full",
+    "Nunca igualar por debajo del piso de margen"
+   ],
+   "kpi": "Estado \"winning\" y participación de visitas del catálogo",
+   "demo": "MLA2000000003"
+  },
+  {
+   "id": "oferta",
+   "titulo": "La conversión se cae con visitas estables",
+   "grupo": "Oferta",
+   "regla": "Con 100 o más visitas, la conversión cae de forma significativa (z ≤ −1,96) contra el período anterior.",
+   "causas": [
+    "Subió el precio 5% o más",
+    "Hay competidores más baratos en el catálogo",
+    "Opiniones negativas recientes",
+    "Fotos o descripción que no responden las dudas"
+   ],
+   "solucion": [
+    "Mirar cuándo empezó en el gráfico y qué cambió ese día",
+    "Si fue el precio, volver unos 5% abajo y medir dos semanas",
+    "Leer las últimas preguntas y opiniones: suelen decir qué falta"
+   ],
+   "kpi": "Conversión de vuelta a su nivel sin perder margen",
+   "demo": "MLA2000000004"
+  },
+  {
+   "id": "visitas-sin-ventas",
+   "titulo": "Visitas sin ventas",
+   "grupo": "Oferta",
+   "regla": "150 o más visitas en 28 días y ninguna venta, o una conversión menor a un cuarto de la mediana de la cuenta.",
+   "causas": [
+    "Precio, envío o cuotas peores que los primeros resultados",
+    "Fotos que no muestran el producto real",
+    "Descripción incompleta",
+    "Opiniones malas"
+   ],
+   "solucion": [
+    "Comparar precio, envío y cuotas contra los 3 primeros resultados",
+    "Si están parejos, el problema es la ficha: fotos, descripción y atributos",
+    "No bajar el precio antes de revisar la ficha"
+   ],
+   "kpi": "Primeras ventas y conversión cerca de la mediana de la cuenta",
+   "demo": "MLA2000000005"
+  },
+  {
+   "id": "perdida",
+   "titulo": "Vende a pérdida",
+   "grupo": "Rentabilidad",
+   "regla": "Con el costo cargado, el margen de contribución por unidad es negativo: precio − comisión − envío − impuestos − costo < 0.",
+   "causas": [
+    "Comisión o envío más caros de lo calculado",
+    "Precio que no se actualizó con el costo",
+    "Promociones que perforan el piso"
+   ],
+   "solucion": [
+    "Calcular el precio de equilibrio y subir al menos hasta ahí",
+    "Revisar si el envío gratis conviene en ese precio",
+    "Salir de promociones que dejan margen negativo"
+   ],
+   "kpi": "Margen de contribución positivo en cada venta",
+   "demo": "MLA2000000010"
+  },
+  {
+   "id": "quiebre",
+   "titulo": "Se queda sin stock",
+   "grupo": "Stock",
+   "regla": "Al ritmo de venta actual, el stock alcanza para 7 días o menos (alerta de reposición a los 15 días).",
+   "causas": [
+    "Ventas que crecieron más que la reposición",
+    "Lead time del proveedor mayor al esperado"
+   ],
+   "solucion": [
+    "Pedir reposición ya, con lead time y colchón de seguridad",
+    "Si no llega a tiempo, subir el precio un poco para estirar el stock",
+    "No pausar: un quiebre hace perder posición"
+   ],
+   "kpi": "Cero días sin stock en las publicaciones A",
+   "demo": "MLA2000000008"
+  },
+  {
+   "id": "inmovilizado",
+   "titulo": "Stock inmovilizado",
+   "grupo": "Stock",
+   "regla": "Al ritmo actual, el stock alcanza para más de 90 días: capital parado.",
+   "causas": [
+    "Compra por encima de la demanda",
+    "Publicación con problemas de exposición u oferta"
+   ],
+   "solucion": [
+    "Resolver primero la visibilidad o la ficha",
+    "Promoción con descuento dentro del margen",
+    "Pack o combo con un producto que rote"
+   ],
+   "kpi": "Cobertura por debajo de 60 días",
+   "demo": "MLA2000000006"
+  },
+  {
+   "id": "calidad",
+   "titulo": "Vende mucho pero su calidad es baja",
+   "grupo": "Ficha",
+   "regla": "Está en la curva A (el 80% de la facturación) y su puntaje de calidad de Mercado Libre es menor a 60/100.",
+   "causas": [
+    "Atributos obligatorios sin completar",
+    "Pocas fotos o fotos de baja calidad",
+    "Ficha técnica incompleta"
+   ],
+   "solucion": [
+    "Completar lo que marca Mercado Libre como pendiente",
+    "Priorizar las que más facturan: cada punto rinde más ahí"
+   ],
+   "kpi": "Puntaje de calidad por encima de 80",
+   "demo": "MLA2000000001"
+  },
+  {
+   "id": "dormida",
+   "titulo": "Casi nadie la ve",
+   "grupo": "Visibilidad",
+   "regla": "Menos de 30 visitas en 28 días y como mucho 1 venta.",
+   "causas": [
+    "Título sin las palabras que busca la gente",
+    "Categoría incorrecta",
+    "Atributos incompletos que la sacan de los filtros"
+   ],
+   "solucion": [
+    "Trabajar la exposición antes que el precio: título, categoría y atributos",
+    "Si el margen da, una campaña chica de Product Ads para medir"
+   ],
+   "kpi": "Visitas semanales en crecimiento",
+   "demo": "MLA2000000006"
+  },
+  {
+   "id": "suba",
+   "titulo": "Oportunidad de subir el precio",
+   "grupo": "Rentabilidad",
+   "regla": "Convierte por encima de la mediana de la cuenta, tiene stock suficiente y nunca se probó una suba.",
+   "causas": [
+    "Demanda firme y buena posición",
+    "El precio quedó bajo frente al valor percibido"
+   ],
+   "solucion": [
+    "Subir 3 a 5% y medir dos semanas",
+    "Si la conversión no cae, se ganó margen; si cae, volver"
+   ],
+   "kpi": "Más margen por unidad con la misma conversión",
+   "demo": "MLA2000000007"
+  }
+ ]
 }

@@ -91,7 +91,7 @@
           <h2>Tu carrera en e-commerce</h2>
           <p class="tk-sub">Tu perfil y lo que vale, qué aprender, cómo practicarlo con tus publicaciones reales y cómo contarlo en el CV. <span class="ac-save mono" id="ac-save" aria-live="polite"></span></p>
         </div>
-        <div class="tk-head-actions"><a class="btn-secondary cp-sm" href="ia.html" target="_blank" rel="noopener">${ic('external')}Ver la página pública</a></div>
+        <div class="tk-head-actions"><a class="btn-secondary cp-sm" href="sistema.html" target="_blank" rel="noopener">${ic('external')}Ver la página pública</a></div>
       </header>
       <div class="tk-kpis">
         <div class="tk-kpi"><p class="tk-kpi-k">Ruta completada</p><p class="tk-kpi-v">${Math.round(st.hechas / st.tareas * 100)}<small>%</small></p><div class="tk-progress-bar"><i style="width:${st.hechas / st.tareas * 100}%"></i></div></div>

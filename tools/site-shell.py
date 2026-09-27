@@ -20,6 +20,7 @@ FRONT = Path(__file__).resolve().parent.parent / "frontend"
 NAV_ITEMS = [  # (id, texto, href)
     ("cv", "CV", "index.html"),
     ("lab", "Lab ML", "lab.html"),
+    ("sistema", "Sistema", "sistema.html"),
     ("programacion", "Programación", "programacion.html"),
     ("armar", "Armá tu web", "armar.html"),
     ("contacto", "Contacto", "contacto.html"),
@@ -28,7 +29,7 @@ NAV_ITEMS = [  # (id, texto, href)
 ACTIVE_BY_PAGE = {
     "index.html": "cv", "programacion.html": "programacion", "contacto.html": "contacto", "armar.html": "armar",
     "lab.html": "lab", "acos.html": "lab", "anatomia.html": "lab", "excels.html": "lab", "imagenes.html": "lab",
-    "metricas.html": "lab", "pricing.html": "lab", "reputacion.html": "lab", "seo.html": "lab", "ia.html": "lab",
+    "metricas.html": "lab", "pricing.html": "lab", "reputacion.html": "lab", "seo.html": "lab", "sistema.html": "sistema",
 }
 
 THEME_SCRIPT = ("<script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}"
@@ -158,6 +159,6 @@ def process(path):
 
 if __name__ == "__main__":
     for p in sorted(FRONT.glob("*.html")):
-        if p.name == "admin.html":
+        if p.name in ("admin.html", "ia.html"):   # el panel y la redirección vieja no llevan menú
             continue
         print(("✓ " if process(p) else "· ") + p.name)

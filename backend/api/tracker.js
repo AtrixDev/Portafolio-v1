@@ -9,6 +9,7 @@
 // POST ?action=config  { cuenta, impuestosPct }                 → impuestos sobre el precio (IIBB, etc.)
 // GET  ?action=competencia&cuenta=ID&id=MLA…                   → otros vendedores del mismo producto de catálogo
 // GET  ?action=ficha&cuenta=ID&id=MLA…                         → atributos, fotos y atributos que faltan según la categoría (Academia IA)
+// GET  ?action=demo                   → PÚBLICO: análisis de la cuenta demo (datos simulados) para sistema.html
 // GET  ?action=cron                    → sincronización diaria (Vercel Cron, con CRON_SECRET)
 import { getDB } from './db.js';
 import { cors, isAdmin, ADMIN_SECRET } from '../lib/http.js';
@@ -47,6 +48,13 @@ export default async function handler(req, res) {
   cors(res, 'GET, POST, OPTIONS');
   if (req.method === 'OPTIONS') return res.status(200).end();
   const action = req.query.action;
+
+  // Demo pública: solo la cuenta simulada, nunca datos reales
+  if (action === 'demo') {
+    const { series, config, ...a } = analizarCuenta(cuentaDemo());
+    res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
+    return res.status(200).json({ ...a, clases: CLASES, demo: true });
+  }
 
   let db;
   try { db = await getDB(); } catch { return res.status(503).json({ error: 'Sin conexión con la base de datos' }); }
