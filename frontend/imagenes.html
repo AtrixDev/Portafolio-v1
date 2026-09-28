@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Imágenes con IA | Darío Colángelo</title>  <meta name="description" content="Cómo usar IA para crear imágenes de producto profesionales para Mercado Libre. Secuencia de 7 fotos y diseño de infografías.">
 
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>
   <meta name="author" content="Darío Colángelo">
   <meta name="robots" content="index, follow">
   <meta property="og:title" content="Imágenes con IA para Mercado Libre | Darío Colángelo">
@@ -16,7 +17,7 @@
   <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
   <link rel="stylesheet" href="css/root.css" />
   <link rel="stylesheet" href="css/shared.css" />
-  <link rel="stylesheet" href="css/page.css" />
+  <link rel="stylesheet" href="css/guia.css" />
   <link rel="stylesheet" href="css/surfaces.css">
 </head>
 <body>
@@ -53,53 +54,99 @@
   <a href="contacto.html">Contacto</a>
 </div>
 <!-- NAV:end -->
-<div id="contenido" class="ph">
-  <div class="ph-bg"></div>
-  <div class="ph-grid"></div>
+<main>
+<header id="contenido" class="ph gd-hero">
+  <div class="ph-bg" aria-hidden="true"></div>
   <div class="ph-c">
-    <a href="lab.html" class="btn-back">← Volver al Lab</a>
-    <h1 class="ph-title">Imágenes con<br><span class='grad'>Inteligencia Artificial</span></h1>
-    <p class="ph-sub">Cómo usar IA generativa para crear contenido visual de producto: fondos, infografías, mockups y fichas técnicas de calidad profesional.</p>
+    <a href="lab.html" class="btn-back"><svg class="icon icon-back" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg>Todas las guías</a>
+    <h1 class="ph-title">Imágenes con <span class="grad">inteligencia artificial</span></h1>
+    <p class="ph-sub">Cómo usar IA generativa para el contenido visual de tus productos: fondos, infografías, fotos de uso y fichas técnicas.</p>
+    <p class="gd-for"><b>Te sirve si</b> no tenés fotos que vendan y una sesión de fotos no entra en el presupuesto.</p>
   </div>
+</header>
+
+<div class="gd sheet">
+  <nav class="gd-toc" aria-labelledby="gd-toc-t">
+    <p class="gd-toc-t" id="gd-toc-t">En esta guía</p>
+    <ol>
+      <li><a href="#por-que">Qué podés hacer con IA</a></li>
+      <li><a href="#stack">Las herramientas</a></li>
+      <li><a href="#prompt">El prompt que funciona</a></li>
+    </ol>
+  </nav>
+  <article class="gd-body">
+<section class="gd-sec" id="por-que" data-toc="Qué podés hacer con IA">
+  <h2>Las imágenes deciden antes que todo lo demás</h2>
+  <p>Antes de leer el título, el precio o la descripción, el comprador ya decidió algo mirando las fotos. La IA te deja producir contenido visual de calidad sin depender de sesiones de fotos caras.</p>
+  <dl class="gd-rows">
+    <div class="gd-row"><dt>Fondos profesionales</dt><dd>Reemplazar el fondo de una foto real por un ambiente aspiracional. Del fondo blanco aburrido a un escenario premium.</dd></div>
+    <div class="gd-row"><dt>Infografías de producto</dt><dd>Fichas técnicas visuales con flechas, llamadas y comparaciones, sin necesidad de un diseñador.</dd></div>
+    <div class="gd-row"><dt>Mockups y fotos de uso</dt><dd>El producto en contexto (cocina, hogar, oficina, aire libre) sin hacer una sesión de fotos.</dd></div>
+  </dl>
+  <p>Para saber qué foto va en cada posición, seguí <a href="anatomia.html#fotos">la secuencia de 7 fotos</a>.</p>
+</section>
+
+<section class="gd-sec" id="stack" data-toc="Las herramientas">
+  <h2>Las herramientas, según la tarea</h2>
+  <dl class="gd-rows">
+    <div class="gd-row"><dt>Adobe Firefly y Remove.bg</dt><dd>Sacar fondos automáticamente y reemplazarlos por contextos generados con IA. Ideal para producir catálogo a escala.</dd></div>
+    <div class="gd-row"><dt>Canva IA y Magic Studio</dt><dd>Infografías, fondos aspiracionales y plantillas de fichas técnicas sin saber diseño.</dd></div>
+    <div class="gd-row"><dt>ChatGPT con DALL·E, o Midjourney</dt><dd>Imágenes de uso y ambientes aspiracionales. Piden prompts bien armados para lograr resultados comerciales.</dd></div>
+    <div class="gd-row"><dt>Amazon Creative Suite</dt><dd>La herramienta de Amazon para crear contenido de producto con IA. Lo que enseña se traslada a Mercado Libre.</dd></div>
+  </dl>
+</section>
+
+<section class="gd-sec" id="prompt" data-toc="El prompt que funciona">
+  <h2>Cómo pedirle a la IA lo que necesitás</h2>
+  <p>La estructura es siempre la misma: el producto, dónde está, con qué luz y el estilo de foto.</p>
+  <div class="gd-prompt">
+    <div class="gd-prompt-top"><span>Estructura</span></div>
+    <pre><i>[Producto]</i> on a <i>[superficie o ambiente]</i>, <i>[iluminación]</i>, professional product photography, high resolution, commercial quality</pre>
+  </div>
+  <div class="gd-prompt">
+    <div class="gd-prompt-top"><span>Ejemplo listo para copiar</span><button type="button" class="gd-copy" data-copy="prompt-ej"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-copy"/></svg><span aria-live="polite">Copiar</span></button></div>
+    <pre id="prompt-ej">Wooden cutting board on a marble kitchen counter, natural morning light, editorial style, professional product photography, commercial quality</pre>
+  </div>
+  <dl class="gd-rows">
+    <div class="gd-row"><dt>Lo que funciona</dt><dd>
+      <div class="gd-vs">
+        <p class="is-ok"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-check"/></svg>Especificar el contexto de uso real.</p>
+        <p class="is-ok"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-check"/></svg>Pedir un estilo fotográfico concreto.</p>
+        <p class="is-ok"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-check"/></svg>Incluir «commercial quality».</p>
+        <p class="is-ok"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-check"/></svg>Iterar con variaciones.</p>
+      </div>
+    </dd></div>
+    <div class="gd-row"><dt>Lo que no</dt><dd>
+      <div class="gd-vs">
+        <p class="is-bad"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-x"/></svg><span class="sr-only">Evitar: </span>Prompts vagos como «imagen de mi producto».</p>
+        <p class="is-bad"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-x"/></svg><span class="sr-only">Evitar: </span>No decir la iluminación ni el contexto.</p>
+        <p class="is-bad"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-x"/></svg><span class="sr-only">Evitar: </span>Publicar sin una revisión humana final.</p>
+      </div>
+    </dd></div>
+  </dl>
+  <div class="gd-note">
+    <p class="gd-note-t"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-alert"/></svg>Antes de publicar</p>
+    <p>Mercado Libre tiene políticas sobre imágenes generadas con IA: revisá siempre los términos vigentes. La IA es una herramienta de apoyo, no un reemplazo de la fotografía profesional para la foto principal.</p>
+  </div>
+</section>
+  </article>
 </div>
 
-<div class="cs reveal">
-  <div class="ct">Las imágenes son el factor #1 de conversión</div>
-  <p class="ctxt">Antes de leer el título, el precio o la descripción, el comprador ya tomó una decisión inconsciente basada en las imágenes. La IA permite democratizar la producción de contenido visual de alta calidad sin depender de sesiones fotográficas costosas.</p>
-  <div class="g3 reveal">
-    <div class="card"><div class="card-icon"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-image"/></svg></div><div class="card-title">Fondos Profesionales</div><div class="card-desc">Reemplazar fondos de fotos reales con ambientes aspiracionales usando IA. De fondo blanco aburrido a escenario premium.</div></div>
-    <div class="card"><div class="card-icon"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-chart"/></svg></div><div class="card-title">Infografías de Producto</div><div class="card-desc">Crear fichas técnicas visuales: flechas, llamadas, comparativas. Sin necesidad de diseñador gráfico.</div></div>
-    <div class="card"><div class="card-icon"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-users"/></svg></div><div class="card-title">Mockups y Lifestyle</div><div class="card-desc">Generar imágenes de producto en contexto de uso real sin sesión fotográfica: cocina, hogar, oficina, al aire libre.</div></div>
+<section class="gd-close" aria-labelledby="gd-close-t">
+  <h2 id="gd-close-t">¿Tus fotos venden o solo muestran?</h2>
+  <p>Pasá una publicación por la auditoría gratis para ver cómo está armada. Si querés que rehaga las imágenes y la secuencia, escribime.</p>
+  <div class="gd-close-actions">
+    <a href="sistema.html#auditar" class="btn-primary">Auditá tu cuenta gratis <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a>
+    <a href="contacto.html" class="btn-secondary">Escribime</a>
+    <a href="index.html#experiencia" class="link-arrow">¿Buscás analista? Mirá mi trayectoria <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a>
   </div>
-</div>
-<div class="cs alt reveal">
-  <div class="ct">Stack de trabajo para crear contenido visual</div>
-  <div class="step-list reveal">
-    <div class="step-row"><div class="step-n">01</div><div class="step-b"><div class="step-t">Adobe Firefly / Remove.bg</div><div class="step-d">Eliminar fondos automáticamente y reemplazar con contextos generados por IA. Ideal para escalar producción de catálogo.</div></div></div>
-    <div class="step-row"><div class="step-n">02</div><div class="step-b"><div class="step-t">Canva IA + Magic Studio</div><div class="step-d">Generación de infografías, fondos aspiracionales y templates de fichas técnicas sin conocimientos de diseño.</div></div></div>
-    <div class="step-row"><div class="step-n">03</div><div class="step-b"><div class="step-t">ChatGPT + DALL·E / Midjourney</div><div class="step-d">Para crear imágenes lifestyle y ambientes aspiracionales. Requiere prompts bien construidos para resultados comerciales.</div></div></div>
-    <div class="step-row"><div class="step-n">04</div><div class="step-b"><div class="step-t">Amazon Creative Suite</div><div class="step-d">La herramienta de Amazon para crear contenido de producto con IA. Extrapolable a estrategias de contenido para ML.</div></div></div>
-  </div>
-</div>
-<div class="cs reveal">
-  <div class="ct">Cómo pedirle a la IA lo que necesitás</div>
-  <div class="hbox">
-    <div class="hbox-title">Estructura de prompt efectivo para producto</div>
-    <div class="hbox-body" style="font-family:var(--font-mono);font-size:.82rem;line-height:1.8;">
-      <span style="color:var(--cyan)">[Producto]</span> on a <span style="color:var(--cyan)">[superficie/ambiente]</span>, <span style="color:var(--cyan)">[iluminación]</span>, professional product photography, high resolution, commercial quality<br><br>
-      <strong style="color:var(--white)">Ejemplo:</strong> Wooden cutting board on a marble kitchen counter, natural morning light, editorial style, professional product photography, commercial quality
-    </div>
-  </div>
-  <div class="g2 reveal">
-    <div class="card"><div class="card-n good">Lo que funciona ✓</div><div class="card-title good">Buenas prácticas</div><div class="card-desc">Especificar el contexto de uso real. Pedir estilo fotográfico específico. Incluir "commercial quality". Iterar con variaciones.</div></div>
-    <div class="card"><div class="card-n bad">Lo que no funciona ✗</div><div class="card-title bad">Errores comunes</div><div class="card-desc">Prompts vagos como "imagen de mi producto". No especificar iluminación ni contexto. Publicar sin revisión humana final.</div></div>
-  </div>
-  <div class="hbox" style="margin-top:1rem;"><div class="hbox-title"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-alert"/></svg>Consideración importante</div><div class="hbox-body">ML tiene políticas sobre imágenes generadas por IA. Siempre revisar los términos actuales antes de publicar. La IA es una herramienta de apoyo, no un reemplazo de la fotografía profesional para la foto héroe principal.</div></div>
-</div>
-<div class="nb">
-  <a href="excels.html">← Excels Automatizados</a>
-  <a href="lab.html">Volver al Lab →</a>
-</div>
+</section>
+
+<nav class="gd-pager" aria-label="Otras guías">
+  <a href="excels.html"><span>Guía anterior</span><b>Excels automatizados</b></a>
+  <a href="lab.html"><span>Volver al Lab</span><b>Todas las guías</b></a>
+</nav>
+</main>
 <footer>
   <p class="footer-name">Darío Colángelo<span>.</span></p>
   <ul class="footer-links">
@@ -114,5 +161,6 @@
   </div>
 </footer>
 <script src="js/main.js"></script>
+<script src="js/guia.js"></script>
 </body>
 </html>
