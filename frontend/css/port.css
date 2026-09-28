@@ -1,7 +1,7 @@
 /* ============================================================
    PORT.CSS — Portada: quién soy + dragón de código + mapa del valor de la web
    ============================================================ */
-.pt { padding: clamp(2rem, 5vw, 3.5rem) var(--pad-x) var(--pad-y); }
+.pt { padding: calc(var(--nav-h) + clamp(1.5rem, 4vw, 3rem)) var(--pad-x) var(--pad-y); }
 .pt-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; min-height: min(760px, calc(100svh - 140px)); }
 .pt-status { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem; font: 500 .88rem/1.3 var(--font-sans); color: var(--text-2); }
 .pt-status b { display: inline-flex; align-items: center; gap: .45rem; color: var(--text); font-weight: 600; }
@@ -177,3 +177,9 @@
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z'/%3E%3C/svg%3E") center/contain no-repeat;
           mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z'/%3E%3C/svg%3E") center/contain no-repeat; background-color: currentColor; }
 .is-finde .pt-photo figcaption i, .is-finde #pt-est-top i { background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+/* Credencial sobre el nombre: marcas con las que trabajé */
+.pt-cred { display: inline-flex; flex-wrap: wrap; align-items: center; gap: .35rem .55rem; padding: .45rem .5rem .45rem .85rem; border-radius: var(--r-pill); background: var(--surface); border: 1px solid var(--line-strong); box-shadow: var(--edge); font-size: .82rem; color: var(--text-2); }
+.pt-cred b { font: 700 .8rem/1 var(--font-display); letter-spacing: -.01em; color: var(--text); padding: .38rem .6rem; border-radius: var(--r-pill); background: var(--surface-2); }
+.pt-sub b { color: var(--text); font-weight: 600; }
+@media (max-width: 560px) { .pt-cred { border-radius: 16px; } }
