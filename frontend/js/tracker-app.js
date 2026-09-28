@@ -184,7 +184,7 @@
   }
 
   function enlazarCabecera() {
-    $('tk-cuenta')?.addEventListener('change', e => { S.cuenta = e.target.value; S.filtro = 'todas'; S.item = null; S.vista = 'resumen'; localStorageSet('tk-cuenta', S.cuenta); cargarCuenta(); });
+    $('tk-cuenta')?.addEventListener('change', e => { S.cuenta = e.target.value; S.filtro = 'todas'; S.item = null; S.op = null; S.vista = 'resumen'; localStorageSet('tk-cuenta', S.cuenta); cargarCuenta(); });
     $('tk-sync')?.addEventListener('click', () => sincronizar(S.cuenta));
     document.querySelectorAll('#tk-app [data-ir]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); document.querySelector(`.cp-nav a[data-s="${a.dataset.ir}"]`)?.click(); }));
   }
@@ -333,6 +333,7 @@
     rentabilidad: 'Margen por unidad = precio − comisión de Mercado Libre − envío gratis (si lo pagás vos) − impuestos − costo del producto. Comisión y envío se traen solos de Mercado Libre; el costo y los impuestos los cargás vos. El ACOS máximo es lo máximo que podés gastar en Product Ads por venta sin perder plata.',
     calidad: 'Es el puntaje de calidad oficial de Mercado Libre para cada publicación, con lo que te pide completar. Mejorarlo sube la exposición. Ordenado de peor a mejor.',
     preguntas: 'Preguntas sin responder, las más viejas primero. Responder rápido mejora la conversión: después de 24 horas se marcan en amarillo.',
+    opiniones: 'Compara las opiniones de tu publicación con las de un competidor directo. Cada opinión se clasifica por tema (tamaño, calidad, uso, envío…) y por tono: 4 y 5 estrellas son positivas, 1 a 3 negativas. Una oportunidad es un tema donde al competidor lo critican y a vos no: ahí conviene posicionarte (título, primera foto, atributos, descripción).',
     auditoria: 'Diagnóstico completo para un cliente nuevo o un prospecto: salud de la cuenta por área, qué problemas tiene, cuánta plata está en juego y las 10 acciones en orden. Usá el link de invitación para que el prospecto vincule su cuenta, sincronizá y guardá esto como PDF.',
     reporte: 'Resumen mensual listo para mandarle al cliente. Tocá «Imprimir o guardar PDF» y elegí «Guardar como PDF».',
     diagnostico: 'Si cayeron las visitas, el problema es de exposición (la encuentran menos). Si las visitas siguen igual y cayó la conversión, es de oferta (la ven pero no la compran). La causa probable sale de cruzar precio, stock y catálogo.',
@@ -343,7 +344,7 @@
   };
 
   // ── Pestañas de la cuenta ──
-  const VISTAS = [['resumen', 'Resumen', 'chart'], ['rentabilidad', 'Rentabilidad', 'dollar'], ['calidad', 'Calidad', 'award'], ['preguntas', 'Preguntas', 'message'], ['reporte', 'Reporte', 'file'], ['auditoria', 'Auditoría', 'shield']];
+  const VISTAS = [['resumen', 'Resumen', 'chart'], ['rentabilidad', 'Rentabilidad', 'dollar'], ['calidad', 'Calidad', 'award'], ['preguntas', 'Preguntas', 'message'], ['opiniones', 'Opiniones', 'star'], ['reporte', 'Reporte', 'file'], ['auditoria', 'Auditoría', 'shield']];
   function tabs() {
     const d = S.datos;
     const badge = { preguntas: d?.preguntas?.length || 0, rentabilidad: d?.resumen?.rentabilidad?.perdiendo || 0 };
@@ -356,11 +357,12 @@
   function renderVista() {
     const root = $('tk-app'), c = S.cuentas.find(x => x.id === S.cuenta);
     if (S.vista === 'auditoria' && !DX) { cargarDX(); }
-    const cuerpo = { rentabilidad: vistaRentabilidad, calidad: vistaCalidad, preguntas: vistaPreguntas, reporte: vistaReporte, auditoria: vistaAuditoria }[S.vista]();
+    const cuerpo = { rentabilidad: vistaRentabilidad, calidad: vistaCalidad, preguntas: vistaPreguntas, reporte: vistaReporte, auditoria: vistaAuditoria, opiniones: vistaOpiniones }[S.vista]();
     root.innerHTML = cabecera(c) + tabs() + cuerpo;
     enlazarCabecera(); enlazarTabs();
     if (S.vista === 'rentabilidad') enlazarRentabilidad();
     if (S.vista === 'reporte' || S.vista === 'auditoria') $('tk-print')?.addEventListener('click', () => window.print());
+    if (S.vista === 'opiniones') enlazarOpiniones();
     root.querySelectorAll('[data-item]').forEach(b => b.addEventListener('click', e => { if (e.target.closest('input')) return; abrirItem(b.dataset.item); }));
   }
 
@@ -519,6 +521,122 @@
         ${acciones.length ? `<ol class="tk-rep-actions">${acciones.slice(0, 10).map(x => `<li>${esc(x)}</li>`).join('')}</ol>` : '<p>No hay acciones urgentes: la cuenta se mueve dentro de lo esperado.</p>'}
         <p class="tk-rep-foot">Datos de la API oficial de Mercado Libre. Clasificaciones y recomendaciones calculadas por ML Tracker.</p>
       </article>`;
+  }
+
+  // ── Minero de opiniones: tu publicación vs. un competidor, por tema y tono ──
+  const TEMAS = [
+    ['Tamaño y capacidad', /chic[oa]|grande|tamañ|capacidad|\bentra|espacio|medida|litro|alcanza/i],
+    ['Calidad y durabilidad', /calidad|se romp|rompi|se pel|pel[óo]|raya|durabl|dur[óo]|frágil|fragil|resistent|recubrim/i],
+    ['Funcionamiento y fallas', /dej[óo] de funcionar|no funciona|no anda|falla|defect|funciona|anda bien|cumple/i],
+    ['Batería y autonomía', /bater|autonom|\bcarga|horas de/i],
+    ['Ruido', /ruid|silenc/i],
+    ['Limpieza', /limpi/i],
+    ['Facilidad de uso', /f[áa]cil|dif[íi]cil|pr[áa]ctic|intuitiv|confus|manual|panel/i],
+    ['Olor y materiales', /olor|pl[áa]stic|material|acero/i],
+    ['Envío y embalaje', /lleg[óo]|env[íi]o|entrega|embal|paquete/i],
+    ['Precio y valor', /precio|barat|caro|vale la pena|relaci[óo]n/i],
+    ['Garantía y atención', /garant|atenci[óo]n|respond|vendedor/i],
+  ];
+  function temasDe(op) {
+    const neg = op.reviews.filter(r => r.rate <= 3), pos = op.reviews.filter(r => r.rate >= 4);
+    return TEMAS.map(([t, re]) => {
+      const n = neg.filter(r => re.test(r.titulo + ' ' + r.texto)), p = pos.filter(r => re.test(r.titulo + ' ' + r.texto));
+      return { tema: t, neg: n.length, pos: p.length, pctNeg: op.reviews.length ? n.length / op.reviews.length : 0, citas: n.slice(0, 2).map(r => r.texto) };
+    });
+  }
+  function vistaOpiniones() {
+    const d = S.datos, O = S.op ||= { mia: null, ref: S.cuenta === 'demo' ? 'MLA3000000099' : '', res: null, cargando: false, error: null };
+    if (!O.mia || !d.items.some(i => i.id === O.mia)) O.mia = (S.cuenta === 'demo' ? 'MLA2000000004' : [...d.items].sort((a, b) => b.actual.facturacion - a.actual.facturacion)[0]?.id) || null;
+    const form = `
+      <section class="tk-card">
+        <div class="tk-card-head"><h3>Opiniones vs. la competencia ${ayuda(AYUDA.opiniones)}</h3></div>
+        <div class="op-form">
+          <label class="cp-field"><span>Tu publicación</span><span class="tk-select"><select id="op-mia">${[...d.items].sort((a, b) => b.actual.facturacion - a.actual.facturacion).map(i => `<option value="${esc(i.id)}"${i.id === O.mia ? ' selected' : ''}>${esc(i.title.slice(0, 70))}</option>`).join('')}</select></span></label>
+          <label class="cp-field"><span>Competidor directo <small>(link de la publicación o de catálogo, o su ID)</small></span><input id="op-ref" value="${esc(O.ref)}" placeholder="https://articulo.mercadolibre.com.ar/MLA-…"></label>
+          <button type="button" class="btn-primary" id="op-go"${O.cargando ? ' disabled' : ''}>${ic('search')}${O.cargando ? 'Leyendo opiniones…' : 'Analizar'}</button>
+        </div>
+        ${S.cuenta === 'demo' ? '<p class="tk-sub">Cuenta demo: compara la freidora de aire con un competidor simulado.</p>' : ''}
+        ${O.error ? `<p class="tk-error">${ic('alert')} ${esc(O.error)}</p>` : ''}
+      </section>`;
+    if (!O.res) return form;
+    const { mia, comp } = O.res, tm = temasDe(mia), tc = temasDe(comp);
+    const filas = TEMAS.map((_, k) => ({ tema: tm[k].tema, m: tm[k], c: tc[k] })).filter(f => f.m.neg + f.m.pos + f.c.neg + f.c.pos > 0)
+      .sort((a, b) => (b.c.neg - b.m.neg) - (a.c.neg - a.m.neg));
+    const oport = filas.filter(f => f.c.neg >= 2 && f.c.pctNeg >= 0.1 && f.m.pctNeg <= f.c.pctNeg / 2);
+    const riesgos = filas.filter(f => f.m.neg >= 2 && f.m.pctNeg > f.c.pctNeg * 1.5);
+    const lado = (op, t) => `<div class="op-side"><p class="mono tk-muted">${t}</p><h4>${esc(op.titulo || op.id)}</h4>
+      <p class="op-avg"><b>${op.promedio ?? '—'}</b> ★ · ${num(op.total)} opiniones${op.precio ? ` · ${plata(op.precio)}` : ''}</p>
+      <div class="op-dist">${[5, 4, 3, 2, 1].map(n => { const c = op.reviews.filter(r => r.rate === n).length; return `<span><i>${n}★</i><b style="width:${op.reviews.length ? c / op.reviews.length * 100 : 0}%"></b><em>${c}</em></span>`; }).join('')}</div>
+      <p class="tk-muted op-leidas">${op.reviews.length} leídas${op.reviews.length < op.total ? ` de ${op.total}` : ''}</p></div>`;
+    return form + `
+      <section class="tk-card"><div class="op-vs">${lado(mia, 'Tu publicación')}${lado(comp, 'Competidor')}</div></section>
+      ${oport.length ? `<section class="tk-card op-oport"><div class="tk-card-head"><h3>${ic('target')} Oportunidades para posicionarte</h3></div>
+        <ul>${oport.map(f => `<li><b>${esc(f.tema)}:</b> al competidor se lo critican ${f.c.neg} ${f.c.neg === 1 ? 'vez' : 'veces'} (${pct(f.c.pctNeg, 0)} de sus opiniones)${f.m.pos ? ` y a vos te lo elogian ${f.m.pos}` : ''}. ${f.c.citas[0] ? `<q>${esc(f.c.citas[0])}</q>` : ''}</li>`).join('')}</ul>
+        <p class="tk-sub">Llevalo al título, a la primera foto y a los atributos, solo si tu producto realmente lo cumple.</p></section>` : ''}
+      ${riesgos.length ? `<section class="tk-card op-riesgo"><div class="tk-card-head"><h3>${ic('alert')} Donde el competidor te gana</h3></div><ul>${riesgos.map(f => `<li><b>${esc(f.tema)}:</b> ${f.m.neg} críticas a tu publicación contra ${f.c.neg} al competidor.</li>`).join('')}</ul></section>` : ''}
+      <section class="tk-card"><div class="tk-card-head"><h3>Temas: críticas y elogios</h3></div>
+        <div class="tk-table-wrap"><table class="tk-table op-table"><thead><tr><th>Tema</th><th class="r">Tus críticas</th><th class="r">Tus elogios</th><th class="r">Críticas al rival</th><th class="r">Elogios al rival</th></tr></thead>
+        <tbody>${filas.map(f => `<tr><td>${esc(f.tema)}</td><td class="r num${f.m.neg ? ' op-neg' : ''}">${f.m.neg}</td><td class="r num">${f.m.pos}</td><td class="r num${f.c.neg ? ' op-neg' : ''}">${f.c.neg}</td><td class="r num">${f.c.pos}</td></tr>`).join('')}</tbody></table></div>
+        <p class="tk-sub">Clasificación por palabras clave: sirve para ver el patrón. Para el análisis fino, usá el prompt de abajo con Claude.</p></section>
+      <section class="tk-card"><div class="tk-card-head"><h3>Análisis profundo con Claude</h3><span class="tk-head-actions"><button type="button" class="btn-secondary cp-sm" id="op-copy">${ic('copy')}Copiar prompt</button><button type="button" class="btn-primary cp-sm" id="op-claude">${ic('external')}Copiar y abrir Claude</button></span></div>
+        <p class="tk-sub">Lleva las opiniones reales de las dos publicaciones. Pegalo en Claude y te devuelve el posicionamiento: título, fotos, atributos y respuestas.</p></section>`;
+  }
+  function promptOpiniones() {
+    const { mia, comp } = S.op.res;
+    const lista = (rs, n) => rs.slice(0, n).map(r => `- (${r.rate}★) ${(r.titulo ? r.titulo + ': ' : '') + r.texto}`.replace(/\s+/g, ' ')).join('\n') || '- (ninguna)';
+    const tc = temasDe(comp), tm = temasDe(mia);
+    return `Actuá como analista de Mercado Libre especializado en voz del cliente.
+Objetivo: encontrar qué valoran y qué critican los compradores de mi competidor directo y convertirlo en ventaja para mi publicación, sin inventar características.
+
+Reglas:
+1. Usá solo las opiniones de abajo. Citá textualmente las que usás como evidencia.
+2. Agrupá por atributo del producto (ej. capacidad, durabilidad, ruido) y contá cuántas veces aparece cada tema.
+3. Un tema es relevante si aparece en al menos 10% de las opiniones o en 3 o más.
+4. No afirmes que mi producto cumple algo si no está confirmado: marcalo como VALIDAR.
+
+MI PUBLICACIÓN: ${mia.titulo} (${mia.id}) · ${mia.promedio ?? '—'}★ · ${mia.total} opiniones${mia.precio ? ' · $' + Math.round(mia.precio).toLocaleString('es-AR') : ''}
+COMPETIDOR: ${comp.titulo} (${comp.id}) · ${comp.promedio ?? '—'}★ · ${comp.total} opiniones${comp.precio ? ' · $' + Math.round(comp.precio).toLocaleString('es-AR') : ''}
+
+Conteo preliminar por palabras clave (críticas / elogios):
+${TEMAS.map((t, k) => `- ${t[0]}: competidor ${tc[k].neg}/${tc[k].pos} · mío ${tm[k].neg}/${tm[k].pos}`).join('\n')}
+
+OPINIONES NEGATIVAS DEL COMPETIDOR (1 a 3★):
+${lista(comp.reviews.filter(r => r.rate <= 3), 60)}
+
+OPINIONES POSITIVAS DEL COMPETIDOR (4 y 5★):
+${lista(comp.reviews.filter(r => r.rate >= 4), 20)}
+
+OPINIONES NEGATIVAS DE MI PUBLICACIÓN:
+${lista(mia.reviews.filter(r => r.rate <= 3), 30)}
+
+OPINIONES POSITIVAS DE MI PUBLICACIÓN:
+${lista(mia.reviews.filter(r => r.rate >= 4), 20)}
+
+Entregá:
+A. Top 5 dolores del competidor, con frecuencia y citas.
+B. Top 3 cosas que el competidor hace bien y yo tengo que igualar.
+C. Mis puntos débiles según mis opiniones.
+D. Posicionamiento propuesto: título (3 opciones), primera foto (qué mostrar), 3 infografías, atributos a destacar y 5 respuestas preparadas para preguntas frecuentes.
+E. Qué validar antes de publicar cada afirmación.`;
+  }
+  function enlazarOpiniones() {
+    const O = S.op;
+    $('op-mia')?.addEventListener('change', e => { O.mia = e.target.value; O.res = null; });
+    $('op-ref')?.addEventListener('input', e => { O.ref = e.target.value; });
+    $('op-go')?.addEventListener('click', async () => {
+      if (!O.ref.trim()) { $('op-ref').focus(); return; }
+      O.cargando = true; O.error = null; renderVista();
+      try {
+        const q = r => api(`action=opiniones&cuenta=${encodeURIComponent(S.cuenta)}&ref=${encodeURIComponent(r)}`);
+        const [mia, comp] = await Promise.all([q(O.mia), q(O.ref)]);
+        if (!comp.reviews.length) throw new Error('El competidor todavía no tiene opiniones con texto.');
+        O.res = { mia, comp };
+      } catch (e) { O.error = e.message || 'No se pudieron leer las opiniones.'; }
+      O.cargando = false; renderVista();
+    });
+    const copiar = async () => { try { await navigator.clipboard.writeText(promptOpiniones()); toastTk('Prompt copiado'); return true; } catch (e) { toastTk('No se pudo copiar'); return false; } };
+    $('op-copy')?.addEventListener('click', copiar);
+    $('op-claude')?.addEventListener('click', async () => { if (await copiar()) window.open('https://claude.ai/new', '_blank', 'noopener'); });
   }
 
   // ── Auditoría de cuenta (servicio): salud por área, hallazgos con plata en juego y plan de 10 acciones ──

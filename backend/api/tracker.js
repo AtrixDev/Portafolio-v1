@@ -9,6 +9,7 @@
 // POST ?action=config  { cuenta, impuestosPct }                 → impuestos sobre el precio (IIBB, etc.)
 // GET  ?action=competencia&cuenta=ID&id=MLA…                   → otros vendedores del mismo producto de catálogo
 // GET  ?action=ficha&cuenta=ID&id=MLA…                         → atributos, fotos y atributos que faltan según la categoría (Academia IA)
+// GET  ?action=opiniones&cuenta=ID&ref=LINK|MLA…               → opiniones de cualquier publicación (propia o de la competencia)
 // GET  ?action=demo                   → PÚBLICO: análisis de la cuenta demo (datos simulados) para sistema.html
 // GET  ?action=cron                    → sincronización diaria (Vercel Cron, con CRON_SECRET)
 import { getDB } from './db.js';
@@ -37,6 +38,25 @@ function fichaDemo(id) {
       { id: 'COLOR', nombre: 'Color', tipo: 'recomendado' },
     ],
   };
+}
+
+// Opiniones simuladas para la cuenta demo (freidora de aire: la propia vs. un competidor)
+function opinionesDemo(ref) {
+  const propia = /MLA2000000004/.test(ref);
+  const r = (rate, texto, fecha = '2026-08-10') => ({ rate, titulo: '', texto, fecha });
+  const reviews = propia ? [
+    r(5, 'Excelente, la canasta es grande y entran papas para 4 personas. Muy fácil de limpiar.'), r(5, 'Cocina rápido y parejo. El antiadherente viene muy bien.'),
+    r(4, 'Buena calidad, un poco ruidosa pero cumple.'), r(5, 'Llegó al otro día, muy bien embalada.'), r(5, 'Fácil de usar, el panel digital es claro.'),
+    r(3, 'Anda bien pero el cable es corto.'), r(5, 'La uso todos los días, muy práctica y fácil de limpiar.'), r(4, 'Buena relación precio calidad.'),
+  ] : [
+    r(2, 'La canasta es muy chica, entran papas para una sola persona.'), r(1, 'A los dos meses se empezó a pelar el antiadherente. Mala calidad.'),
+    r(2, 'Muy ruidosa y el olor a plástico no se va.'), r(3, 'Cocina bien pero es chica para una familia.'), r(1, 'Dejó de funcionar al mes y la garantía no respondió.'),
+    r(4, 'Buen precio, cumple.'), r(2, 'Difícil de limpiar, la grasa queda pegada.'), r(5, 'Llegó rápido y funciona bien.'), r(2, 'Chica, para dos personas no alcanza. El antiadherente se raya.'),
+    r(3, 'El panel es confuso y el manual viene en inglés.'), r(4, 'Buena por el precio.'), r(1, 'Se peló el recubrimiento, no la recomiendo.'),
+  ];
+  const niveles = [1, 2, 3, 4, 5].reduce((o, n) => ({ ...o, [['one', 'two', 'three', 'four', 'five'][n - 1]]: reviews.filter(x => x.rate === n).length }), {});
+  return { demo: true, id: propia ? 'MLA2000000004' : 'MLA3000000099', titulo: propia ? 'Freidora De Aire 4 Litros Digital 1500w Antiadherente' : 'Freidora De Aire 3,5 L Competidor', precio: propia ? 106000 : 84999,
+    link: null, foto: null, promedio: +(reviews.reduce((t, x) => t + x.rate, 0) / reviews.length).toFixed(1), total: reviews.length, niveles, reviews };
 }
 
 async function analisis(db, id) {
@@ -133,6 +153,35 @@ export default async function handler(req, res) {
       if (!cuenta || cuenta === 'demo' || !Number.isFinite(imp) || imp < 0 || imp > 60) return res.status(400).json({ error: 'Datos inválidos' });
       await db.collection('ml_accounts').updateOne({ _id: String(cuenta) }, { $set: { 'config.impuestosPct': imp } });
       return res.status(200).json({ ok: true });
+    }
+
+    if (action === 'opiniones') {
+      const cuenta = String(req.query.cuenta || ''), ref = String(req.query.ref || '').trim();
+      // Acepta un ID (MLA123…), un link de publicación (MLA-123…) o de catálogo (/p/MLA…)
+      const cat = ref.match(/\/p\/(MLA\d+)/i), it = ref.match(/(MLA)-?(\d{6,})/i);
+      if (!cat && !it) return res.status(400).json({ error: 'Pegá el link o el ID de una publicación de Mercado Libre' });
+      if (cuenta === 'demo') return res.status(200).json(opinionesDemo(ref));
+      const token = await getAccessToken(db, cuenta);
+      const get = p => fetch('https://api.mercadolibre.com' + p, { headers: { Authorization: `Bearer ${token}` } }).then(x => x.ok ? x.json() : null).catch(() => null);
+      let itemId = it && !cat ? `MLA${it[2]}` : null, titulo = null;
+      if (cat) {   // producto de catálogo: se toma la publicación ganadora
+        const pr = await get(`/products/${cat[1].toUpperCase()}`);
+        itemId = pr?.buy_box_winner?.item_id || (await get(`/products/${cat[1].toUpperCase()}/items?limit=1`))?.results?.[0]?.item_id || null;
+        titulo = pr?.name || null;
+      }
+      if (!itemId) return res.status(404).json({ error: 'No encontré esa publicación' });
+      const item = await get(`/items/${itemId}?attributes=id,title,price,permalink,thumbnail,seller_id`);
+      const reviews = [];
+      let prom = null, niveles = null, total = 0;
+      for (let off = 0; off < 200; off += 50) {
+        const r = await get(`/reviews/item/${itemId}?limit=50&offset=${off}`);
+        if (!r) break;
+        prom ??= r.rating_average; niveles ??= r.rating_levels; total = r.paging?.total ?? total;
+        reviews.push(...(r.reviews || []).map(x => ({ rate: x.rate, titulo: x.title || '', texto: x.content || '', fecha: x.date_created?.slice(0, 10) || null })));
+        if (!r.reviews?.length || reviews.length >= total) break;
+      }
+      return res.status(200).json({ id: itemId, titulo: item?.title || titulo, precio: item?.price ?? null, link: item?.permalink || null, foto: item?.thumbnail || null,
+        promedio: prom, total, niveles, reviews });
     }
 
     if (action === 'competencia') {
