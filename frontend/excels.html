@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Excels Automatizados | Darío Colángelo</title>  <meta name="description" content="Herramientas en Excel para analistas de Mercado Libre: automatización de reportes, seguimiento de ACOS y análisis de catálogo.">
 
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>
   <meta name="author" content="Darío Colángelo">
   <meta name="robots" content="index, follow">
   <meta property="og:title" content="Excels Automatizados ML | Darío Colángelo">
@@ -16,7 +17,7 @@
   <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
   <link rel="stylesheet" href="css/root.css" />
   <link rel="stylesheet" href="css/shared.css" />
-  <link rel="stylesheet" href="css/page.css" />
+  <link rel="stylesheet" href="css/guia.css" />
   <link rel="stylesheet" href="css/surfaces.css">
 </head>
 <body>
@@ -51,47 +52,92 @@
   <a href="contacto.html">Contacto</a>
 </div>
 <!-- NAV:end -->
-<div id="contenido" class="ph">
-  <div class="ph-bg"></div>
-  <div class="ph-grid"></div>
+<main>
+<header id="contenido" class="ph gd-hero">
+  <div class="ph-bg" aria-hidden="true"></div>
   <div class="ph-c">
-    <a href="lab.html" class="btn-back">← Volver al Lab</a>
-    <h1 class="ph-title">Excels<br><span class='grad'>Automatizados</span></h1>
-    <p class="ph-sub">Herramientas y plantillas para analistas de E-Commerce: seguimiento de ACOS, monitoreo de competencia y control operativo completo.</p>
+    <a href="lab.html" class="btn-back"><svg class="icon icon-back" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg>Todas las guías</a>
+    <h1 class="ph-title">Excels <span class="grad">automatizados</span></h1>
+    <p class="ph-sub">Las planillas con las que sigo ACOS, precios de la competencia y el estado del catálogo, y cómo automatizarlas con Google Sheets.</p>
+    <p class="gd-for"><b>Te sirve si</b> perdés horas por semana copiando datos a mano, o manejás varias cuentas a la vez.</p>
   </div>
+</header>
+
+<div class="gd sheet">
+  <nav class="gd-toc" aria-labelledby="gd-toc-t">
+    <p class="gd-toc-t" id="gd-toc-t">En esta guía</p>
+    <ol>
+      <li><a href="#por-que">Por qué automatizar</a></li>
+      <li><a href="#plantillas">Las 5 planillas que uso</a></li>
+      <li><a href="#sheets">Google Sheets avanzado</a></li>
+    </ol>
+  </nav>
+  <article class="gd-body">
+<section class="gd-sec" id="por-que" data-toc="Por qué automatizar">
+  <h2>Tu tiempo vale más que copiar datos</h2>
+  <p>Un analista que completa planillas a mano pierde entre 5 y 10 horas por semana en tareas que una herramienta bien armada hace en minutos. Automatizar libera ese tiempo para lo que importa: analizar y decidir.</p>
+  <dl class="gd-rows">
+    <div class="gd-row"><dt>Velocidad</dt><dd>Datos que tardaban horas en consolidarse, disponibles en segundos. Más tiempo para interpretar, menos para copiar.</dd></div>
+    <div class="gd-row"><dt>Precisión</dt><dd>Sin errores de tipeo. Un error de pricing puede costar decenas de miles en ventas perdidas.</dd></div>
+    <div class="gd-row"><dt>Alertas</dt><dd>Avisos automáticos cuando un número pasa el umbral que definiste, para actuar antes de que el problema crezca.</dd></div>
+  </dl>
+</section>
+
+<section class="gd-sec" id="plantillas" data-toc="Las 5 planillas que uso">
+  <h2>Las cinco planillas que uso siempre</h2>
+  <ol class="gd-steps">
+    <li><h3>Seguimiento de ACOS por publicación</h3><p>Una fila por publicación, actualizada cada semana. Estas son sus columnas:</p>
+  <div class="gd-sheet-wrap" tabindex="0" role="region" aria-label="Columnas de la planilla de ACOS por publicación">
+      <table class="gd-sheet">
+        <caption>Columnas de la planilla de ACOS por publicación. Se actualiza una vez por semana.</caption>
+        <thead><tr><th scope="col">ID publicación</th><th scope="col">Nombre</th><th scope="col">Gasto pub.</th><th scope="col">Ventas pub.</th><th scope="col">ACOS actual</th><th scope="col">ACOS objetivo</th><th scope="col">Acción recomendada</th></tr></thead>
+        <tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+      </table>
+    </div>
+    </li>
+    <li><h3>Monitor de precios de la competencia</h3><p>Registro semanal de los precios de los 10 competidores principales por categoría, con una fórmula que avisa si alguno baja más de un 10%. El método está en <a href="pricing.html#seguimiento">Pricing y competencia</a>.</p></li>
+    <li><h3>Calculadora de margen real</h3><p>Cargás el costo del producto y calcula sola el precio mínimo viable, el precio recomendado y el margen neto después de Mercado Libre.</p></li>
+    <li><h3>Tablero de métricas semanales</h3><p>Junta ventas, CTR, conversión y ACOS en un solo panel, con un gráfico de tendencia para ver la evolución mes a mes.</p></li>
+    <li><h3>Control de publicaciones activas</h3><p>El estado de cada publicación (activa, pausada, sin stock, en catálogo, penalizada) con la fecha de su última optimización.</p></li>
+  </ol>
+</section>
+
+<section class="gd-sec" id="sheets" data-toc="Google Sheets avanzado">
+  <h2>Automatización avanzada con Google Sheets</h2>
+  <p>Casos de uso reales:</p>
+  <ul class="gd-rows gd-list">
+    <li>Extraer los precios públicos de la competencia y cargarlos solos en la planilla semanal.</li>
+    <li>Mandar una alerta por email cuando el ACOS de una campaña supera el umbral definido.</li>
+    <li>Generar solo el reporte semanal con los números principales del período.</li>
+    <li>Juntar datos de varias cuentas de Mercado Libre en un único tablero.</li>
+  </ul>
+  <dl class="gd-rows">
+    <div class="gd-row"><dt>Nivel básico<small>Fórmulas avanzadas</small></dt><dd>QUERY, IMPORTDATA, IF anidados, ARRAYFORMULA. Sin programar, pero con lógica potente.</dd></div>
+    <div class="gd-row"><dt>Nivel avanzado<small>Apps Script (JavaScript)</small></dt><dd>Funciones propias, disparadores automáticos, conexión con APIs externas y alertas por email.</dd></div>
+  </dl>
+  <div class="gd-note">
+    <p class="gd-note-t"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-activity"/></svg>El paso siguiente a la planilla</p>
+    <p>El ML Tracker, la herramienta que construí, se conecta a la API oficial de Mercado Libre y hace buena parte de este seguimiento solo. <a href="sistema.html#demo">Probalo con una cuenta de ejemplo</a>.</p>
+  </div>
+</section>
+  </article>
 </div>
 
-<div class="cs reveal">
-  <div class="ct">El tiempo del analista es su activo más valioso</div>
-  <p class="ctxt">Un analista que completa planillas manualmente pierde entre 5 y 10 horas semanales en tareas que una herramienta bien construida puede hacer en minutos. La automatización libera tiempo para análisis y estrategia.</p>
-  <div class="g3 reveal">
-    <div class="card"><div class="card-icon"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-zap"/></svg></div><div class="card-title">Velocidad</div><div class="card-desc">Datos que tardaban horas en consolidar, disponibles en segundos. Más tiempo para interpretar, menos para copiar.</div></div>
-    <div class="card"><div class="card-icon"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-target"/></svg></div><div class="card-title">Precisión</div><div class="card-desc">Eliminar errores humanos en el ingreso de datos. Un error de pricing puede costar decenas de miles en ventas perdidas.</div></div>
-    <div class="card"><div class="card-icon"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-activity"/></svg></div><div class="card-title">Alertas</div><div class="card-desc">Recibir notificaciones automáticas cuando un KPI supera el umbral definido. Actuar antes de que sea un problema grave.</div></div>
+<section class="gd-close" aria-labelledby="gd-close-t">
+  <h2 id="gd-close-t">¿Seguís copiando datos a mano?</h2>
+  <p>Si querés dejar andando reportes y alertas para tu cuenta, escribime. Y si querés ver primero dónde está el problema, la auditoría es gratis.</p>
+  <div class="gd-close-actions">
+    <a href="sistema.html#auditar" class="btn-primary">Auditá tu cuenta gratis <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a>
+    <a href="contacto.html" class="btn-secondary">Escribime</a>
+    <a href="index.html#experiencia" class="link-arrow">¿Buscás analista? Mirá mi trayectoria <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a>
   </div>
-</div>
-<div class="cs alt reveal">
-  <div class="ct">Las que uso siempre</div>
-  <div class="step-list reveal">
-    <div class="step-row"><div class="step-n">01</div><div class="step-b"><div class="step-t">Tracker de ACOS por publicación</div><div class="step-d">Columnas: ID publicación · Nombre · Gasto pub. · Ventas pub. · ACOS actual · ACOS objetivo · Acción recomendada. Actualización semanal.</div></div></div>
-    <div class="step-row"><div class="step-n">02</div><div class="step-b"><div class="step-t">Monitor de precios de competidores</div><div class="step-d">Registro semanal de precios de top 10 competidores por categoría. Fórmula que alerta si alguien baja más del 10%.</div></div></div>
-    <div class="step-row"><div class="step-n">03</div><div class="step-b"><div class="step-t">Calculadora de margen real</div><div class="step-d">Ingresás costo del producto y calcula automáticamente: precio mínimo viable, precio recomendado y margen neto post-ML.</div></div></div>
-    <div class="step-row"><div class="step-n">04</div><div class="step-b"><div class="step-t">Dashboard de métricas semanales</div><div class="step-d">Consolida ventas, CTR, conversión y ACOS en un solo panel. Gráfico de tendencias para ver evolución mes a mes.</div></div></div>
-    <div class="step-row"><div class="step-n">05</div><div class="step-b"><div class="step-t">Control de publicaciones activas</div><div class="step-d">Estado de cada publicación: activa, pausada, sin stock, en catálogo, penalizada. Con fechas de última optimización.</div></div></div>
-  </div>
-</div>
-<div class="cs reveal">
-  <div class="ct">Automatización avanzada con Google Sheets</div>
-  <div class="hbox"><div class="hbox-title">Casos de uso reales</div><div class="hbox-body"><ul class="blist"><li>Extracción de precios públicos de competidores y carga automática en la planilla semanal</li><li>Envío de alerta por email cuando el ACOS de una campaña supera el umbral definido</li><li>Generación automática de reporte semanal con los KPIs principales del período</li><li>Consolidación de datos de múltiples cuentas de ML en un solo dashboard centralizado</li></ul></div></div>
-  <div class="g2 reveal">
-    <div class="card"><div class="card-n">Nivel básico</div><div class="card-title">Fórmulas avanzadas</div><div class="card-desc">QUERY, IMPORTDATA, IF anidados, ARRAYFORMULA. Sin programar, pero con lógica potente.</div></div>
-    <div class="card"><div class="card-n">Nivel avanzado</div><div class="card-title">App Script (JavaScript)</div><div class="card-desc">Funciones personalizadas, triggers automáticos, conexión con APIs externas y envío de alertas por email.</div></div>
-  </div>
-</div>
-<div class="nb">
-  <a href="metricas.html">← Dashboard de Métricas</a>
-  <a href="imagenes.html">Imágenes con IA →</a>
-</div>
+</section>
+
+<nav class="gd-pager" aria-label="Otras guías">
+  <a href="metricas.html"><span>Guía anterior</span><b>Dashboard de métricas</b></a>
+  <a href="imagenes.html"><span>Guía siguiente</span><b>Imágenes con IA</b></a>
+</nav>
+</main>
 <footer>
   <p class="footer-name">Darío Colángelo<span>.</span></p>
   <ul class="footer-links">
@@ -106,5 +152,6 @@
   </div>
 </footer>
 <script src="js/main.js"></script>
+<script src="js/guia.js"></script>
 </body>
 </html>

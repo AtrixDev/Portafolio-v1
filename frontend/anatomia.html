@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Anatomía de Publicación | Darío Colángelo</title>
   <meta name="description" content="Las 4 capas de una publicación de Mercado Libre que convierte: título, fotos, descripción y atributos. Metodología práctica.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>
   <meta name="author" content="Darío Colángelo">
   <meta name="robots" content="index, follow">
   <meta property="og:title" content="Anatomía de Publicación | Darío Colángelo">
@@ -16,7 +17,7 @@
   <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
   <link rel="stylesheet" href="css/root.css" />
   <link rel="stylesheet" href="css/shared.css" />
-  <link rel="stylesheet" href="css/page.css" />
+  <link rel="stylesheet" href="css/guia.css" />
   <link rel="stylesheet" href="css/surfaces.css">
 </head>
 <body>
@@ -51,78 +52,139 @@
   <a href="contacto.html">Contacto</a>
 </div>
 <!-- NAV:end -->
-<div id="contenido" class="ph">
-  <div class="ph-bg"></div>
-  <div class="ph-grid"></div>
+<main>
+<header id="contenido" class="ph gd-hero">
+  <div class="ph-bg" aria-hidden="true"></div>
   <div class="ph-c">
-    <a href="lab.html" class="btn-back">← Volver al Lab</a>
-    <h1 class="ph-title">Anatomía de una<br><span class='grad'>Publicación Exitosa</span></h1>
-    <p class="ph-sub">Una publicación no es solo una foto y un precio. Es un sistema de conversión con 4 capas. Si falla una, baja la tasa de conversión.</p>
+    <a href="lab.html" class="btn-back"><svg class="icon icon-back" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg>Todas las guías</a>
+    <h1 class="ph-title">Anatomía de una <span class="grad">publicación exitosa</span></h1>
+    <p class="ph-sub">Una publicación no es una foto y un precio: es un sistema de conversión de cuatro capas. Si falla una, la conversión cae.</p>
+    <p class="gd-for"><b>Te sirve si</b> tenés visitas pero pocas ventas, o vas a armar una publicación desde cero.</p>
   </div>
+</header>
+
+<div class="gd sheet">
+  <nav class="gd-toc" aria-labelledby="gd-toc-t">
+    <p class="gd-toc-t" id="gd-toc-t">En esta guía</p>
+    <ol>
+      <li><a href="#capas">Las 4 capas de conversión</a></li>
+      <li><a href="#fotos">La secuencia de 7 fotos</a></li>
+      <li><a href="#descripcion">La descripción</a></li>
+      <li><a href="#estrategias">Qué estrategia elegir</a></li>
+      <li><a href="#que-falla">Cómo saber qué falla</a></li>
+    </ol>
+  </nav>
+  <article class="gd-body">
+<section class="gd-sec" id="capas" data-toc="Las 4 capas de conversión">
+  <h2>Las 4 capas de conversión</h2>
+  <p>Antes de tocar las fotos, entendé el camino del comprador. Cada capa cumple una función, y si falla una, todo lo que viene después pierde fuerza.</p>
+  <ol class="gd-steps">
+    <li><h3>Captación</h3><p class="gd-meta">Miniatura y título</p><p>El primer contacto. Competís contra cientos de resultados: si no hay clic, el resto no existe.</p></li>
+    <li><h3>Validación</h3><p class="gd-meta">Primeras 3 fotos</p><p>El comprador confirma que encontró lo que buscaba, antes de leer nada.</p></li>
+    <li><h3>Convicción</h3><p class="gd-meta">Fotos 4 a 7</p><p>Argumentación visual: beneficios, prueba social, autoridad técnica. Acá se decide la compra.</p></li>
+    <li><h3>Cierre</h3><p class="gd-meta">Últimas fotos y descripción</p><p>Bajar el miedo: garantía, devolución, atención personalizada.</p></li>
+  </ol>
+</section>
+
+<section class="gd-sec" id="fotos" data-toc="La secuencia de 7 fotos">
+  <h2>La secuencia de 7 fotos</h2>
+  <p>Una estructura que se adapta a cualquier producto físico. El orden importa tanto como el contenido de cada foto.</p>
+  <ol class="gd-steps is-big">
+    <li>
+      <h3>Producto héroe</h3><p class="gd-meta">Objetivo: el clic</p>
+      <p>Fondo blanco puro, producto grande (80% del encuadre), alta nitidez y sin texto. Esta foto compite contra cientos en el scroll: es la más importante de todas.</p>
+    </li>
+    <li>
+      <h3>Beneficio principal</h3><p class="gd-meta">Objetivo: el interés</p>
+      <p>Comunicá el beneficio, no la característica.</p>
+      <div class="gd-vs">
+        <p class="is-bad"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-x"/></svg><span class="sr-only">En vez de: </span><span>«Tabla de titanio»</span></p>
+        <p class="is-ok"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-check"/></svg><span class="sr-only">Mejor: </span>«Cortá sin dañar tus cuchillos»</p>
+      </div>
+    </li>
+    <li>
+      <h3>El problema</h3><p class="gd-meta">Objetivo: tocar el dolor</p>
+      <p>Mostrá el dolor del comprador con una comparación visual: tu producto contra «lo común». Por ejemplo: «¿Tus tablas se deforman? ¿Se rayan al mes?».</p>
+    </li>
+    <li>
+      <h3>Datos técnicos</h3><p class="gd-meta">Objetivo: la convicción</p>
+      <p>Ahora sí podés hablar técnico: medidas, materiales, peso. Siempre con un micro-beneficio al lado.</p>
+      <div class="gd-vs"><p class="is-ok"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-check"/></svg>2 cm de grosor: mayor estabilidad al cortar</p></div>
+    </li>
+    <li>
+      <h3>Prueba social</h3><p class="gd-meta">Objetivo: la confianza</p>
+      <p>Uso real: una persona usando el producto en un ambiente aspiracional. Activa confianza, identificación y deseo.</p>
+    </li>
+    <li>
+      <h3>Garantía</h3><p class="gd-meta">Objetivo: bajar el miedo</p>
+      <p>Garantía, envío rápido, devolución fácil: todo lo que baje la ansiedad del comprador.</p>
+    </li>
+    <li>
+      <h3>Cierre emocional</h3><p class="gd-meta">Objetivo: la compra</p>
+      <p>Un llamado a la acción aspiracional, el empujón final.</p>
+      <div class="gd-vs"><p class="is-ok"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-check"/></svg>«Convertí tu cocina en un espacio profesional»</p></div>
+    </li>
+  </ol>
+  <figure class="gd-fig">
+    <img src="https://http2.mlstatic.com/D_NQ_NP_644799-MLA91259375564_092025-O.webp" alt="Mandolina Borner V5 Powerline roja sobre una mesada con verduras, con el sello Made in Germany" loading="lazy" decoding="async" width="1200" height="750">
+    <figcaption>Una foto de ambiente de la publicación de Borner que rehice (mandolina V5 Powerline). El antes y después completo está en <a href="index.html#caso-exito">la portada</a>.</figcaption>
+  </figure>
+</section>
+
+<section class="gd-sec" id="descripcion" data-toc="La descripción">
+  <h2>La descripción: casi nadie la usa bien</h2>
+  <p>La descripción es tu vendedor para el comprador que todavía duda. Armala en este orden:</p>
+  <ol class="gd-steps">
+    <li><h3>Apertura emocional</h3><p>Tres líneas como máximo. Conectá con el deseo o la identidad del comprador antes de hablar del producto.</p></li>
+    <li><h3>Beneficios en viñetas</h3><p>Claros y fáciles de escanear: el comprador escanea, no lee. Cada viñeta, un beneficio concreto.</p></li>
+    <li><h3>Datos técnicos</h3><p>Medidas, material, peso y qué incluye. Información objetiva para el comprador más analítico.</p></li>
+    <li><h3>Preguntas frecuentes</h3><p>Respondé 3 a 5 preguntas comunes antes de que te las hagan. Menos preguntas mejora el ranking.</p></li>
+  </ol>
+</section>
+
+<section class="gd-sec" id="estrategias" data-toc="Qué estrategia elegir">
+  <h2>Elegí la estrategia según producto y comprador</h2>
+  <dl class="gd-rows">
+    <div class="gd-row"><dt>Claridad</dt><dd>Publicaciones simples, limpias y ordenadas que generan confianza. Ideal para compradores racionales.</dd></div>
+    <div class="gd-row"><dt>Golpe emocional</dt><dd>Para regalos o productos aspiracionales: el comprador compra cómo se va a sentir.</dd></div>
+    <div class="gd-row"><dt>Autoridad técnica</dt><dd>Para productos premium. Hablar como experto genera confianza y justifica un precio más alto.</dd></div>
+    <div class="gd-row"><dt>Comparación directa</dt><dd>Mostrás el producto barato con sus problemas y después tu solución. Convierte muchísimo si está bien hecha.</dd></div>
+  </dl>
+</section>
+
+<section class="gd-sec" id="que-falla" data-toc="Cómo saber qué falla">
+  <h2>Cómo saber qué capa está fallando</h2>
+  <p>Cuatro números te dicen dónde mirar:</p>
+  <dl class="gd-rows">
+    <div class="gd-row"><dt>CTR</dt><dd>Clics sobre impresiones. Mide si la miniatura y el título enganchan.<br><code>clics / impresiones</code></dd></div>
+    <div class="gd-row"><dt>Conversión</dt><dd>Visitas que terminan en compra. Mide la calidad del contenido.<br><code>ventas / visitas</code></dd></div>
+    <div class="gd-row"><dt>Preguntas previas</dt><dd>Muchas preguntas significan que el contenido no resuelve las dudas clave.<br><code>preguntas / visitas</code></dd></div>
+    <div class="gd-row"><dt>Devoluciones</dt><dd>Indican si el producto cumple lo que promete la publicación.<br><code>devoluciones / ventas</code></dd></div>
+  </dl>
+  <p>Y cuando los cruzás, aparece el diagnóstico:</p>
+  <dl class="gd-rows">
+    <div class="gd-row"><dt>Muchas visitas y pocas ventas</dt><dd>Falla la <b>validación</b>: las fotos 1 a 3 o el precio. El problema no es la visibilidad, es el contenido.</dd></div>
+    <div class="gd-row"><dt>Pocas visitas</dt><dd>Falla la <b>captación</b>: miniatura, título o SEO. Empezá por <a href="seo.html">la guía de títulos</a>.</dd></div>
+  </dl>
+</section>
+  </article>
 </div>
 
-<div class="cs reveal">
-  <div class="ct">Las 4 Capas de Conversión</div>
-  <p class="ctxt">Antes de tocar las fotos, entendé el viaje del comprador. Cada capa cumple una función específica. Si falla una, todo lo que sigue pierde efectividad.</p>
-  <div class="g4 reveal">
-    <div class="card"><div class="card-n">Capa 01</div><div class="card-title">Captación</div><p style="font-family:var(--font-mono);font-size:.65rem;color:var(--cyan);margin:.3rem 0 .5rem;">Miniatura + Título</p><div class="card-desc">El primer contacto. Compite contra cientos. Si no hace click, el resto no existe.</div></div>
-    <div class="card"><div class="card-n">Capa 02</div><div class="card-title">Validación</div><p style="font-family:var(--font-mono);font-size:.65rem;color:var(--cyan);margin:.3rem 0 .5rem;">Primeras 3 fotos</p><div class="card-desc">El comprador confirma que encontró lo que buscaba antes de leer nada.</div></div>
-    <div class="card"><div class="card-n">Capa 03</div><div class="card-title">Convicción</div><p style="font-family:var(--font-mono);font-size:.65rem;color:var(--cyan);margin:.3rem 0 .5rem;">Fotos 4 a 7</p><div class="card-desc">Argumentación visual. Beneficios, prueba social, autoridad técnica. Acá se decide la compra.</div></div>
-    <div class="card"><div class="card-n">Capa 04</div><div class="card-title">Cierre</div><p style="font-family:var(--font-mono);font-size:.65rem;color:var(--cyan);margin:.3rem 0 .5rem;">Últimas fotos + Descripción</p><div class="card-desc">Reducción del miedo. Garantías, devolución, atención personalizada.</div></div>
+<section class="gd-close" aria-labelledby="gd-close-t">
+  <h2 id="gd-close-t">¿Tus publicaciones pasan las cuatro capas?</h2>
+  <p>Pegá el link de una publicación en la auditoría gratis y mirá lo que Mercado Libre deja ver desde afuera, o conectá tu cuenta para ver los problemas con más plata en juego. Si preferís que la rearme yo, escribime.</p>
+  <div class="gd-close-actions">
+    <a href="sistema.html#auditar" class="btn-primary">Auditá tu cuenta gratis <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a>
+    <a href="contacto.html" class="btn-secondary">Escribime</a>
+    <a href="index.html#experiencia" class="link-arrow">¿Buscás analista? Mirá mi trayectoria <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a>
   </div>
-</div>
+</section>
 
-<div class="cs alt reveal">
-  <div class="ct">Secuencia PERFECTA de 7 Fotos</div>
-  <p class="ctxt">Estructura universal adaptable a cualquier producto físico. El orden importa tanto como el contenido.</p>
-  <div class="foto-sequence reveal">
-    <div class="foto-row"><div class="foto-num">01</div><div class="foto-header"><div class="foto-label">Producto Héroe</div><div class="foto-obj">Objetivo: Click</div></div><div class="foto-body"><div class="foto-desc">Fondo blanco puro. Producto grande (80% del encuadre). Alta nitidez. Sin texto. Esta foto compite contra cientos en el scroll.</div><div class="foto-ex">→ Máxima calidad · Sin texto · Producto protagonista</div></div></div>
-    <div class="foto-row"><div class="foto-num">02</div><div class="foto-header"><div class="foto-label">Beneficio Principal</div><div class="foto-obj">Objetivo: Interés</div></div><div class="foto-body"><div class="foto-desc">Comunicar beneficio, NO característica.</div><div class="foto-ex"><span class="txt-bad">✗ "Tabla de titanio"</span> → <span class="txt-good">✓ "Cortá sin dañar tus cuchillos"</span></div></div></div>
-    <div class="foto-row"><div class="foto-num">03</div><div class="foto-header"><div class="foto-label">El Problema</div><div class="foto-obj">Objetivo: Dolor</div></div><div class="foto-body"><div class="foto-desc">Atacar el dolor del comprador. Comparativa visual: tu producto vs "lo común".</div><div class="foto-ex">→ ¿Tus tablas se deforman? ¿Se rayan al mes?</div></div></div>
-    <div class="foto-row"><div class="foto-num">04</div><div class="foto-header"><div class="foto-label">Specs Técnicas</div><div class="foto-obj">Objetivo: Convicción</div></div><div class="foto-body"><div class="foto-desc">Ahora sí podés hablar técnico. Medidas, materiales, peso. Siempre con micro-beneficio.</div><div class="foto-ex"><span class="txt-good">2 cm de grosor → Mayor estabilidad al cortar</span></div></div></div>
-    <div class="foto-row"><div class="foto-num">05</div><div class="foto-header"><div class="foto-label">Prueba Social</div><div class="foto-obj">Objetivo: Confianza</div></div><div class="foto-body"><div class="foto-desc">Uso real, persona utilizándolo, ambiente aspiracional. Activa confianza, identificación y deseo.</div><div class="foto-ex">→ Persona + Producto + Contexto real de uso</div></div></div>
-    <div class="foto-row"><div class="foto-num">06</div><div class="foto-header"><div class="foto-label">Garantía</div><div class="foto-obj">Objetivo: Reducir miedo</div></div><div class="foto-body"><div class="foto-desc">Garantía, envíos rápidos, devolución fácil. Todo lo que baje la ansiedad del comprador.</div></div></div>
-    <div class="foto-row"><div class="foto-num">07</div><div class="foto-header"><div class="foto-label">CTA Emocional</div><div class="foto-obj">Objetivo: Cierre</div></div><div class="foto-body"><div class="foto-desc">Llamado a la acción aspiracional. El empujón final.</div><div class="foto-ex"><span class="txt-good">"Convertí tu cocina en un espacio profesional"</span></div></div></div>
-  </div>
-</div>
-
-<div class="cs reveal">
-  <div class="ct">Casi nadie la usa bien</div>
-  <div class="g4 reveal">
-    <div class="card"><div class="card-n">Paso 01</div><div class="card-title">Apertura Emocional</div><div class="card-desc">Máximo 3 líneas. Conectar con el deseo o identidad del comprador antes de hablar del producto.</div></div>
-    <div class="card"><div class="card-n">Paso 02</div><div class="card-title">Beneficios en Bullets</div><div class="card-desc">Claros y escaneables. El comprador escanea, no lee. Cada bullet: un beneficio concreto y tangible.</div></div>
-    <div class="card"><div class="card-n">Paso 03</div><div class="card-title">Specs Técnicas</div><div class="card-desc">Medidas, material, peso, qué incluye. Información objetiva para el comprador más analítico.</div></div>
-    <div class="card"><div class="card-n">Paso 04</div><div class="card-title">FAQ Anticipadas</div><div class="card-desc">Responder 3-5 preguntas comunes antes de que las hagan. Reduce preguntas → mejora ranking.</div></div>
-  </div>
-</div>
-
-<div class="cs alt reveal">
-  <div class="ct">Elegí según producto y audiencia</div>
-  <div class="g2 reveal">
-    <div class="card"><div class="card-n">// Estrategia 01</div><div class="card-title">Dominación por Claridad</div><div class="card-desc">Publicaciones simples, limpias, ordenadas. Aumenta confianza. Ideal para compradores racionales.</div></div>
-    <div class="card"><div class="card-n">// Estrategia 02</div><div class="card-title">Golpe Emocional</div><div class="card-desc">Ideal para regalos o productos aspiracionales. El comprador compra cómo se va a sentir.</div></div>
-    <div class="card"><div class="card-n">// Estrategia 03</div><div class="card-title">Autoridad Técnica</div><div class="card-desc">Perfecto para productos premium. Hablar como experto genera confianza y justifica el precio superior.</div></div>
-    <div class="card"><div class="card-n">// Estrategia 04</div><div class="card-title">Comparativa Destructiva</div><div class="card-desc">Mostrás el producto barato con sus problemas, luego tu solución superior. Convierte muchísimo si está bien ejecutada.</div></div>
-  </div>
-</div>
-
-<div class="cs reveal">
-  <div class="ct">KPIs que tenés que mirar</div>
-  <div class="g4 reveal">
-    <div class="card"><div class="card-icon"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-eye"/></svg></div><div class="card-title">CTR</div><div class="card-desc">Clicks vs impresiones. Mide si miniatura y título enganchan.</div><div class="formula-sm">clicks / impresiones</div></div>
-    <div class="card"><div class="card-icon"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-cart"/></svg></div><div class="card-title">Conversión</div><div class="card-desc">Visitas que terminan en compra. Mide calidad del contenido.</div><div class="formula-sm">ventas / visitas</div></div>
-    <div class="card"><div class="card-icon"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-message"/></svg></div><div class="card-title">Preguntas previas</div><div class="card-desc">Muchas preguntas = contenido que no resuelve dudas clave.</div><div class="formula-sm">preguntas / visitas</div></div>
-    <div class="card"><div class="card-icon">↩️</div><div class="card-title">Devoluciones</div><div class="card-desc">Indica si el producto cumple las expectativas del contenido.</div><div class="formula-sm">dev. / ventas</div></div>
-  </div>
-  <div class="g2 reveal" style="margin-top:1rem;">
-    <div class="hbox"><div class="hbox-title" style="color:var(--red);">Muchas visitas + Pocas ventas</div><div class="hbox-body">→ Falla la Validación (fotos 1-3 o precio). El problema no es la visibilidad, es el contenido.</div></div>
-    <div class="hbox"><div class="hbox-title" style="color:var(--red);">Pocas visitas</div><div class="hbox-body">→ Falla la Captación (miniatura / título / SEO). Hay que mejorar el posicionamiento orgánico.</div></div>
-  </div>
-</div>
-<div class="nb">
-  <a href="lab.html">← Volver al Lab</a>
-  <a href="acos.html">ACOS & Product Ads →</a>
-</div>
+<nav class="gd-pager" aria-label="Otras guías">
+  <a href="lab.html"><span>Volver al Lab</span><b>Todas las guías</b></a>
+  <a href="acos.html"><span>Guía siguiente</span><b>ACOS y Product Ads</b></a>
+</nav>
+</main>
 <footer>
   <p class="footer-name">Darío Colángelo<span>.</span></p>
   <ul class="footer-links">
@@ -137,5 +199,6 @@
   </div>
 </footer>
 <script src="js/main.js"></script>
+<script src="js/guia.js"></script>
 </body>
 </html>

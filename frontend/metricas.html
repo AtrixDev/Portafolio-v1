@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard de Métricas | Darío Colángelo</title>  <meta name="description" content="Dashboard de métricas clave para analistas de Mercado Libre: visitas, conversión, GMV, ACOS y reputación.">
 
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>
   <meta name="author" content="Darío Colángelo">
   <meta name="robots" content="index, follow">
   <meta property="og:title" content="Métricas de Mercado Libre | Darío Colángelo">
@@ -16,7 +17,7 @@
   <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
   <link rel="stylesheet" href="css/root.css" />
   <link rel="stylesheet" href="css/shared.css" />
-  <link rel="stylesheet" href="css/page.css" />
+  <link rel="stylesheet" href="css/guia.css" />
   <link rel="stylesheet" href="css/surfaces.css">
 </head>
 <body>
@@ -51,48 +52,81 @@
   <a href="contacto.html">Contacto</a>
 </div>
 <!-- NAV:end -->
-<div id="contenido" class="ph">
-  <div class="ph-bg"></div>
-  <div class="ph-grid"></div>
+<main>
+<header id="contenido" class="ph gd-hero">
+  <div class="ph-bg" aria-hidden="true"></div>
   <div class="ph-c">
-    <a href="lab.html" class="btn-back">← Volver al Lab</a>
-    <h1 class="ph-title">Dashboard de<br><span class='grad'>Métricas</span></h1>
-    <p class="ph-sub">Los KPIs que todo analista de ML debe dominar: cómo interpretarlos, cuándo actuar y cómo construir un sistema de monitoreo efectivo.</p>
+    <a href="lab.html" class="btn-back"><svg class="icon icon-back" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg>Todas las guías</a>
+    <h1 class="ph-title">Dashboard de <span class="grad">métricas</span></h1>
+    <p class="ph-sub">Los números que un analista de Mercado Libre tiene que dominar: cómo leerlos, cuándo actuar y cómo cruzarlos para encontrar el problema.</p>
+    <p class="gd-for"><b>Te sirve si</b> mirás el panel de Mercado Libre y no sabés qué hacer con lo que ves.</p>
   </div>
+</header>
+
+<div class="gd sheet">
+  <nav class="gd-toc" aria-labelledby="gd-toc-t">
+    <p class="gd-toc-t" id="gd-toc-t">En esta guía</p>
+    <ol>
+      <li><a href="#panel">Las 6 métricas</a></li>
+      <li><a href="#diagnostico">Qué te dicen juntas</a></li>
+      <li><a href="#frecuencia">Cada cuánto mirar</a></li>
+    </ol>
+  </nav>
+  <article class="gd-body">
+<section class="gd-sec" id="panel" data-toc="Las 6 métricas">
+  <h2>El panel del analista: seis métricas</h2>
+  <p>Van en orden: del primer contacto del comprador hasta lo que pasa después de la venta. Cuando algo cae, recorrelas de arriba hacia abajo.</p>
+  <ol class="gd-steps">
+    <li><h3>Impresiones</h3><p class="gd-meta">Visibilidad</p><p>Cuántas veces apareció tu publicación en los resultados. Si baja, hay un problema de SEO o de algoritmo.</p><p class="gd-meta">Fuente: métricas de Mercado Libre</p></li>
+    <li><h3>CTR</h3><p class="gd-meta">Atracción</p><p>El porcentaje de impresiones que terminan en clic. Referencia en Mercado Libre: 2% a 5%.</p><code class="gd-when">clics / impresiones × 100</code></li>
+    <li><h3>Tasa de conversión</h3><p class="gd-meta">Convicción</p><p>El porcentaje de visitas que terminan en compra. Un buen producto tiene entre 3% y 8% en Mercado Libre.</p><code class="gd-when">ventas / visitas × 100</code></li>
+    <li><h3>ACOS</h3><p class="gd-meta">Rentabilidad</p><p>El costo de la publicidad sobre las ventas. El más crítico para la rentabilidad: tiene <a href="acos.html">su propia guía</a>.</p><code class="gd-when">gasto publicitario / ventas × 100</code></li>
+    <li><h3>Preguntas por venta</h3><p class="gd-meta">Fricción</p><p>Muchas preguntas significan que el contenido no responde las dudas clave. Hay que mejorar la publicación.</p><code class="gd-when">preguntas / ventas</code></li>
+    <li><h3>Tasa de devoluciones</h3><p class="gd-meta">Calidad</p><p>Si supera el 5%, el producto no cumple lo que promete la publicación.</p><code class="gd-when">devoluciones / ventas × 100</code></li>
+  </ol>
+</section>
+
+<section class="gd-sec" id="diagnostico" data-toc="Qué te dicen juntas">
+  <h2>Qué te dicen cuando las cruzás</h2>
+  <p>Un número solo no dice mucho. Estas son las cuatro combinaciones clave, con su causa y qué hacer:</p>
+  <dl class="gd-rows">
+    <div class="gd-row"><dt>Pocas visitas<small>Problema de visibilidad</small></dt><dd><b>Causa:</b> título con palabras clave equivocadas, atributos incompletos o sin Product Ads activos.</dd><dd><b>Qué hacer:</b> optimizar el SEO y activar campañas. <a href="seo.html">Guía de títulos</a></dd></div>
+    <div class="gd-row"><dt>Visitas sin ventas<small>Problema de contenido</small></dt><dd><b>Causa:</b> fotos de baja calidad, precio alto sin justificación o descripción débil.</dd><dd><b>Qué hacer:</b> optimizar la publicación completa. <a href="anatomia.html">Anatomía de una publicación</a></dd></div>
+    <div class="gd-row"><dt>CTR alto sin ventas<small>Brecha de expectativas</small></dt><dd><b>Causa:</b> la foto o el título prometen algo que la publicación no cumple.</dd><dd><b>Qué hacer:</b> alinear el contenido con lo que el producto realmente es.</dd></div>
+    <div class="gd-row"><dt>ACOS alto con buenas ventas<small>Campaña ineficiente</small></dt><dd><b>Causa:</b> palabras clave muy amplias o pujas altas en términos poco calificados.</dd><dd><b>Qué hacer:</b> optimizar las campañas sin recortar el presupuesto de golpe. <a href="acos.html">Guía de ACOS</a></dd></div>
+  </dl>
+  <div class="gd-note">
+    <p class="gd-note-t"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-activity"/></svg>Esto mismo, automático</p>
+    <p>Mi ML Tracker hace este cruce solo y valida las caídas con pruebas estadísticas para no confundir ruido con problema. Lo podés <a href="sistema.html#demo">probar con una cuenta de ejemplo</a>.</p>
+  </div>
+</section>
+
+<section class="gd-sec" id="frecuencia" data-toc="Cada cuánto mirar">
+  <h2>Cada cuánto revisar cada métrica</h2>
+  <dl class="gd-rows">
+    <div class="gd-row"><dt>Todos los días<small>Ventas y pedidos</small></dt><dd>Control operativo: detectar caídas bruscas que pueden venir de un problema técnico, de stock o de una penalización.</dd></div>
+    <div class="gd-row"><dt>Cada semana<small>ACOS y CTR</small></dt><dd>Ajustes de campañas: ver qué publicaciones mejoraron o empeoraron y actuar en consecuencia.</dd></div>
+    <div class="gd-row"><dt>Cada mes<small>Conversión y devoluciones</small></dt><dd>Análisis estratégico: decisiones de catálogo, precios y lanzamientos.</dd></div>
+  </dl>
+</section>
+  </article>
 </div>
 
-<div class="cs reveal">
-  <div class="ct">El panel de control del analista</div>
-  <div class="g2 reveal">
-    <div class="card"><div class="card-n">01 · Visibilidad</div><div class="card-title">Impresiones</div><div class="card-desc">Cuántas veces apareció tu publicación en resultados. Si baja → problema de SEO o algoritmo.</div><div class="formula-sm">Fuente: Métricas ML</div></div>
-    <div class="card"><div class="card-n">02 · Atracción</div><div class="card-title">CTR</div><div class="card-desc">% de impresiones que resultan en click. Benchmark ML: 2-5%.</div><div class="formula-sm">clicks / impresiones × 100</div></div>
-    <div class="card"><div class="card-n">03 · Convicción</div><div class="card-title">Tasa de Conversión</div><div class="card-desc">% de visitas que terminan en compra. Un buen producto tiene 3-8% en ML.</div><div class="formula-sm">ventas / visitas × 100</div></div>
-    <div class="card"><div class="card-n">04 · Rentabilidad</div><div class="card-title">ACOS</div><div class="card-desc">Costo de publicidad sobre ventas. El más crítico para rentabilidad.</div><div class="formula-sm">gasto pub. / ventas × 100</div></div>
-    <div class="card"><div class="card-n">05 · Fricción</div><div class="card-title">Preguntas por venta</div><div class="card-desc">Muchas preguntas → el contenido no responde las dudas clave. Mejorar publicación.</div><div class="formula-sm">preguntas / ventas</div></div>
-    <div class="card"><div class="card-n">06 · Calidad</div><div class="card-title">Tasa de Devoluciones</div><div class="card-desc">Si supera el 5% → el producto no cumple las expectativas del contenido publicado.</div><div class="formula-sm">devoluciones / ventas × 100</div></div>
+<section class="gd-close" aria-labelledby="gd-close-t">
+  <h2 id="gd-close-t">¿Qué dicen los números de tu cuenta?</h2>
+  <p>La auditoría gratis hace este cruce sobre tu cuenta real y te muestra los tres problemas con más plata en juego. Si querés que te arme el tablero y las alertas, escribime.</p>
+  <div class="gd-close-actions">
+    <a href="sistema.html#auditar" class="btn-primary">Auditá tu cuenta gratis <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a>
+    <a href="contacto.html" class="btn-secondary">Escribime</a>
+    <a href="index.html#experiencia" class="link-arrow">¿Buscás analista? Mirá mi trayectoria <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a>
   </div>
-</div>
-<div class="cs alt reveal">
-  <div class="ct">Árbol de decisión para detectar problemas</div>
-  <div class="step-list reveal">
-    <div class="step-row"><div class="step-n">?</div><div class="step-b"><div class="step-t">Pocas visitas → Problema de Visibilidad</div><div class="step-d">Causa: Título con palabras clave incorrectas, publicación sin atributos completos, sin Product Ads activos. Acción: optimizar SEO + activar campañas.</div></div></div>
-    <div class="step-row"><div class="step-n">?</div><div class="step-b"><div class="step-t">Visitas SIN conversión → Problema de Contenido</div><div class="step-d">Causa: Fotos de mala calidad, precio alto sin justificación, descripción débil. Acción: optimizar publicación completa.</div></div></div>
-    <div class="step-row"><div class="step-n">?</div><div class="step-b"><div class="step-t">Alto CTR SIN ventas → Brecha de expectativas</div><div class="step-d">Causa: La foto/título promete algo que el interior no entrega. Acción: alinear contenido con realidad del producto.</div></div></div>
-    <div class="step-row"><div class="step-n">?</div><div class="step-b"><div class="step-t">Alto ACOS con buenas ventas → Campaña ineficiente</div><div class="step-d">Causa: Palabras clave muy amplias, bids altos en términos no calificados. Acción: optimizar campañas, no bajar presupuesto bruscamente.</div></div></div>
-  </div>
-</div>
-<div class="cs reveal">
-  <div class="ct">Cuándo revisar cada métrica</div>
-  <div class="g3 reveal">
-    <div class="card"><div class="card-n">Diario</div><div class="card-title">Ventas y pedidos</div><div class="card-desc">Control operativo. Detectar caídas bruscas que pueden indicar un problema técnico, de stock o una penalización.</div></div>
-    <div class="card"><div class="card-n">Semanal</div><div class="card-title">ACOS y CTR</div><div class="card-desc">Ajustes de campañas. Identificar publicaciones que empeoraron o mejoraron para actuar en consecuencia.</div></div>
-    <div class="card"><div class="card-n">Mensual</div><div class="card-title">Conversión y devoluciones</div><div class="card-desc">Análisis estratégico. Decisiones sobre optimización de catálogo, precios y lanzamientos.</div></div>
-  </div>
-</div>
-<div class="nb">
-  <a href="reputacion.html">← Reputación & Postventa</a>
-  <a href="excels.html">Excels Automatizados →</a>
-</div>
+</section>
+
+<nav class="gd-pager" aria-label="Otras guías">
+  <a href="reputacion.html"><span>Guía anterior</span><b>Reputación y postventa</b></a>
+  <a href="excels.html"><span>Guía siguiente</span><b>Excels automatizados</b></a>
+</nav>
+</main>
 <footer>
   <p class="footer-name">Darío Colángelo<span>.</span></p>
   <ul class="footer-links">
@@ -107,5 +141,6 @@
   </div>
 </footer>
 <script src="js/main.js"></script>
+<script src="js/guia.js"></script>
 </body>
 </html>

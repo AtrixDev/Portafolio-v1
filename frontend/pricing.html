@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pricing & Competencia | Darío Colángelo</title>  <meta name="description" content="Estrategia de precios en Mercado Libre. Cómo analizar la competencia y posicionarte sin destruir el margen.">
 
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>
   <meta name="author" content="Darío Colángelo">
   <meta name="robots" content="index, follow">
   <meta property="og:title" content="Pricing y Competencia ML | Darío Colángelo">
@@ -16,7 +17,7 @@
   <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
   <link rel="stylesheet" href="css/root.css" />
   <link rel="stylesheet" href="css/shared.css" />
-  <link rel="stylesheet" href="css/page.css" />
+  <link rel="stylesheet" href="css/guia.css" />
   <link rel="stylesheet" href="css/surfaces.css">
 </head>
 <body>
@@ -51,49 +52,80 @@
   <a href="contacto.html">Contacto</a>
 </div>
 <!-- NAV:end -->
-<div id="contenido" class="ph">
-  <div class="ph-bg"></div>
-  <div class="ph-grid"></div>
+<main>
+<header id="contenido" class="ph gd-hero">
+  <div class="ph-bg" aria-hidden="true"></div>
   <div class="ph-c">
-    <a href="lab.html" class="btn-back">← Volver al Lab</a>
-    <h1 class="ph-title">Pricing &<br><span class='grad'>Competencia</span></h1>
-    <p class="ph-sub">Estrategia de precios inteligente: cómo monitorear competidores, detectar oportunidades y no destruir margen.</p>
+    <a href="lab.html" class="btn-back"><svg class="icon icon-back" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg>Todas las guías</a>
+    <h1 class="ph-title">Pricing y <span class="grad">competencia</span></h1>
+    <p class="ph-sub">Cómo fijar precios con cabeza: seguir a la competencia, detectar oportunidades y no regalar el margen.</p>
+    <p class="gd-for"><b>Te sirve si</b> vendés bien pero no sabés cuánto te queda, o la competencia te obliga a bajar precios.</p>
   </div>
+</header>
+
+<div class="gd sheet">
+  <nav class="gd-toc" aria-labelledby="gd-toc-t">
+    <p class="gd-toc-t" id="gd-toc-t">En esta guía</p>
+    <ol>
+      <li><a href="#posicionamiento">El precio comunica</a></li>
+      <li><a href="#seguimiento">Cómo seguir a la competencia</a></li>
+      <li><a href="#margen">El margen real</a></li>
+    </ol>
+  </nav>
+  <article class="gd-body">
+<section class="gd-sec" id="posicionamiento" data-toc="El precio comunica">
+  <h2>El precio no es solo un número</h2>
+  <p>El precio comunica posicionamiento. Uno muy bajo destruye la percepción de calidad; uno muy alto sin justificación pierde conversión. El punto justo es donde precio, contenido y confianza se alinean.</p>
+  <dl class="gd-rows">
+    <div class="gd-row"><dt>Precio ancla</dt><dd>Precio tachado más precio de oferta. Aumenta la sensación de ahorro aunque el descuento sea modesto.</dd></div>
+    <div class="gd-row"><dt>Precio de penetración</dt><dd>Entrás con un precio bajo para ganar ventas y reputación, y lo subís de a poco una vez que te consolidaste.</dd></div>
+    <div class="gd-row"><dt>Precio premium</dt><dd>Más caro, con contenido que lo justifique: fotos de alta calidad, descripción impecable y reputación sólida.</dd></div>
+  </dl>
+</section>
+
+<section class="gd-sec" id="seguimiento" data-toc="Cómo seguir a la competencia">
+  <h2>Cómo seguir los precios de la competencia</h2>
+  <ol class="gd-steps">
+    <li><h3>Identificá a tus 10 competidores principales</h3><p>Buscá tu palabra clave principal y anotá los 10 que más vendieron en los últimos 30 días.</p></li>
+    <li><h3>Registrá sus precios cada semana</h3><p>En una planilla: precio, si tiene cuotas sin interés, si incluye envío gratis y su calificación. Así detectás cada cambio.</p></li>
+    <li><h3>Encontrá el «precio ganador»</h3><p>El que más vende no siempre es el más barato. Mirá la combinación de precio, contenido y reputación.</p></li>
+    <li><h3>Automatizalo con Apps Script</h3><p>Extraé los precios públicos de forma automática y recibí una alerta cuando un competidor baje más de un 10%. Lo explico en <a href="excels.html">Excels automatizados</a>.</p></li>
+  </ol>
+</section>
+
+<section class="gd-sec" id="margen" data-toc="El margen real">
+  <h2>No vendas sin calcular el margen real</h2>
+  <p>Lo que queda después de cada venta no es la diferencia entre precio y costo. Hay que restarle todo lo que Mercado Libre y la publicidad se llevan:</p>
+  <p class="gd-formula">Margen neto = Precio de venta − Costo del producto − Comisión de ML − Envío − ACOS − Impuestos</p>
+  <dl class="gd-rows">
+    <div class="gd-row"><dt>Comisión de ML<small>Varía por categoría</small></dt><dd>Entre 9% y 17% según la categoría. Verificala siempre en la calculadora oficial antes de fijar el precio.</dd></div>
+    <div class="gd-row"><dt>Envío gratis<small>Casi obligatorio</small></dt><dd>Las publicaciones con envío gratis tienen ventaja en el ranking. Calculalo como un costo dentro del precio final.</dd></div>
+    <div class="gd-row"><dt>Cuotas sin interés<small>Costo para el vendedor</small></dt><dd>Las cuotas sin interés las pagás vos. Calcularlas bien evita sorpresas en la rentabilidad.</dd></div>
+    <div class="gd-row"><dt>Descuentos y promos<small>Planificar con margen</small></dt><dd>Las Ofertas del Día piden descuentos del 15% al 30%. Fijá el precio base con ese colchón incluido.</dd></div>
+  </dl>
+  <div class="gd-note">
+    <p class="gd-note-t"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-bulb"/></svg>Regla práctica</p>
+    <p>Antes de publicar cualquier producto, calculá el «precio mínimo de supervivencia»: el precio más bajo al que podés vender sin perder plata. Todo lo que esté por debajo es un error de pricing.</p>
+  </div>
+</section>
+  </article>
 </div>
 
-<div class="cs reveal">
-  <div class="ct">Precio no es solo número</div>
-  <p class="ctxt">El precio comunica posicionamiento. Un precio muy bajo destruye la percepción de calidad. Un precio muy alto sin justificación pierde conversión. El punto óptimo es donde precio, contenido y confianza se alinean.</p>
-  <div class="g3 reveal">
-    <div class="card"><div class="card-n">Estrategia 01</div><div class="card-title">Precio Ancla</div><div class="card-desc">Mostrar precio tachado + precio de oferta. Aumenta percepción de ahorro incluso si el descuento es modesto.</div></div>
-    <div class="card"><div class="card-n">Estrategia 02</div><div class="card-title">Precio de Penetración</div><div class="card-desc">Entrar con precio bajo para ganar ventas iniciales y reputación. Subir precio progresivamente una vez consolidado.</div></div>
-    <div class="card"><div class="card-n">Estrategia 03</div><div class="card-title">Precio Premium</div><div class="card-desc">Precio superior con contenido que lo justifique. Requiere fotos de alta calidad, descripción impecable y reputación sólida.</div></div>
+<section class="gd-close" aria-labelledby="gd-close-t">
+  <h2 id="gd-close-t">¿Sabés cuánto ganás en cada venta?</h2>
+  <p>La auditoría gratis de tu cuenta marca las publicaciones con más plata en juego. Si querés armar el modelo de margen de tu catálogo, escribime.</p>
+  <div class="gd-close-actions">
+    <a href="sistema.html#auditar" class="btn-primary">Auditá tu cuenta gratis <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a>
+    <a href="contacto.html" class="btn-secondary">Escribime</a>
+    <a href="index.html#experiencia" class="link-arrow">¿Buscás analista? Mirá mi trayectoria <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a>
   </div>
-</div>
-<div class="cs alt reveal">
-  <div class="ct">Sistema de seguimiento de precios</div>
-  <div class="step-list reveal">
-    <div class="step-row"><div class="step-n">01</div><div class="step-b"><div class="step-t">Identificar los top 10 competidores</div><div class="step-d">Buscar la palabra clave principal en ML y registrar los primeros 10 con más ventas en los últimos 30 días.</div></div></div>
-    <div class="step-row"><div class="step-n">02</div><div class="step-b"><div class="step-t">Registrar precios semanalmente</div><div class="step-d">En una planilla: precio, si tiene cuotas sin interés, si incluye envío gratis y calificación. Detectar variaciones.</div></div></div>
-    <div class="step-row"><div class="step-n">03</div><div class="step-b"><div class="step-t">Identificar el "precio ganador"</div><div class="step-d">El precio del producto con más ventas no siempre es el más bajo. Analizá la combinación precio + contenido + reputación.</div></div></div>
-    <div class="step-row"><div class="step-n">04</div><div class="step-b"><div class="step-t">Automatizar con App Script</div><div class="step-d">Extraer precios públicos de forma automática y recibir alertas cuando un competidor baja más del 10%.</div></div></div>
-  </div>
-</div>
-<div class="cs reveal">
-  <div class="ct">No vendas sin calcular el margen real</div>
-  <div class="formula">Margen neto = Precio venta − Costo producto − Comisión ML − Envío − ACOS − Impuestos</div>
-  <div class="g2 reveal">
-    <div class="card"><div class="card-n">Comisión ML</div><div class="card-title">Varía por categoría</div><div class="card-desc">Entre 9% y 17% según la categoría. Siempre verificar en la calculadora oficial antes de fijar precio.</div></div>
-    <div class="card"><div class="card-n">Envío Gratis</div><div class="card-title">Casi obligatorio</div><div class="card-desc">Las publicaciones con envío gratis tienen ventaja en el ranking. Calcularlo como costo dentro del precio final.</div></div>
-    <div class="card"><div class="card-n">Cuotas sin interés</div><div class="card-title">Costo real para el vendedor</div><div class="card-desc">Las cuotas sin interés tienen un costo para el vendedor. Calcularlo correctamente evita sorpresas en la rentabilidad.</div></div>
-    <div class="card"><div class="card-n">Descuentos y promos</div><div class="card-title">Planificar con margen</div><div class="card-desc">Las Ofertas del Día requieren descuentos del 15-30%. Fijar el precio base con ese colchón incluido.</div></div>
-  </div>
-  <div class="hbox"><div class="hbox-title"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-bulb"/></svg>Regla práctica</div><div class="hbox-body">Antes de publicar cualquier producto, calculá el "precio mínimo de supervivencia": el precio mínimo al que podés vender sin perder dinero. Todo por debajo es un error de pricing.</div></div>
-</div>
-<div class="nb">
-  <a href="seo.html">← SEO de Títulos</a>
-  <a href="reputacion.html">Reputación & Postventa →</a>
-</div>
+</section>
+
+<nav class="gd-pager" aria-label="Otras guías">
+  <a href="seo.html"><span>Guía anterior</span><b>SEO de títulos</b></a>
+  <a href="reputacion.html"><span>Guía siguiente</span><b>Reputación y postventa</b></a>
+</nav>
+</main>
 <footer>
   <p class="footer-name">Darío Colángelo<span>.</span></p>
   <ul class="footer-links">
@@ -108,5 +140,6 @@
   </div>
 </footer>
 <script src="js/main.js"></script>
+<script src="js/guia.js"></script>
 </body>
 </html>
