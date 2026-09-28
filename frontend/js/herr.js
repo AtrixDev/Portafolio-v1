@@ -18,8 +18,8 @@ const H = [
   { id: 'importacion', q: '¿Te conviene importarlo?', imp: ['Costo por unidad', 'Margen y precio mínimo'], e: 'funciona', n: 'Calculadora de importación', v: 'Cuánto te cuesta un producto importado puesto en tu depósito', p: 'Vendedores', cta: [['Abrir la calculadora completa', 'importar.html'], ['Analizarlo con vos', contacto('importacion')]] },
   { id: 'competencia', q: '¿Qué está haciendo tu competencia?', imp: ['Saltos de vendidos', 'Cambios de precio', 'Ventas estimadas con rango'], e: 'diseno', n: 'Alertas de competencia', v: 'Te avisa cuando un competidor salta de ventas o cambia el precio', p: 'Vendedores', cta: [['Avisame cuando esté', contacto('competencia')]] },
   { id: 'radar', q: '¿Qué va a pegar antes que el resto?', imp: ['Mercado Libre y afuera'], e: 'diseno', n: 'Radar de demanda', v: 'Productos que empiezan a crecer, antes que el resto', p: 'Vendedores', cta: [['Avisame cuando esté', contacto('radar')]] },
-  { id: 'perdida', q: '¿Cuánto gastás de más en publicidad?', imp: ['En pesos por mes', 'Caso real: ACOS 30% → 12%'], e: 'prueba', n: '¿Cuánta plata estás perdiendo?', v: 'Lo que se va en publicidad de más, en pesos por mes', p: 'Vendedores', cta: [['Quiero bajarlo', contacto('acos')]] },
   { id: 'informe', q: '¿Qué recibís con la auditoría?', imp: ['10 problemas ordenados', 'Plan de acción'], e: 'funciona', n: 'Informe de muestra', v: 'Así se ve la auditoría completa que te entrego', p: 'Vendedores', cta: [['Ver el informe de muestra', 'informe-muestra.html'], ['Quiero el mío', 'sistema.html#auditar']] },
+  { id: 'perdida', q: '¿Cuánto gastás de más en publicidad?', imp: ['En pesos por mes', 'Caso real: ACOS 30% → 12%'], e: 'funciona', n: '¿Cuánta plata estás perdiendo?', v: 'Lo que se va en publicidad de más, en pesos por mes', p: 'Vendedores', cta: [['Abrir la calculadora completa', 'perdida.html'], ['Quiero bajarlo', contacto('acos')]] },
   { id: 'desarmes', q: '¿Por qué no vende esa publicación?', imp: ['Casos reales', 'Antes y después'], e: 'idea', n: 'Desarmes de publicaciones', v: 'Una publicación real, desarmada: qué falla y cómo lo arreglo', p: 'Vendedores y empresas', cta: [['Desarmá la mía', contacto('desarme')]] },
   { id: 'mail', q: '¿Querés enterarte primero?', imp: ['Cada lunes', 'Un mail corto'], e: 'idea', n: 'Radar semanal por mail', v: 'Las tendencias que más crecieron, cada lunes en tu correo', p: 'Vendedores', cta: [['Quiero recibirlo', contacto('radar-mail')]] },
 ];
@@ -174,7 +174,7 @@ const DEMOS = {
     html: () => `<div class="hd-calc"><label>Ventas por Product Ads al mes ($)<input type="number" id="hp-v" value="3000000" min="0" step="100000"></label>
       <label>Tu ACOS actual (%)<input type="number" id="hp-a" value="30" min="0" max="100" step="1"></label>
       <label>ACOS al que se puede llegar (%)<input type="number" id="hp-o" value="15" min="0" max="100" step="1"></label></div>
-      <p class="hd-big" id="hp-out" aria-live="polite"></p><p class="hd-soft">Es la diferencia entre lo que gastás y lo que gastarías con el ACOS objetivo, vendiendo lo mismo. En Vení a la Cocina lo bajé de 30% a 12%.</p>`,
+      <p class="hd-big" id="hp-out" aria-live="polite"></p><p class="hd-soft">Es la diferencia entre lo que gastás y lo que gastarías con el ACOS objetivo, vendiendo lo mismo. En Vení a la Cocina lo bajé de 30% a 12%. La versión completa suma tu margen y la comisión: te dice hasta qué ACOS ganás plata.</p>`,
     init: el => { const run = () => { const v = id => +$(id).value || 0; const x = v('hp-v') * Math.max(0, v('hp-a') - v('hp-o')) / 100;
       $('hp-out').innerHTML = `<span>Estás gastando de más</span><b>${plata(x)}</b><small>por mes · ${plata(x * 12)} por año</small>`; }; el.addEventListener('input', run); run(); },
   },
