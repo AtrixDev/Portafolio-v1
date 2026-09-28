@@ -53,6 +53,11 @@ document.querySelectorAll('.ct-copy').forEach(btn => {
     msg.value = `Hola Darío, usé la calculadora de importación de tu web y quiero analizar si me conviene importar${prod ? ` «${prod}»` : ' un producto'} para vender en Mercado Libre.`;
     const r = form.querySelector('input[name="reason"][value="freelance"]'); if (r && !motivo) r.checked = true;
   }
+  else if (asunto === 'acos' && !msg.value) {
+    const acos = (new URLSearchParams(location.search).get('acos') || '').replace(/[^\d.,]/g, '').slice(0, 5);
+    msg.value = `Hola Darío, usé la calculadora de Product Ads de tu web y quiero bajar el ACOS de mi cuenta de Mercado Libre.${acos ? ` Hoy lo tengo en ${acos.replace('.', ',')}%.` : ''}`;
+    const r = form.querySelector('input[name="reason"][value="freelance"]'); if (r && !motivo) r.checked = true;
+  }
   else if (motivo === 'consulta' && !msg.value) msg.value = 'Hola Darío, ¿me podrías enviar una copia de tus certificados de Smartbeemo?';
 
   const RULES = {

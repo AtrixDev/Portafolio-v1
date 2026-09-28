@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>¿Cuánta plata estás perdiendo en Product Ads? | Darío Colángelo</title>
+  <meta name="description" content="Calculá cuánto gastás de más en Product Ads de Mercado Libre por mes y por año, cuál es el ACOS máximo que te deja ganancia y a cuánto tenés que bajarlo para ganar el margen que querés.">
+  <meta name="author" content="Darío Colángelo">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#efefec" media="(prefers-color-scheme: light)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="¿Cuánta plata estás perdiendo en Product Ads? | Darío Colángelo">
+  <meta property="og:description" content="Calculá cuánto gastás de más en Product Ads de Mercado Libre por mes y por año, cuál es el ACOS máximo que te deja ganancia y a cuánto tenés que bajarlo para ganar el margen que querés.">
+  <meta property="og:locale" content="es_AR">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ffe14a'/><text x='50%25' y='54%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%23141207'>DC</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Geist:wght@400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+  <link rel="stylesheet" href="css/root.css">
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/perdida.css?v=1">
+  <link rel="stylesheet" href="css/surfaces.css">
+</head>
+<body>
+
+<!-- NAV:start -->
+<a href="#contenido" class="skip-link">Saltar al contenido</a>
+<nav id="site-nav" aria-label="Principal">
+  <a href="index.html" class="nav-logo" aria-label="Darío Colángelo, inicio"><span class="nav-mark" aria-hidden="true">DC</span><span class="nav-name">Darío Colángelo</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">CV</a></li>
+    <li><a href="herramientas.html">Herramientas</a></li>
+    <li><a href="lab.html">Lab ML</a></li>
+    <li><a href="sistema.html">Sistema</a></li>
+    <li><a href="programacion.html">Programación</a></li>
+    <li><a href="armar.html">Armá tu web</a></li>
+    <li><a href="contacto.html" class="nav-cta">Contacto</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Cambiar tema">
+      <svg class="icon icon-sun" aria-hidden="true"><use href="assets/icons.svg#i-sun"/></svg>
+      <svg class="icon icon-moon" aria-hidden="true"><use href="assets/icons.svg#i-moon"/></svg>
+    </button>
+    <button class="hamburger" id="hamburger" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu" aria-label="Menú">
+  <a href="index.html">CV</a>
+  <a href="herramientas.html">Herramientas</a>
+  <a href="lab.html">Lab ML</a>
+  <a href="sistema.html">Sistema</a>
+  <a href="programacion.html">Programación</a>
+  <a href="armar.html">Armá tu web</a>
+  <a href="contacto.html">Contacto</a>
+</div>
+<!-- NAV:end -->
+
+<main id="contenido">
+<header class="ph pd-hero">
+  <div class="ph-bg"></div>
+  <div class="ph-c">
+    <h1 class="ph-title">¿Cuánta plata estás perdiendo en <span class="grad">publicidad</span>?</h1>
+    <p class="ph-sub">Cargá lo que vendés con Product Ads y lo que te deja cada venta. Te digo cuánto gastás de más por mes y por año, hasta qué ACOS ganás plata y a cuánto tenés que bajarlo para ganar lo que querés.</p>
+    <p class="pd-lead">Arranca con un <b>caso de ejemplo</b> para que veas cómo funciona. Cambiá cualquier número por los tuyos: todo se recalcula mientras escribís y nada sale de tu navegador.</p>
+  </div>
+</header>
+
+<section class="cs pd-sec" id="calculadora" aria-label="Calculadora">
+  <div class="pd-app">
+    <form class="pd-form" id="pd-form" novalidate autocomplete="off">
+      <fieldset class="pd-group">
+        <legend>Lo que vendés con publicidad</legend>
+        <label class="pd-field"><span>Ventas por Product Ads al mes</span>
+          <span class="pd-in"><i aria-hidden="true">$</i><input name="ventas" inputmode="decimal" aria-describedby="h-ventas"></span></label>
+        <p class="pd-help" id="h-ventas">Está en el panel de Product Ads como «Ingresos» o «Ventas por Product Ads». Usá un mes completo.</p>
+
+        <div class="pd-seg" role="radiogroup" aria-label="Qué dato tenés a mano">
+          <label><input type="radio" name="modo" value="acos" checked><span>Sé mi ACOS</span></label>
+          <label><input type="radio" name="modo" value="inversion"><span>Sé cuánto invierto</span></label>
+        </div>
+        <label class="pd-field" data-modo="acos"><span>Tu ACOS actual</span>
+          <span class="pd-in"><input name="acos" inputmode="decimal" aria-describedby="h-acos"><i aria-hidden="true">%</i></span></label>
+        <label class="pd-field" data-modo="inversion" hidden><span>Inversión en Product Ads al mes</span>
+          <span class="pd-in"><i aria-hidden="true">$</i><input name="inversion" inputmode="decimal" aria-describedby="h-acos"></span></label>
+        <p class="pd-help" id="h-acos">ACOS = inversión ÷ ventas por publicidad. Un ACOS de 30% es que de cada $100 que vendés con publicidad, $30 se van en publicidad.</p>
+      </fieldset>
+
+      <fieldset class="pd-group">
+        <legend>Lo que te deja cada venta</legend>
+        <div class="pd-grid">
+          <label class="pd-field"><span>Margen del producto</span>
+            <span class="pd-in"><input name="margen" inputmode="decimal" aria-describedby="h-margen"><i aria-hidden="true">%</i></span></label>
+          <label class="pd-field"><span>Comisión de Mercado Libre</span>
+            <span class="pd-in"><input name="comision" inputmode="decimal" aria-describedby="h-comision"><i aria-hidden="true">%</i></span></label>
+        </div>
+        <p class="pd-help" id="h-margen">Margen: lo que queda del precio después de pagar el producto (y el envío y los impuestos, si los pagás vos), antes de la comisión y la publicidad. Si vendés a $10.000 y te cuesta $5.500, es 45%.</p>
+        <p class="pd-help" id="h-comision">Comisión: la de tu publicación, con cuotas si las ofrecés. Ronda el 14% en clásica y el 29% en premium, según la categoría.</p>
+      </fieldset>
+
+      <fieldset class="pd-group">
+        <legend>A dónde querés llegar</legend>
+        <div class="pd-grid">
+          <label class="pd-field"><span>ACOS objetivo</span>
+            <span class="pd-in"><input name="objetivo" inputmode="decimal" aria-describedby="h-objetivo"><i aria-hidden="true">%</i></span></label>
+          <label class="pd-field"><span>Ganancia que querés sobre la venta</span>
+            <span class="pd-in"><input name="ganar" inputmode="decimal" aria-describedby="h-ganar"><i aria-hidden="true">%</i></span></label>
+        </div>
+        <p class="pd-help" id="h-objetivo">El ACOS al que creés que podés llegar ordenando campañas, pujas y publicaciones.</p>
+        <p class="pd-help" id="h-ganar">Lo que querés que te quede limpio de cada venta por publicidad, después de pagar todo.</p>
+      </fieldset>
+    </form>
+
+    <aside class="pd-res" id="resultado" aria-labelledby="pd-res-t">
+      <h2 id="pd-res-t" class="sr-only">Resultado</h2>
+      <div class="pd-big" id="pd-big">
+        <span id="r-big-k">Estás gastando de más</span>
+        <b id="r-mes">—</b>
+        <small id="r-anio">por mes</small>
+      </div>
+      <p class="pd-sum" id="pd-sum" aria-live="polite"></p>
+
+      <div class="pd-rule" id="pd-rule" aria-hidden="true">
+        <div class="pd-track"><i class="z-bad"></i><i class="z-warn"></i><i class="z-ok"></i></div>
+        <span class="pd-mk" data-k="hoy"><em>Hoy</em></span>
+        <span class="pd-mk" data-k="obj"><em>Objetivo</em></span>
+        <div class="pd-scale"><span>0%</span><span id="r-scale-max"></span></div>
+      </div>
+      <p class="pd-legend" aria-hidden="true"><span class="z-ok">Ganás lo que querés</span><span class="z-warn">Ganás menos</span><span class="z-bad">Perdés plata</span></p>
+
+      <dl class="pd-kpis">
+        <div><dt>ACOS máximo rentable</dt><dd id="r-max">—</dd></div>
+        <div><dt>ACOS para ganar <span id="r-x">—</span></dt><dd id="r-obj">—</dd></div>
+        <div class="pd-kpi-row"><dt>Hoy, con las ventas por publicidad</dt><dd id="r-hoy">—</dd></div>
+      </dl>
+    </aside>
+  </div>
+  <a class="pd-dock" id="pd-dock" href="#resultado"><span class="pd-dock-t"><b>—</b><small>de más por mes</small></span><span class="pd-dock-go">Ver resultado <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></span></a>
+</section>
+
+<section class="cs alt pd-exp" id="numeros" aria-labelledby="t-numeros">
+  <h2 class="ct" id="t-numeros">Qué significa cada número</h2>
+  <p class="ctxt">Con tus datos, así sale cada cuenta. Todos los porcentajes son sobre lo que vendés con publicidad.</p>
+  <ol class="pd-steps" id="pd-steps"></ol>
+  <p class="pd-note"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-alert"/></svg><span>El gasto de más supone que vendés lo mismo con el ACOS objetivo. Bajar el ACOS bien no es cortar la publicidad: es sacarle plata a lo que no vende y ponérsela a lo que sí.</span></p>
+</section>
+
+<section class="cs pd-caso" aria-labelledby="t-caso">
+  <div class="pd-caso-in">
+    <div>
+      <h2 class="ct" id="t-caso">Un caso real: de 30% a 12%</h2>
+      <p class="ctxt">En Vení a la Cocina, entre junio y noviembre de 2025, bajé el ACOS de 30% a 12%. Por cada $100 vendidos con Product Ads, la publicidad pasó a costar $12 en vez de $30.</p>
+      <div class="pd-acos" aria-hidden="true">
+        <div class="pd-acos-row"><span>Antes</span><i style="--v:.3"></i><b>30%</b></div>
+        <div class="pd-acos-row is-now"><span>Después</span><i style="--v:.12"></i><b>12%</b></div>
+      </div>
+      <p class="pd-caso-note">Es un solo caso y cada cuenta es distinta: no te prometo el mismo número. Los montos de la cuenta son confidenciales; por eso la captura los oculta.</p>
+    </div>
+    <figure class="pd-proof">
+      <img src="assets/resultados/product-ads-nov-2025.webp" width="728" height="288" alt="Panel de Product Ads de noviembre 2025: ACOS 12,04%, ventas por Product Ads +47%, clics +27%" loading="lazy" decoding="async">
+      <figcaption><strong>Panel de Product Ads.</strong> 1 al 21 de noviembre de 2025: ACOS 12,04%.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="cs alt pd-cta" aria-labelledby="t-cta">
+  <div class="pd-cta-in">
+    <div>
+      <h2 class="ct" id="t-cta">¿Querés bajarlo sin vender menos?</h2>
+      <p class="ctxt">Reviso tus campañas, qué publicaciones se comen el presupuesto sin vender y dónde conviene poner la plata. Contame tu ACOS y lo vemos.</p>
+    </div>
+    <div class="pd-cta-btns">
+      <a href="contacto.html?asunto=acos" class="btn-primary" id="pd-cta">Quiero bajar mi ACOS <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a>
+    </div>
+  </div>
+  <p class="pd-legal">Es una estimación para decidir si vale la pena revisar tu publicidad. Usa promedios del mes: cada publicación tiene su propio margen y su propio ACOS.</p>
+</section>
+</main>
+
+<div class="nb">
+  <a href="herramientas.html#perdida">← Herramientas</a>
+  <a href="contacto.html?asunto=acos">Contacto →</a>
+</div>
+<footer>
+  <p class="footer-name">Darío Colángelo<span>.</span></p>
+  <ul class="footer-links">
+    <li><a href="assets/Dario-Colangelo-CV.pdf" download><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-download"/></svg>CV en PDF</a></li>
+    <li><a href="https://www.linkedin.com/in/dariocolangelo/" target="_blank" rel="noopener">LinkedIn</a></li>
+    <li><a href="https://wa.me/541144474507" target="_blank" rel="noopener">WhatsApp</a></li>
+    <li><a href="mailto:daricolangelo@gmail.com">daricolangelo@gmail.com</a></li>
+  </ul>
+  <div class="footer-note">
+    <span>Analista de E-Commerce · CABA, Argentina</span>
+    <a href="#contenido" class="footer-top"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-up"/></svg>Volver arriba</a>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/perdida.js?v=1"></script>
+</body>
+</html>
