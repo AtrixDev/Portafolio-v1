@@ -14,8 +14,8 @@ const H = [
   { id: 'simulador', q: '¿Qué le falta a tu publicación?', imp: ['7 criterios', 'Al instante'], e: 'funciona', n: 'Simulador de puntaje', v: 'El criterio con el que reviso una publicación, para mover', p: 'Vendedores', cta: [['Revisar mi publicación real', 'sistema.html#auditar']] },
   { id: 'diagnostico', q: '¿Qué le pasa a tu cuenta?', imp: ['10 problemas típicos', 'Cómo se detecta', 'Qué hacer'], e: 'funciona', n: 'Catálogo de diagnóstico', v: 'Cómo se detecta cada problema típico y qué hacer', p: 'Vendedores y empresas', cta: [['Ver los 10 problemas', 'sistema.html#diagnostico']] },
   { id: 'opiniones', q: '¿Qué odian los compradores de tu rubro?', imp: ['Hasta 200 opiniones', 'Tuyas o de la competencia'], e: 'funciona', n: 'Minero de opiniones', v: 'Qué critican y qué elogian los compradores, en segundos', p: 'Vendedores', cta: [['Analizar mi producto', contacto('opiniones')]], nota: 'Es de uso interno: con tu producto lo corro yo.' },
-  { id: 'tendencias', q: '¿Qué está por venderse?', imp: ['Por categoría', 'Datos de Mercado Libre'], e: 'prueba', n: 'Buscador de tendencias', v: 'Las búsquedas que más crecen en cada categoría', p: 'Vendedores', cta: [['Pedir la lista completa', contacto('tendencias')]] },
-  { id: 'importacion', q: '¿Te conviene importarlo?', imp: ['Costo por unidad', 'Margen y precio mínimo'], e: 'prueba', n: 'Calculadora de importación', v: 'Cuánto te cuesta un producto importado puesto en tu depósito', p: 'Vendedores', cta: [['Quiero la versión completa', contacto('importacion')]] },
+  { id: 'tendencias', q: '¿Qué está por venderse?', imp: ['Por categoría', 'Datos reales de Mercado Libre'], e: 'funciona', n: 'Buscador de tendencias', v: 'Las búsquedas que más crecen en cada categoría', p: 'Vendedores', cta: [['Buscar tendencias ahora', 'sistema.html#tendencias'], ['Pedir la lista completa', contacto('tendencias')]] },
+  { id: 'importacion', q: '¿Te conviene importarlo?', imp: ['Costo por unidad', 'Margen y precio mínimo'], e: 'funciona', n: 'Calculadora de importación', v: 'Cuánto te cuesta un producto importado puesto en tu depósito', p: 'Vendedores', cta: [['Abrir la calculadora completa', 'importar.html'], ['Analizarlo con vos', contacto('importacion')]] },
   { id: 'competencia', q: '¿Qué está haciendo tu competencia?', imp: ['Saltos de vendidos', 'Cambios de precio', 'Ventas estimadas con rango'], e: 'diseno', n: 'Alertas de competencia', v: 'Te avisa cuando un competidor salta de ventas o cambia el precio', p: 'Vendedores', cta: [['Avisame cuando esté', contacto('competencia')]] },
   { id: 'radar', q: '¿Qué va a pegar antes que el resto?', imp: ['Mercado Libre y afuera'], e: 'diseno', n: 'Radar de demanda', v: 'Productos que empiezan a crecer, antes que el resto', p: 'Vendedores', cta: [['Avisame cuando esté', contacto('radar')]] },
   { id: 'perdida', q: '¿Cuánto gastás de más en publicidad?', imp: ['En pesos por mes', 'Caso real: ACOS 30% → 12%'], e: 'prueba', n: '¿Cuánta plata estás perdiendo?', v: 'Lo que se va en publicidad de más, en pesos por mes', p: 'Vendedores', cta: [['Quiero bajarlo', contacto('acos')]] },
@@ -146,7 +146,7 @@ const DEMOS = {
     }),
   },
   tendencias: {
-    html: () => `${ejemplo('Ejemplo · Hogar, Muebles y Jardín')}
+    html: () => `${ejemplo('Así se ve · la versión completa trae datos reales')}
       <ol class="hd-trend">${['organizador de cajones', 'dispenser de detergente', 'lámpara de escritorio led'].map((t, i) => `<li><span>${i + 1}</span><b>${t}</b><em>creciendo</em></li>`).join('')}
       ${[4, 5, 6, 7, 8].map(i => `<li class="is-blur" aria-hidden="true"><span>${i}</span><b>${'█'.repeat(8 + (i * 3) % 7)}</b><em>creciendo</em></li>`).join('')}</ol>
       <p class="hd-soft">Los 3 primeros de cada categoría se ven completos. La lista entera, con las que valen la pena, te la paso yo.</p>`,
