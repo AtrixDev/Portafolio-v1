@@ -22,6 +22,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 import weblab_curado as C
 import weblab_skills as SK
 import weblab_negocios as NG
+import weblab_correcciones as CR
 
 def slug(s):
     s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
@@ -189,6 +190,7 @@ def build():
     data["ux"] = ux
 
     traducir(data)
+    CR.aplicar(data)   # correcciones de contenido (ver tools/weblab_correcciones.py)
 
     # Unicidad de ids por categoría
     for cat, items in data.items():
