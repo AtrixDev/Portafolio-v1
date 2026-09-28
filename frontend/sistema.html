@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="css/root.css">
   <link rel="stylesheet" href="css/shared.css">
   <link rel="stylesheet" href="css/page.css">
-  <link rel="stylesheet" href="css/sistema.css">
+  <link rel="stylesheet" href="css/sistema.css?v=2">
   <link rel="stylesheet" href="css/surfaces.css">
 </head>
 <body>
@@ -99,7 +99,16 @@
     <input id="au-url" type="url" inputmode="url" autocomplete="off" placeholder="Pegá acá el link de tu publicación" required>
     <button type="submit" class="btn-primary" id="au-go">Auditar mi publicación <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></button>
   </form>
-  <p class="au-hint mono">Hasta 5 por día · la reviso con los mismos criterios que uso con mis clientes</p>
+  <details class="au-help">
+    <summary>¿Qué link pego?</summary>
+    <ol>
+      <li><b>Desde la app o la web:</b> tocá <b>Compartir</b> en tu publicación y después <b>Copiar link</b>. Ese sirve tal cual.</li>
+      <li><b>Desde la compu:</b> copiá la dirección de la página de tu producto.</li>
+      <li><b>O solo el número:</b> abajo de todo en la publicación dice «Publicación #1234567890». Pegá ese número.</li>
+    </ol>
+    <p>Los links de catálogo (los que tienen <b>/p/</b>) dan el análisis más completo.</p>
+  </details>
+  <p class="au-hint mono">Gratis · hasta 5 por día · con los mismos criterios que uso con mis clientes</p>
   <div id="au-out" aria-live="polite"></div>
 </div>
 

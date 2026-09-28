@@ -18,9 +18,12 @@ export default async function handler(req, res) {
   if (!url || typeof url !== 'string' || url.length > 600) {
     return res.status(400).json({ error: 'Pegá el link de tu publicación de Mercado Libre y arrancamos.' });
   }
-  const mlaId = parseMlaId(url);
+  // En los links de catálogo (/p/MLA…) manda el número del catálogo, aunque el link compartido traiga
+  // también el de una publicación (?wid=MLA… o pdp_filters=item_id:MLA…)
+  const catalogo = url.match(/\/p\/(MLA\d+)/i)?.[1]?.toUpperCase() || null;
+  const mlaId = catalogo || parseMlaId(url);
   if (!mlaId && esUrlUserProduct(url)) {
-    return res.status(400).json({ error: 'Ese link es de la ficha del producto (/up/…) y no trae el número de la publicación. Abrila, bajá hasta el final y copiá el número que dice «Publicación #…»: pegalo acá y lo analizo.', code: 'user_product' });
+    return res.status(400).json({ error: 'Ese link es de la ficha del producto y no trae el número de la publicación. Bajá hasta el final de la publicación en Mercado Libre, copiá el número que dice «Publicación #…» y pegalo acá.', code: 'user_product' });
   }
   if (!mlaId) {
     return res.status(400).json({ error: 'Mmm, ese link no parece de una publicación. Abrí tu producto en Mercado Libre y copiá la dirección de esa página (la que tiene MLA en el medio).' });
@@ -45,7 +48,7 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: 'Llegaste al límite de 30 análisis por hora. Probá de nuevo más tarde.' });
   }
 
-  const esCatalogo = esUrlCatalogo(url);
+  const esCatalogo = !!catalogo || esUrlCatalogo(url);
   try {
     const item = await fetchPublicacion(db, mlaId, esCatalogo, { titulo: tituloDesdeUrl(url) });
     if (!item) return res.status(404).json({ error: 'No encontré esa publicación. Revisá que el link esté completo y que siga activa, y probamos de nuevo.' });
