@@ -1,0 +1,45 @@
+{
+  "_comentario": "Valores por defecto de la calculadora de importación (importar.html). Son ORIENTATIVOS: el visitante los puede editar y la página aclara que hay que validarlos con un despachante. El Derecho de Importación depende de la posición NCM exacta; acá va un valor típico por rubro. Antes de publicar, revisar cada alícuota contra el Arancel Integrado Aduanero (ARCA / Tarifar) y actualizar 'revisado'.",
+  "_fuente": "Tributos generales de importación de ARCA (ex AFIP): Tasa de estadística, IVA (Ley 23.349), percepción de IVA adicional (RG 2937), percepción de Ganancias (RG 2281) y percepción de Ingresos Brutos en aduana (SIRPEI, Convenio Multilateral). Derecho de Importación: valor típico del rubro, a confirmar por NCM.",
+  "revisado": "2026-09",
+  "tipo_cambio_ejemplo": 1450,
+  "categorias": [
+    { "id": "cocina",      "nombre": "Cocina y bazar",               "di": 20, "te": 3, "iva": 21,   "iva_ad": 20, "ganancias": 6, "iibb": 2.5 },
+    { "id": "electro",     "nombre": "Pequeños electrodomésticos",   "di": 20, "te": 3, "iva": 21,   "iva_ad": 20, "ganancias": 6, "iibb": 2.5 },
+    { "id": "electronica", "nombre": "Electrónica y accesorios",     "di": 16, "te": 3, "iva": 10.5, "iva_ad": 10, "ganancias": 6, "iibb": 2.5 },
+    { "id": "juguetes",    "nombre": "Juguetes",                     "di": 20, "te": 3, "iva": 21,   "iva_ad": 20, "ganancias": 6, "iibb": 2.5 },
+    { "id": "textil",      "nombre": "Indumentaria y textil hogar",  "di": 20, "te": 3, "iva": 21,   "iva_ad": 20, "ganancias": 6, "iibb": 2.5 },
+    { "id": "calzado",     "nombre": "Calzado",                      "di": 20, "te": 3, "iva": 21,   "iva_ad": 20, "ganancias": 6, "iibb": 2.5 },
+    { "id": "herramientas","nombre": "Herramientas",                 "di": 18, "te": 3, "iva": 21,   "iva_ad": 20, "ganancias": 6, "iibb": 2.5 },
+    { "id": "deportes",    "nombre": "Deportes y fitness",           "di": 20, "te": 3, "iva": 21,   "iva_ad": 20, "ganancias": 6, "iibb": 2.5 },
+    { "id": "otro",        "nombre": "Otro (cargá tus alícuotas)",   "di": 0,  "te": 3, "iva": 21,   "iva_ad": 20, "ganancias": 6, "iibb": 2.5 }
+  ],
+  "_comentario_mercadolibre": "Comisiones orientativas: en Mercado Libre Argentina dependen de la categoría y cambian seguido. La página pide mirarlas en la publicación real.",
+  "mercadolibre": {
+    "comision_clasica": 14,
+    "comision_premium": 29,
+    "iibb_venta": 3.5
+  },
+  "ejemplo": {
+    "_comentario": "Caso de ejemplo con el que arranca la calculadora. Números inventados a propósito para mostrar cómo funciona; la página lo aclara.",
+    "producto": "Set de utensilios de silicona",
+    "fob": 4.2,
+    "unidades": 500,
+    "flete_modo": "total",
+    "flete_total": 900,
+    "flete_kg": 3.5,
+    "kg": 260,
+    "flete_cbm": 180,
+    "cbm": 2.4,
+    "seguro": 1,
+    "categoria": "cocina",
+    "despachante": 350000,
+    "locales": 450000,
+    "precio": 39999,
+    "tipo": "premium",
+    "cuotas": 0,
+    "envio": 4500,
+    "cargo_fijo": 0,
+    "margen_objetivo": 20
+  }
+}

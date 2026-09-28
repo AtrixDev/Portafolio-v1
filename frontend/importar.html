@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de importación a Mercado Libre | Darío Colángelo</title>
+  <meta name="description" content="Calculá cuánto te cuesta cada unidad importada puesta en tu depósito y cuánto te queda después de vender en Mercado Libre: impuestos, flete, comisiones, precio mínimo y precio para tu margen.">
+  <meta name="author" content="Darío Colángelo">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#efefec" media="(prefers-color-scheme: light)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Calculadora de importación a Mercado Libre | Darío Colángelo">
+  <meta property="og:description" content="Calculá cuánto te cuesta cada unidad importada puesta en tu depósito y cuánto te queda después de vender en Mercado Libre: impuestos, flete, comisiones, precio mínimo y precio para tu margen.">
+  <meta property="og:locale" content="es_AR">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ffe14a'/><text x='50%25' y='54%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%23141207'>DC</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Geist:wght@400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+  <link rel="stylesheet" href="css/root.css">
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/importar.css?v=1">
+  <link rel="stylesheet" href="css/surfaces.css">
+</head>
+<body>
+
+<!-- NAV:start -->
+<a href="#contenido" class="skip-link">Saltar al contenido</a>
+<nav id="site-nav" aria-label="Principal">
+  <a href="index.html" class="nav-logo" aria-label="Darío Colángelo, inicio"><span class="nav-mark" aria-hidden="true">DC</span><span class="nav-name">Darío Colángelo</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">CV</a></li>
+    <li><a href="lab.html">Lab ML</a></li>
+    <li><a href="sistema.html">Sistema</a></li>
+    <li><a href="programacion.html">Programación</a></li>
+    <li><a href="armar.html">Armá tu web</a></li>
+    <li><a href="contacto.html" class="nav-cta">Contacto</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Cambiar tema">
+      <svg class="icon icon-sun" aria-hidden="true"><use href="assets/icons.svg#i-sun"/></svg>
+      <svg class="icon icon-moon" aria-hidden="true"><use href="assets/icons.svg#i-moon"/></svg>
+    </button>
+    <button class="hamburger" id="hamburger" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu" aria-label="Menú">
+  <a href="index.html">CV</a>
+  <a href="lab.html">Lab ML</a>
+  <a href="sistema.html">Sistema</a>
+  <a href="programacion.html">Programación</a>
+  <a href="armar.html">Armá tu web</a>
+  <a href="contacto.html">Contacto</a>
+</div>
+<!-- NAV:end -->
+
+
+<div id="contenido" class="ph im-hero">
+  <div class="ph-bg"></div>
+  <div class="ph-c">
+    <h1 class="ph-title">¿Te conviene importarlo para <span class="grad">Mercado Libre</span>?</h1>
+    <p class="ph-sub">Cargá lo que pagás en origen, el flete y los impuestos, y mirá cuánto te cuesta cada unidad puesta en tu depósito y cuánto te queda después de venderla. Todo se recalcula mientras escribís.</p>
+    <p class="im-lead">Arranca con un <b>caso de ejemplo</b> (500 sets de utensilios de silicona) para que veas cómo funciona. Cambiá cualquier número por los tuyos.</p>
+  </div>
+</div>
+
+<div class="cs im-sec" id="calculadora">
+  <div class="im-app">
+    <form class="im-form" id="im-form" novalidate autocomplete="off">
+
+      <fieldset class="im-group">
+        <legend>Qué traés</legend>
+        <div class="im-grid">
+          <label class="im-field im-wide"><span>Producto <small>(opcional)</small></span>
+            <input name="producto" type="text" maxlength="80"></label>
+          <label class="im-field"><span>Costo FOB por unidad</span>
+            <span class="im-in"><i aria-hidden="true">USD</i><input name="fob" inputmode="decimal" aria-describedby="h-fob"></span></label>
+          <label class="im-field"><span>Unidades</span>
+            <span class="im-in"><input name="unidades" inputmode="numeric"></span></label>
+          <label class="im-field im-wide"><span>Dólar para importar</span>
+            <span class="im-in"><i aria-hidden="true">$</i><input name="tc" inputmode="decimal" aria-describedby="h-tc"><i aria-hidden="true">por USD</i></span></label>
+        </div>
+        <p class="im-help" id="h-fob">FOB: el precio del producto cargado en el barco o avión, sin flete ni seguro.</p>
+        <p class="im-help" id="h-tc">La aduana usa el dólar oficial vendedor del Banco Nación del día anterior. El que viene cargado es un ejemplo: poné el de hoy.</p>
+      </fieldset>
+
+      <fieldset class="im-group">
+        <legend>Flete y seguro</legend>
+        <div class="im-seg" role="radiogroup" aria-label="Cómo te cotizaron el flete">
+          <label><input type="radio" name="flete_modo" value="total"><span>Total</span></label>
+          <label><input type="radio" name="flete_modo" value="kg"><span>Por kilo</span></label>
+          <label><input type="radio" name="flete_modo" value="cbm"><span>Por m³</span></label>
+        </div>
+        <div class="im-grid">
+          <label class="im-field im-wide" data-modo="total"><span>Flete internacional total</span>
+            <span class="im-in"><i aria-hidden="true">USD</i><input name="flete_total" inputmode="decimal"></span></label>
+          <label class="im-field" data-modo="kg" hidden><span>Tarifa por kilo</span>
+            <span class="im-in"><i aria-hidden="true">USD</i><input name="flete_kg" inputmode="decimal"><i aria-hidden="true">/kg</i></span></label>
+          <label class="im-field" data-modo="kg" hidden><span>Peso total del envío</span>
+            <span class="im-in"><input name="kg" inputmode="decimal"><i aria-hidden="true">kg</i></span></label>
+          <label class="im-field" data-modo="cbm" hidden><span>Tarifa por m³</span>
+            <span class="im-in"><i aria-hidden="true">USD</i><input name="flete_cbm" inputmode="decimal"><i aria-hidden="true">/m³</i></span></label>
+          <label class="im-field" data-modo="cbm" hidden><span>Volumen del envío</span>
+            <span class="im-in"><input name="cbm" inputmode="decimal"><i aria-hidden="true">m³</i></span></label>
+          <label class="im-field"><span>Seguro</span>
+            <span class="im-in"><input name="seguro" inputmode="decimal" aria-describedby="h-seg"><i aria-hidden="true">%</i></span></label>
+        </div>
+        <p class="im-help" id="h-seg">Porcentaje sobre FOB + flete. Si no lo contratás, la aduana igual suma un seguro estimado al valor.</p>
+      </fieldset>
+
+      <fieldset class="im-group">
+        <legend>Impuestos de importación</legend>
+        <label class="im-switch">
+          <input type="checkbox" name="ri" role="switch" aria-describedby="h-ri">
+          <span class="im-switch-ui" aria-hidden="true"></span>
+          <span class="im-switch-t">Soy responsable inscripto</span>
+        </label>
+        <p class="im-help" id="h-ri">Si sos RI, el IVA de la importación es crédito fiscal y las percepciones de Ganancias e Ingresos Brutos son pagos a cuenta: los adelantás, pero no son costo. Si sos monotributista, todo suma al costo.</p>
+        <div class="im-grid">
+          <label class="im-field im-wide"><span>Rubro</span>
+            <select name="categoria" id="im-cat" aria-describedby="h-cat"></select></label>
+        </div>
+        <p class="im-help" id="h-cat">Cada rubro carga alícuotas típicas. El Derecho de Importación real depende de la posición arancelaria (NCM) exacta de tu producto.</p>
+        <div class="im-rates">
+          <label class="im-field"><span>Derecho de importación</span><span class="im-in"><input name="di" inputmode="decimal"><i aria-hidden="true">%</i></span></label>
+          <label class="im-field"><span>Tasa de estadística</span><span class="im-in"><input name="te" inputmode="decimal"><i aria-hidden="true">%</i></span></label>
+          <label class="im-field"><span>IVA</span><span class="im-in"><input name="iva" inputmode="decimal"><i aria-hidden="true">%</i></span></label>
+          <label class="im-field"><span>IVA adicional</span><span class="im-in"><input name="iva_ad" inputmode="decimal"><i aria-hidden="true">%</i></span></label>
+          <label class="im-field"><span>Percepción de Ganancias</span><span class="im-in"><input name="ganancias" inputmode="decimal"><i aria-hidden="true">%</i></span></label>
+          <label class="im-field"><span>Percepción de IIBB</span><span class="im-in"><input name="iibb" inputmode="decimal"><i aria-hidden="true">%</i></span></label>
+        </div>
+        <div class="im-note">
+          <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-alert"/></svg>
+          <p><b>Son valores orientativos</b> <span id="im-revisado"></span>. Validalos con tu despachante antes de comprar: una posición arancelaria mal elegida te cambia el costo de punta a punta. <button type="button" class="im-link" id="im-reset">Volver a las alícuotas del rubro</button></p>
+        </div>
+      </fieldset>
+
+      <fieldset class="im-group">
+        <legend>Gastos en Argentina</legend>
+        <div class="im-grid">
+          <label class="im-field"><span>Honorarios del despachante</span>
+            <span class="im-in"><i aria-hidden="true">$</i><input name="despachante" inputmode="decimal"></span></label>
+          <label class="im-field"><span>Terminal, depósito y flete a tu depósito</span>
+            <span class="im-in"><i aria-hidden="true">$</i><input name="locales" inputmode="decimal"></span></label>
+        </div>
+        <p class="im-help">Montos totales del embarque, en pesos y sin IVA. Si no sos RI, la calculadora les suma el 21% porque no lo podés descontar.</p>
+      </fieldset>
+
+      <fieldset class="im-group">
+        <legend>Venta en Mercado Libre</legend>
+        <div class="im-grid">
+          <label class="im-field im-wide"><span>Precio de venta por unidad</span>
+            <span class="im-in"><i aria-hidden="true">$</i><input name="precio" inputmode="decimal"></span></label>
+        </div>
+        <div class="im-seg" role="radiogroup" aria-label="Tipo de publicación">
+          <label><input type="radio" name="tipo" value="clasica"><span>Clásica</span></label>
+          <label><input type="radio" name="tipo" value="premium"><span>Premium</span></label>
+        </div>
+        <div class="im-grid">
+          <label class="im-field"><span>Comisión</span>
+            <span class="im-in"><input name="comision" inputmode="decimal" aria-describedby="h-com"><i aria-hidden="true">%</i></span></label>
+          <label class="im-field"><span>Costo de cuotas sin interés</span>
+            <span class="im-in"><input name="cuotas" inputmode="decimal" aria-describedby="h-cuo"><i aria-hidden="true">%</i></span></label>
+          <label class="im-field"><span>Envío que pagás por unidad</span>
+            <span class="im-in"><i aria-hidden="true">$</i><input name="envio" inputmode="decimal"></span></label>
+          <label class="im-field"><span>Cargo fijo por unidad</span>
+            <span class="im-in"><i aria-hidden="true">$</i><input name="cargo_fijo" inputmode="decimal" aria-describedby="h-fijo"></span></label>
+          <label class="im-field im-wide"><span>Ingresos Brutos sobre la venta</span>
+            <span class="im-in"><input name="iibb_venta" inputmode="decimal"><i aria-hidden="true">%</i></span></label>
+        </div>
+        <p class="im-help" id="h-com">La comisión cambia según la categoría: mirala en la pantalla de tu publicación o en la calculadora de costos de Mercado Libre.</p>
+        <p class="im-help" id="h-cuo">Solo si ofrecés más cuotas sin interés de las que ya incluye la publicación.</p>
+        <p class="im-help" id="h-fijo">Mercado Libre cobra un cargo fijo a los productos de precio bajo. Si tu precio lo supera, dejalo en 0.</p>
+      </fieldset>
+    </form>
+
+    <aside class="im-res" id="resultado" aria-labelledby="im-res-t">
+      <h2 id="im-res-t">Resultado por unidad</h2>
+      <p class="im-sum" id="im-sum" aria-live="polite"></p>
+      <dl class="im-kpis">
+        <div><dt>Costo puesto en tu depósito</dt><dd id="r-costo">—</dd></div>
+        <div class="im-kpi-main"><dt>Ganancia por unidad</dt><dd id="r-gan">—</dd></div>
+        <div><dt>Margen</dt><dd id="r-margen">—</dd></div>
+        <div><dt>Markup</dt><dd id="r-markup">—</dd></div>
+        <div class="im-kpi-row"><dt>Ganancia total <span id="r-u"></span></dt><dd id="r-total">—</dd></div>
+      </dl>
+      <div class="im-precios">
+        <div class="im-precio"><span>Precio mínimo para no perder</span><b id="r-min">—</b></div>
+        <div class="im-precio">
+          <label for="im-obj">Precio para ganar un margen de</label>
+          <span class="im-in im-in-sm"><input id="im-obj" name="margen_objetivo" inputmode="decimal" form="im-form"><i aria-hidden="true">%</i></span>
+          <b id="r-sug">—</b>
+        </div>
+      </div>
+      <p class="im-adel" id="r-adel" hidden></p>
+    </aside>
+  </div>
+
+  <a class="im-dock" id="im-dock" href="#resultado"><span class="im-dock-t"><b>—</b><small>ganancia por unidad</small></span><span class="im-dock-go">Ver resultado <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></span></a>
+
+  <div class="im-tables" id="desglose">
+    <section class="im-tbl" aria-labelledby="t-costo">
+      <h2 id="t-costo" class="im-h">De dónde sale el costo</h2>
+      <p class="im-tsub">Todo el embarque y cuánto le toca a cada unidad. Los tributos marcados como <b>a cuenta</b> los pagás en la aduana pero los recuperás.</p>
+      <div class="im-scroll"><table class="im-table" id="tb-costo"></table></div>
+    </section>
+    <section class="im-tbl" aria-labelledby="t-venta">
+      <h2 id="t-venta" class="im-h">Qué te queda de cada venta</h2>
+      <p class="im-tsub" id="t-venta-sub"></p>
+      <div class="im-scroll"><table class="im-table" id="tb-venta"></table></div>
+    </section>
+  </div>
+</div>
+
+<div class="cs alt im-cta reveal">
+  <div class="im-cta-in">
+    <div>
+      <h2 class="ct">¿Querés que lo analicemos para tu producto?</h2>
+      <p class="ctxt">Revisamos juntos la posición arancelaria, el precio al que se vende en Mercado Libre y si el margen aguanta la cuenta completa. Me estoy formando en comercio exterior y trabajo cuentas de Mercado Libre todos los días.</p>
+    </div>
+    <div class="im-cta-btns">
+      <a href="contacto.html?asunto=importacion" class="btn-primary" id="im-cta">Escribime por tu producto <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a>
+    </div>
+  </div>
+  <p class="im-legal">Esta calculadora es una estimación para decidir si vale la pena avanzar. No reemplaza la liquidación de tu despachante ni el asesoramiento de tu contador.</p>
+</div>
+
+<div class="nb">
+  <a href="sistema.html">← Sistema</a>
+  <a href="contacto.html?asunto=importacion">Contacto →</a>
+</div>
+<footer>
+  <p class="footer-name">Darío Colángelo<span>.</span></p>
+  <ul class="footer-links">
+    <li><a href="assets/Dario-Colangelo-CV.pdf" download><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-download"/></svg>CV en PDF</a></li>
+    <li><a href="https://www.linkedin.com/in/dariocolangelo/" target="_blank" rel="noopener">LinkedIn</a></li>
+    <li><a href="https://wa.me/541144474507" target="_blank" rel="noopener">WhatsApp</a></li>
+    <li><a href="mailto:daricolangelo@gmail.com">daricolangelo@gmail.com</a></li>
+  </ul>
+  <div class="footer-note">
+    <span>Analista de E-Commerce · CABA, Argentina</span>
+    <a href="#contenido" class="footer-top"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-up"/></svg>Volver arriba</a>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/importar.js?v=1"></script>
+</body>
+</html>
