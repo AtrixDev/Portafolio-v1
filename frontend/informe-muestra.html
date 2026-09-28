@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Herramientas | Darío Colángelo</title>
-  <meta name="description" content="Las herramientas que construí para Mercado Libre, con una demo para probar cada una: ML Tracker, auditoría de cuenta, chequeo de publicaciones, minero de opiniones y más.">
+  <title>Informe de muestra de la auditoría | Darío Colángelo</title>
+  <meta name="description" content="Así se ve el informe que recibís después de la auditoría de tu cuenta de Mercado Libre: salud por área, los problemas que más plata cuestan y un plan de acción en orden. Armado con una cuenta de ejemplo.">
   <meta name="author" content="Darío Colángelo">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#efefec" media="(prefers-color-scheme: light)">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Herramientas | Darío Colángelo">
-  <meta property="og:description" content="Las herramientas que construí para Mercado Libre, con una demo para probar cada una: ML Tracker, auditoría de cuenta, chequeo de publicaciones, minero de opiniones y más.">
+  <meta property="og:title" content="Informe de muestra de la auditoría | Darío Colángelo">
+  <meta property="og:description" content="Así se ve el informe que recibís después de la auditoría de tu cuenta de Mercado Libre: salud por área, los problemas que más plata cuestan y un plan de acción en orden. Armado con una cuenta de ejemplo.">
   <meta property="og:locale" content="es_AR">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ffe14a'/><text x='50%25' y='54%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%23141207'>DC</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,7 @@
   <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
   <link rel="stylesheet" href="css/root.css">
   <link rel="stylesheet" href="css/shared.css">
-  <link rel="stylesheet" href="css/herr.css?v=1">
+  <link rel="stylesheet" href="css/informe.css?v=1">
   <link rel="stylesheet" href="css/surfaces.css">
 </head>
 <body>
@@ -31,7 +31,7 @@
   <a href="index.html" class="nav-logo" aria-label="Darío Colángelo, inicio"><span class="nav-mark" aria-hidden="true">DC</span><span class="nav-name">Darío Colángelo</span></a>
   <ul class="nav-links">
     <li><a href="index.html">CV</a></li>
-    <li><a href="herramientas.html" class="active" aria-current="page">Herramientas</a></li>
+    <li><a href="herramientas.html">Herramientas</a></li>
     <li><a href="lab.html">Lab ML</a></li>
     <li><a href="sistema.html">Sistema</a></li>
     <li><a href="programacion.html">Programación</a></li>
@@ -50,7 +50,7 @@
 </nav>
 <div class="mobile-menu" id="mobileMenu" aria-label="Menú">
   <a href="index.html">CV</a>
-  <a href="herramientas.html" class="active" aria-current="page">Herramientas</a>
+  <a href="herramientas.html">Herramientas</a>
   <a href="lab.html">Lab ML</a>
   <a href="sistema.html">Sistema</a>
   <a href="programacion.html">Programación</a>
@@ -60,18 +60,52 @@
 <!-- NAV:end -->
 
 <main id="contenido">
-<section class="hr" id="herramientas" aria-labelledby="t-hr">
-  <div class="hr-head">
-    <h2 id="t-hr">Herramientas</h2>
-    <p>Todo lo que construyo, ordenado por estado. Cada una tiene una demo para probar acá mismo y un botón a la versión completa.<small id="hr-count"></small></p>
+<header class="ph if-hero">
+  <div class="ph-bg"></div>
+  <div class="ph-c">
+    <h1 class="ph-title">¿Qué recibís después de la auditoría?</h1>
+    <p class="ph-sub">Este informe: la salud de tu cuenta por área, los problemas que más plata te cuestan y un plan en orden para arreglarlos. Acá lo ves armado con una <b>cuenta de ejemplo</b>; el tuyo sale con los datos reales de tu cuenta.</p>
+    <div class="if-acts">
+      <button type="button" class="btn-secondary" data-print><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-download"/></svg>Guardar como PDF</button>
+      <a href="sistema.html#auditar" class="btn-primary">Quiero el mío, con mi cuenta <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a>
+    </div>
   </div>
-  <div class="hr-show">
-    <nav class="hr-dock" id="hr-dock" aria-label="Herramientas por estado"></nav>
-    <article class="hr-stage" id="hr-stage" aria-live="polite"></article>
+</header>
+
+<div class="if-wrap">
+  <article class="if-doc" id="informe" aria-busy="true" aria-labelledby="if-doc-t">
+    <header class="if-doc-head">
+      <div>
+        <p class="if-ej"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-flask"/></svg>Cuenta de ejemplo · datos simulados</p>
+        <h2 id="if-doc-t">Auditoría de cuenta en Mercado Libre</h2>
+        <p class="if-meta" id="if-meta">Analizando la cuenta de ejemplo…</p>
+      </div>
+      <p class="if-by"><span class="nav-mark" aria-hidden="true">DC</span><span>Darío Colángelo<small>Analista de Mercado Libre</small></span></p>
+    </header>
+    <div id="if-body">
+      <div class="if-load" aria-hidden="true"><span></span><span></span><span></span></div>
+    </div>
+  </article>
+</div>
+
+<section class="cs if-cta" aria-labelledby="if-cta-t">
+  <div class="if-cta-in">
+    <div>
+      <h2 class="ct" id="if-cta-t">Tu cuenta, con tus números</h2>
+      <p class="ctxt">Conectás tu cuenta de Mercado Libre en un minuto, con acceso de solo lectura. Corro el mismo análisis con tus publicaciones reales y te mando este informe con tus montos y tu plan de acción.</p>
+    </div>
+    <div class="if-cta-btns">
+      <a href="sistema.html#auditar" class="btn-primary">Quiero el mío, con mi cuenta <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a>
+    </div>
   </div>
+  <p class="if-print-only">Pedí el tuyo en la sección Auditoría de sistema.html, en el sitio de Darío Colángelo · daricolangelo@gmail.com</p>
 </section>
 </main>
 
+<div class="nb">
+  <a href="herramientas.html#informe">← Herramientas</a>
+  <a href="sistema.html#auditar">Auditar mi cuenta →</a>
+</div>
 <footer>
   <p class="footer-name">Darío Colángelo<span>.</span></p>
   <ul class="footer-links">
@@ -85,8 +119,9 @@
     <a href="#contenido" class="footer-top"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-up"/></svg>Volver arriba</a>
   </div>
 </footer>
+<p class="if-sello" aria-hidden="true">Informe de muestra · cuenta de ejemplo con datos simulados · Darío Colángelo</p>
 
 <script src="js/main.js"></script>
-<script type="module" src="js/herr.js?v=3"></script>
+<script type="module" src="js/informe.js?v=1"></script>
 </body>
 </html>
