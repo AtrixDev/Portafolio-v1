@@ -80,7 +80,7 @@ export const PUESTOS = [
     alcance: [['1', 'sistema en producción'], ['6', 'webs para negocios']],
     hizo: ['<b>ML Tracker</b>: conectado a la API oficial; sigue visitas, ventas y conversión y explica qué se cae y por qué.', '<b>Auditoría automática</b> de cuentas, con informe en PDF.', '<b>6 webs</b> para negocios, de punta a punta.'],
     tools: ['Node.js', 'MongoDB', 'API de Mercado Libre', 'Vercel', 'Claude Code', 'Python'],
-    cta: [['Ver todas las herramientas', 'herramientas.html'], ['Auditar una cuenta', '../sistema.html#auditar']],
+    cta: [['Ver todas las herramientas', 'herramientas.html'], ['Auditar una cuenta', 'sistema.html#auditar']],
     sistemas: [
       ['¿Por qué cayeron tus ventas?', 'ML Tracker', 'Te dice qué publicación se cae, por qué y qué hacer.', 'herramientas.html#tracker'],
       ['¿Dónde se te escapa la plata?', 'Auditoría de cuenta', 'Conectás tu cuenta y en minutos ves la salud por área.', 'herramientas.html#auditoria'],

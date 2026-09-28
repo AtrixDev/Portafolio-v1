@@ -18,7 +18,7 @@ function tabla() {
     return `<tr data-id="${s.id}">
       <th scope="row" class="hb-sk"><button type="button" class="hb-name" data-id="${s.id}" aria-pressed="false">${esc(s.n)}</button>
         <span class="hb-chips">${COLS.filter(c => s.usos?.[c.id]).map(c => `<span>${esc(c.corto)}</span>`).join('')}</span></th>
-      ${COLS.map(c => { const u = s.usos?.[c.id]; return `<td>${u ? `<button type="button" class="hb-cell" data-id="${s.id}" title="${esc(u[0])}"><span class="hb-dot" aria-hidden="true"></span>${u[1] ? `<b>${esc(u[1])}</b>` : `<span class="sr-only">${esc(u[0])}</span>`}</button>` : '<span class="hb-no" aria-label="No"></span>'}</td>`; }).join('')}
+      ${COLS.map(c => { const u = s.usos?.[c.id]; return `<td>${u ? `<button type="button" class="hb-cell" data-id="${s.id}" title="${esc(u[0])}"><span class="hb-dot" aria-hidden="true"></span>${u[1] ? `<b>${esc(u[1])}</b>` : `<span class="sr-only">${esc(u[0])}</span>`}</button>` : '<span class="hb-no" role="img" aria-label="No"></span>'}</td>`; }).join('')}
       <td class="hb-pr"><span class="hb-meter"><i style="--v:${m / MAX}"></i></span><b>${tiempo(m)}</b></td>
     </tr>`; }).join('')}</tbody>`).join('');
   $('hb-map').innerHTML = `<table class="hb-table"><colgroup><col class="c-sk">${COLS.map(() => '<col>').join('')}<col class="c-pr"></colgroup>${head}${body}</table>`;
