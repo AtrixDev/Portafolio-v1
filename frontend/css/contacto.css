@@ -73,6 +73,9 @@
 .ct-channel-wa .ct-channel-icon { background:rgba(37,211,102,.12); color:var(--green); border-color:rgba(37,211,102,.3); }
 .ct-channel-wa .ct-action { background:var(--green); border-color:var(--green); color:#062b14; font-weight:600; }
 .ct-channel-wa .ct-action:hover { filter:brightness(1.08); color:#062b14; }
+/* En claro el verde es oscuro: texto blanco para llegar a AA */
+:root[data-theme="light"] .ct-channel-wa .ct-action, :root[data-theme="light"] .ct-channel-wa .ct-action:hover { color:#fff; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .ct-channel-wa .ct-action, :root:not([data-theme="dark"]) .ct-channel-wa .ct-action:hover { color:#fff; } }
 
 /* ── FORMULARIO ── */
 .ct-form-layout { display:grid; grid-template-columns: 1.5fr 1fr; gap:4rem; align-items:start; }

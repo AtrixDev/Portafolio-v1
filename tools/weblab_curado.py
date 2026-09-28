@@ -265,7 +265,7 @@ EJEMPLOS = {
   "ecommerce":     [["Frávega", "https://www.fravega.com"], ["Garbarino", "https://www.garbarino.com"]],
   "blog":          [["CSS-Tricks", "https://css-tricks.com"], ["Smashing Magazine", "https://www.smashingmagazine.com"]],
   "saas":          [["Notion", "https://www.notion.com"], ["Trello", "https://trello.com"]],
-  "dashboard":     [["ML Tracker", "index.html#herramientas"]],
+  "dashboard":     [["ML Tracker", "herramientas.html#tracker"]],
   "reservas":      [["Calendly", "https://calendly.com"]],
   "marketplace":   [["Mercado Libre", "https://www.mercadolibre.com.ar"], ["Airbnb", "https://www.airbnb.com.ar"]],
   "interna":       [["Panel admin de esta web (privado)", "admin.html"]],

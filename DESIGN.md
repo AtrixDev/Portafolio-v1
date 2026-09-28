@@ -15,7 +15,7 @@ Grafito y un solo acento: amarillo señal. Es una herramienta de trabajo que mue
 | Token | Oscuro | Uso |
 |---|---|---|
 | `--bg` / `--surface` / `--surface-2` | #0b0b0c / #131315 / #1a1a1d | fondo y capas |
-| `--text` / `--text-2` / `--muted` | #ededea / #a7a7ad / #818189 | texto (AA sobre `--bg`) |
+| `--text` / `--text-2` / `--muted` | #ededea / #a7a7ad / #88888f | texto (AA sobre `--bg`) |
 | `--accent` / `--accent-ink` | #ffe14a / #141207 | CTA principal, marca, puerta de vendedores |
 | `--accent-soft` | amarillo al 10% | fondos teñidos (`.hbox`, cajas destacadas) |
 | `--ok` / `--warn` / `--bad` | verde / ámbar / rojo | **solo datos**: estados, checks, antes/después |

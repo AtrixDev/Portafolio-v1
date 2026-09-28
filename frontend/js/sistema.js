@@ -26,7 +26,7 @@
   const num = x => x == null ? '—' : Math.round(x).toLocaleString('es-AR');
   const plata = x => x == null ? '—' : (x < 0 ? '−$' : '$') + Math.abs(Math.round(x)).toLocaleString('es-AR');
   const pct = (x, d = 1) => x == null ? '—' : (x * 100).toLocaleString('es-AR', { maximumFractionDigits: d }) + '%';
-  const delta = (a, b) => { if (!b) return ''; const r = Math.round((a / b - 1) * 100); return `<span class="dm-d ${r > 0 ? 'up' : r < 0 ? 'down' : ''}">${r > 0 ? '▲' : r < 0 ? '▼' : '•'} ${Math.abs(r)}%</span>`; };
+  const delta = (a, b) => { if (!b) return ''; const r = Math.round((a / b - 1) * 100); return `<dd class="dm-d ${r > 0 ? 'up' : r < 0 ? 'down' : ''}">${r > 0 ? '▲' : r < 0 ? '▼' : '•'} ${Math.abs(r)}%</dd>`; };
   const ACC = { subir: 'Subir precio', probar_suba: 'Probar suba', bajar: 'Bajar precio', revisar: 'Revisar oferta', mantener: 'Mantener' };
   const chipCl = c => { const x = DM.clases[c] || { txt: c, tono: 'neutral' }; return `<span class="dm-chip" data-tono="${x.tono}">${esc(x.txt)}</span>`; };
 
@@ -63,12 +63,12 @@
     const items = [...DM.items].sort((x, y) => y.actual.facturacion - x.actual.facturacion);
     $('dm').innerHTML = `
       <div class="dm-top">
-        <div class="dm-kpis">
+        <dl class="dm-kpis">
           <div><dt>Visitas</dt><dd>${num(a.visitas)}</dd>${delta(a.visitas, b.visitas)}</div>
           <div><dt>Ventas</dt><dd>${num(a.unidades)}</dd>${delta(a.unidades, b.unidades)}</div>
           <div><dt>Facturación</dt><dd>${plata(a.facturacion)}</dd>${delta(a.facturacion, b.facturacion)}</div>
           <div><dt>Conversión</dt><dd>${pct(a.conversion, 2)}</dd>${delta(a.conversion, b.conversion)}</div>
-        </div>
+        </dl>
         <div class="dm-chart">${grafico(DM.serie)}</div>
       </div>
       <p class="dm-period mono">Últimos ${DM.ventana} días vs. los ${DM.ventana} anteriores · cuenta de ejemplo</p>

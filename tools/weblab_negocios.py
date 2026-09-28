@@ -231,7 +231,7 @@ EJEMPLOS_AR = {
   "ecommerce":     [["Frávega", "https://www.fravega.com"], ["Musimundo", "https://www.musimundo.com"]],
   "blog":          [["Infobae", "https://www.infobae.com"], ["La Nación", "https://www.lanacion.com.ar"]],
   "saas":          [["Tiendanube", "https://www.tiendanube.com"], ["Xubio", "https://xubio.com"]],
-  "dashboard":     [["ML Tracker", "index.html#herramientas"]],
+  "dashboard":     [["ML Tracker", "herramientas.html#tracker"]],
   "reservas":      [["Doctoralia", "https://www.doctoralia.com.ar"]],
   "marketplace":   [["Mercado Libre", "https://www.mercadolibre.com.ar"], ["Zonaprop", "https://www.zonaprop.com.ar"], ["PedidosYa", "https://www.pedidosya.com.ar"]],
   "interna":       [["Panel admin de esta web (privado)", "admin.html"]],

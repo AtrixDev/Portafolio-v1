@@ -20,7 +20,7 @@
   --line-strong: rgba(255,255,255,.15);
   --text:   #ededea;   /* principal */
   --text-2: #a7a7ad;   /* secundario — 8:1 sobre --bg */
-  --muted:  #818189;   /* terciario — 5:1 sobre --bg */
+  --muted:  #88888f;   /* terciario — 5,6:1 sobre --bg, AA también sobre --surface-2 y fondos teñidos */
 
   /* ── Acento único ── */
   --accent:      #ffe14a;              /* relleno (botones, marcas) */
@@ -129,13 +129,13 @@
   --line-strong: rgba(17,17,19,.26);
   --text:   #121214;
   --text-2: #4a4a50;
-  --muted:  #66666d;
+  --muted:  #606067;   /* AA también sobre --bg2 */
   --accent:      #ffdc2e;
   --accent-ink:  #141207;
   --accent-text: #7a5f00;
   --accent-soft: rgba(255,214,0,.16);
   --accent-line: rgba(160,120,0,.35);
-  --ok:   #15803d;
+  --ok:   #14773a;   /* AA también sobre --ok-soft */
   --warn: #a16207;
   --bad:  #c2261f;
   --ok-soft:   rgba(21,128,61,.10);
@@ -181,13 +181,13 @@
     --line-strong: rgba(17,17,19,.26);
     --text:   #121214;
     --text-2: #4a4a50;
-    --muted:  #66666d;
+    --muted:  #606067;
     --accent:      #ffdc2e;
     --accent-ink:  #141207;
     --accent-text: #7a5f00;
     --accent-soft: rgba(255,214,0,.16);
     --accent-line: rgba(160,120,0,.35);
-    --ok:   #15803d;
+    --ok:   #14773a;
     --warn: #a16207;
     --bad:  #c2261f;
     --ok-soft:   rgba(21,128,61,.10);
