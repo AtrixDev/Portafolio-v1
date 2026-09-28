@@ -16,8 +16,8 @@
   const STATS_DEFAULT = [
     { number: '+3', label: 'Años en Mercado Libre' },
     { number: '+20', label: 'Cuentas gestionadas' },
-    { number: '39,2%', label: 'Más facturación' },
-    { number: '13%', label: 'ACOS final (desde 30%)' },
+    { number: '+38,9%', label: 'en ventas' },
+    { number: '30% → 12%', label: 'de ACOS' },
     { number: '+1.800', label: 'Publicaciones trabajadas' },
   ];
 
@@ -238,7 +238,7 @@
             ${safeUrl(it.url) ? `<a href="${safeUrl(it.url)}" target="_blank" rel="noopener">Ver en Mercado Libre</a>` : ''}
           </div>
           <div class="pf-item-acts">
-            ${on && !hayFiltro ? `<span class="pf-orden"><button type="button" class="cp-icon-btn" data-mover-pf="${esc(it._id)}" data-dir="-1" aria-label="Subir en la web" title="Subir">↑</button><button type="button" class="cp-icon-btn" data-mover-pf="${esc(it._id)}" data-dir="1" aria-label="Bajar en la web" title="Bajar">↓</button></span>` : ''}
+            ${on && !hayFiltro ? `<span class="pf-orden"><button type="button" class="cp-icon-btn" data-mover-pf="${esc(it._id)}" data-dir="-1" aria-label="Subir en la web" title="Subir">${icon('arrow-up')}</button><button type="button" class="cp-icon-btn" data-mover-pf="${esc(it._id)}" data-dir="1" aria-label="Bajar en la web" title="Bajar"><span class="pf-abajo">${icon('arrow-up')}</span></button></span>` : ''}
             <button type="button" class="cp-icon-btn pf-star" data-star="${esc(it._id)}" aria-pressed="${on}" aria-label="${on ? 'Quitar de la web' : 'Destacar en la web'}" title="${on ? 'Se ve en la web: tocá para ocultarla' : 'Oculta: tocá para mostrarla en la web'}">${icon('star')}</button>
             <button type="button" class="cp-icon-btn cp-danger" data-del-pf="${esc(it._id)}" aria-label="Eliminar">${icon('trash')}</button>
           </div>
@@ -300,7 +300,7 @@
 
   // ── Mensajes ──
   let MSGS = [], FILTER = 'todos';
-  const REASONS = { oferta: 'Oferta laboral', freelance: 'Pedido de web / freelance', consulta: 'Consulta', otro: 'Otro' };
+  const REASONS = { auditoria: 'Auditoría gratis (cuenta conectada)', oferta: 'Oferta laboral', freelance: 'Pedido de web / freelance', consulta: 'Consulta', otro: 'Otro' };
   async function loadMessages() {
     const list = $('msg-list'); list.innerHTML = '<p class="cp-empty">Cargando…</p>';
     try {
@@ -319,7 +319,7 @@
       const wa = /(?:\+?54)?\s?9?\s?\d{2,4}[\s-]?\d{3,4}[\s-]?\d{4}/.exec(m.message || '');
       return `<article class="cp-msg${m.read ? '' : ' is-unread'}">
         <header><div><strong>${esc(m.name)}</strong>${m.company ? `<span> · ${esc(m.company)}</span>` : ''}</div><time>${fecha}</time></header>
-        <p class="cp-msg-meta"><span class="cp-tag${m.reason === 'freelance' ? ' is-hl' : ''}">${esc(REASONS[m.reason] || m.reason)}</span><a href="mailto:${esc(m.email)}">${esc(m.email)}</a></p>
+        <p class="cp-msg-meta"><span class="cp-tag${m.reason === 'freelance' || m.reason === 'auditoria' ? ' is-hl' : ''}">${esc(REASONS[m.reason] || m.reason)}</span><a href="mailto:${esc(m.email)}">${esc(m.email)}</a></p>
         <div class="cp-msg-body">${esc(m.message)}</div>
         <div class="cp-msg-actions">
           <a class="btn-secondary cp-sm" href="mailto:${esc(m.email)}?subject=${encodeURIComponent('Re: tu mensaje en mi web')}">${icon('mail')}Responder</a>

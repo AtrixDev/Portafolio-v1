@@ -1,16 +1,26 @@
 // api/audit.js
 // POST /api/audit  { url } → score de salud + plan de acción de una publicación de ML
 //   · con sesión del panel: resultado completo
-//   · público (mini auditoría de sistema.html): resultado resumido, 5 por persona por día, 100 por día en total
-//     y memoria de 24 h por publicación (una publicación repetida no gasta consultas a la API)
+//   · público (chequeo rápido de sistema.html): solo datos verificables, sin puntaje; 5 por persona por día,
+//     100 por día en total y memoria de 24 h por publicación (una publicación repetida no gasta consultas)
+// POST /api/audit?action=conectar  { nombre, email, whatsapp } → link de Mercado Libre para conectar la cuenta
+//      (auditoría completa gratis; el pedido llega a Mensajes del admin cuando se conecta)
+// GET  /api/audit?action=estado&id=…  → sincroniza por tandas y, al terminar, devuelve el resumen de la auditoría
+// Mercado Libre no deja leer publicaciones de otros vendedores: el puntaje real solo sale con la cuenta conectada.
 import { getDB } from './db.js';
-import { cors, clientIp, rateLimit, isAdmin } from '../lib/http.js';
-import { fetchPublicacion, MLNotLinked, MLForbidden } from '../lib/ml.js';
+import { randomBytes } from 'node:crypto';
+import { cors, clientIp, rateLimit, isAdmin, ADMIN_SECRET } from '../lib/http.js';
+import { fetchPublicacion, MLNotLinked, MLForbidden, ML, makeState, authorizeUrl } from '../lib/ml.js';
+import { sincronizar, datosCuenta } from '../lib/tracker-sync.js';
+import { analizarCuenta } from '../lib/tracker.js';
+import { resumenAuditoria } from '../lib/auditoria-cuenta.js';
 import { parseMlaId, esUrlCatalogo, esUrlUserProduct, tituloDesdeUrl, scorePublicacion, planDeAccion, tituloConIA } from '../lib/audit.js';
 
 export default async function handler(req, res) {
-  cors(res, 'POST, OPTIONS');
+  cors(res, 'GET, POST, OPTIONS');
   if (req.method === 'OPTIONS') return res.status(200).end();
+  const accion = req.query?.action;
+  if (accion === 'conectar' || accion === 'estado') return auditoriaCuenta(req, res, accion);
   if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' });
   const admin = isAdmin(req);
 
@@ -60,21 +70,21 @@ export default async function handler(req, res) {
       ai.resumen = `Auditoría parcial: de 8 controles se pudieron verificar ${ok}, y sobre esos da ${score}/100. ${(problemas[0] || mejoras[0]) ? `Lo de mayor impacto: ${(problemas[0] || mejoras[0]).toLowerCase()}.` : 'No hay problemas en lo verificable.'} Si la publicación es tuya, escribime y la audito completa.`;
     }
     if (!admin) {
-      // Con muy pocos controles verificables (publicación de otro vendedor que no es de catálogo) no se inventa un puntaje
-      const verificados = Object.values(checks).filter(v => v !== null).length;
-      if (verificados < 4) {
-        const lim = { limitada: true, item: { title: item.title || null, permalink: item.permalink || null }, extras: item._extras || null };
-        await cache.updateOne({ _id: mlaId }, { $set: { res: lim, at: new Date() } }, { upsert: true }).catch(() => {});
-        return res.status(200).json(lim);
-      }
-      // Versión pública: el diagnóstico completo, pero el paso a paso sólo de la primera acción
-      const acciones = (ai.acciones || []).slice(0, 5).map((a, i) => ({ titulo: a.titulo, impacto: a.impacto, tiempo: a.tiempo_estimado, como: i === 0 ? a.como : null }));
-      const pub = {
-        score, problemas, mejoras, checks, parcial: !!item._faltan, score_potencial: ai.score_potencial, acciones, mas: Math.max(0, (ai.acciones || []).length - 5),
-        item: { title: item.title, price: item.price, foto: item.pictures?.[0]?.secure_url || null, fotos: item.pictures?.length || 0, permalink: item.permalink || null },
+      // Chequeo rápido: solo lo que Mercado Libre muestra de una publicación ajena, sin puntaje
+      const fotos = item._faltan?.includes('fotos') ? null : item.pictures?.length ?? null;
+      const atributos = item._faltan?.includes('atributos') ? null : item.attributes?.length ?? null;
+      const desc = (item.descripcion || '').length;
+      const rapido = {
+        rapido: true, catalogo: esCatalogo,
+        item: { title: item.title || null, permalink: item.permalink || null, foto: item.pictures?.[0]?.secure_url || null },
+        datos: {
+          fotos, atributos,
+          descripcion: esCatalogo ? null : desc,
+          opiniones: item._extras?.opiniones ?? null, preguntas: item._extras?.preguntas ?? null,
+        },
       };
-      await cache.updateOne({ _id: mlaId }, { $set: { res: pub, at: new Date() } }, { upsert: true }).catch(() => {});
-      return res.status(200).json(pub);
+      await cache.updateOne({ _id: mlaId }, { $set: { res: rapido, at: new Date() } }, { upsert: true }).catch(() => {});
+      return res.status(200).json(rapido);
     }
     const ia = await tituloConIA(item, score, problemas);
     if (ia) {
@@ -116,5 +126,51 @@ export default async function handler(req, res) {
     }
     console.error('[audit] Error:', err.message);
     return res.status(502).json({ error: 'Mercado Libre no me contestó a tiempo. Dale unos minutos y probá de nuevo.' });
+  }
+}
+
+// ── Auditoría completa gratis con la cuenta conectada ──
+const emailOk = e => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
+const limpio = (v, n) => String(v ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
+
+async function auditoriaCuenta(req, res, accion) {
+  let db;
+  try { db = await getDB(); } catch { return res.status(503).json({ error: 'El servicio no está disponible en este momento.' }); }
+  const col = db.collection('auditorias');
+
+  if (accion === 'conectar') {
+    if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' });
+    const b = req.body || {};
+    if (b.website) return res.status(200).json({ ok: true });   // honeypot
+    const pedido = { nombre: limpio(b.nombre, 80), email: limpio(b.email, 120).toLowerCase(), whatsapp: limpio(b.whatsapp, 40) };
+    const errores = {};
+    if (pedido.nombre.length < 2) errores.nombre = 'Decime cómo te llamás.';
+    if (!emailOk(pedido.email)) errores.email = 'Ese email no parece válido.';
+    if (Object.keys(errores).length) return res.status(400).json({ error: 'Revisá los datos marcados.', errores });
+    if (!ML.appId || !ML.redirectUri) return res.status(503).json({ error: 'La conexión con Mercado Libre está en mantenimiento. Escribime y la hacemos juntos.' });
+    if (!(await rateLimit(db, `auditcon:${clientIp(req)}`, 3, 86400))) {
+      return res.status(429).json({ error: 'Ya pediste tres auditorías hoy desde tu conexión. Si algo no funcionó, escribime y lo resolvemos.' });
+    }
+    const id = randomBytes(16).toString('hex');
+    await col.insertOne({ _id: id, ...pedido, estado: 'esperando', createdAt: new Date() });
+    return res.status(200).json({ url: authorizeUrl(makeState(ADMIN_SECRET, 'lead', { lid: id })) });
+  }
+
+  // estado: el id es el comprobante del pedido (32 caracteres aleatorios)
+  const id = String(req.query.id || '');
+  if (!/^[a-f0-9]{32}$/.test(id)) return res.status(400).json({ error: 'Pedido inválido' });
+  const p = await col.findOne({ _id: id });
+  if (!p) return res.status(404).json({ error: 'No encontré ese pedido.' });
+  if (p.estado === 'listo') return res.status(200).json({ estado: 'listo', nombre: p.nombre, nickname: p.nickname, resumen: p.resumen });
+  if (!p.cuenta) return res.status(200).json({ estado: 'esperando' });
+  try {
+    const prog = await sincronizar(db, p.cuenta, { presupuestoMs: 7000 });
+    if (!prog.listo) return res.status(200).json({ estado: 'sincronizando', nickname: p.nickname, progreso: prog });
+    const resumen = resumenAuditoria(analizarCuenta(await datosCuenta(db, p.cuenta)));
+    await col.updateOne({ _id: id }, { $set: { estado: 'listo', resumen, listoAt: new Date() } });
+    return res.status(200).json({ estado: 'listo', nombre: p.nombre, nickname: p.nickname, resumen });
+  } catch (err) {
+    console.error('[audit estado]', err.message);
+    return res.status(200).json({ estado: 'sincronizando', nickname: p.nickname, progreso: { fase: 'reintentando', texto: 'Mercado Libre está lento: sigo intentando' } });
   }
 }

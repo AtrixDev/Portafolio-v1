@@ -21,3 +21,7 @@ _backup-*/
 
 # Sesión de Mercado Libre del extractor (cookies): nunca se sube
 tools/.ml-perfil/
+
+# Impeccable: capturas y estado local
+.impeccable/review/
+.impeccable/questions/

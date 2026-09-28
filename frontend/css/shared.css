@@ -123,7 +123,7 @@
 }
 .btn-primary {
   background: var(--accent); color: var(--accent-ink); border: 1px solid transparent;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 10px 28px -12px rgba(255,214,0,.45);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 10px 24px -14px rgba(0,0,0,.5);
 }
 .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.05); }
 .btn-secondary {
@@ -262,10 +262,7 @@
   position: relative; margin: 1.25rem 0; padding: 1.5rem 1.6rem 1.5rem 1.85rem;
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-card);
 }
-.hbox::before {
-  content: ''; position: absolute; left: 0; top: 1.25rem; bottom: 1.25rem; width: 3px;
-  border-radius: 0 3px 3px 0; background: var(--accent);
-}
+.hbox { background: var(--accent-soft); border-color: var(--accent-line); }
 .hbox-title { display: flex; align-items: center; gap: .5rem; font-weight: 650; font-size: 1.02rem; margin-bottom: .5rem; color: var(--text); }
 .hbox-body { font-size: .98rem; color: var(--text-2); line-height: 1.7; }
 

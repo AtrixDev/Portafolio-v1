@@ -180,3 +180,5 @@
   .pf-tools { grid-template-columns: 1fr 1fr; }
   .pf-tools .cp-field:first-child { grid-column: 1 / -1; }
 }
+
+.pf-abajo { display: inline-flex; transform: rotate(180deg); }

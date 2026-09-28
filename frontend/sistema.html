@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="css/root.css">
   <link rel="stylesheet" href="css/shared.css">
   <link rel="stylesheet" href="css/page.css">
-  <link rel="stylesheet" href="css/sistema.css?v=2">
+  <link rel="stylesheet" href="css/sistema.css?v=5">
   <link rel="stylesheet" href="css/surfaces.css">
 </head>
 <body>
@@ -62,65 +62,77 @@
   <div class="ph-bg"></div>
   <div class="ph-grid"></div>
   <div class="ph-c">
-        <div class="ph-tag">Sistema · Método, herramientas y prueba en vivo</div>
     <h1 class="ph-title">IA aplicada a<br><span class="grad">Mercado Libre</span></h1>
     <p class="ph-sub">Uso IA para auditar publicaciones, cuidar el margen y decidir con datos, con una regla fija: ningún dato inventado y ningún cambio sin piloto y vuelta atrás.</p>
-    <dl class="ia-stats" id="ia-stats" aria-label="Contenido de esta página">
-      <div><dt>Skills rankeadas</dt><dd id="ia-n-skills">16</dd></div>
-      <div><dt>Prompts listos</dt><dd id="ia-n-prompts">22</dd></div>
-      <div><dt>Problemas que detecta</dt><dd id="ia-n-diag">10</dd></div>
-      <div id="ia-n-aplicadas-box" hidden><dt>Ya aplicadas</dt><dd id="ia-n-aplicadas">0</dd></div>
-    </dl>
-    <div class="ia-hero-cta"><a href="#demo" class="btn-primary">Probá el sistema en vivo <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a><a href="#auditar" class="btn-secondary">Auditá tu publicación gratis</a></div>
+    <p class="ia-proof" id="ia-proof">Lo que construí para trabajar cuentas de Mercado Libre: un tablero que detecta <b id="ia-n-diag">10</b> tipos de problema, una auditoría que cualquiera puede correr sobre su cuenta y el método con el que uso IA sin inventar datos.</p>
+    <aside class="ia-peek" id="ia-peek" aria-label="Vista previa de la demo en vivo" hidden></aside>
+    <div class="ia-hero-cta"><a href="#demo" class="btn-primary">Probá el sistema en vivo <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a><a href="#auditar" class="btn-secondary">Auditá tu cuenta gratis</a></div>
   </div>
 </div>
 
-<div class="cs reveal">
-  <div class="section-label">Método</div>
-  <h2 class="ct">Cómo trabajo con IA</h2>
-  <p class="ctxt">La IA acelera el análisis, pero en una cuenta real un dato inventado cuesta una moderación o una venta a pérdida. Estas son las reglas con las que la uso.</p>
-  <div class="g3" id="ia-principios"></div>
-</div>
-
-
-<div class="cs alt reveal" id="demo">
-  <div class="section-label">En vivo</div>
+<div class="cs reveal" id="demo">
   <h2 class="ct">Probá el sistema</h2>
   <p class="ctxt">Es mi ML Tracker funcionando con una <b>cuenta de ejemplo</b>: 13 publicaciones con datos simulados de 120 días. Tocá una publicación para ver qué detecta y qué recomienda. Con una cuenta real se conecta por OAuth a la API oficial de Mercado Libre.</p>
   <div class="dm" id="dm"><p class="ia-loading">Cargando la demo…</p></div>
 </div>
 
-<div class="cs reveal" id="auditar">
-  <div class="section-label">Gratis</div>
-  <h2 class="ct">¿Tu publicación vende todo lo que podría?</h2>
-  <p class="ctxt">Pegá el link y en segundos te digo qué le está frenando las ventas: fotos, título, descripción, stock, atributos y garantía. Sin registrarte y sin vueltas.</p>
-  <form class="au-form" id="au-form" novalidate>
-    <label class="sr-only" for="au-url">Link de tu publicación de Mercado Libre</label>
-    <input id="au-url" type="url" inputmode="url" autocomplete="off" placeholder="Pegá acá el link de tu publicación" required>
-    <button type="submit" class="btn-primary" id="au-go">Auditar mi publicación <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></button>
-  </form>
-  <details class="au-help">
-    <summary>¿Qué link pego?</summary>
-    <ol>
-      <li><b>Desde la app o la web:</b> tocá <b>Compartir</b> en tu publicación y después <b>Copiar link</b>. Ese sirve tal cual.</li>
-      <li><b>Desde la compu:</b> copiá la dirección de la página de tu producto.</li>
-      <li><b>O solo el número:</b> abajo de todo en la publicación dice «Publicación #1234567890». Pegá ese número.</li>
-    </ol>
-    <p>Los links de catálogo (los que tienen <b>/p/</b>) dan el análisis más completo.</p>
-  </details>
-  <p class="au-hint mono">Gratis · hasta 5 por día · con los mismos criterios que uso con mis clientes</p>
+<div class="cs alt reveal" id="auditar">
+  <h2 class="ct">¿Tu cuenta vende todo lo que podría?</h2>
+  <p class="ctxt">Conectá tu cuenta de Mercado Libre y en unos minutos ves lo mismo que veo yo cuando audito a un cliente: la salud de la cuenta y los problemas que más plata te están costando. Gratis.</p>
+  <div class="au-caminos" id="au-caminos">
+    <section class="au-conectar" aria-labelledby="au-c-t">
+      <h3 id="au-c-t">Auditoría completa de tu cuenta</h3>
+      <ul class="au-recibis">
+        <li><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-activity"/></svg><span><b>En minutos, en esta pantalla:</b> la salud de tu cuenta en seis áreas y los tres problemas con más plata en juego.</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-file"/></svg><span><b>En 24 horas, en tu email:</b> el informe completo con el plan de diez acciones en orden, que te preparo yo.</span></li>
+      </ul>
+      <form class="au-cform" id="au-cform" novalidate>
+        <div class="au-cfields">
+          <label class="au-field"><span>Tu nombre</span><input name="nombre" autocomplete="name" required></label>
+          <label class="au-field"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
+          <label class="au-field"><span>WhatsApp <small>(opcional)</small></span><input name="whatsapp" type="tel" autocomplete="tel"></label>
+        </div>
+        <input class="au-hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" class="btn-primary au-cbtn">Conectar mi cuenta de Mercado Libre <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></button>
+        <p class="au-legal"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-lock"/></svg>Te lleva a Mercado Libre a autorizar la conexión. Solo leo tus datos para la auditoría: no publico, no cambio precios ni respondo nada. La podés desconectar cuando quieras.</p>
+        <p class="au-err" id="au-cerr" role="alert" hidden></p>
+      </form>
+    </section>
+    <section class="au-rapido" aria-labelledby="au-r-t">
+      <h3 id="au-r-t">¿Solo querés mirar una publicación?</h3>
+      <p>Pegá el link y te muestro lo que Mercado Libre deja ver desde afuera.</p>
+      <form class="au-form" id="au-form" novalidate>
+        <label class="sr-only" for="au-url">Link de la publicación de Mercado Libre</label>
+        <input id="au-url" type="url" inputmode="url" autocomplete="off" placeholder="Link de la publicación" required>
+        <button type="submit" class="btn-secondary" id="au-go">Mirar</button>
+      </form>
+      <details class="au-help">
+        <summary>¿Qué link pego?</summary>
+        <ol>
+          <li>En la publicación tocá <b>Compartir</b> y después <b>Copiar link</b>: sirve tal cual.</li>
+          <li>O copiá la dirección de la página, desde la compu.</li>
+          <li>O pegá solo el número que dice «Publicación #…» abajo de todo.</li>
+        </ol>
+      </details>
+    </section>
+  </div>
   <div id="au-out" aria-live="polite"></div>
 </div>
 
-<div class="cs alt reveal" id="diagnostico">
-  <div class="section-label">Diagnóstico</div>
+<div class="cs reveal" id="diagnostico">
   <h2 class="ct">Qué problemas detecta y cómo se resuelven</h2>
   <p class="ctxt">Cada problema con la regla exacta con la que el sistema lo detecta, sus causas más probables, qué hacer y el número que confirma que se resolvió. No son reglas de dedo: las caídas se validan con pruebas estadísticas para no confundir ruido con problema.</p>
   <div class="dx" id="dx"></div>
 </div>
 
+<div class="cs alt reveal" id="metodo">
+  <h2 class="ct">Cómo trabajo con IA</h2>
+  <p class="ctxt">La IA acelera el análisis, pero en una cuenta real un dato inventado cuesta una moderación o una venta a pérdida. Estas son las reglas con las que la uso.</p>
+  <ol class="ia-reglas" id="ia-principios"></ol>
+</div>
+
+
 <div class="cs reveal" id="skills">
-  <div class="section-label">Habilidades</div>
   <h2 class="ct">Skills ordenadas por valor</h2>
   <p class="ctxt">Qué rinde más en el trabajo diario de un analista de Mercado Libre. <b>Tier S</b> diferencia un perfil; <b>A</b> suma mucho; <b>B</b> complementa. Tocá una para ver los conceptos y los KPIs que mueve.</p>
   <div class="ia-toolbar">
@@ -135,14 +147,12 @@
 </div>
 
 <div class="cs alt reveal" id="sistemas">
-  <div class="section-label">Mapa</div>
   <h2 class="ct">14 sistemas de IA para un seller</h2>
   <p class="ctxt">No conviene empezar por «un agente que haga todo». El orden que más rinde: calidad de publicaciones, rentabilidad, stock, preventa, competencia, Ads, contenido y, recién al final, automatización.</p>
   <ol class="ia-sistemas" id="ia-sistemas"></ol>
 </div>
 
 <div class="cs reveal" id="prompts">
-  <div class="section-label">Biblioteca</div>
   <h2 class="ct">Prompts listos para usar</h2>
   <p class="ctxt">Los que uso para auditar, fijar precios y armar reportes. Los datos entre corchetes se reemplazan por los tuyos; donde dice <code>[DATOS]</code> van los números de la publicación o de la cuenta.</p>
   <div class="ia-toolbar">
@@ -153,16 +163,14 @@
 </div>
 
 <div class="cs alt reveal" id="stack">
-  <div class="section-label">Herramientas</div>
   <h2 class="ct">El stack</h2>
   <p class="ctxt">Cada pieza tiene un rol: el MCP da acceso, la skill enseña el proceso, la API es la fuente de verdad y una persona aprueba.</p>
-  <div class="ia-stack" id="ia-stack"></div>
+  <dl class="ia-stack" id="ia-stack"></dl>
 </div>
 
 <div class="cs ia-cta reveal">
   <div class="ia-cta-in">
     <div>
-      <div class="section-label">Trabajemos</div>
       <h2 class="ct">¿Tu cuenta necesita esto?</h2>
       <p class="ctxt">Audito publicaciones, armo el modelo de margen y dejo andando reportes y alertas con la API de Mercado Libre. También lo aplico en relación de dependencia como analista.</p>
     </div>
@@ -192,6 +200,6 @@
   </div>
 </footer>
 <script src="js/main.js"></script>
-<script src="js/sistema.js?v=3"></script>
+<script src="js/sistema.js?v=6"></script>
 </body>
 </html>

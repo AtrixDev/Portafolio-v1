@@ -169,7 +169,6 @@
     return `
       <header class="tk-head">
         <div>
-          <p class="tk-eyebrow mono">ML Tracker</p>
           <h2>${esc(c?.nickname || '')}</h2>
           <p class="tk-sub">${c?.demo ? 'Cuenta de ejemplo con datos simulados para ver cómo responde el análisis.' : `Últimos 28 días contra los 28 anteriores · datos actualizados ${hace(c?.ultimaSync)}`}</p>
         </div>
@@ -565,8 +564,8 @@
     const oport = filas.filter(f => f.c.neg >= 2 && f.c.pctNeg >= 0.1 && f.m.pctNeg <= f.c.pctNeg / 2);
     const riesgos = filas.filter(f => f.m.neg >= 2 && f.m.pctNeg > f.c.pctNeg * 1.5);
     const lado = (op, t) => `<div class="op-side"><p class="mono tk-muted">${t}</p><h4>${esc(op.titulo || op.id)}</h4>
-      <p class="op-avg"><b>${op.promedio ?? '—'}</b> ★ · ${num(op.total)} opiniones${op.precio ? ` · ${plata(op.precio)}` : ''}</p>
-      <div class="op-dist">${[5, 4, 3, 2, 1].map(n => { const c = op.reviews.filter(r => r.rate === n).length; return `<span><i>${n}★</i><b style="width:${op.reviews.length ? c / op.reviews.length * 100 : 0}%"></b><em>${c}</em></span>`; }).join('')}</div>
+      <p class="op-avg"><b>${op.promedio ?? '—'}</b> ${ic('star')} · ${num(op.total)} opiniones${op.precio ? ` · ${plata(op.precio)}` : ''}</p>
+      <div class="op-dist">${[5, 4, 3, 2, 1].map(n => { const c = op.reviews.filter(r => r.rate === n).length; return `<span><i>${n} ${ic('star')}</i><b style="width:${op.reviews.length ? c / op.reviews.length * 100 : 0}%"></b><em>${c}</em></span>`; }).join('')}</div>
       <p class="tk-muted op-leidas">${op.reviews.length} leídas${op.reviews.length < op.total ? ` de ${op.total}` : ''}</p></div>`;
     return form + `
       <section class="tk-card"><div class="op-vs">${lado(mia, 'Tu publicación')}${lado(comp, 'Competidor')}</div></section>
@@ -787,8 +786,8 @@ E. Qué validar antes de publicar cada afirmación.`;
       <header class="tk-item-head">
         ${it.thumbnail ? `<img src="${esc(safeUrl(it.thumbnail))}" alt="" width="72" height="72">` : `<span class="tk-noimg is-lg" aria-hidden="true">${esc(it.title.slice(0, 1))}</span>`}
         <div>
-          <p class="tk-eyebrow mono">${esc(it.id)}${it.catalog_listing ? ' · Catálogo' : ''}</p>
           <h2>${esc(it.title)}</h2>
+          <p class="tk-item-id mono">${esc(it.id)}${it.catalog_listing ? ' · Catálogo' : ''}</p>
           <p class="tk-item-tags">${chip(it.clase)} ${it.nueva ? '<span class="tk-chip" data-tono="neutral">Nueva</span>' : ''} ${it.abc ? `<span class="tk-chip" data-tono="neutral" title="Curva ABC">Curva ${it.abc}${it.participacion ? ` · ${pct(it.participacion)} de la facturación` : ''}</span>` : ''} <span class="tk-price-now num">${plata(it.price)}</span>
           ${it.permalink ? `<a class="link-arrow" href="${esc(safeUrl(it.permalink))}" target="_blank" rel="noopener">Ver en Mercado Libre ${ic('external')}</a>` : ''}</p>
         </div>

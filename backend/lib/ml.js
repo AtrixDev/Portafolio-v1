@@ -22,9 +22,10 @@ export class MLForbidden extends Error {
 // ── OAuth ──────────────────────────────────────────────────────
 function sign(data, secret) { return createHmac('sha256', secret).update(data).digest('base64url'); }
 
-// El state lleva el tipo de vínculo: 'admin' (desde el panel) o 'cliente' (link de invitación)
-export function makeState(secret, tipo = 'admin') {
-  const payload = Buffer.from(JSON.stringify({ n: randomBytes(8).toString('hex'), tipo, exp: Date.now() + 10 * 60 * 1000 })).toString('base64url');
+// El state lleva el tipo de vínculo: 'admin' (desde el panel), 'cliente' (link de invitación)
+// o 'lead' (auditoría gratis de la web, con el id del pedido en `extra.lid`)
+export function makeState(secret, tipo = 'admin', extra = {}) {
+  const payload = Buffer.from(JSON.stringify({ ...extra, n: randomBytes(8).toString('hex'), tipo, exp: Date.now() + 10 * 60 * 1000 })).toString('base64url');
   return `${payload}.${sign(payload, secret)}`;
 }
 
@@ -94,7 +95,7 @@ async function cuentas(db) {
   return col;
 }
 
-export async function linkAccount(db, code, state, tipo = 'admin') {
+export async function linkAccount(db, code, state, tipo = 'admin', extra = {}) {
   const data = await tokenRequest({ grant_type: 'authorization_code', code, redirect_uri: ML.redirectUri, code_verifier: pkceVerifier(state) });
   const me = await fetch(`${API}/users/me`, { headers: { Authorization: `Bearer ${data.access_token}` } }).then(r => r.json()).catch(() => ({}));
   if (!me.id) throw new Error('No se pudo leer el usuario de Mercado Libre');
@@ -103,7 +104,7 @@ export async function linkAccount(db, code, state, tipo = 'admin') {
   await col.updateOne(
     { _id: String(me.id) },
     {
-      $set: { ...tokenDoc(data), nickname: me.nickname || '', linkedAt: new Date(), status: 'ok', error: null },
+      $set: { ...tokenDoc(data), nickname: me.nickname || '', linkedAt: new Date(), status: 'ok', error: null, ...(extra.leadId ? { leadId: String(extra.leadId) } : {}) },
       $setOnInsert: { principal: tipo === 'admin' && !hayPrincipal, tipo },
     },
     { upsert: true }

@@ -87,9 +87,8 @@
     $('ac-app').innerHTML = `
       <header class="tk-head">
         <div>
-          <p class="tk-eyebrow mono">Mi carrera · privado</p>
           <h2>Tu carrera en e-commerce</h2>
-          <p class="tk-sub">Tu perfil y lo que vale, qué aprender, cómo practicarlo con tus publicaciones reales y cómo contarlo en el CV. <span class="ac-save mono" id="ac-save" aria-live="polite"></span></p>
+          <p class="tk-sub">Solo lo ves vos: tu perfil y lo que vale, qué aprender, cómo practicarlo con tus publicaciones reales y cómo contarlo en el CV. <span class="ac-save mono" id="ac-save" aria-live="polite"></span></p>
         </div>
         <div class="tk-head-actions"><a class="btn-secondary cp-sm" href="sistema.html" target="_blank" rel="noopener">${ic('external')}Ver la página pública</a></div>
       </header>
@@ -235,8 +234,8 @@
       ${sel ? `
       <section class="tk-card ac-ndet" id="ac-ndet">
         <div class="tk-card-head"><h3>${esc(sel.nombre)}</h3><span class="ac-btns">
-          <button type="button" class="ac-mini" data-mover="-1" title="Etapa anterior" ${sel.etapa === 'idea' ? 'disabled' : ''}>←</button>
-          <button type="button" class="ac-mini" data-mover="1" title="Etapa siguiente" ${sel.etapa === 'activo' ? 'disabled' : ''}>→</button>
+          <button type="button" class="ac-mini" data-mover="-1" title="Etapa anterior" aria-label="Etapa anterior" ${sel.etapa === 'idea' ? 'disabled' : ''}><span class="ac-izq">${ic('arrow-right')}</span></button>
+          <button type="button" class="ac-mini" data-mover="1" title="Etapa siguiente" aria-label="Etapa siguiente" ${sel.etapa === 'activo' ? 'disabled' : ''}>${ic('arrow-right')}</button>
           <button type="button" class="ac-mini" data-cerrar-n title="Cerrar">${ic('x')}</button></span></div>
         <div class="ac-form-row">
           <label class="cp-field"><span>Nombre</span><input data-nf="nombre" value="${esc(sel.nombre)}"></label>
@@ -466,7 +465,7 @@
     main.innerHTML = `
       <div class="tk-card">
         <div class="ac-phead">
-          <div><p class="tk-eyebrow mono">${esc(pr.cat)}${skill ? ' · ' + esc(skill.nombre) : ''}</p><h3>${esc(pr.titulo)}</h3><p class="tk-sub">${esc(pr.desc)}</p></div>
+          <div><h3>${esc(pr.titulo)}</h3><p class="ac-pmeta">${esc(pr.cat)}${skill ? ' · ' + esc(skill.nombre) : ''}</p><p class="tk-sub">${esc(pr.desc)}</p></div>
         </div>
         ${pr.alcance !== 'libre' ? `
           <div class="ac-src">

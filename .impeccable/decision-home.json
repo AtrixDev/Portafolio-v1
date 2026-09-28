@@ -1,0 +1,68 @@
+{
+  "title": "Elegí la estructura de tu portada",
+  "question": "Tu identidad visual se mantiene (grafito, un solo amarillo, tus tipografías). Lo que elegís acá es cómo se cuenta la historia y cómo llegan empresas y sellers a la acción. Quedate con una, pedime otra tanda o dame una indicación.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "La trayectoria con pruebas",
+      "kicker": "THE ROLL",
+      "lineage": "Estructura 6 de 7: historia cronológica con evidencia en cada capítulo",
+      "thesis": "Tu carrera contada como una línea de resultados verificables, de la agencia a tus propias herramientas.",
+      "palette": ["#0b0b0c", "#17171a", "#ededea", "#ffe14a"],
+      "materials": ["capturas reales del panel", "números con fuente"],
+      "viewport": "Arriba: quién sos y dos botones (Busco analista / Quiero vender más). Debajo arranca la línea: Adamas, DEMASLED, Vení a la Cocina y herramientas propias, cada capítulo con su número y su captura.",
+      "risk": "Un seller que llega apurado a vender tiene que scrollear para ver algo que pueda usar.",
+      "wireframe": {"cols": 12, "rows": 10, "regions": [
+        {"label": "nav", "x": 0, "y": 0, "w": 12, "h": 1},
+        {"label": "quién soy + 2 puertas", "x": 0, "y": 1, "w": 7, "h": 3, "accent": true},
+        {"label": "foto", "x": 8, "y": 1, "w": 4, "h": 3},
+        {"label": "2023 agencia", "x": 1, "y": 4, "w": 10, "h": 1},
+        {"label": "2025 DEMASLED", "x": 1, "y": 5, "w": 10, "h": 1},
+        {"label": "2025 Vení a la Cocina +38,9%", "x": 1, "y": 6, "w": 10, "h": 2, "accent": true},
+        {"label": "hoy: herramientas propias", "x": 1, "y": 8, "w": 10, "h": 1},
+        {"label": "contacto", "x": 0, "y": 9, "w": 12, "h": 1}
+      ]}
+    },
+    {
+      "id": "diagnostico",
+      "label": "¿Qué le pasa a tu cuenta?",
+      "lineage": "Estructura 4 de 7: la portada empieza con un diagnóstico que el visitante elige",
+      "thesis": "La portada te pregunta qué te duele (visitas sin ventas, ACOS alto, perdiste el catálogo) y te muestra cómo lo resolvés vos, con tu caso real.",
+      "palette": ["#0b0b0c", "#17171a", "#ededea", "#ffe14a"],
+      "materials": ["catálogo de diagnóstico", "caso Borner", "auditoría conectada"],
+      "viewport": "Titular y una fila de síntomas para tocar. Al elegir uno aparece la regla que lo detecta, el caso donde lo resolviste y el botón para auditar tu cuenta. El perfil para empresas queda un scroll más abajo.",
+      "risk": "Un reclutador que solo busca el perfil lo encuentra en segundo lugar.",
+      "wireframe": {"cols": 12, "rows": 10, "regions": [
+        {"label": "nav", "x": 0, "y": 0, "w": 12, "h": 1},
+        {"label": "titular: ¿qué le pasa a tu cuenta?", "x": 0, "y": 1, "w": 8, "h": 2},
+        {"label": "síntomas para tocar", "x": 0, "y": 3, "w": 12, "h": 1, "accent": true},
+        {"label": "cómo lo detecto + caso real", "x": 0, "y": 4, "w": 7, "h": 3},
+        {"label": "auditá tu cuenta", "x": 8, "y": 4, "w": 4, "h": 3, "accent": true},
+        {"label": "perfil para empresas + CV", "x": 0, "y": 7, "w": 12, "h": 2},
+        {"label": "contacto", "x": 0, "y": 9, "w": 12, "h": 1}
+      ]}
+    },
+    {
+      "id": "tablero",
+      "label": "El sistema es la portada",
+      "lineage": "Estructura 2 de 7: la herramienta funcionando es lo primero que se ve",
+      "thesis": "Antes de leer quién sos, el visitante ve el ML Tracker trabajando en vivo con la cuenta de ejemplo, y tu presentación se apoya en lo que acaba de ver.",
+      "palette": ["#0b0b0c", "#17171a", "#ededea", "#ffe14a"],
+      "materials": ["demo en vivo", "alertas reales del análisis"],
+      "viewport": "Titular corto a la izquierda y, a la derecha, el tablero en vivo con salud de la cuenta, alertas y publicaciones para tocar. Debajo: resultados, perfil y las dos puertas.",
+      "risk": "Si el tablero no se entiende en 5 segundos, tapa tu presentación en vez de reforzarla.",
+      "wireframe": {"cols": 12, "rows": 10, "regions": [
+        {"label": "nav", "x": 0, "y": 0, "w": 12, "h": 1},
+        {"label": "titular + botones", "x": 0, "y": 1, "w": 5, "h": 3},
+        {"label": "tablero en vivo", "x": 5, "y": 1, "w": 7, "h": 4, "accent": true},
+        {"label": "resultados", "x": 0, "y": 5, "w": 12, "h": 1},
+        {"label": "perfil + CV", "x": 0, "y": 6, "w": 6, "h": 2},
+        {"label": "auditá tu cuenta", "x": 6, "y": 6, "w": 6, "h": 2, "accent": true},
+        {"label": "contacto", "x": 0, "y": 9, "w": 12, "h": 1}
+      ]}
+    }
+  ],
+  "reroll": true,
+  "steer": true,
+  "buildPath": {"value": "code"}
+}

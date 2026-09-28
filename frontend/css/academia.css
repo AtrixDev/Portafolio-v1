@@ -198,3 +198,7 @@
   .ac-stars { display: none; }
   .ac-skill summary .tk-chip { grid-column: 2; justify-self: start; }
 }
+
+.ac-izq { display: inline-flex; transform: rotate(180deg); }
+.op-dist i .icon, .op-avg .icon { width: .85em; height: .85em; vertical-align: -1px; color: var(--accent-text); }
+.ac-pmeta { margin-top: .25rem; font-size: .8rem; color: var(--accent-text); }

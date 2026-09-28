@@ -9,7 +9,6 @@
   const $ = id => document.getElementById(id);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const ic = n => `<svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-${n}"/></svg>`;
-  const ICONOS = ['shield', 'database', 'chart', 'lock', 'target', 'trending'];
   let D, PUB = {}, tier = 'S', cat = 'Todas', q = '';
 
   Promise.all([
@@ -19,10 +18,6 @@
     D = data; PUB = pub.skills || {};
     principios(); diagnostico(); skills(); sistemas(); cats(); prompts(); stack();
     $('ia-n-diag').textContent = D.diagnostico.length;
-    $('ia-n-skills').textContent = D.skills.length;
-    $('ia-n-prompts').textContent = D.prompts.length;
-    const n = Object.values(PUB).filter(s => s.estado === 'aplicada' || s.estado === 'dominada').length;
-    if (n) { $('ia-n-aplicadas').textContent = n; $('ia-n-aplicadas-box').hidden = false; }
     $('ia-credit').innerHTML = `${esc(D.credito.txt)} <a href="${esc(D.credito.url)}" target="_blank" rel="noopener">Fuente</a>.`;
   }).catch(() => { $('ia-skills').innerHTML = '<p class="ia-loading">No se pudo cargar el contenido. Recargá la página.</p>'; });
 
@@ -35,9 +30,25 @@
   const ACC = { subir: 'Subir precio', probar_suba: 'Probar suba', bajar: 'Bajar precio', revisar: 'Revisar oferta', mantener: 'Mantener' };
   const chipCl = c => { const x = DM.clases[c] || { txt: c, tono: 'neutral' }; return `<span class="dm-chip" data-tono="${x.tono}">${esc(x.txt)}</span>`; };
 
-  fetch('/api/tracker?action=demo').then(r => r.ok ? r.json() : Promise.reject()).then(d => { DM = d; demo(); })
+  fetch('/api/tracker?action=demo').then(r => r.ok ? r.json() : Promise.reject()).then(d => { DM = d; demo(); peek(); })
     .catch(() => { $('dm').innerHTML = '<p class="ia-loading">La demo no está disponible en este momento.</p>'; });
 
+  // Vista previa en el primer viewport: salud, alertas y un acceso a cada una
+  function peek() {
+    const el = $('ia-peek'); if (!el || !DM) return;
+    const a = DM.resumen.actual;
+    el.innerHTML = `
+      <p class="pk-t"><span class="status-dot" aria-hidden="true"></span>En vivo · cuenta de ejemplo</p>
+      <dl class="pk-kpis">
+        <div><dt>Ventas 28 días</dt><dd>${num(a.unidades)}</dd></div>
+        <div><dt>Conversión</dt><dd>${pct(a.conversion, 2)}</dd></div>
+        <div><dt>Alertas</dt><dd>${DM.alertas.length}</dd></div>
+      </dl>
+      <ul class="dm-alerts pk-alerts">${DM.alertas.slice(0, 3).map(x => `<li data-nivel="${x.nivel}">${x.id ? `<button type="button" data-dm="${x.id}">${esc(x.txt)}</button>` : `<span>${esc(x.txt)}</span>`}</li>`).join('')}</ul>
+      <a class="pk-mas" href="#demo">Abrir la demo completa ${ic('arrow-right')}</a>`;
+    el.hidden = false;
+    el.addEventListener('click', e => { const b = e.target.closest('[data-dm]'); if (b) abrirDemo(b.dataset.dm); });
+  }
   function grafico(serie) {
     const s = serie.slice(-90), W = 600, H = 120, max = Math.max(...s.map(p => p.v), 1), maxU = Math.max(...s.map(p => p.u), 1);
     const x = i => i * W / (s.length - 1);
@@ -100,85 +111,147 @@
   }
   $('dm').addEventListener('click', e => { const b = e.target.closest('[data-dm]'); if (b) abrirDemo(b.dataset.dm); });
 
-  // ═══ Mini auditoría gratis (POST /api/audit, modo público) ═══
-  const CHECKS = [['fotoHero', 'Foto principal'], ['fotos7', '7 fotos o más'], ['titulo', 'Título completo'], ['descripcion', 'Descripción'], ['stock', 'Stock'], ['activa', 'Publicación activa'], ['atributos', 'Atributos'], ['garantia', 'Garantía']];
-  const veredicto = n => n >= 85 ? ['¡Está muy bien!', 'Tiene todo lo importante. Con estos detalles la dejás impecable.', 'ok']
-    : n >= 60 ? ['Buena base, pero está dejando ventas sobre la mesa', 'Lo más importante está, pero hay mejoras simples que suben la conversión.', 'warn']
-    : ['Acá hay ventas escapándose', 'La buena noticia: casi todo se arregla en una tarde. Arrancá por lo primero.', 'bad'];
-  const IMP = { alto: 'Impacto alto', medio: 'Impacto medio', bajo: 'Impacto bajo' };
-  function contactoAuditoria(link) {
-    return `contacto.html?motivo=consulta&asunto=auditoria${link ? '&pub=' + encodeURIComponent(link) : ''}#formulario`;
-  }
-  function resultadoAuditoria(r) {
-    const [tit, sub, tono] = veredicto(r.score);
-    const ok = CHECKS.filter(([k]) => r.checks[k] != null);
+  // ═══ Auditoría: conectar la cuenta (completa) o mirar una publicación (chequeo rápido) ═══
+  // Mercado Libre no deja leer publicaciones ajenas: el puntaje real sale solo con la cuenta conectada.
+  const out = $('au-out');
+  const contactoAuditoria = link => `contacto.html?motivo=consulta&asunto=auditoria${link ? '&pub=' + encodeURIComponent(link) : ''}#formulario`;
+  const tonoSalud = v => v == null ? 'muted' : v >= 80 ? 'ok' : v >= 60 ? 'warn' : 'bad';
+  const plataAR = x => '$' + Math.round(x).toLocaleString('es-AR');
+  const irAlFormulario = () => { $('au-cform').scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => $('au-cform').elements.nombre.focus({ preventScroll: true }), 400); };
+
+  // Chequeo rápido: solo datos que Mercado Libre muestra de una publicación ajena, sin puntaje
+  function chequeoRapido(r) {
+    const d = r.datos, filas = [];
+    if (r.catalogo) filas.push(['info', 'Es una publicación de catálogo', 'El título y las fotos los define Mercado Libre. Ahí se compite por precio, envío, cuotas y reputación.']);
+    if (d.fotos != null) filas.push([d.fotos >= 7 ? 'check' : 'alert', `${d.fotos} ${d.fotos === 1 ? 'foto' : 'fotos'}`, d.fotos >= 7 ? 'Buena secuencia.' : 'Lo ideal son 7 o más: el comprador no puede tocar el producto, las fotos hacen ese trabajo.']);
+    if (d.atributos != null) filas.push([d.atributos >= 10 ? 'check' : 'alert', `${d.atributos} atributos cargados`, d.atributos >= 10 ? 'Bien completo para aparecer en los filtros.' : 'Cada atributo que falta te saca de un filtro de búsqueda.']);
+    if (d.descripcion != null) filas.push([d.descripcion > 300 ? 'check' : 'alert', d.descripcion ? `Descripción de ${d.descripcion.toLocaleString('es-AR')} caracteres` : 'Sin descripción', d.descripcion > 300 ? 'Tiene de dónde agarrarse el comprador.' : 'Es el último empujón antes de comprar: hoy no está ayudando.']);
+    if (d.opiniones != null) filas.push(['info', `${d.opiniones.toLocaleString('es-AR')} opiniones`, 'Con la cuenta conectada te digo qué critican y qué elogian, y cómo usarlo.']);
     return `
       <article class="au-res">
         <header class="au-res-head">
-          ${r.item.foto ? `<img src="${esc(r.item.foto)}" alt="" width="72" height="72">` : ''}
-          <div><p class="mono au-k">Tu publicación</p><h3>${esc(r.item.title || 'Publicación')}</h3>${r.item.permalink ? `<a href="${esc(r.item.permalink)}" target="_blank" rel="noopener">Verla en Mercado Libre</a>` : ''}</div>
+          ${r.item.foto ? `<img src="${esc(r.item.foto)}" alt="" width="64" height="64">` : ''}
+          <div><h3>${esc(r.item.title || 'Publicación')}</h3>${r.item.permalink ? `<a href="${esc(r.item.permalink)}" target="_blank" rel="noopener">Verla en Mercado Libre</a>` : ''}</div>
         </header>
-        <div class="au-res-score" data-tono="${tono}">
-          <p class="au-num"><b>${r.score}</b><span>/100</span></p>
-          <div><h4>${tit}</h4><p>${sub}${r.score_potencial > r.score ? ` Con estos cambios puede llegar a <b>${r.score_potencial}/100</b>.` : ''}</p></div>
-        </div>
-        ${r.parcial ? '<p class="au-parcial">Es de otro vendedor, así que revisé lo que Mercado Libre muestra en público. Si es tuya, en la auditoría completa miro todo.</p>' : ''}
-        <ul class="au-checks">${ok.map(([k, t]) => `<li data-ok="${r.checks[k]}">${ic(r.checks[k] ? 'check' : 'x')}${t}</li>`).join('')}</ul>
-        ${r.problemas.length ? `<h4 class="au-h4">Lo que te está costando ventas</h4><ul class="au-list is-bad">${r.problemas.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
-        ${r.acciones.length ? `<h4 class="au-h4">Tu plan, en orden</h4><ol class="au-steps">${r.acciones.map((x, i) => `<li${x.como ? '' : ' class="is-locked"'}>
-            <p><b>${esc(x.titulo)}</b> <span class="mono">${IMP[x.impacto] || ''}${x.tiempo ? ' · ' + esc(x.tiempo) : ''}</span></p>
-            ${x.como ? `<p class="au-como">${esc(x.como)}</p>` : i === 1 ? '<p class="au-lock">El paso a paso de esta y las siguientes está en la auditoría completa.</p>' : ''}
-          </li>`).join('')}</ol>${r.mas ? `<p class="au-mas">Y ${r.mas} ${r.mas === 1 ? 'mejora más' : 'mejoras más'} en la auditoría completa.</p>` : ''}` : ''}
-        <div class="au-cta">
-          <div><h4>Esto es la punta del iceberg</h4><p>En la auditoría completa de tu cuenta reviso rentabilidad, precios, stock, competencia y Product Ads, y te dejo un plan de 10 acciones con los números.</p></div>
-          <a class="btn-primary" href="${contactoAuditoria(r.item.permalink)}">Quiero la auditoría completa ${ic('arrow-right')}</a>
+        <ul class="au-datos">${filas.map(([i, t, x]) => `<li data-t="${i}">${ic(i === 'info' ? 'bulb' : i)}<div><b>${esc(t)}</b><span>${esc(x)}</span></div></li>`).join('')}</ul>
+        <div class="au-mas-cta">
+          <p><b>Esto es lo que se ve desde afuera.</b> Visitas, conversión, margen por venta, si estás ganando el catálogo y a qué precio lo recuperás: eso aparece cuando conectás tu cuenta.</p>
+          <button type="button" class="btn-primary" data-ir-conectar>Quiero la auditoría completa</button>
         </div>
       </article>`;
   }
   $('au-form').addEventListener('submit', async e => {
     e.preventDefault();
-    const url = $('au-url').value.trim(), out = $('au-out'), btn = $('au-go');
+    const url = $('au-url').value.trim(), btn = $('au-go');
     if (!url) { $('au-url').focus(); return; }
-    btn.disabled = true; out.innerHTML = '<p class="au-cargando">Revisando tu publicación con lupa…</p>';
+    btn.disabled = true; btn.textContent = 'Mirando…';
+    out.innerHTML = '<div class="au-cargando" aria-busy="true"><span></span><span></span><span></span></div>';
     try {
       const r = await fetch('/api/audit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) });
       const d = await r.json().catch(() => ({}));
-      if (!r.ok) {
-        const limite = r.status === 429;
-        out.innerHTML = `<div class="au-msg${limite ? ' is-limite' : ''}"><p>${esc(d.error || 'Algo no salió bien. Probá de nuevo en un rato.')}</p>${limite || d.code === 'ml_not_linked' ? `<a class="btn-secondary" href="${contactoAuditoria(url)}">Escribime</a>` : ''}</div>`;
-      } else if (d.limitada) {
-        out.innerHTML = `<div class="au-msg is-limite"><p><b>Mercado Libre protege los datos de cada vendedor</b>, así que desde afuera solo veo una parte de esta publicación${d.item?.title ? ` («${esc(d.item.title)}»)` : ''}. Dos opciones: probá con el link de catálogo, el que tiene <b>/p/</b> en la dirección, o si la publicación es tuya, escribime y te hago la auditoría completa <b>sin cargo</b>.</p><a class="btn-primary" href="${contactoAuditoria(d.item?.permalink || url)}">Quiero mi auditoría gratis</a></div>`;
-      } else {
-        out.innerHTML = resultadoAuditoria(d);
-        out.querySelector('.au-res')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      out.innerHTML = r.ok && d.rapido ? chequeoRapido(d)
+        : `<div class="au-msg${r.status === 429 ? ' is-limite' : ''}"><p>${esc(d.error || 'Algo no salió bien. Probá de nuevo en un rato.')}</p>${r.status === 429 || d.code === 'ml_not_linked' ? `<a class="btn-secondary" href="${contactoAuditoria(url)}">Escribime</a>` : ''}</div>`;
     } catch (err) {
       out.innerHTML = '<div class="au-msg"><p>Se cortó la conexión. Revisá tu internet y probá de nuevo.</p></div>';
     }
-    btn.disabled = false;
+    btn.disabled = false; btn.textContent = 'Mirar';
   });
+  out.addEventListener('click', e => { if (e.target.closest('[data-ir-conectar]')) irAlFormulario(); });
+
+  // Conectar la cuenta: valida acá, crea el pedido y lleva a Mercado Libre a autorizar
+  $('au-cform').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = e.currentTarget, btn = f.querySelector('.au-cbtn'), err = $('au-cerr');
+    const datos = { nombre: f.nombre.value.trim(), email: f.email.value.trim(), whatsapp: f.whatsapp.value.trim(), website: f.website.value };
+    f.querySelectorAll('[aria-invalid]').forEach(x => x.removeAttribute('aria-invalid'));
+    const mal = datos.nombre.length < 2 ? f.nombre : !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(datos.email) ? f.email : null;
+    if (mal) { mal.setAttribute('aria-invalid', 'true'); err.textContent = mal === f.nombre ? 'Decime cómo te llamás.' : 'Revisá el email: ahí te mando el informe.'; err.hidden = false; mal.focus(); return; }
+    err.hidden = true; btn.disabled = true; btn.firstChild.textContent = 'Te llevo a Mercado Libre… ';
+    try {
+      const r = await fetch('/api/audit?action=conectar', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datos) });
+      const d = await r.json().catch(() => ({}));
+      if (r.ok && d.url) { location.href = d.url; return; }
+      err.textContent = d.error || 'No se pudo iniciar la conexión. Probá de nuevo en un rato.'; err.hidden = false;
+    } catch (e2) { err.textContent = 'Se cortó la conexión. Revisá tu internet y probá de nuevo.'; err.hidden = false; }
+    btn.disabled = false; btn.firstChild.textContent = 'Conectar mi cuenta de Mercado Libre ';
+  });
+
+  // Vuelta desde Mercado Libre: ?auditoria=<pedido> sincroniza por tandas y muestra el resultado
+  function panelProgreso(p, nick) {
+    const pct = p?.pasos ? Math.round((p.paso - 1) / p.pasos * 100) : 5;
+    return `<article class="au-res au-prog" aria-busy="true">
+      <h3>Analizando la cuenta ${nick ? esc(nick) : ''}</h3>
+      <p>${esc(p?.texto || 'Conectando con Mercado Libre')}${p?.detalle ? ` · ${esc(p.detalle)}` : ''}</p>
+      <div class="au-barra" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}" aria-label="Avance del análisis"><i style="transform: scaleX(${Math.max(0.04, pct / 100)})"></i></div>
+      <p class="au-nota">Tarda entre uno y cinco minutos según cuántas publicaciones tengas. Podés dejar esta pestaña abierta.</p>
+    </article>`;
+  }
+  function resultadoCuenta(d) {
+    const r = d.resumen;
+    return `<article class="au-res au-final">
+      <div class="au-salud" data-tono="${tonoSalud(r.salud)}">
+        <p class="au-num"><b>${r.salud ?? '—'}</b><span>/100</span></p>
+        <div><h3>${esc(d.nombre?.split(' ')[0] || 'Listo')}, esta es la salud de ${esc(d.nickname || 'tu cuenta')}</h3>
+        <p>${r.activas} publicaciones activas analizadas. ${r.totalHallazgos ? `Encontré ${r.totalHallazgos} tipos de problema; estos son los que más pesan.` : 'No encontré problemas relevantes: la cuenta se mueve dentro de lo esperado.'}</p></div>
+      </div>
+      <ul class="au-areas">${r.areas.map(a => `<li><span>${esc(a.area)}</span><span class="au-bar"><i data-tono="${tonoSalud(a.valor)}" style="transform: scaleX(${(a.valor ?? 0) / 100})"></i></span><b>${a.valor ?? '—'}</b></li>`).join('')}</ul>
+      ${r.hallazgos.length ? `<ol class="au-top">${r.hallazgos.map(h => `<li><b>${esc(h.titulo)}</b><span>${h.publicaciones} ${h.publicaciones === 1 ? 'publicación' : 'publicaciones'}${h.monto ? ` · ${plataAR(h.monto)} ${esc(h.montoTxt)}` : ''}</span></li>`).join('')}</ol>` : ''}
+      ${r.sinCostos ? '<p class="au-nota">La rentabilidad no se puede medir sin los costos de tus productos: la vemos juntos en el informe.</p>' : ''}
+      <div class="au-mas-cta">
+        <p><b>En 24 horas te llega el informe completo</b> con el plan de diez acciones en orden y el paso a paso de cada una.</p>
+        <a class="btn-primary" href="https://wa.me/541144474507?text=${encodeURIComponent('Hola Darío, conecté mi cuenta ' + (d.nickname || '') + ' para la auditoría y quiero charlar el resultado.')}" target="_blank" rel="noopener">Charlemos el resultado por WhatsApp</a>
+      </div>
+    </article>`;
+  }
+  async function seguirPedido(id) {
+    $('au-caminos').hidden = true;
+    out.innerHTML = panelProgreso(null);
+    $('auditar').scrollIntoView({ block: 'start' });
+    for (let intentos = 0; intentos < 120; intentos++) {
+      let d;
+      try { d = await (await fetch('/api/audit?action=estado&id=' + id)).json(); } catch (e) { d = { estado: 'sincronizando' }; }
+      if (d.estado === 'listo') { out.innerHTML = resultadoCuenta(d); return; }
+      if (d.error) { out.innerHTML = `<div class="au-msg"><p>${esc(d.error)}</p><a class="btn-secondary" href="${contactoAuditoria()}">Escribime</a></div>`; return; }
+      out.innerHTML = panelProgreso(d.progreso, d.nickname);
+      await new Promise(ok => setTimeout(ok, 1200));
+    }
+    out.innerHTML = `<div class="au-msg"><p>Tu cuenta es grande y el análisis sigue en curso. Te mando el resultado por email en cuanto termine.</p></div>`;
+  }
+  const pedido = new URLSearchParams(location.search).get('auditoria');
+  if (/^[a-f0-9]{32}$/.test(pedido || '')) seguirPedido(pedido);
+  else if (pedido === 'cancelada') out.innerHTML = '<div class="au-msg"><p>Cancelaste la conexión. Cuando quieras lo intentamos de nuevo: no se guardó nada de tu cuenta.</p></div>';
+  else if (pedido === 'error') out.innerHTML = `<div class="au-msg"><p>Mercado Libre no terminó la conexión. Probá de nuevo o escribime y la hacemos juntos.</p><a class="btn-secondary" href="${contactoAuditoria()}">Escribime</a></div>`;
 
   // ═══ Catálogo de diagnóstico ═══
   function diagnostico() {
-    $('dx').innerHTML = D.diagnostico.map(x => `
-      <article class="dx-card" id="dx-${x.id}">
-        <p class="dx-g mono">${esc(x.grupo)}</p>
-        <h3>${esc(x.titulo)}</h3>
-        <p class="dx-rule"><b>Cómo lo detecta:</b> ${esc(x.regla)}</p>
-        <details><summary>Causas y solución</summary>
-          <h4>Causas probables</h4><ul>${x.causas.map(c => `<li>${esc(c)}</li>`).join('')}</ul>
-          <h4>Qué hacer</h4><ol>${x.solucion.map(c => `<li>${esc(c)}</li>`).join('')}</ol>
-        </details>
-        <p class="dx-kpi"><b>Se resolvió cuando:</b> ${esc(x.kpi)}</p>
-        <button type="button" class="dx-demo" data-dx-demo="${x.demo}">Verlo en la demo →</button>
-      </article>`).join('');
+    const grupos = [...new Set(D.diagnostico.map(x => x.grupo))];
+    $('dx').innerHTML = grupos.map(g => `
+      <section class="dx-grupo" aria-label="${esc(g)}">
+        <h3 class="dx-g">${esc(g)}</h3>
+        ${D.diagnostico.filter(x => x.grupo === g).map(x => `
+          <article class="dx-row" id="dx-${x.id}">
+            <div class="dx-head">
+              <h4>${esc(x.titulo)}</h4>
+              <button type="button" class="dx-demo" data-dx-demo="${x.demo}">Verlo en la demo ${ic('arrow-right')}</button>
+            </div>
+            <p class="dx-rule"><b>Cómo lo detecta:</b> ${esc(x.regla)}</p>
+            <details>
+              <summary>Causas y qué hacer</summary>
+              <div class="dx-cols">
+                <div><h5>Causas probables</h5><ul>${x.causas.map(c => `<li>${esc(c)}</li>`).join('')}</ul></div>
+                <div><h5>Qué hacer</h5><ol>${x.solucion.map(c => `<li>${esc(c)}</li>`).join('')}</ol></div>
+              </div>
+              <p class="dx-kpi"><b>Se resolvió cuando:</b> ${esc(x.kpi)}</p>
+            </details>
+          </article>`).join('')}
+      </section>`).join('');
   }
   $('dx').addEventListener('click', e => { const b = e.target.closest('[data-dx-demo]'); if (b) abrirDemo(b.dataset.dxDemo); });
 
   function principios() {
-    $('ia-principios').innerHTML = D.principios.map((p, i) => `
-      <div class="card"><span class="card-icon">${ic(ICONOS[i % ICONOS.length])}</span><div class="card-title">${esc(p.t)}</div><div class="card-desc">${esc(p.d)}</div></div>`).join('');
+    $('ia-principios').innerHTML = D.principios.map(p => `<li><h3>${esc(p.t)}</h3><p>${esc(p.d)}</p></li>`).join('');
   }
+
 
   // Viñeta con el logro real (solo si la skill se marcó como pública)
   function logro(sk, campos) {
@@ -255,12 +328,11 @@
   });
 
   function stack() {
-    $('ia-stack').innerHTML = D.stack.map(s => `
-      <a class="ia-tool" href="${esc(s.url)}" target="_blank" rel="noopener">
-        <span class="ia-tool-top"><span class="ia-pcat mono">${esc(s.tipo)}</span>${ic('external')}</span>
-        <span class="ia-tool-name">${esc(s.nombre)}</span>
-        <span class="ia-tool-desc">${esc(s.uso)}</span>
-        ${s.cmd ? `<code>${esc(s.cmd)}</code>` : ''}
-      </a>`).join('');
+    $('ia-stack').innerHTML = D.stack.map(t => `
+      <div class="ia-tool">
+        <dt><a href="${esc(t.url)}" target="_blank" rel="noopener">${esc(t.nombre)} ${ic('external')}<span class="sr-only">(se abre en otra pestaña)</span></a><span class="ia-tipo">${esc(t.tipo)}</span></dt>
+        <dd>${esc(t.uso)}${t.cmd ? `<code>${esc(t.cmd)}</code>` : ''}</dd>
+      </div>`).join('');
   }
+
 })();
