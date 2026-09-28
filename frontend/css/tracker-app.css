@@ -311,21 +311,64 @@
 .tk-rep-actions { padding-left: 1.2rem; display: flex; flex-direction: column; gap: .5rem; font-size: .9rem; line-height: 1.5; }
 .tk-rep-foot { margin-top: 1.75rem; font-size: .76rem; color: var(--muted); }
 
+
+/* ═══ Auditoría de cuenta ═══ */
+.au-salud { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 1.5rem; align-items: center; margin: 1.5rem 0 .5rem; }
+.au-total { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: .1rem; padding: 1.3rem 1rem; border-radius: var(--r-card); background: var(--bg2); text-align: center; }
+.au-total b { font-family: var(--font-display); font-size: 3.4rem; font-weight: 800; letter-spacing: -.05em; line-height: 1; }
+.au-total span { font-family: var(--font-mono); color: var(--muted); }
+.au-total p { width: 100%; margin-top: .3rem; font-size: .82rem; color: var(--text-2); }
+.au-total[data-tono="ok"] b { color: var(--ok); } .au-total[data-tono="warn"] b { color: var(--warn); } .au-total[data-tono="bad"] b { color: var(--bad); }
+.au-areas { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
+.au-areas li { display: grid; grid-template-columns: 9rem minmax(0, 1fr) 2.2rem; grid-template-rows: auto auto; column-gap: .8rem; align-items: center; }
+.au-a-n { font-size: .88rem; font-weight: 600; }
+.au-bar { height: 8px; border-radius: 999px; background: var(--bg2); overflow: hidden; }
+.au-bar i { display: block; height: 100%; border-radius: inherit; background: var(--muted); }
+.au-bar i[data-tono="ok"] { background: var(--ok); } .au-bar i[data-tono="warn"] { background: var(--warn); } .au-bar i[data-tono="bad"] { background: var(--bad); }
+.au-areas b { font-size: .85rem; text-align: right; }
+.au-areas small { grid-column: 2 / -1; font-size: .74rem; color: var(--muted); }
+.au-lead { font-size: .95rem; line-height: 1.6; color: var(--text-2); }
+.au-lead b { color: var(--text); }
+.au-hall { display: flex; flex-direction: column; gap: .8rem; }
+.au-h { padding: 1rem 1.1rem; border-radius: 12px; border: 1px solid var(--line); background: var(--bg2); font-size: .88rem; line-height: 1.55; color: var(--text-2); }
+.au-h p + p { margin-top: .35rem; }
+.au-h b { color: var(--text); font-weight: 600; }
+.au-h-top { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .7rem; margin-bottom: .5rem; }
+.au-h-top h4 { font-size: 1rem; font-weight: 650; color: var(--text); }
+.au-n { margin-left: auto; font-size: .74rem; color: var(--muted); }
+.au-juego b { font-family: var(--font-display); font-size: 1.15rem; }
+.au-pubs { font-size: .8rem; color: var(--muted) !important; }
+.au-plan li { line-height: 1.55; }
+.au-plan .tk-chip { font-size: .66rem; vertical-align: 1px; }
+.au-plan small { display: block; color: var(--muted); font-size: .78rem; }
+.au-no { padding-left: 1.2rem; font-size: .88rem; color: var(--text-2); line-height: 1.55; }
+.au-foot { margin-top: 2rem; padding-top: 1.1rem; border-top: 2px solid var(--text); font-size: .9rem; }
+.au-foot .mono { margin-top: .3rem; font-size: .78rem; color: var(--text-2); }
+@media (max-width: 720px) { .au-salud { grid-template-columns: 1fr; } .au-areas li { grid-template-columns: 7rem minmax(0, 1fr) 2rem; } }
+
 @media (max-width: 720px) { .tk-rep-kpis { grid-template-columns: 1fr 1fr; } .tk-q-todo, .tk-q-done { padding-left: 0; } }
 
 @media print {
-  @page { margin: 14mm; }
-  body { background: #fff !important; }
+  @page { margin: 12mm 0; }
+  :root, html { color-scheme: light !important; background: #fff !important; }
+  html, body { background: #fff !important; color-scheme: light; }
+  html, body, .cp-panel, .cp-main, #tk-app, .cp-sec, .tk-report { width: auto !important; min-width: 0 !important; max-width: none !important; overflow: visible !important; }
+  .cp-panel { grid-template-columns: 1fr !important; }
   body::after, .cp-side, .tk-head, .tk-tabs, .tk-report-bar, .tk-demo, #tk-progreso, .cp-toast, .skip-link { display: none !important; }
   .cp-panel { display: block !important; }
   .cp-main { padding: 0 !important; max-width: none !important; }
-  .tk-report { border: 0; box-shadow: none; padding: 0; background: #fff; color: #111; }
+  .tk-report { border: 0; box-shadow: none; padding: 0 14mm !important; box-sizing: border-box; background: #fff; color: #111; border-radius: 0; }
   .tk-report * { color: #111 !important; }
   .tk-report .tk-bar { fill: #999 !important; }
   .tk-report .tk-grid { stroke: #ddd !important; }
   .tk-report .tk-axis { fill: #666 !important; }
   .tk-rep-kpis, .tk-report tr, .tk-rep-actions li, .tk-report .tk-chart { break-inside: avoid; }
   .tk-report h3 { break-after: avoid; }
+  .au-h, .au-salud, .au-plan li { break-inside: avoid; }
+  .au-h, .au-total { background: #f4f4f4 !important; border-color: #ddd !important; }
+  .au-bar { background: #e6e6e6 !important; }
+  .au-bar i { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .tk-report .tk-chip { border: 1px solid #999 !important; background: none !important; }
 }
 
 /* ═══ Guía de uso ═══ */

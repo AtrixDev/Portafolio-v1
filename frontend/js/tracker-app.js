@@ -333,6 +333,7 @@
     rentabilidad: 'Margen por unidad = precio − comisión de Mercado Libre − envío gratis (si lo pagás vos) − impuestos − costo del producto. Comisión y envío se traen solos de Mercado Libre; el costo y los impuestos los cargás vos. El ACOS máximo es lo máximo que podés gastar en Product Ads por venta sin perder plata.',
     calidad: 'Es el puntaje de calidad oficial de Mercado Libre para cada publicación, con lo que te pide completar. Mejorarlo sube la exposición. Ordenado de peor a mejor.',
     preguntas: 'Preguntas sin responder, las más viejas primero. Responder rápido mejora la conversión: después de 24 horas se marcan en amarillo.',
+    auditoria: 'Diagnóstico completo para un cliente nuevo o un prospecto: salud de la cuenta por área, qué problemas tiene, cuánta plata está en juego y las 10 acciones en orden. Usá el link de invitación para que el prospecto vincule su cuenta, sincronizá y guardá esto como PDF.',
     reporte: 'Resumen mensual listo para mandarle al cliente. Tocá «Imprimir o guardar PDF» y elegí «Guardar como PDF».',
     diagnostico: 'Si cayeron las visitas, el problema es de exposición (la encuentran menos). Si las visitas siguen igual y cayó la conversión, es de oferta (la ven pero no la compran). La causa probable sale de cruzar precio, stock y catálogo.',
     precio: 'Subir: convierte arriba del promedio, el stock no alcanza o las subas anteriores no le bajaron la conversión. Bajar: perdiste el catálogo, la conversión cayó después de una suba o hay stock parado. Siempre controla que el precio sugerido no te haga perder plata con tus costos.',
@@ -342,7 +343,7 @@
   };
 
   // ── Pestañas de la cuenta ──
-  const VISTAS = [['resumen', 'Resumen', 'chart'], ['rentabilidad', 'Rentabilidad', 'dollar'], ['calidad', 'Calidad', 'award'], ['preguntas', 'Preguntas', 'message'], ['reporte', 'Reporte', 'file']];
+  const VISTAS = [['resumen', 'Resumen', 'chart'], ['rentabilidad', 'Rentabilidad', 'dollar'], ['calidad', 'Calidad', 'award'], ['preguntas', 'Preguntas', 'message'], ['reporte', 'Reporte', 'file'], ['auditoria', 'Auditoría', 'shield']];
   function tabs() {
     const d = S.datos;
     const badge = { preguntas: d?.preguntas?.length || 0, rentabilidad: d?.resumen?.rentabilidad?.perdiendo || 0 };
@@ -354,11 +355,12 @@
 
   function renderVista() {
     const root = $('tk-app'), c = S.cuentas.find(x => x.id === S.cuenta);
-    const cuerpo = { rentabilidad: vistaRentabilidad, calidad: vistaCalidad, preguntas: vistaPreguntas, reporte: vistaReporte }[S.vista]();
+    if (S.vista === 'auditoria' && !DX) { cargarDX(); }
+    const cuerpo = { rentabilidad: vistaRentabilidad, calidad: vistaCalidad, preguntas: vistaPreguntas, reporte: vistaReporte, auditoria: vistaAuditoria }[S.vista]();
     root.innerHTML = cabecera(c) + tabs() + cuerpo;
     enlazarCabecera(); enlazarTabs();
     if (S.vista === 'rentabilidad') enlazarRentabilidad();
-    if (S.vista === 'reporte') $('tk-print')?.addEventListener('click', () => window.print());
+    if (S.vista === 'reporte' || S.vista === 'auditoria') $('tk-print')?.addEventListener('click', () => window.print());
     root.querySelectorAll('[data-item]').forEach(b => b.addEventListener('click', e => { if (e.target.closest('input')) return; abrirItem(b.dataset.item); }));
   }
 
@@ -516,6 +518,111 @@
         <h3>Próximos pasos recomendados</h3>
         ${acciones.length ? `<ol class="tk-rep-actions">${acciones.slice(0, 10).map(x => `<li>${esc(x)}</li>`).join('')}</ol>` : '<p>No hay acciones urgentes: la cuenta se mueve dentro de lo esperado.</p>'}
         <p class="tk-rep-foot">Datos de la API oficial de Mercado Libre. Clasificaciones y recomendaciones calculadas por ML Tracker.</p>
+      </article>`;
+  }
+
+  // ── Auditoría de cuenta (servicio): salud por área, hallazgos con plata en juego y plan de 10 acciones ──
+  // Los problemas, causas y soluciones salen del catálogo de diagnóstico público (data/ia-meli.json), el mismo de sistema.html.
+  let DX = null;
+  async function cargarDX() {
+    try { DX = (await (await fetch('data/ia-meli.json')).json()).diagnostico || []; } catch (e) { DX = []; }
+    if (S.vista === 'auditoria') renderVista();
+  }
+  // Qué publicaciones tienen cada problema del catálogo, con la misma lógica del análisis
+  const DETECTA = {
+    exposicion: i => i.clase === 'perdiendo' && i.diagnostico.some(x => x.tipo === 'exposicion'),
+    catalogo: i => i.catalogo?.status === 'competing',
+    oferta: i => i.clase === 'perdiendo' && i.diagnostico.some(x => x.tipo === 'oferta'),
+    'visitas-sin-ventas': i => i.clase === 'visitas_sin_ventas',
+    perdida: i => i.status === 'active' && i.rentabilidad?.completo && i.rentabilidad.margen < 0,
+    quiebre: i => i.clase === 'sin_stock' || ['quiebre', 'reponer'].includes(i.alertaStock?.tipo),
+    inmovilizado: i => i.alertaStock?.tipo === 'inmovilizado',
+    calidad: i => i.abc === 'A' && i.calidad?.score != null && i.calidad.score < 60,
+    dormida: i => i.clase === 'dormida',
+    suba: i => ['subir', 'probar_suba'].includes(i.precio?.accion),
+  };
+  const PRIORIDAD = { perdida: 3, quiebre: 3, catalogo: 3, exposicion: 2, oferta: 2, 'visitas-sin-ventas': 2, calidad: 1, inmovilizado: 1, dormida: 1, suba: 1 };
+  const PRIO_TXT = { 3: 'Urgente', 2: 'Importante', 1: 'Oportunidad' };
+  const PRIO_TONO = { 3: 'bad', 2: 'warn', 1: 'ok' };
+  // Plata en juego por problema: pérdida del período, facturación expuesta o valor del stock parado
+  function enJuego(id, items) {
+    if (id === 'perdida') return { monto: items.reduce((t, i) => t + -i.rentabilidad.margen * i.actual.unidades, 0), txt: 'perdidos en el período' };
+    if (id === 'inmovilizado') return { monto: items.reduce((t, i) => t + (i.stock || 0) * (i.rentabilidad?.costo ?? i.price ?? 0), 0), txt: 'en stock parado' };
+    if (id === 'suba') return { monto: items.reduce((t, i) => t + Math.max(0, (i.precio.sugerido || i.price) - i.price) * i.actual.unidades, 0), txt: 'de margen extra posible' };
+    if (id === 'dormida') return null;
+    return { monto: items.reduce((t, i) => t + i.actual.facturacion, 0), txt: 'de facturación expuesta' };
+  }
+  function saludCuenta(d) {
+    const act = d.items.filter(i => i.status === 'active'), n = act.length || 1;
+    const share = f => Math.round(100 * (1 - act.filter(f).length / n));
+    const conCosto = act.filter(i => i.rentabilidad?.completo);
+    const viejas = (d.preguntas || []).filter(q => q.horas >= 24).length;
+    const areas = [
+      ['Visibilidad', share(i => DETECTA.exposicion(i) || DETECTA.catalogo(i) || DETECTA.dormida(i)), 'Publicaciones que no pierden exposición ni catálogo'],
+      ['Conversión', share(i => DETECTA.oferta(i) || DETECTA['visitas-sin-ventas'](i)), 'Publicaciones que convierten sus visitas'],
+      ['Rentabilidad', conCosto.length ? Math.round(100 * conCosto.filter(i => i.rentabilidad.margen >= 0).length / conCosto.length) : null, conCosto.length ? `${conCosto.length} con costo cargado` : 'Sin costos cargados: no se puede evaluar'],
+      ['Stock', share(i => DETECTA.quiebre(i) || DETECTA.inmovilizado(i)), 'Sin quiebres ni stock parado'],
+      ['Calidad de fichas', d.resumen.calidadPromedio ?? null, d.resumen.calidadPromedio != null ? 'Promedio del puntaje oficial de Mercado Libre' : 'Sin datos de calidad'],
+      ['Atención', Math.max(0, 100 - viejas * 15), viejas ? `${viejas} preguntas con más de 24 h` : 'Preguntas respondidas a tiempo'],
+    ];
+    const con = areas.filter(a => a[1] != null);
+    return { areas, total: con.length ? Math.round(con.reduce((t, a) => t + a[1], 0) / con.length) : null };
+  }
+  const tonoSalud = v => v == null ? 'muted' : v >= 80 ? 'ok' : v >= 60 ? 'warn' : 'bad';
+  function vistaAuditoria() {
+    if (!DX) return '<p class="tk-empty">Cargando el catálogo de diagnóstico…</p>';
+    const d = S.datos, c = S.cuentas.find(x => x.id === S.cuenta), a = d.resumen.actual;
+    const sal = saludCuenta(d);
+    const hallazgos = DX.map(x => {
+      const items = d.items.filter(i => DETECTA[x.id]?.(i));
+      return items.length ? { ...x, items, prio: PRIORIDAD[x.id] || 1, juego: enJuego(x.id, items) } : null;
+    }).filter(Boolean).sort((x, y) => y.prio - x.prio || (y.juego?.monto || 0) - (x.juego?.monto || 0));
+    // Plan: una acción por publicación y problema, las más graves y de más plata primero
+    const vistos = new Set();
+    const plan = hallazgos.flatMap(h => h.items.map(i => ({ id: i.id, prio: h.prio, monto: i.actual.facturacion, txt: `«${i.title}»: ${h.titulo.toLowerCase()}. ${h.solucion[0]}.`, kpi: h.kpi })))
+      .sort((x, y) => y.prio - x.prio || y.monto - x.monto)
+      .filter(x => !vistos.has(x.id) && vistos.add(x.id)).slice(0, 10);   // una acción por publicación: la más grave
+    const sinEvaluar = [!d.items.some(i => i.rentabilidad?.completo) && 'Rentabilidad: faltan los costos de los productos', 'Product Ads: la inversión por campaña se revisa aparte en el panel de publicidad'].filter(Boolean);
+    const hoy = new Date().toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' });
+    return `
+      <div class="tk-report-bar"><p>${ayuda(AYUDA.auditoria)} Vista previa de la auditoría</p><button type="button" class="btn-primary cp-sm" id="tk-print">${ic('download')}Imprimir o guardar PDF</button></div>
+      <article class="tk-report tk-audit" id="tk-report">
+        <header class="tk-rep-head">
+          <div><p class="mono">Auditoría de cuenta · Mercado Libre</p><h2>${esc(c?.nickname || '')}</h2><p>${d.items.length} publicaciones analizadas · ${fecha(d.serie.at(-28).d)} al ${fecha(d.hasta)} contra los 28 días anteriores</p></div>
+          <div class="tk-rep-by"><span class="nav-mark" aria-hidden="true">DC</span><span>Darío Colángelo<br><small>${hoy}</small></span></div>
+        </header>
+
+        <section class="au-salud">
+          <div class="au-total" data-tono="${tonoSalud(sal.total)}"><b>${sal.total ?? '—'}</b><span>/100</span><p>Salud de la cuenta</p></div>
+          <ul class="au-areas">${sal.areas.map(([n, v, t]) => `<li><span class="au-a-n">${n}</span><span class="au-bar"><i style="width:${v ?? 0}%" data-tono="${tonoSalud(v)}"></i></span><b class="mono">${v ?? '—'}</b><small>${esc(t)}</small></li>`).join('')}</ul>
+        </section>
+
+        <h3>Resumen</h3>
+        <p class="au-lead">${hallazgos.length
+          ? `Encontré <b>${hallazgos.length} tipos de problema</b> en <b>${new Set(hallazgos.flatMap(h => h.items.map(i => i.id))).size} publicaciones</b>. ${hallazgos.filter(h => h.prio === 3).length ? `Hay ${hallazgos.filter(h => h.prio === 3).length} urgentes, que conviene resolver esta semana.` : 'Ninguno es urgente.'} La cuenta facturó ${plata(a.facturacion)} en los últimos 28 días con una conversión de ${pct(a.conversion, 2)}.`
+          : 'No encontré problemas relevantes: la cuenta se mueve dentro de lo esperado.'}</p>
+
+        <h3>Hallazgos</h3>
+        <div class="au-hall">${hallazgos.map(h => `
+          <section class="au-h">
+            <div class="au-h-top"><span class="tk-chip" data-tono="${PRIO_TONO[h.prio]}">${PRIO_TXT[h.prio]}</span><h4>${esc(h.titulo)}</h4><span class="mono au-n">${h.items.length} ${h.items.length === 1 ? 'publicación' : 'publicaciones'}</span></div>
+            ${h.juego && h.juego.monto > 0 ? `<p class="au-juego"><b>${plata(h.juego.monto)}</b> ${h.juego.txt}</p>` : ''}
+            <p class="au-regla"><b>Cómo lo detecté:</b> ${esc(h.regla)}</p>
+            <p class="au-pubs">${h.items.slice(0, 4).map(i => esc(i.title)).join(' · ')}${h.items.length > 4 ? ` y ${h.items.length - 4} más` : ''}</p>
+            <p><b>Causas probables:</b> ${esc(h.causas.slice(0, 3).join(', ').toLowerCase())}.</p>
+            <p><b>Qué hacer:</b> ${esc(h.solucion.slice(0, 2).join('. '))}.</p>
+          </section>`).join('') || '<p>Sin hallazgos.</p>'}</div>
+
+        <h3>Plan de acción: los 10 primeros pasos</h3>
+        ${plan.length ? `<ol class="tk-rep-actions au-plan">${plan.map(x => `<li><span class="tk-chip" data-tono="${PRIO_TONO[x.prio]}">${PRIO_TXT[x.prio]}</span> ${esc(x.txt)} <small>Se resolvió cuando: ${esc(x.kpi.toLowerCase())}.</small></li>`).join('')}</ol>` : '<p>No hay acciones urgentes.</p>'}
+
+        ${sinEvaluar.length ? `<h3>Qué no se pudo evaluar</h3><ul class="au-no">${sinEvaluar.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
+
+        <footer class="au-foot">
+          <p><b>¿Seguimos?</b> Puedo implementar este plan y medir los resultados cada semana.</p>
+          <p class="mono">Darío Colángelo · daricolangelo@gmail.com · Analista de Mercado Libre</p>
+          <p class="tk-rep-foot">Datos de la API oficial de Mercado Libre. Detección con las reglas públicas del catálogo de diagnóstico; las caídas se validan con pruebas estadísticas.</p>
+        </footer>
       </article>`;
   }
 
