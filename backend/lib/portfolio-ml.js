@@ -45,12 +45,6 @@ export function clasificar({ catalogoCreado, meses, desde, hasta }) {
   return { clase, fotosPeriodo: tuyas + (en(meses[0]) ? 1 : 0) };
 }
 
-// "+5 mil vendidos" → 5000 · "+1000 vendidos" → 1000 · "4 vendidos" → 4
-export function parseVendidos(txt) {
-  const m = String(txt || '').match(/\+?\s*([\d.]+)\s*(mil)?\s*vendid/i);
-  return m ? Number(m[1].replace(/\./g, '')) * (m[2] ? 1000 : 1) : null;
-}
-
 export function formatoVendidos(n) {
   if (!n) return '';
   if (n >= 1000 && n % 1000 === 0 && n > 1000) return `+${n / 1000} mil vendidos`;
@@ -69,30 +63,6 @@ async function get(path, token) {
   const res = await fetch(`${API}${path}`, { headers: { Authorization: `Bearer ${token}` }, signal: AbortSignal.timeout(8000) }).catch(() => null);
   if (!res?.ok) return null;
   return res.json().catch(() => null);
-}
-
-// ML suele bloquear las páginas desde servidores: si responde, sacamos vendidos, título y galería
-async function leerHTML(url) {
-  try {
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'Googlebot/2.1 (+http://www.google.com/bot.html)', 'Accept-Language': 'es-AR,es;q=0.9' },
-      redirect: 'follow', signal: AbortSignal.timeout(5000),
-    });
-    if (!res.ok || /account-verification|captcha/.test(res.url)) return null;
-    const html = await res.text();
-    if (!html.includes('ui-pdp')) return null;
-    const sub = html.match(/ui-pdp-subtitle[^>]*>([^<]*)</)?.[1] || '';
-    const galeria = [...new Set([...html.matchAll(/ui-pdp-gallery__figure[\s\S]*?(?:data-zoom|src)="(https:\/\/http2\.mlstatic\.com[^"]+)"/g)].map(m => m[1]))];
-    const rv = html.replace(/<[^>]+>/g, ' ').match(/Calificación ([\d.]+) de 5\. (\d+) opiniones/);
-    return {
-      titulo: html.match(/<h1[^>]*ui-pdp-title[^>]*>([^<]+)</)?.[1]?.trim() || '',
-      vendidos: parseVendidos(sub),
-      galeria,
-      rating: rv ? Number(rv[1]) : null,
-      opiniones: rv ? Number(rv[2]) : null,
-      item: html.match(/"item_id":"(MLA\d+)"/)?.[1] || null,
-    };
-  } catch { return null; }
 }
 
 const fotoURL = id => `https://http2.mlstatic.com/D_NQ_NP_${id}-O.webp`;
@@ -175,16 +145,6 @@ export async function extraerPublicacion(db, url, { desde = '2025-06', hasta = '
     if (!out.galeria.length && f.galeria?.length) { out.galeria = f.galeria; out.meses = f.meses; }
     out.vendidos = f.vendidos; out.opiniones = f.opiniones; out.rating = f.rating;
     if (!ids.catalogo && f.url) out.url = f.url;
-  }
-
-  const html = f ? null : await leerHTML(out.item ? `https://articulo.mercadolibre.com.ar/MLA-${out.item.slice(3)}` : url);
-  if (html) {
-    out.fuentes.push('página');
-    out.titulo ||= html.titulo;
-    out.vendidos = html.vendidos;
-    out.item ||= html.item;
-    if (!out.galeria.length && html.galeria.length) { out.galeria = html.galeria; out.meses = html.galeria.map(mesDeFoto); }
-    out.opiniones = html.opiniones; out.rating = html.rating;
   }
 
   if (out.item && token && out.opiniones == null) {

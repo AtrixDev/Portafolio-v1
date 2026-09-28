@@ -12,6 +12,7 @@ import { diaAR, sumarDias, HISTORIA } from './tracker.js';
 
 const API = 'https://api.mercadolibre.com';
 const CAMPOS = 'id,title,price,original_price,available_quantity,sold_quantity,status,thumbnail,secure_thumbnail,permalink,catalog_listing,catalog_product_id,listing_type_id,date_created,category_id,health,shipping';
+const CAMPOS_BULK = CAMPOS.split(',').map(c => `body.${c}`).join(',');
 
 async function ml(path, token, intentos = 3) {
   for (let i = 0; i < intentos; i++) {
@@ -70,10 +71,11 @@ export async function sincronizar(db, sellerId, { presupuestoMs = 8000 } = {}) {
     for (let i = st.cursor; i < st.ids.length; i += 20) lotes.push(st.ids.slice(i, i + 20));
     let hechos = 0;
     await enParalelo(lotes.map(lote => async () => {
-      const r = await ml(`/items?ids=${lote.join(',')}&attributes=${CAMPOS}`, token);
+      // /items/bulk reemplaza a /items?ids= (ML lo depreca el 25/10/2026): los campos van con prefijo body.
+      const r = await ml(`/items/bulk?ids=${lote.join(',')}&attributes=${CAMPOS_BULK}`, token);
       const ops = [], fops = [];
       for (const x of r || []) {
-        if (x.code !== 200 || !x.body) continue;
+        if (!x.body || (x.status_code ?? x.code ?? 200) !== 200) continue;
         const b = x.body;
         const doc = {
           seller, title: b.title, price: b.price, original_price: b.original_price ?? null,
