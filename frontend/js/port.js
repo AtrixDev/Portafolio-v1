@@ -15,8 +15,8 @@ const flecha = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 const PREV = {
   aud: () => `<div class="pv-aud"><div class="pv-gauge"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="50" class="tr"/><circle cx="60" cy="60" r="50" class="ar" pathLength="100"/></svg><p><b>76</b><span>salud</span></p></div>
     <ul class="pv-find"><li class="pv-ej">Cuenta de ejemplo</li><li><i></i>Perdió el catálogo en 1 publicación</li><li><i></i>2 productos se quedan sin stock</li><li><i></i>1 publicación vende a pérdida</li></ul></div>`,
-  her: () => `<div class="pv-her"><div class="pv-seg" aria-hidden="true"><i class="f" style="--n:8"></i><i class="p" style="--n:1"></i><i class="d" style="--n:2"></i><i class="x" style="--n:3"></i></div>
-    <p class="pv-legend"><span class="f">8 funcionando</span><span class="p">1 probando</span><span class="d">2 diseñando</span><span class="x">3 en idea</span></p>
+  her: () => `<div class="pv-her"><div class="pv-seg" aria-hidden="true"><i class="f" style="--n:10"></i><i class="d" style="--n:2"></i><i class="x" style="--n:2"></i></div>
+    <p class="pv-legend"><span class="f">10 funcionando</span><span class="d">2 diseñando</span><span class="x">2 en idea</span></p>
     <p class="pv-chips">${['ML Tracker', 'Auditoría', 'Simulador', 'Minero de opiniones', 'Tendencias', 'Importación'].map(x => `<span>${x}</span>`).join('')}</p></div>`,
   trk: () => `<div class="pv-trk"><dl><div><dt>Ventas 28 días</dt><dd id="pv-v">748</dd></div><div><dt>Conversión</dt><dd id="pv-c">3,42%</dd></div><div><dt>Alertas</dt><dd id="pv-a">17</dd></div></dl>
     <svg class="pv-spark" viewBox="0 0 300 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 48 L25 44 L50 46 L75 38 L100 40 L125 31 L150 34 L175 25 L200 28 L225 18 L250 21 L275 11 L300 13 L300 60 L0 60Z" class="a"/><path d="M0 48 L25 44 L50 46 L75 38 L100 40 L125 31 L150 34 L175 25 L200 28 L225 18 L250 21 L275 11 L300 13" class="l"/></svg></div>`,
