@@ -238,6 +238,7 @@
             ${safeUrl(it.url) ? `<a href="${safeUrl(it.url)}" target="_blank" rel="noopener">Ver en Mercado Libre</a>` : ''}
           </div>
           <div class="pf-item-acts">
+            ${on && !hayFiltro ? `<span class="pf-orden"><button type="button" class="cp-icon-btn" data-mover-pf="${esc(it._id)}" data-dir="-1" aria-label="Subir en la web" title="Subir">↑</button><button type="button" class="cp-icon-btn" data-mover-pf="${esc(it._id)}" data-dir="1" aria-label="Bajar en la web" title="Bajar">↓</button></span>` : ''}
             <button type="button" class="cp-icon-btn pf-star" data-star="${esc(it._id)}" aria-pressed="${on}" aria-label="${on ? 'Quitar de la web' : 'Destacar en la web'}" title="${on ? 'Se ve en la web: tocá para ocultarla' : 'Oculta: tocá para mostrarla en la web'}">${icon('star')}</button>
             <button type="button" class="cp-icon-btn cp-danger" data-del-pf="${esc(it._id)}" aria-label="Eliminar">${icon('trash')}</button>
           </div>
@@ -247,6 +248,23 @@
   ['pf-q', 'pf-f-marca', 'pf-f-clase', 'pf-f-dest'].forEach(id => $(id).addEventListener('input', renderPortfolio));
 
   $('pf-list').addEventListener('click', async e => {
+    // Reordenar destacadas: se intercambia con la vecina y se guarda el orden completo (1, 2, 3…)
+    const mv = e.target.closest('[data-mover-pf]');
+    if (mv) {
+      const dest = PF_ITEMS.filter(i => i.destacada !== false);
+      const i = dest.findIndex(x => x._id === mv.dataset.moverPf), j = i + Number(mv.dataset.dir);
+      if (i < 0 || j < 0 || j >= dest.length) return;
+      [dest[i], dest[j]] = [dest[j], dest[i]];
+      dest.forEach((x, k) => { x.order = k + 1; });
+      PF_ITEMS = [...dest, ...PF_ITEMS.filter(x => x.destacada === false)];
+      renderPortfolio();
+      try {
+        const r = await api('/api/portfolio?action=orden', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: dest.map(x => x._id) }) });
+        if (!r.ok) throw new Error(r.status);
+        toast('Orden guardado: así se ve en la web.');
+      } catch (e2) { if (e2.message !== '401') { toast('No se pudo guardar el orden.', true); loadPortfolio(); } }
+      return;
+    }
     const star = e.target.closest('[data-star]');
     if (star) {
       const it = PF_ITEMS.find(i => i._id === star.dataset.star); if (!it) return;

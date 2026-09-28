@@ -170,7 +170,9 @@
 .pf-bulk { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .6rem; margin-bottom: .9rem; padding: .6rem .9rem; border-radius: 12px; border: 1px dashed var(--line-strong); font-size: .86rem; color: var(--text-2); }
 .pf-bulk[hidden] { display: none; }
 .cp-danger-txt { color: var(--bad) !important; }
-.pf-item-acts { display: flex; gap: .4rem; }
+.pf-item-acts { display: flex; gap: .4rem; align-items: center; }
+.pf-orden { display: inline-flex; gap: 2px; margin-right: .2rem; }
+.pf-orden .cp-icon-btn { font-size: .95rem; font-weight: 700; }
 .pf-star[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .pf-item.is-off { opacity: .72; }
 .pf-item .pf-ev { color: var(--muted); font-size: .76rem; }

@@ -501,3 +501,21 @@ main > section { padding: var(--pad-y) var(--pad-x); position: relative; }
 .ce-pubs-grid .pm-case-title { font-size: .86rem; }
 .ce-pubs-grid .pm-case-metric { font-size: .72rem; }
 @media (max-width: 860px) { .ce-pubs-grid { grid-template-columns: 1fr 1fr; } }
+
+/* ── Caso de estudio en 4 pasos (dentro de #caso-exito) ── */
+.cs-story { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 2.2rem 0 1.4rem; }
+.cs-story > li { display: flex; flex-direction: column; gap: .55rem; padding: 1.3rem; border-radius: var(--r-card); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--edge); }
+.cs-story > li:last-child { border-color: var(--accent-line); }
+.cs-n { font-size: .72rem; color: var(--accent-text); }
+.cs-story h3 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.25; }
+.cs-story p, .cs-story ul { font-size: .9rem; color: var(--text-2); line-height: 1.6; }
+.cs-story ul { padding-left: 1rem; display: flex; flex-direction: column; gap: .35rem; }
+.cs-story li li::marker { color: var(--accent-text); }
+.cs-kpis { display: flex; flex-direction: column; gap: .3rem; }
+.cs-kpis b { font-family: var(--font-display); font-size: 1.35rem; color: var(--text); letter-spacing: -.02em; margin-right: .35rem; }
+.cs-src { font-size: .76rem !important; color: var(--muted) !important; }
+.cs-bridge { margin: 0 0 1rem; font-size: .92rem; color: var(--text-2); }
+.ce-title a { color: inherit; text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 3px; }
+.ce-title a:hover { text-decoration-color: var(--accent-text); }
+@media (max-width: 1000px) { .cs-story { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .cs-story { grid-template-columns: 1fr; } }

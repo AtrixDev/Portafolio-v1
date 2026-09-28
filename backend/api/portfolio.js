@@ -106,6 +106,14 @@ export default async function handler(req, res) {
     return res.status(201).json({ success: true, id: result.insertedId.toString(), item });
   }
 
+  // PATCH ?action=orden  { ids: [...] } → guarda el orden de las destacadas (1, 2, 3…) en una sola escritura
+  if (req.method === 'PATCH' && q.action === 'orden') {
+    const ids = (Array.isArray(req.body?.ids) ? req.body.ids : []).slice(0, 200).map(oid).filter(Boolean);
+    if (!ids.length) return res.status(400).json({ error: 'Falta el orden' });
+    await col.bulkWrite(ids.map((_id, i) => ({ updateOne: { filter: { _id }, update: { $set: { order: i + 1 } } } })), { ordered: false });
+    return res.json({ success: true, ordenadas: ids.length });
+  }
+
   // PATCH ?id=... → editar
   if (req.method === 'PATCH') {
     const _id = oid(q.id);
