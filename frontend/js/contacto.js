@@ -47,6 +47,7 @@ document.querySelectorAll('.ct-copy').forEach(btn => {
   if (motivo && REASONS[motivo]) form.querySelector(`input[name="reason"][value="${motivo}"]`).checked = true;
   const asunto = new URLSearchParams(location.search).get('asunto'), pub = new URLSearchParams(location.search).get('pub');
   if (asunto === 'auditoria' && !msg.value) msg.value = `Hola Darío, usé la auditoría gratis de tu web y quiero la auditoría completa de mi cuenta de Mercado Libre.${pub && /^https?:\/\/[^\s]*mercadoli/i.test(pub) ? `\nLa publicación que revisé: ${pub}` : ''}`;
+  else if (asunto === 'tendencias' && !msg.value) { const cat = (new URLSearchParams(location.search).get('cat') || '').slice(0, 60).replace(/[^\p{L}\p{N} ,.y-]/gu, ''); msg.value = `Hola Darío, usé el buscador de tendencias de tu web y quiero la lista completa${cat && cat !== 'Todo Mercado Libre' ? ` de ${cat}` : ''}. Vendo: `; }
   else if (motivo === 'consulta' && !msg.value) msg.value = 'Hola Darío, ¿me podrías enviar una copia de tus certificados de Smartbeemo?';
 
   const RULES = {

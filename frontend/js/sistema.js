@@ -111,6 +111,66 @@
   }
   $('dm').addEventListener('click', e => { const b = e.target.closest('[data-dm]'); if (b) abrirDemo(b.dataset.dm); });
 
+  // ═══ Buscador de tendencias ═══
+  // /api/tracker?action=tendencias: los 3 primeros completos; del resto el servidor manda solo posición y tipo.
+  // El término oculto nunca llega al navegador: en su lugar va un texto de relleno difuminado.
+  const TIPOS = { crece: 'Crece rápido', buscada: 'Muy buscada', popular: 'Popular' };
+  const RELLENO = ['acá va un término', 'pedime la lista', 'esto no es el dato', 'buen intento', 'término escondido', 'la lista completa', 'escribime y te la paso', 'no está en el código'];
+  const MAX_OCULTAS = 5;
+  let tdPedido = 0, tdCats = false;
+  const tdSel = $('td-cat'), tdOut = $('td-out');
+  const tipo = t => `<span class="td-tipo" data-tipo="${t}">${TIPOS[t] || ''}</span>`;
+  const fechaTd = f => new Intl.DateTimeFormat('es-AR', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'America/Argentina/Buenos_Aires' }).format(new Date(f));
+
+  function tendenciasRender(d) {
+    if (!tdCats && d.categorias?.length) {
+      tdSel.innerHTML = `<option value="todas">Todo Mercado Libre</option>` + d.categorias.map(c => `<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('');
+      tdSel.value = d.categoria?.id || 'todas'; tdCats = true;
+    }
+    $('td-fuente').textContent = d.demo ? 'Ejemplo ilustrativo: no son datos de Mercado Libre.'
+      : d.actualizado ? `Datos de Mercado Libre · actualizado el ${fechaTd(d.actualizado)}` : 'Datos de Mercado Libre';
+    const aviso = d.demo ? `<p class="td-aviso">${ic('alert')}<span><b>Estás viendo un ejemplo.</b> La conexión con Mercado Libre no está disponible en este momento, así que estos términos son inventados para mostrarte cómo funciona. No los uses para decidir.</span></p>` : '';
+    if (!d.total) { tdOut.innerHTML = aviso + '<p class="td-vacio">Mercado Libre no tiene tendencias para esta categoría hoy. Probá con otra.</p>'; return; }
+    const cat = d.categoria?.id === 'todas' ? 'todo Mercado Libre' : d.categoria?.nombre || 'esta categoría';
+    const fila = x => `<li class="td-fila td-top"><span class="td-pos">${x.pos}</span>
+      <span class="td-term">${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.termino)}${ic('external')}<span class="sr-only"> (ver la búsqueda en Mercado Libre, se abre en otra pestaña)</span></a>` : esc(x.termino)}</span>
+      <span class="td-der">${tipo(x.tipo)}</span></li>`;
+    const ocultas = d.ocultos.slice(0, MAX_OCULTAS);
+    const n = d.ocultos.length;
+    tdOut.innerHTML = `${aviso}
+      <ol class="td-lista">${d.visibles.map(fila).join('')}
+        ${n ? `<li class="sr-only">Y ${n} términos más que te paso por mensaje.</li>` : ''}
+      </ol>
+      ${n ? `<ol class="td-lista td-ocultas" aria-hidden="true">${ocultas.map(x => `<li class="td-fila td-oculta"><span class="td-pos">${x.pos}</span><span class="td-term">${RELLENO[(x.pos * 5) % RELLENO.length]}</span><span class="td-der">${tipo(x.tipo)}</span></li>`).join('')}</ol>
+      <div class="td-mas">
+        <h3>Hay ${n} términos más en ${esc(cat)}</h3>
+        <p>Te paso la lista completa y te marco en cuáles vale la pena entrar según tu producto, tu margen y la competencia que hay arriba.</p>
+        <a class="btn-primary" href="contacto.html?motivo=consulta&asunto=tendencias&cat=${encodeURIComponent(d.categoria?.nombre || '')}#formulario">Quiero la lista completa ${ic('arrow-right').replace('class="icon"', 'class="icon icon-end"')}</a>
+      </div>` : ''}`;
+  }
+
+  async function tendencias(cat = 'todas') {
+    const yo = ++tdPedido;
+    tdSel.disabled = true;
+    tdOut.innerHTML = '<div class="td-cargando" aria-busy="true" aria-label="Cargando tendencias"><span></span><span></span><span></span><span></span></div>';
+    try {
+      const r = await fetch('/api/tracker?action=tendencias&cat=' + encodeURIComponent(cat));
+      const d = await r.json().catch(() => ({}));
+      if (yo !== tdPedido) return;
+      if (r.ok) tendenciasRender(d);
+      else tdOut.innerHTML = `<div class="au-msg${r.status === 429 ? ' is-limite' : ''}"><p>${esc(d.error || 'Algo no salió bien. Probá de nuevo en un rato.')}</p>${r.status === 429 ? '<a class="btn-secondary" href="contacto.html?motivo=consulta&asunto=tendencias#formulario">Escribime</a>' : ''}</div>`;
+    } catch (e) {
+      if (yo === tdPedido) tdOut.innerHTML = '<div class="au-msg"><p>Se cortó la conexión. Revisá tu internet y probá de nuevo.</p></div>';
+    }
+    if (yo === tdPedido) tdSel.disabled = false;
+  }
+  tdSel.addEventListener('change', () => tendencias(tdSel.value));
+  // Se pide recién cuando la sección está por verse: cuida la cuota de la API
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); tendencias(); } }, { rootMargin: '400px 0px' });
+    io.observe($('tendencias'));
+  } else tendencias();
+
   // ═══ Auditoría: conectar la cuenta (completa) o mirar una publicación (chequeo rápido) ═══
   // Mercado Libre no deja leer publicaciones ajenas: el puntaje real sale solo con la cuenta conectada.
   const out = $('au-out');

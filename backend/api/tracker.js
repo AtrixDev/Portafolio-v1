@@ -11,13 +11,16 @@
 // GET  ?action=ficha&cuenta=ID&id=MLA…                         → atributos, fotos y atributos que faltan según la categoría (Academia IA)
 // GET  ?action=opiniones&cuenta=ID&ref=LINK|MLA…               → opiniones de cualquier publicación (propia o de la competencia)
 // GET  ?action=demo                   → PÚBLICO: análisis de la cuenta demo (datos simulados) para sistema.html
+// GET  ?action=tendencias&cat=MLA…|todas → PÚBLICO: términos en tendencia de /trends/MLA (3 completos; el admin ve todos).
+//                                          Límite por IP, memoria de 24 h por categoría y demo:true si no hay token
 // GET  ?action=cron                    → sincronización diaria (Vercel Cron, con CRON_SECRET)
 import { getDB } from './db.js';
-import { cors, isAdmin, ADMIN_SECRET } from '../lib/http.js';
+import { cors, isAdmin, ADMIN_SECRET, clientIp, rateLimit } from '../lib/http.js';
 import { listAccounts, unlink, makeInvite, getAccessToken, MLNotLinked } from '../lib/ml.js';
 import { analizarCuenta, CLASES } from '../lib/tracker.js';
 import { cuentaDemo } from '../lib/tracker-demo.js';
 import { sincronizar, datosCuenta } from '../lib/tracker-sync.js';
+import { categoriasML, terminosML, recortar, respuestaDemo, catValida, TODAS } from '../lib/tendencias.js';
 
 
 // Ficha de ejemplo para la cuenta demo (la real sale de /items y /categories/…/attributes)
@@ -75,6 +78,8 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
     return res.status(200).json({ ...a, clases: CLASES, demo: true });
   }
+
+  if (action === 'tendencias') return tendencias(req, res);
 
   let db;
   try { db = await getDB(); } catch { return res.status(503).json({ error: 'Sin conexión con la base de datos' }); }
@@ -267,4 +272,60 @@ export default async function handler(req, res) {
   }
 }
 
+// ── Buscador de tendencias (público) ──
+// Mismo patrón que la mini auditoría: límite por IP, memoria de 24 h en Mongo y un tope global
+// de consultas nuevas a Mercado Libre. Sin token o sin base, responde el ejemplo marcado demo:true.
+async function tendencias(req, res) {
+  const cat = String(req.query.cat || TODAS);
+  if (!catValida(cat)) return res.status(400).json({ error: 'Esa categoría no existe. Elegí una de la lista.' });
+  const admin = isAdmin(req);
+  res.setHeader('Cache-Control', admin ? 'no-store' : 'private, max-age=600');
+  const demo = motivo => res.status(200).json(respuestaDemo(cat, { completo: admin, motivo }));
 
+  let db;
+  try {
+    db = await Promise.race([getDB(), new Promise((_, no) => setTimeout(() => no(new Error('timeout')), 5000))]);
+  } catch { return demo('sin_base'); }
+
+  if (!admin && !(await rateLimit(db, `tendpub:${clientIp(req)}`, 40, 86400))) {
+    return res.status(429).json({ code: 'limite_persona', error: 'Hoy ya miraste un montón de categorías: mañana se renueva. Si querés la lista completa de alguna, escribime y te la paso.' });
+  }
+
+  const cache = db.collection('tendencias_cache');
+  await cache.createIndex({ at: 1 }, { expireAfterSeconds: 86400 }).catch(() => {});
+  try {
+    let [cats, terms] = await Promise.all([cache.findOne({ _id: 'categorias' }), cache.findOne({ _id: 't:' + cat })]);
+    if (!cats || !terms) {
+      if (!admin && !(await rateLimit(db, 'tendpub:global', 300, 86400))) {
+        return res.status(429).json({ code: 'limite_global', error: 'Por hoy llegamos al tope de consultas a Mercado Libre. Volvé mañana o escribime y te paso las tendencias de tu rubro.' });
+      }
+      let token;
+      try { token = await getAccessToken(db); } catch (e) { if (e instanceof MLNotLinked) return demo('sin_token'); throw e; }
+      if (!cats) {
+        cats = { _id: 'categorias', lista: await categoriasML(token), at: new Date() };
+        await cache.updateOne({ _id: cats._id }, { $set: { lista: cats.lista, at: cats.at } }, { upsert: true });
+      }
+      if (cat !== TODAS && !cats.lista.some(c => c.id === cat)) {
+        return res.status(400).json({ error: 'Mercado Libre solo publica tendencias de categorías amplias. Elegí una de la lista.' });
+      }
+      if (!terms) {
+        try {
+          terms = { _id: 't:' + cat, lista: await terminosML(token, cat), at: new Date() };
+        } catch (e) {
+          if (e.status === 401) return demo('sin_token');
+          if (e.status === 403 || e.status === 404) return res.status(404).json({ error: 'Mercado Libre no publica tendencias para esa categoría. Probá con otra.' });
+          throw e;
+        }
+        await cache.updateOne({ _id: terms._id }, { $set: { lista: terms.lista, at: terms.at } }, { upsert: true });
+      }
+    }
+    const categoria = cat === TODAS ? { id: TODAS, nombre: 'Todo Mercado Libre' } : cats.lista.find(c => c.id === cat) || { id: cat, nombre: 'Categoría' };
+    return res.status(200).json({
+      demo: false, categoria, categorias: cats.lista, actualizado: terms.at,
+      ...recortar(terms.lista, { completo: admin }),
+    });
+  } catch (err) {
+    console.error('[tendencias]', err.message);
+    return res.status(502).json({ error: 'Mercado Libre no me contestó a tiempo. Dale unos minutos y probá de nuevo.' });
+  }
+}
