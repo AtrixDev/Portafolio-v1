@@ -19,6 +19,7 @@ FRONT = Path(__file__).resolve().parent.parent / "frontend"
 
 NAV_ITEMS = [  # (id, texto, href)
     ("cv", "CV", "index.html"),
+    ("herramientas", "Herramientas", "herramientas.html"),
     ("lab", "Lab ML", "lab.html"),
     ("sistema", "Sistema", "sistema.html"),
     ("programacion", "Programación", "programacion.html"),
@@ -29,7 +30,7 @@ NAV_ITEMS = [  # (id, texto, href)
 ACTIVE_BY_PAGE = {
     "index.html": "cv", "programacion.html": "programacion", "contacto.html": "contacto", "armar.html": "armar",
     "lab.html": "lab", "acos.html": "lab", "anatomia.html": "lab", "excels.html": "lab", "imagenes.html": "lab",
-    "metricas.html": "lab", "pricing.html": "lab", "reputacion.html": "lab", "seo.html": "lab", "sistema.html": "sistema",
+    "metricas.html": "lab", "pricing.html": "lab", "reputacion.html": "lab", "seo.html": "lab", "sistema.html": "sistema", "herramientas.html": "herramientas",
 }
 
 THEME_SCRIPT = ("<script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}"

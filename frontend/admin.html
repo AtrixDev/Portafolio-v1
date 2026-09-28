@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="css/admin.css?v=5">
   <link rel="stylesheet" href="css/tracker-app.css?v=12">
   <link rel="stylesheet" href="css/academia.css?v=5">
+<link rel="stylesheet" href="css/admin-hab.css?v=1">
 </head>
 <body>
 
@@ -46,6 +47,7 @@
       <a href="#" data-s="hero" class="active"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-layout"/></svg>Portada</a>
       <a href="#" data-s="stats"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-chart"/></svg>Resultados</a>
       <a href="#" data-s="sobre"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-user"/></svg>Sobre mí</a>
+      <a href="#" data-s="habilidades"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-sparkles"/></svg>Habilidades</a>
       <a href="#" data-s="contacto"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-mail"/></svg>Contacto</a>
       <a href="#" data-s="portfolio"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-image"/></svg>Historial de publicaciones</a>
       <p class="cp-nav-group">Actividad</p>
@@ -85,6 +87,13 @@
       <header class="cp-head"><h2>Resultados</h2><p>Los 5 números grandes debajo de la portada. El 3.º y el 4.º van resaltados.</p></header>
       <div class="cp-stats" id="stats-editor"></div>
       <div class="cp-actions"><button type="button" class="btn-primary" data-save="stats">Guardar resultados</button></div>
+    </section>
+
+    <!-- HABILIDADES -->
+    <section class="cp-sec" id="ps-habilidades">
+      <header class="cp-head"><h2>Habilidades</h2><p>El mapa de habilidades de la web: en qué puesto usaste cada una, con qué herramientas, su prueba y la guía del Lab. El tiempo de práctica se calcula solo con la duración de cada puesto.</p></header>
+      <div class="he" id="hab-editor"><p class="cp-empty">Cargando…</p></div>
+      <div class="cp-actions"><button type="button" class="btn-primary" id="hab-save">Guardar habilidades</button><button type="button" class="btn-secondary" id="hab-reset">Volver a los valores originales</button><p class="he-msg" id="hab-msg" role="status" hidden></p></div>
     </section>
 
     <!-- SOBRE MÍ -->
@@ -316,6 +325,7 @@
 <script src="js/main.js"></script>
 <script src="js/tracker-app.js?v=9"></script>
 <script src="js/academia.js?v=6"></script>
-<script src="js/admin.js?v=7"></script>
+<script src="js/admin.js?v=8"></script>
+<script type="module" src="js/admin-hab.js?v=1"></script>
 </body>
 </html>

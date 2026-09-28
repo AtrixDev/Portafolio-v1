@@ -25,3 +25,6 @@ tools/.ml-perfil/
 # Impeccable: capturas y estado local
 .impeccable/review/
 .impeccable/questions/
+
+# Bocetos y propuestas de diseño (solo locales)
+_propuestas/

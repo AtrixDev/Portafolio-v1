@@ -27,8 +27,10 @@
   <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
   <link rel="stylesheet" href="css/root.css">
   <link rel="stylesheet" href="css/shared.css">
-  <link rel="stylesheet" href="css/simulador.css">
-  <link rel="stylesheet" href="css/index.css?v=6">
+  <link rel="stylesheet" href="css/index.css?v=7">
+  <link rel="stylesheet" href="css/port.css?v=1">
+  <link rel="stylesheet" href="css/exp.css?v=1">
+  <link rel="stylesheet" href="css/hab.css?v=1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -52,6 +54,7 @@
   <a href="index.html" class="nav-logo" aria-label="Darío Colángelo, inicio"><span class="nav-mark" aria-hidden="true">DC</span><span class="nav-name">Darío Colángelo</span></a>
   <ul class="nav-links">
     <li><a href="index.html" class="active" aria-current="page">CV</a></li>
+    <li><a href="herramientas.html">Herramientas</a></li>
     <li><a href="lab.html">Lab ML</a></li>
     <li><a href="sistema.html">Sistema</a></li>
     <li><a href="programacion.html">Programación</a></li>
@@ -70,6 +73,7 @@
 </nav>
 <div class="mobile-menu" id="mobileMenu" aria-label="Menú">
   <a href="index.html" class="active" aria-current="page">CV</a>
+  <a href="herramientas.html">Herramientas</a>
   <a href="lab.html">Lab ML</a>
   <a href="sistema.html">Sistema</a>
   <a href="programacion.html">Programación</a>
@@ -81,281 +85,50 @@
 <main id="contenido">
 
 <!-- ═══ HERO ═══ -->
-<section class="hero" aria-labelledby="hero-title">
-  <div class="hero-glow" aria-hidden="true"></div>
-  <div class="hero-copy">
-    <h1 class="hero-name" id="hero-title"><span class="hero-line" id="el-n1">Darío</span> <span class="hero-line" id="el-n2">Colángelo</span></h1>
-    <p class="hero-role" id="el-tag">Analista E-Commerce · Mercado Libre</p>
-    <p class="hero-sub" id="el-sub">Ordeno catálogos, bajo el ACOS y construyo mis propias herramientas para vender más en Mercado Libre.</p>
-    <nav class="hero-doors" aria-label="¿Qué estás buscando?">
-      <a href="#experiencia" class="door">
-        <span class="door-k">Para empresas</span>
-        <span class="door-t">Busco un analista</span>
-        <span class="door-d">Mi trayectoria, con los números de cada puesto</span>
-        <svg class="icon door-arrow" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg>
-      </a>
-      <a href="sistema.html#auditar" class="door is-accent">
-        <span class="door-k">Para vendedores</span>
-        <span class="door-t">Quiero vender más</span>
-        <span class="door-d">Auditoría gratis de tu cuenta, en minutos</span>
-        <svg class="icon door-arrow" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg>
-      </a>
-    </nav>
-    <p class="hero-cv"><a href="assets/Dario-Colangelo-CV.pdf" download><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-download"/></svg>Descargar CV en PDF</a></p>
-  </div>
-
-  <div class="hero-visual" id="hero-visual">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" font-family="JetBrains Mono, monospace" font-size="9px" class="dragon-ascii-svg" aria-hidden="true" focusable="false">
-      <defs>
-        <linearGradient id="dragonGrad" x1="0" y1="0" x2="480" y2="480" gradientUnits="userSpaceOnUse">
-          <stop offset="0" style="stop-color:var(--dragon-a)"/>
-          <stop offset=".55" style="stop-color:var(--dragon-a);stop-opacity:.8"/>
-          <stop offset="1" style="stop-color:var(--dragon-b)"/>
-        </linearGradient>
-      </defs>
-      <g fill="url(#dragonGrad)">
-        <text x="224" y="90">#</text>
-        <text x="276" y="90">#####</text>
-        <text x="213" y="100">###</text>
-        <text x="265" y="100">#3</text>
-        <text x="281" y="100">#########</text>
-        <text x="208" y="110">###</text>
-        <text x="260" y="110">##</text>
-        <text x="291" y="110">###########</text>
-        <text x="172" y="120">#</text>
-        <text x="203" y="120">###</text>
-        <text x="250" y="120">####</text>
-        <text x="296" y="120">######nKYaXRv</text>
-        <text x="166" y="130">##</text>
-        <text x="198" y="130">uff0</text>
-        <text x="244" y="130">##TH</text>
-        <text x="302" y="130">xIZM1JRcoreogr</text>
-        <text x="109" y="140">#</text>
-        <text x="156" y="140">####</text>
-        <text x="187" y="140">#####</text>
-        <text x="234" y="140">#####</text>
-        <text x="307" y="140">OLkTkx9NIQ0Wobtq</text>
-        <text x="99" y="150">##############</text>
-        <text x="177" y="150">2tOy4C</text>
-        <text x="218" y="150">######</text>
-        <text x="312" y="150">#################</text>
-        <text x="88" y="160">######################</text>
-        <text x="208" y="160">#######</text>
-        <text x="312" y="160">###########yn9Ffcg</text>
-        <text x="78" y="170">##################Adx9G81aSQHq</text>
-        <text x="317" y="170">######AC72qFl41sNLj</text>
-        <text x="68" y="180">WGaub52Ztd26fEe###############</text>
-        <text x="239" y="180">hD##</text>
-        <text x="317" y="180">####################</text>
-        <text x="52" y="190">########</text>
-        <text x="99" y="190">nHTmt9OBGhnuKo################</text>
-        <text x="322" y="190">####################</text>
-        <text x="21" y="200">##########################################</text>
-        <text x="322" y="200">########41eoPni6JDWYlg</text>
-        <text x="5" y="210">######################################</text>
-        <text x="328" y="210">######################</text>
-        <text x="10" y="220">##########################</text>
-        <text x="166" y="220">#####9gyv1</text>
-        <text x="328" y="220">#######################</text>
-        <text x="16" y="230">################</text>
-        <text x="104" y="230">######</text>
-        <text x="146" y="230">#################</text>
-        <text x="328" y="230">#######################</text>
-        <text x="16" y="240">###############</text>
-        <text x="104" y="240">B1Id9</text>
-        <text x="140" y="240">50##</text>
-        <text x="177" y="240">#############</text>
-        <text x="291" y="240">###</text>
-        <text x="328" y="240">########################</text>
-        <text x="21" y="250">#####</text>
-        <text x="57" y="250">##</text>
-        <text x="104" y="250">#####</text>
-        <text x="140" y="250">qW</text>
-        <text x="198" y="250">###########</text>
-        <text x="296" y="250">####</text>
-        <text x="333" y="250">9ISjs8JHUdKF0j7elKPoh3pK</text>
-        <text x="26" y="260">#KG5</text>
-        <text x="104" y="260">#########</text>
-        <text x="203" y="260">###yPstUeC</text>
-        <text x="296" y="260">9enq5</text>
-        <text x="333" y="260">2wjZRL9OaYsP6ihgIqLSmNqE</text>
-        <text x="31" y="270">0fA</text>
-        <text x="109" y="270">#######</text>
-        <text x="203" y="270">###########</text>
-        <text x="302" y="270">qT###</text>
-        <text x="333" y="270">#########################</text>
-        <text x="36" y="280">##</text>
-        <text x="114" y="280">#####</text>
-        <text x="198" y="280">############</text>
-        <text x="302" y="280">4HZKjht3X13npgW2zMj518Y2bTu5X1Y</text>
-        <text x="120" y="290">####</text>
-        <text x="192" y="290">21nY#########</text>
-        <text x="302" y="290">################################</text>
-        <text x="109" y="300">######</text>
-        <text x="177" y="300">blu17##########</text>
-        <text x="302" y="300">####################</text>
-        <text x="416" y="300">####8H6h8l</text>
-        <text x="78" y="310">qgAT</text>
-        <text x="109" y="310">######</text>
-        <text x="161" y="310">########xJpRa5HSU</text>
-        <text x="276" y="310">#e</text>
-        <text x="302" y="310">########t0SstzyshA6P</text>
-        <text x="426" y="310">MsHarAJO</text>
-        <text x="88" y="320">#########</text>
-        <text x="140" y="320">#####################</text>
-        <text x="276" y="320">##</text>
-        <text x="302" y="320">####################</text>
-        <text x="432" y="320">XkfFNuYU</text>
-        <text x="99" y="330">###########mbpD0ezNmREpOaUVgA</text>
-        <text x="270" y="330">###</text>
-        <text x="296" y="330">Gdp0CXP9K63LSF</text>
-        <text x="374" y="330">3UD###</text>
-        <text x="442" y="330">######</text>
-        <text x="114" y="340">#######################</text>
-        <text x="239" y="340">#</text>
-        <text x="265" y="340">####</text>
-        <text x="291" y="340">######erqtHioRR</text>
-        <text x="380" y="340">#####</text>
-        <text x="447" y="340">#####</text>
-        <text x="104" y="350">########################</text>
-        <text x="255" y="350">#####################</text>
-        <text x="380" y="350">#####</text>
-        <text x="452" y="350">####</text>
-        <text x="94" y="360">KR1VxavU07zUHLnnBbuQzk</text>
-        <text x="213" y="360">##</text>
-        <text x="244" y="360">######################</text>
-        <text x="385" y="360">#yI</text>
-        <text x="458" y="360">###</text>
-        <text x="88" y="370">#######CdxnuVxUZpfbH9v</text>
-        <text x="234" y="370">##########OU6mbjh</text>
-        <text x="328" y="370">##nRV</text>
-        <text x="385" y="370">###</text>
-        <text x="463" y="370">#h</text>
-        <text x="88" y="380">gbtP7ySeQMgV0L#######</text>
-        <text x="218" y="380">################</text>
-        <text x="322" y="380">WvAw</text>
-        <text x="385" y="380">##</text>
-        <text x="463" y="380">##</text>
-        <text x="83" y="390">g7NZRBT7qYHDB#########</text>
-        <text x="203" y="390">#####0Zf2pCLxb</text>
-        <text x="317" y="390">n##</text>
-        <text x="385" y="390">2#</text>
-      </g>
-    </svg>
-    <figure class="hero-portrait">
-      <img src="assets/foto-480.webp" srcset="assets/foto-480.webp 480w, assets/foto-720.webp 720w" sizes="(max-width: 768px) 40vw, 260px" width="480" height="480" alt="Foto de Darío Colángelo" fetchpriority="high">
-      <figcaption>
-        <span class="hero-avail"><span class="status-dot" aria-hidden="true"></span>Disponible para incorporación</span>
-        <span class="hero-badge" id="el-badge">E-Commerce Manager · Mercado Libre</span>
-      </figcaption>
-    </figure>
-  </div>
-
-  <!-- Línea de pruebas (el admin puede reemplazar su contenido desde Resultados) -->
-  <div class="stats-bar" id="el-stats" role="list" aria-label="Resultados clave">
-    <div class="stat" role="listitem"><div class="stat-number">+3</div><div class="stat-label">años en Mercado Libre</div></div>
-    <div class="stat" role="listitem"><div class="stat-number">+20</div><div class="stat-label">cuentas gestionadas</div></div>
-    <div class="stat" role="listitem"><div class="stat-number">+38,9%</div><div class="stat-label">en ventas</div></div>
-    <div class="stat" role="listitem"><div class="stat-number">30% → 12%</div><div class="stat-label">de ACOS</div></div>
-    <div class="stat" role="listitem"><div class="stat-number">+1.800</div><div class="stat-label">publicaciones trabajadas</div></div>
-  </div>
-</section>
-
-<!-- ═══ SOBRE MÍ ═══ -->
-<section id="sobre-mi" class="about sheet" aria-labelledby="t-sobre">
-  <h2 class="section-title about-title reveal" id="t-sobre">Un analista que también construye <span class="grad">sus herramientas</span>.</h2>
-  <div class="about-grid">
-    <div class="about-text reveal" id="el-sobre">
-      <p>Analista de E-Commerce especializado en Mercado Libre, con más de 3 años de experiencia en gestión operativa, catálogo, pauta publicitaria (Product Ads), reputación y optimización de publicaciones orientadas a conversión.</p>
-      <p>Perfil analítico y operativo con impacto directo en rentabilidad: llevé el ACOS global del 30% al 12% y las ventas crecieron 38,9% en mi última posición. Trabajé con Tiendas Oficiales, marcas premium y agencias multi-cuenta.</p>
-      <p>Uso herramientas de IA (Claude Code, ChatGPT) para automatizar análisis, generar contenido y mejorar procesos: eso me permite hacer más en menos tiempo.</p>
+<section class="pt" aria-labelledby="t-pt">
+  <div class="pt-hero">
+    <div>
+      <div class="pt-id">
+        <div><p class="pt-status"><b id="pt-est-top"><i aria-hidden="true"></i><span class="pt-est-t">Disponible</span></b><span>Analista de Mercado Libre · Buenos Aires</span></p>
+        <h1 id="t-pt"><span>Darío</span><span>Colángelo</span></h1></div>
+      </div>
+      <p class="pt-role">Creo soluciones modernas para <span>problemas reales de negocio.</span></p>
+      <p class="pt-sub">Nunca fui bueno vendiéndome, así que armé una web que lo demuestra por mí: resultados con pruebas y herramientas que podés usar vos mismo.</p>
+      <p class="pt-proof"><span><b>+38,9%</b> ventas</span><span>ACOS <b>30% → 12%</b></span><span><b>+1.800</b> publicaciones</span><span><b>+20</b> cuentas</span></p>
+      <nav class="pt-doors" aria-label="¿Qué venís a buscar?">
+        <a class="pt-door" href="#experiencia"><span class="pt-door-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M3 12.5h18"/></svg></span><span><small>Para empresas</small><strong>Busco un analista</strong><span class="pt-door-d">Trayectoria a escala, habilidades medidas y resultados con pruebas.</span><span class="pt-door-go">Ver mi perfil <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></span></span></a>
+        <a class="pt-door is-sell" href="sistema.html#auditar"><span class="pt-door-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><span><small>Para vendedores</small><strong>Quiero vender más</strong><span class="pt-door-d">Te audito la cuenta gratis y te digo dónde se escapa la plata.</span><span class="pt-door-go">Auditar gratis <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></span></span></a>
+      </nav>
+      <a class="pt-cv" href="assets/Dario-Colangelo-CV.pdf" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg>Descargar CV en PDF</a>
     </div>
-    <aside class="about-tools reveal" aria-label="Herramientas">
-      <h3 class="tools-title">Uso a diario</h3>
-      <div class="tools-list">
-        <span class="skill-tag">Mercado Libre</span><span class="skill-tag">Product Ads</span><span class="skill-tag">Tienda Nube</span><span class="skill-tag">UpSeller</span><span class="skill-tag">Nubimetrics</span><span class="skill-tag">Real Trends</span><span class="skill-tag">Excel</span><span class="skill-tag">App Script</span><span class="skill-tag">Canva</span><span class="skill-tag">Tango</span><span class="skill-tag">Claude Code</span><span class="skill-tag">ChatGPT</span><span class="skill-tag">Administrado</span><span class="skill-tag">AnswerThePublic</span><span class="skill-tag">Python</span><span class="skill-tag">ComfyUI</span><span class="skill-tag">Claude API</span><span class="skill-tag">React · Node</span>
-      </div>
-      <h3 class="tools-title">Aprendiendo</h3>
-      <div class="tools-list">
-        <span class="skill-tag learning">Producteca</span><span class="skill-tag learning">VTEX</span><span class="skill-tag learning">Google Analytics 4</span><span class="skill-tag learning">Amazon Seller</span>
-      </div>
-      <a href="#experiencia" class="link-arrow" id="el-btn1">Ver la trayectoria</a>
-    </aside>
+    <div class="pt-art">
+      <canvas id="pt-dragon" role="img" aria-label="Dragón dibujado con caracteres de código"></canvas>
+      <figure class="pt-photo"><img src="assets/foto-480.webp" srcset="assets/foto-480.webp 480w, assets/foto-720.webp 720w" sizes="(max-width: 1000px) 34vw, 220px" width="480" height="480" alt="Foto de Darío Colángelo"><figcaption id="pt-estado"><b><i aria-hidden="true"></i><span class="pt-est-t">Disponible para charlar</span></b><span>Analista de Mercado Libre</span></figcaption></figure>
+      <p class="pt-hint">Pasale el mouse o hacé clic</p>
+    </div>
+  </div>
+  <div class="pt-mapwrap">
+    <h2>No es un CV. Es mi trabajo, <span>abierto para que lo uses.</span></h2>
+    <p>Herramientas que funcionan, pruebas de cada resultado y todo lo que sé, a un clic. Elegí por dónde empezar.</p>
+    <div class="pt-map" id="pt-map"></div>
   </div>
 </section>
 
-<!-- ═══ TRAYECTORIA: cada capítulo con su prueba ═══ -->
-<section id="experiencia" class="tl" aria-labelledby="t-tl">
-  <h2 class="section-title" id="t-tl">La trayectoria, <span class="grad">con pruebas</span>.</h2>
-  <p class="section-intro">De atender clientes a gestionar tiendas oficiales y construir mis propias herramientas. Cada capítulo con lo que hice y cómo se puede comprobar.</p>
-  <ol class="tl-list">
-    <li class="tl-ch is-small reveal">
-      <p class="tl-when">2018 – 2021</p>
-      <div class="tl-main">
-        <h3 class="tl-co">Ministerio de Educación</h3>
-        <p class="tl-role">Asistente de Jornada Extendida</p>
-        <p class="tl-desc">Organización de actividades y acompañamiento de alumnos. Ahí aprendí a comunicar, a tener paciencia y a coordinar equipos.</p>
-      </div>
-    </li>
+<section class="xp" id="experiencia" aria-labelledby="t-xp">
+  <div class="xp-head">
+    <h2 id="t-xp">Trayectoria</h2>
+    <p>Cada puesto a escala real. Tocá uno para abrir su expediente: qué hice, con qué y cómo se comprueba.</p>
+  </div>
+  <div class="xp-scale" id="xp-scale"></div>
+  <article class="xp-file is-swapping" id="xp-file" role="tabpanel" aria-live="polite"></article>
+  <dialog class="xp-dialog" id="xp-dialog"><form method="dialog"><button aria-label="Cerrar"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 3l10 10M13 3 3 13"/></svg></button></form><img alt=""></dialog>
+</section>
 
-    <li class="tl-ch reveal">
-      <p class="tl-when">2023 – 2024</p>
-      <div class="tl-main">
-        <h3 class="tl-co">Adamas Agencia</h3>
-        <p class="tl-role">Consultor de Mercado Libre · E-Commerce Manager</p>
-        <p class="tl-desc">Mi escuela: más de diez cuentas en simultáneo y de rubros distintos. Catálogos, Product Ads, precios y tiendas en WordPress y Tienda Nube.</p>
-        <div class="exp-results">
-          <span class="result-pill">+10 cuentas simultáneas</span>
-          <span class="result-pill">Multi-vertical</span>
-        </div>
-        <details class="exp-more">
-          <summary>Qué hacía</summary>
-          <ul class="exp-bullets">
-            <li>Desarrollo y optimización de tiendas en WordPress y Tienda Nube.</li>
-            <li>Catálogos orientados a conversión en múltiples verticales.</li>
-            <li>Campañas de Product Ads con análisis de rentabilidad.</li>
-          </ul>
-          <p class="tools-line mono">Mercado Libre · Nubimetrics · Real Trends · Excel · Tienda Nube · WordPress · Google Analytics</p>
-        </details>
-      </div>
-    </li>
-
-    <li class="tl-ch reveal">
-      <p class="tl-when">Ene – Jun 2025</p>
-      <div class="tl-main">
-        <h3 class="tl-co">DemasLed</h3>
-        <p class="tl-role">Analista de E-Commerce</p>
-        <p class="tl-desc">Productos importados de iluminación: más de 200 publicaciones con SEO validado en Nubimetrics y un monitor automático de precios de la competencia hecho en Apps Script.</p>
-        <div class="exp-results">
-          <span class="result-pill">+200 publicaciones creadas</span>
-          <span class="result-pill">SEO con Nubimetrics</span>
-          <span class="result-pill">Automatización con App Script</span>
-        </div>
-        <details class="exp-more">
-          <summary>Qué hacía</summary>
-          <ul class="exp-bullets">
-            <li>Análisis técnico, redacción de títulos, descripciones y atributos clave.</li>
-            <li>Planificación e implementación de campañas masivas y promociones.</li>
-            <li>Extracción automatizada de datos de mercado y alertas de variaciones de precios.</li>
-          </ul>
-          <p class="tools-line mono">Nubimetrics · Real Trends · AnswerThePublic · App Script · ChatGPT · CRM</p>
-        </details>
-      </div>
-    </li>
-
-    <li class="tl-ch is-big" id="caso-exito">
-      <p class="tl-when">Jun – Dic 2025<span class="exp-current is-soft">Último empleo</span></p>
-      <div class="tl-main">
-        <h3 class="tl-co">Vení A La Cocina</h3>
-        <p class="tl-role">E-Commerce Manager · Tiendas Oficiales de Borner, Lurch, Vacu Vin y Microplane</p>
-        <p class="tl-desc">El capítulo donde todo se juntó: una empresa de local a la calle que recién arrancaba en Mercado Libre, y seis meses para que el canal online rindiera.</p>
-        <div class="exp-results">
-          <span class="result-pill is-hl">+38,9% en ventas</span>
-          <span class="result-pill is-hl">+32,4% unidades</span>
-          <span class="result-pill is-hl">ACOS 30% → 12%</span>
-          <span class="result-pill">+200 publicaciones creadas</span>
-          <span class="result-pill">Catálogos Borner, Lurch, Vacu Vin y Microplane</span>
-        </div>
+<section id="caso-exito" class="caso" aria-labelledby="t-caso">
+  <div class="caso-head">
+    <h2 class="section-title" id="t-caso">Caso Borner: el mismo producto, <span class="grad">otra publicación</span>.</h2>
+    <p class="section-intro">Vení a la Cocina, tiendas oficiales de Borner, Lurch, Vacu Vin y Microplane. Un negocio de local a la calle que recién arrancaba en Mercado Libre, y seis meses para que el canal online rindiera.</p>
+  </div>
         <div class="tl-case">
 
   <ol class="cs-story" aria-label="El caso en cuatro pasos">
@@ -501,101 +274,22 @@
     <a href="https://www.mercadolibre.com.ar/p/MLA27077244" target="_blank" rel="noopener" class="btn-secondary">Ver la publicación en ML <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-external"/></svg><span class="sr-only">(se abre en otra pestaña)</span></a>
     <button type="button" class="link-arrow btn-portfolio" id="btn-open-portfolio" aria-haspopup="dialog"><span id="btn-open-portfolio-txt">Historial de publicaciones</span> <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></button>
   </div>
-        </div>
-        <details class="exp-more" open>
-          <summary>Qué hacía</summary>
-          <ul class="exp-bullets">
-            <li>Catalogación, optimización SEO y mejora continua de publicaciones.</li>
-            <li>Ofertas del día y promociones mensuales.</li>
-            <li>Campañas de Product Ads con responsabilidad sobre el ACOS global.</li>
-            <li>Diseño visual y UX de fichas de producto orientadas a conversión.</li>
-            <li>Diseño de "Mi Página" en ML para Tiendas Oficiales y de la Tienda Nube de Borner.</li>
-            <li>Mensajes automatizados de postventa para incentivar reseñas con foto.</li>
-            <li>Coordinación con la consultora externa de Mercado Libre y operación de despachos (Flex y Turbo).</li>
-          </ul>
-          <p class="tools-line mono">Mercado Libre · Tango · Administrado · UpSeller · Excel · ChatGPT · Tienda Nube · Brigada MELI</p>
-        </details>
-      </div>
-    </li>
-
-    <li class="tl-ch is-big" id="herramientas">
-      <p class="tl-when">Dic 2025 – hoy<span class="exp-current">Actual</span></p>
-      <div class="tl-main">
-        <h3 class="tl-co">Herramientas propias</h3>
-        <p class="tl-role">Consultor freelance · ML Tracker, auditorías y webs para negocios</p>
-        <div class="tool">
-          <div class="tool-copy">
-            <h4 class="tool-name">ML <span class="grad">Tracker</span></h4>
-    <p class="tool-desc">Mi herramienta de trabajo, conectada por OAuth a la API oficial de Mercado Libre. Sigue visitas, ventas y conversión de cada publicación con 150 días de historia, detecta cuáles crecen y cuáles se caen, explica por qué y sugiere cuándo subir o bajar el precio. Se actualiza sola todos los días.</p>
-    <p class="tool-try">Al lado, el simulador con el criterio con el que reviso una publicación: fotos, título, descripción, stock y atributos. Movelo y mirá cómo cambia el puntaje.</p>
-    <ul class="tool-feats">
-      <li><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-trending"/></svg><div><strong>Tendencias y diagnóstico</strong><span>Clasifica cada publicación y separa si el problema es de exposición o de oferta.</span></div></li>
-      <li><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-tag"/></svg><div><strong>Motor de precios</strong><span>Cuándo subir o bajar, y cómo reaccionó la conversión a cada cambio anterior.</span></div></li>
-      <li><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-dollar"/></svg><div><strong>Rentabilidad real</strong><span>Margen con comisión, envío e impuestos, ACOS máximo y curva ABC.</span></div></li>
-      <li><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-users"/></svg><div><strong>Catálogo y competencia</strong><span>Alerta si perdés el primer lugar y muestra a qué precio lo recuperás.</span></div></li>
-    </ul>
-    <div class="tool-cta">
-      <a href="sistema.html#demo" class="btn-primary">Probalo en vivo <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a>
-      <a href="sistema.html" class="link-arrow">Ver el Sistema completo <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a>
-      <span class="tool-private">La demo usa una cuenta de ejemplo; las cuentas reales siguen privadas.</span>
-    </div>
-    <p class="tool-stack">JavaScript · Node.js · MongoDB · Vercel · OAuth 2.0 · API de Mercado Libre</p>
-  </div>
-
-  <div class="sim reveal" data-sim aria-labelledby="sim-title">
-    <div class="sim-head">
-      <p class="sim-title" id="sim-title">Simulador de score</p>
-      <button type="button" class="sim-reset" data-sim-reset>Reiniciar</button>
-    </div>
-    <div class="sim-body">
-      <div class="sim-gauge">
-        <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="sim-track" cx="60" cy="60" r="52"/><circle class="sim-arc" cx="60" cy="60" r="52" pathLength="100"/></svg>
-        <div class="sim-score"><output class="sim-num num" data-sim-score aria-live="polite">0</output><span class="sim-band" data-sim-band>...</span></div>
-      </div>
-      <div class="sim-controls">
-        <label class="sim-range"><span>Fotos <b class="num" data-sim-out="fotos">3</b></span><input type="range" min="0" max="10" value="3" data-sim-in="fotos"></label>
-        <label class="sim-range"><span>Largo del título <b class="num" data-sim-out="titulo">34</b></span><input type="range" min="0" max="80" value="34" data-sim-in="titulo"></label>
-        <div class="sim-toggles">
-          <label class="sim-toggle"><input type="checkbox" data-sim-in="descripcion"><span>Descripción</span></label>
-          <label class="sim-toggle"><input type="checkbox" checked data-sim-in="stock"><span>Stock</span></label>
-          <label class="sim-toggle"><input type="checkbox" data-sim-in="atributos"><span>5+ atributos</span></label>
-          <label class="sim-toggle"><input type="checkbox" data-sim-in="garantia"><span>Garantía</span></label>
-          <label class="sim-toggle"><input type="checkbox" checked data-sim-in="activa"><span>Activa</span></label>
-        </div>
-      </div>
-    </div>
-    <p class="sim-tip" data-sim-tip aria-live="polite"></p>
-  </div>
-        </div>
-        <div class="exp-results">
-          <span class="result-pill is-hl">6 webs para negocios</span>
-          <span class="result-pill is-hl">ML Tracker</span>
-          <span class="result-pill is-hl">MELI Visual Listing Agent</span>
-        </div>
-        <details class="exp-more">
-          <summary>Qué hago</summary>
-          <ul class="exp-bullets">
-            <li>MELI Visual Listing Agent: pipeline que combina análisis SEO, generación de copy e imágenes con IA, con scoring propio (CTR, CVR, SEO, confianza visual) para optimizar publicaciones antes de publicarlas.</li>
-            <li>6 sitios web para negocios: diseño, desarrollo, formularios de contacto y publicación en producción.</li>
-            <li>ML Tracker: herramienta conectada por OAuth a las cuentas de Mercado Libre que sigue visitas, ventas y conversión de cada publicación, detecta cuáles crecen o se caen y por qué, y sugiere cuándo subir o bajar el precio.</li>
-          </ul>
-          <p class="tools-line mono">HTML · CSS · JavaScript · Node.js · MongoDB · Vercel · API de Mercado Libre · Python · ComfyUI · FLUX · Claude API</p>
-        </details>
-      </div>
-    </li>
-
-    <li class="tl-ch is-next reveal">
-      <p class="tl-when">2026 – 2029</p>
-      <div class="tl-main">
-        <h3 class="tl-co">Lo que viene: comercio internacional</h3>
-        <p class="tl-role">Técnico en Comercio Internacional · Universidad de Belgrano, en curso</p>
-        <p class="tl-desc">Sumo importación, costos y logística al e-commerce: detectar demanda que ya está validada, costear el producto puesto en Argentina y venderlo en Mercado Libre con margen.</p>
-      </div>
-    </li>
-  </ol>
 </section>
 
-<!-- ═══ 30 DÍAS ═══ -->
+<section class="hb" id="habilidades" aria-labelledby="t-hb">
+  <div class="hb-head">
+    <h2 id="t-hb">Habilidades</h2>
+    <p>No me pongo notas. Cada habilidad muestra en qué puesto la usé y para qué; el tiempo de práctica sale de la trayectoria real. Tocá una para ver el detalle.</p>
+  </div>
+  <div class="hb-grid">
+    <div class="hb-map" id="hb-map"></div>
+    <aside class="hb-side">
+      <div class="hb-det" id="hb-det" aria-live="polite"></div>
+      <div class="hb-learn-box"><p>Aprendiendo ahora</p><div class="hb-learn" id="hb-learn"></div></div>
+    </aside>
+  </div>
+</section>
+
 <section id="valor-prop" class="plan" aria-labelledby="t-valor">
   <h2 class="section-title" id="t-valor">Mis primeros <span class="grad">30 días</span> en tu equipo.</h2>
   <p class="section-intro">No son proyecciones: son acciones concretas, con fechas.</p>
@@ -633,29 +327,7 @@
   </ol>
 </section>
 
-<!-- ═══ LAB ═══ -->
-<section id="lab-promo" class="lab band" aria-labelledby="t-lab">
-  <h2 class="section-title" id="t-lab">El Laboratorio</h2>
-  <p class="section-intro">Donde documento lo que aprendo y aplico en Mercado Libre: frameworks de conversión, estrategias probadas y herramientas.</p>
-  <div class="bento">
-    <a class="bento-card bento-feature reveal" href="anatomia.html">
-      <img src="https://http2.mlstatic.com/D_NQ_NP_644799-MLA91259375564_092025-O.webp" alt="" loading="lazy" decoding="async">
-      <span class="bento-body">
-        <span class="bento-title">Anatomía de una publicación exitosa</span>
-        <span class="bento-sub">Las 4 capas de conversión y la secuencia de 7 fotos.</span>
-      </span>
-    </a>
-    <a class="bento-card reveal" style="--i:1" href="acos.html"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-trending"/></svg><span class="bento-title">ACOS y Product Ads</span><span class="bento-sub">Rentabilidad y campañas</span></a>
-    <a class="bento-card reveal" style="--i:2" href="seo.html"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-search"/></svg><span class="bento-title">SEO de títulos</span><span class="bento-sub">Visibilidad orgánica</span></a>
-    <a class="bento-card reveal" style="--i:3" href="pricing.html"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-tag"/></svg><span class="bento-title">Pricing y competencia</span><span class="bento-sub">Proteger el margen</span></a>
-    <a class="bento-card reveal" style="--i:4" href="reputacion.html"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-star"/></svg><span class="bento-title">Reputación y postventa</span><span class="bento-sub">Reseñas y reclamos</span></a>
-    <a class="bento-card reveal" style="--i:1" href="metricas.html"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-activity"/></svg><span class="bento-title">Métricas</span><span class="bento-sub">CTR, conversión, ACOS</span></a>
-    <a class="bento-card reveal" style="--i:2" href="excels.html"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-sheet"/></svg><span class="bento-title">Excels automatizados</span><span class="bento-sub">Plantillas para analistas</span></a>
-    <a class="bento-card reveal" style="--i:3" href="imagenes.html"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-image"/></svg><span class="bento-title">Imágenes con IA</span><span class="bento-sub">Contenido visual</span></a>
-    <a class="bento-card bento-code reveal" style="--i:4" href="programacion.html"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-code"/></svg><span class="bento-title">Lab de programación</span><span class="bento-sub">Cómo se construye una web</span></a>
-  </div>
-  <a href="lab.html" class="link-arrow lab-all">Entrar al Lab <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a>
-</section>
+
 
 <!-- ═══ FORMACIÓN ═══ -->
 <section id="educacion" class="edu sheet" aria-labelledby="t-edu">
@@ -764,8 +436,9 @@
 </footer>
 
 <script src="js/main.js"></script>
-<script src="js/score.js"></script>
-<script src="js/simulador.js"></script>
-<script src="js/index.js?v=3"></script>
+<script src="js/index.js?v=4"></script>
+<script type="module" src="js/port.js?v=1"></script>
+<script type="module" src="js/exp.js?v=1"></script>
+<script type="module" src="js/hab.js?v=1"></script>
 </body>
 </html>

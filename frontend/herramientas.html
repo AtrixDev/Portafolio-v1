@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Página no encontrada | Darío Colángelo</title>
-  <meta name="description" content="Esta página no existe. Volvé al inicio o mirá el Lab.">
+  <title>Herramientas | Darío Colángelo</title>
+  <meta name="description" content="Las herramientas que construí para Mercado Libre, con una demo para probar cada una: ML Tracker, auditoría de cuenta, chequeo de publicaciones, minero de opiniones y más.">
   <meta name="author" content="Darío Colángelo">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#efefec" media="(prefers-color-scheme: light)">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Página no encontrada | Darío Colángelo">
-  <meta property="og:description" content="Esta página no existe. Volvé al inicio o mirá el Lab.">
+  <meta property="og:title" content="Herramientas | Darío Colángelo">
+  <meta property="og:description" content="Las herramientas que construí para Mercado Libre, con una demo para probar cada una: ML Tracker, auditoría de cuenta, chequeo de publicaciones, minero de opiniones y más.">
   <meta property="og:locale" content="es_AR">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ffe14a'/><text x='50%25' y='54%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%23141207'>DC</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,6 +20,7 @@
   <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
   <link rel="stylesheet" href="css/root.css">
   <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/herr.css?v=1">
   <link rel="stylesheet" href="css/surfaces.css">
 </head>
 <body>
@@ -30,7 +31,7 @@
   <a href="index.html" class="nav-logo" aria-label="Darío Colángelo, inicio"><span class="nav-mark" aria-hidden="true">DC</span><span class="nav-name">Darío Colángelo</span></a>
   <ul class="nav-links">
     <li><a href="index.html">CV</a></li>
-    <li><a href="herramientas.html">Herramientas</a></li>
+    <li><a href="herramientas.html" class="active" aria-current="page">Herramientas</a></li>
     <li><a href="lab.html">Lab ML</a></li>
     <li><a href="sistema.html">Sistema</a></li>
     <li><a href="programacion.html">Programación</a></li>
@@ -49,7 +50,7 @@
 </nav>
 <div class="mobile-menu" id="mobileMenu" aria-label="Menú">
   <a href="index.html">CV</a>
-  <a href="herramientas.html">Herramientas</a>
+  <a href="herramientas.html" class="active" aria-current="page">Herramientas</a>
   <a href="lab.html">Lab ML</a>
   <a href="sistema.html">Sistema</a>
   <a href="programacion.html">Programación</a>
@@ -58,24 +59,18 @@
 </div>
 <!-- NAV:end -->
 
-
-<main id="contenido" class="nf">
-  <p class="nf-code mono" aria-hidden="true">404</p>
-  <h1 class="nf-title">Esta publicación no existe.</h1>
-  <p class="nf-sub">Puede que el link esté incompleto o que la página se haya movido. Probá con alguno de estos:</p>
-  <div class="nf-actions">
-    <a href="index.html" class="btn-primary">Ir al inicio</a>
-    <a href="programacion.html" class="btn-secondary">Programación</a>
-    <a href="lab.html" class="btn-secondary">Lab ML</a>
+<main id="contenido">
+<section class="hr" id="herramientas" aria-labelledby="t-hr">
+  <div class="hr-head">
+    <h2 id="t-hr">Herramientas</h2>
+    <p>Todo lo que construyo, ordenado por estado. Cada una tiene una demo para probar acá mismo y un botón a la versión completa.<small id="hr-count"></small></p>
   </div>
+  <div class="hr-show">
+    <nav class="hr-dock" id="hr-dock" aria-label="Herramientas por estado"></nav>
+    <article class="hr-stage" id="hr-stage" aria-live="polite"></article>
+  </div>
+</section>
 </main>
-<style>
-  .nf { min-height: 100dvh; display: flex; flex-direction: column; justify-content: center; padding: calc(var(--nav-h) + 3rem) var(--pad-x) 4rem; }
-  .nf-code { font-size: clamp(6rem, 22vw, 16rem); font-weight: 700; line-height: .85; letter-spacing: -.06em; color: var(--accent-text); }
-  .nf-title { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 750; letter-spacing: -.045em; line-height: 1; margin-top: 1.5rem; max-width: 18ch; }
-  .nf-sub { margin-top: 1rem; color: var(--text-2); max-width: 48ch; font-size: 1.08rem; }
-  .nf-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
-</style>
 
 <footer>
   <p class="footer-name">Darío Colángelo<span>.</span></p>
@@ -90,6 +85,8 @@
     <a href="#contenido" class="footer-top"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-up"/></svg>Volver arriba</a>
   </div>
 </footer>
+
 <script src="js/main.js"></script>
+<script type="module" src="js/herr.js?v=1"></script>
 </body>
 </html>

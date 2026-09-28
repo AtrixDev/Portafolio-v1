@@ -1,0 +1,27 @@
+/* admin-hab.css — Editor de Habilidades del admin */
+.he { display: grid; gap: 1rem; }
+.he-area { display: grid; gap: .6rem; }
+.he-area-top { display: flex; align-items: flex-end; gap: 1rem; }
+.he-area-top .cp-field { flex: 1; }
+.he-skill { border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); }
+.he-skill > summary { display: flex; align-items: center; gap: .8rem; padding: .75rem .9rem; cursor: pointer; list-style: none; }
+.he-skill > summary::-webkit-details-marker { display: none; }
+.he-skill > summary b { font-weight: 600; }
+.he-skill > summary > span:not(.he-ord) { font-size: .8rem; color: var(--muted); }
+.he-ord { margin-left: auto; display: flex; gap: .3rem; }
+.he-ord button { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; }
+.he-ord button:disabled { opacity: .35; cursor: default; }
+.he-body { display: grid; gap: .8rem; padding: .3rem .9rem 1rem; }
+.he-usos { border: 0; padding: 0; margin: 0; display: grid; gap: .45rem; }
+.he-usos legend { font: 600 .8rem/1 var(--font-sans); color: var(--muted); margin-bottom: .5rem; }
+.he-uso { display: grid; grid-template-columns: 11rem minmax(0, 2fr) minmax(0, 1fr); gap: .5rem; align-items: center; }
+.he-uso input:not([type=checkbox]) { padding: .55rem .7rem; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--text); font: inherit; font-size: .88rem; }
+.he-uso input:disabled { opacity: .45; }
+.he-chk { display: flex; align-items: center; gap: .5rem; font-size: .9rem; }
+.he-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
+.he-del { justify-self: start; border: 0; background: none; color: var(--bad); font: 600 .85rem/1 var(--font-sans); cursor: pointer; padding: .4rem 0; }
+.he-add { justify-self: start; }
+.he-learn textarea { width: 100%; }
+.he-msg { font-size: .9rem; }
+.he-msg[data-tono="ok"] { color: var(--ok); } .he-msg[data-tono="bad"] { color: var(--bad); }
+@media (max-width: 760px) { .he-uso, .he-2 { grid-template-columns: minmax(0, 1fr); } }

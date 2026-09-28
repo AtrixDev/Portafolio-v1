@@ -577,3 +577,9 @@ button.cert-link { font: inherit; font-size: inherit; cursor: pointer; }
   .stats-bar { flex-direction: column; align-items: flex-start; gap: .35rem; }
   .stat + .stat::before { display: none; }
 }
+
+/* Caso Borner: sección propia (antes vivía dentro de la línea de tiempo) */
+.caso { padding: var(--pad-y) var(--pad-x); }
+.caso-head { max-width: 60rem; margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
+.caso-head .section-intro { margin-top: .9rem; }
+.caso .tl-case { margin-top: 0; }

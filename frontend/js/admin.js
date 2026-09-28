@@ -118,7 +118,7 @@
     if (section === 'contacto') ST.contacto = { sub: v('c-sub'), email: v('c-email'), linkedin: v('c-linkedin'), tel: v('c-tel') };
     if (section === 'stats') ST.stats = STATS_DEFAULT.map((_, i) => ({ number: v(`st-num-${i}`), label: v(`st-lbl-${i}`) }));
     try {
-      const r = await api('/api/content', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(ST) });
+      const r = await api('/api/content', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ [section]: ST[section] }) });   // solo la sección editada: no pisa lo que se guarda en otras (p. ej. habilidades)
       if (!r.ok) throw new Error(r.status);
       toast('Guardado. Ya se ve en la web.');
     } catch (e) { if (e.message !== '401') toast('No se pudo guardar.', true); }

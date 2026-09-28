@@ -17,12 +17,12 @@ function applyState(s) {
     setText('el-btn1', h.btn1);
     setText('el-badge', h.badge);
   }
-  if (s.stats && s.stats.length) {
+  if (s.stats && s.stats.length && document.getElementById('el-stats')) {
     document.getElementById('el-stats').innerHTML = s.stats.map(st =>
       `<div class="stat" role="listitem"><div class="stat-number">${st.number}</div><div class="stat-label">${st.label}</div></div>`
     ).join('');
   }
-  if (s.sobre) {
+  if (s.sobre && document.getElementById('el-sobre')) {
     const sb = s.sobre;
     document.getElementById('el-sobre').innerHTML =
       [sb.p1, sb.p2, sb.p3].filter(Boolean).map(p => `<p>${p}</p>`).join('');
