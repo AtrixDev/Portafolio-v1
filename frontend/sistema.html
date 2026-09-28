@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="css/root.css">
   <link rel="stylesheet" href="css/shared.css">
   <link rel="stylesheet" href="css/page.css">
-  <link rel="stylesheet" href="css/sistema.css?v=5">
+  <link rel="stylesheet" href="css/sistema.css?v=6">
   <link rel="stylesheet" href="css/surfaces.css">
 </head>
 <body>
@@ -76,7 +76,28 @@
   <div class="dm" id="dm"><p class="ia-loading">Cargando la demo…</p></div>
 </div>
 
-<div class="cs alt reveal" id="auditar">
+<div class="cs alt reveal" id="tendencias">
+  <h2 class="ct">Qué está buscando la gente en Mercado Libre</h2>
+  <p class="ctxt">Elegí una categoría y mirá las búsquedas que más crecen, las más deseadas y las más populares, directo de la API de tendencias de Mercado Libre. Las tres primeras van de regalo; la lista completa te la paso yo.</p>
+  <div class="td">
+    <div class="td-side">
+      <label class="td-cat" for="td-cat">Categoría</label>
+      <div class="td-select"><select id="td-cat" disabled><option value="todas">Todo Mercado Libre</option></select></div>
+      <p class="td-fuente" id="td-fuente"></p>
+    </div>
+    <div class="td-ley">
+      <dl class="td-tipos">
+        <div><dt><span class="td-tipo" data-tipo="crece">Crece rápido</span></dt><dd>Las 10 búsquedas que más están subiendo. Acá se llega temprano.</dd></div>
+        <div><dt><span class="td-tipo" data-tipo="buscada">Muy buscada</span></dt><dd>Las 20 que más gente busca con intención de comprar.</dd></div>
+        <div><dt><span class="td-tipo" data-tipo="popular">Popular</span></dt><dd>Las 20 de siempre. Venden, pero suele haber mucha competencia.</dd></div>
+      </dl>
+      <p class="td-nota">Mercado Libre no publica cuántas veces se busca cada término, así que acá no vas a ver volúmenes inventados: el orden es el suyo.</p>
+    </div>
+    <div class="td-main" id="td-out" aria-live="polite"><div class="td-cargando" aria-busy="true" aria-label="Cargando tendencias"><span></span><span></span><span></span><span></span></div></div>
+  </div>
+</div>
+
+<div class="cs reveal" id="auditar">
   <h2 class="ct">¿Tu cuenta vende todo lo que podría?</h2>
   <p class="ctxt">Conectá tu cuenta de Mercado Libre y en unos minutos ves lo mismo que veo yo cuando audito a un cliente: la salud de la cuenta y los problemas que más plata te están costando. Gratis.</p>
   <div class="au-caminos" id="au-caminos">
@@ -119,20 +140,20 @@
   <div id="au-out" aria-live="polite"></div>
 </div>
 
-<div class="cs reveal" id="diagnostico">
+<div class="cs alt reveal" id="diagnostico">
   <h2 class="ct">Qué problemas detecta y cómo se resuelven</h2>
   <p class="ctxt">Cada problema con la regla exacta con la que el sistema lo detecta, sus causas más probables, qué hacer y el número que confirma que se resolvió. No son reglas de dedo: las caídas se validan con pruebas estadísticas para no confundir ruido con problema.</p>
   <div class="dx" id="dx"></div>
 </div>
 
-<div class="cs alt reveal" id="metodo">
+<div class="cs reveal" id="metodo">
   <h2 class="ct">Cómo trabajo con IA</h2>
   <p class="ctxt">La IA acelera el análisis, pero en una cuenta real un dato inventado cuesta una moderación o una venta a pérdida. Estas son las reglas con las que la uso.</p>
   <ol class="ia-reglas" id="ia-principios"></ol>
 </div>
 
 
-<div class="cs reveal" id="skills">
+<div class="cs alt reveal" id="skills">
   <h2 class="ct">Skills ordenadas por valor</h2>
   <p class="ctxt">Qué rinde más en el trabajo diario de un analista de Mercado Libre. <b>Tier S</b> diferencia un perfil; <b>A</b> suma mucho; <b>B</b> complementa. Tocá una para ver los conceptos y los KPIs que mueve.</p>
   <div class="ia-toolbar">
@@ -146,13 +167,13 @@
   <div class="ia-skills" id="ia-skills"><p class="ia-loading">Cargando…</p></div>
 </div>
 
-<div class="cs alt reveal" id="sistemas">
+<div class="cs reveal" id="sistemas">
   <h2 class="ct">14 sistemas de IA para un seller</h2>
   <p class="ctxt">No conviene empezar por «un agente que haga todo». El orden que más rinde: calidad de publicaciones, rentabilidad, stock, preventa, competencia, Ads, contenido y, recién al final, automatización.</p>
   <ol class="ia-sistemas" id="ia-sistemas"></ol>
 </div>
 
-<div class="cs reveal" id="prompts">
+<div class="cs alt reveal" id="prompts">
   <h2 class="ct">Prompts listos para usar</h2>
   <p class="ctxt">Los que uso para auditar, fijar precios y armar reportes. Los datos entre corchetes se reemplazan por los tuyos; donde dice <code>[DATOS]</code> van los números de la publicación o de la cuenta.</p>
   <div class="ia-toolbar">
@@ -162,13 +183,13 @@
   <div class="ia-prompts" id="ia-prompts"></div>
 </div>
 
-<div class="cs alt reveal" id="stack">
+<div class="cs reveal" id="stack">
   <h2 class="ct">El stack</h2>
   <p class="ctxt">Cada pieza tiene un rol: el MCP da acceso, la skill enseña el proceso, la API es la fuente de verdad y una persona aprueba.</p>
   <dl class="ia-stack" id="ia-stack"></dl>
 </div>
 
-<div class="cs ia-cta reveal">
+<div class="cs alt ia-cta reveal">
   <div class="ia-cta-in">
     <div>
       <h2 class="ct">¿Tu cuenta necesita esto?</h2>
@@ -200,6 +221,6 @@
   </div>
 </footer>
 <script src="js/main.js"></script>
-<script src="js/sistema.js?v=6"></script>
+<script src="js/sistema.js?v=7"></script>
 </body>
 </html>
