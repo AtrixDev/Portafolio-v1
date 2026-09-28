@@ -519,3 +519,5 @@ main > section { padding: var(--pad-y) var(--pad-x); position: relative; }
 .ce-title a:hover { text-decoration-color: var(--accent-text); }
 @media (max-width: 1000px) { .cs-story { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 600px) { .cs-story { grid-template-columns: 1fr; } }
+button.cert-link { font: inherit; font-size: inherit; cursor: pointer; }
+.proof-wide { grid-column: 1 / -1; max-width: 560px; width: 100%; justify-self: center; }

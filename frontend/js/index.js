@@ -296,7 +296,7 @@ function pmCard(item) {
   const img = dlg.querySelector('img');
   document.querySelectorAll('[data-proof]').forEach(btn => btn.addEventListener('click', () => {
     img.src = btn.dataset.proof;
-    img.alt = btn.querySelector('img')?.alt || '';
+    img.alt = btn.querySelector('img')?.alt || btn.getAttribute('aria-label') || '';
     dlg.showModal();
   }));
   dlg.querySelector('.proof-close').addEventListener('click', () => dlg.close());
