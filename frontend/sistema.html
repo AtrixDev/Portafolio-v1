@@ -71,7 +71,7 @@
       <div><dt>Problemas que detecta</dt><dd id="ia-n-diag">10</dd></div>
       <div id="ia-n-aplicadas-box" hidden><dt>Ya aplicadas</dt><dd id="ia-n-aplicadas">0</dd></div>
     </dl>
-    <div class="ia-hero-cta"><a href="#demo" class="btn-primary">Probá el sistema en vivo <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a><a href="#diagnostico" class="btn-secondary">Ver qué detecta</a></div>
+    <div class="ia-hero-cta"><a href="#demo" class="btn-primary">Probá el sistema en vivo <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></a><a href="#auditar" class="btn-secondary">Auditá tu publicación gratis</a></div>
   </div>
 </div>
 
@@ -90,14 +90,27 @@
   <div class="dm" id="dm"><p class="ia-loading">Cargando la demo…</p></div>
 </div>
 
-<div class="cs reveal" id="diagnostico">
+<div class="cs reveal" id="auditar">
+  <div class="section-label">Gratis</div>
+  <h2 class="ct">¿Tu publicación vende todo lo que podría?</h2>
+  <p class="ctxt">Pegá el link y en segundos te digo qué le está frenando las ventas: fotos, título, descripción, stock, atributos y garantía. Sin registrarte y sin vueltas.</p>
+  <form class="au-form" id="au-form" novalidate>
+    <label class="sr-only" for="au-url">Link de tu publicación de Mercado Libre</label>
+    <input id="au-url" type="url" inputmode="url" autocomplete="off" placeholder="Pegá acá el link de tu publicación" required>
+    <button type="submit" class="btn-primary" id="au-go">Auditar mi publicación <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></button>
+  </form>
+  <p class="au-hint mono">Hasta 5 por día · la reviso con los mismos criterios que uso con mis clientes</p>
+  <div id="au-out" aria-live="polite"></div>
+</div>
+
+<div class="cs alt reveal" id="diagnostico">
   <div class="section-label">Diagnóstico</div>
   <h2 class="ct">Qué problemas detecta y cómo se resuelven</h2>
   <p class="ctxt">Cada problema con la regla exacta con la que el sistema lo detecta, sus causas más probables, qué hacer y el número que confirma que se resolvió. No son reglas de dedo: las caídas se validan con pruebas estadísticas para no confundir ruido con problema.</p>
   <div class="dx" id="dx"></div>
 </div>
 
-<div class="cs alt reveal" id="skills">
+<div class="cs reveal" id="skills">
   <div class="section-label">Habilidades</div>
   <h2 class="ct">Skills ordenadas por valor</h2>
   <p class="ctxt">Qué rinde más en el trabajo diario de un analista de Mercado Libre. <b>Tier S</b> diferencia un perfil; <b>A</b> suma mucho; <b>B</b> complementa. Tocá una para ver los conceptos y los KPIs que mueve.</p>
@@ -112,14 +125,14 @@
   <div class="ia-skills" id="ia-skills"><p class="ia-loading">Cargando…</p></div>
 </div>
 
-<div class="cs reveal" id="sistemas">
+<div class="cs alt reveal" id="sistemas">
   <div class="section-label">Mapa</div>
   <h2 class="ct">14 sistemas de IA para un seller</h2>
   <p class="ctxt">No conviene empezar por «un agente que haga todo». El orden que más rinde: calidad de publicaciones, rentabilidad, stock, preventa, competencia, Ads, contenido y, recién al final, automatización.</p>
   <ol class="ia-sistemas" id="ia-sistemas"></ol>
 </div>
 
-<div class="cs alt reveal" id="prompts">
+<div class="cs reveal" id="prompts">
   <div class="section-label">Biblioteca</div>
   <h2 class="ct">Prompts listos para usar</h2>
   <p class="ctxt">Los que uso para auditar, fijar precios y armar reportes. Los datos entre corchetes se reemplazan por los tuyos; donde dice <code>[DATOS]</code> van los números de la publicación o de la cuenta.</p>
@@ -130,14 +143,14 @@
   <div class="ia-prompts" id="ia-prompts"></div>
 </div>
 
-<div class="cs reveal" id="stack">
+<div class="cs alt reveal" id="stack">
   <div class="section-label">Herramientas</div>
   <h2 class="ct">El stack</h2>
   <p class="ctxt">Cada pieza tiene un rol: el MCP da acceso, la skill enseña el proceso, la API es la fuente de verdad y una persona aprueba.</p>
   <div class="ia-stack" id="ia-stack"></div>
 </div>
 
-<div class="cs alt ia-cta reveal">
+<div class="cs ia-cta reveal">
   <div class="ia-cta-in">
     <div>
       <div class="section-label">Trabajemos</div>
@@ -170,6 +183,6 @@
   </div>
 </footer>
 <script src="js/main.js"></script>
-<script src="js/sistema.js?v=1"></script>
+<script src="js/sistema.js?v=3"></script>
 </body>
 </html>

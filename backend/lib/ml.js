@@ -254,7 +254,8 @@ async function leerPublico(token, mlaId, pista) {
     descripcion: desc?.plain_text || desc?.text || '',
     permalink: `https://articulo.mercadolibre.com.ar/MLA-${mlaId.slice(3)}`,
     _source: 'ml-api-publico',
-    _faltan: ['fotos', 'stock', 'estado', 'atributos', 'garantia', ...(titulo ? [] : ['titulo'])],
+    // El título sale del link (viene recortado): se muestra, pero no se puntúa
+    _faltan: ['fotos', 'stock', 'estado', 'atributos', 'garantia', 'titulo'],
     _titulo_del_link: !!titulo,
     _extras: {
       visitas: visitas?.[mlaId] ?? null,

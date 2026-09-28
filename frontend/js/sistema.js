@@ -100,6 +100,64 @@
   }
   $('dm').addEventListener('click', e => { const b = e.target.closest('[data-dm]'); if (b) abrirDemo(b.dataset.dm); });
 
+  // ═══ Mini auditoría gratis (POST /api/audit, modo público) ═══
+  const CHECKS = [['fotoHero', 'Foto principal'], ['fotos7', '7 fotos o más'], ['titulo', 'Título completo'], ['descripcion', 'Descripción'], ['stock', 'Stock'], ['activa', 'Publicación activa'], ['atributos', 'Atributos'], ['garantia', 'Garantía']];
+  const veredicto = n => n >= 85 ? ['¡Está muy bien!', 'Tiene todo lo importante. Con estos detalles la dejás impecable.', 'ok']
+    : n >= 60 ? ['Buena base, pero está dejando ventas sobre la mesa', 'Lo más importante está, pero hay mejoras simples que suben la conversión.', 'warn']
+    : ['Acá hay ventas escapándose', 'La buena noticia: casi todo se arregla en una tarde. Arrancá por lo primero.', 'bad'];
+  const IMP = { alto: 'Impacto alto', medio: 'Impacto medio', bajo: 'Impacto bajo' };
+  function contactoAuditoria(link) {
+    return `contacto.html?motivo=consulta&asunto=auditoria${link ? '&pub=' + encodeURIComponent(link) : ''}#formulario`;
+  }
+  function resultadoAuditoria(r) {
+    const [tit, sub, tono] = veredicto(r.score);
+    const ok = CHECKS.filter(([k]) => r.checks[k] != null);
+    return `
+      <article class="au-res">
+        <header class="au-res-head">
+          ${r.item.foto ? `<img src="${esc(r.item.foto)}" alt="" width="72" height="72">` : ''}
+          <div><p class="mono au-k">Tu publicación</p><h3>${esc(r.item.title || 'Publicación')}</h3>${r.item.permalink ? `<a href="${esc(r.item.permalink)}" target="_blank" rel="noopener">Verla en Mercado Libre</a>` : ''}</div>
+        </header>
+        <div class="au-res-score" data-tono="${tono}">
+          <p class="au-num"><b>${r.score}</b><span>/100</span></p>
+          <div><h4>${tit}</h4><p>${sub}${r.score_potencial > r.score ? ` Con estos cambios puede llegar a <b>${r.score_potencial}/100</b>.` : ''}</p></div>
+        </div>
+        ${r.parcial ? '<p class="au-parcial">Es de otro vendedor, así que revisé lo que Mercado Libre muestra en público. Si es tuya, en la auditoría completa miro todo.</p>' : ''}
+        <ul class="au-checks">${ok.map(([k, t]) => `<li data-ok="${r.checks[k]}">${ic(r.checks[k] ? 'check' : 'x')}${t}</li>`).join('')}</ul>
+        ${r.problemas.length ? `<h4 class="au-h4">Lo que te está costando ventas</h4><ul class="au-list is-bad">${r.problemas.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
+        ${r.acciones.length ? `<h4 class="au-h4">Tu plan, en orden</h4><ol class="au-steps">${r.acciones.map((x, i) => `<li${x.como ? '' : ' class="is-locked"'}>
+            <p><b>${esc(x.titulo)}</b> <span class="mono">${IMP[x.impacto] || ''}${x.tiempo ? ' · ' + esc(x.tiempo) : ''}</span></p>
+            ${x.como ? `<p class="au-como">${esc(x.como)}</p>` : i === 1 ? '<p class="au-lock">El paso a paso de esta y las siguientes está en la auditoría completa.</p>' : ''}
+          </li>`).join('')}</ol>${r.mas ? `<p class="au-mas">Y ${r.mas} ${r.mas === 1 ? 'mejora más' : 'mejoras más'} en la auditoría completa.</p>` : ''}` : ''}
+        <div class="au-cta">
+          <div><h4>Esto es la punta del iceberg</h4><p>En la auditoría completa de tu cuenta reviso rentabilidad, precios, stock, competencia y Product Ads, y te dejo un plan de 10 acciones con los números.</p></div>
+          <a class="btn-primary" href="${contactoAuditoria(r.item.permalink)}">Quiero la auditoría completa ${ic('arrow-right')}</a>
+        </div>
+      </article>`;
+  }
+  $('au-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const url = $('au-url').value.trim(), out = $('au-out'), btn = $('au-go');
+    if (!url) { $('au-url').focus(); return; }
+    btn.disabled = true; out.innerHTML = '<p class="au-cargando">Revisando tu publicación con lupa…</p>';
+    try {
+      const r = await fetch('/api/audit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        const limite = r.status === 429;
+        out.innerHTML = `<div class="au-msg${limite ? ' is-limite' : ''}"><p>${esc(d.error || 'Algo no salió bien. Probá de nuevo en un rato.')}</p>${limite || d.code === 'ml_not_linked' ? `<a class="btn-secondary" href="${contactoAuditoria(url)}">Escribime</a>` : ''}</div>`;
+      } else if (d.limitada) {
+        out.innerHTML = `<div class="au-msg is-limite"><p><b>Mercado Libre protege los datos de cada vendedor</b>, así que desde afuera solo veo una parte de esta publicación${d.item?.title ? ` («${esc(d.item.title)}»)` : ''}. Dos opciones: probá con el link de catálogo, el que tiene <b>/p/</b> en la dirección, o si la publicación es tuya, escribime y te hago la auditoría completa <b>sin cargo</b>.</p><a class="btn-primary" href="${contactoAuditoria(d.item?.permalink || url)}">Quiero mi auditoría gratis</a></div>`;
+      } else {
+        out.innerHTML = resultadoAuditoria(d);
+        out.querySelector('.au-res')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    } catch (err) {
+      out.innerHTML = '<div class="au-msg"><p>Se cortó la conexión. Revisá tu internet y probá de nuevo.</p></div>';
+    }
+    btn.disabled = false;
+  });
+
   // ═══ Catálogo de diagnóstico ═══
   function diagnostico() {
     $('dx').innerHTML = D.diagnostico.map(x => `
