@@ -51,3 +51,15 @@ Grises de una sola familia, levemente fría. No se suma un segundo acento.
 - Clases con prefijo `ad-`: el usuario usa AdBlock y las oculta.
 - Precios públicos.
 - Datos inventados: las demos usan una "cuenta de ejemplo" que se aclara como tal.
+
+## Lo que funciona con Darío (actualizado 28/09/2026 — leer antes de diseñar)
+
+Aprobado y publicado: portada (`css/port.css`, `js/port.js`, dragón en `js/dragon.js`), Trayectoria (`css/exp.css`, `js/exp.js`, datos en `js/exp-data.js`), Habilidades (`css/hab.css`, `js/hab.js`, `js/hab-data.js`) y Herramientas (`herramientas.html`, `css/herr.css`, `js/herr.js`). Son la vara de calidad.
+
+- **La forma sale del contenido.** Cada sección se diseña para lo que muestra: el tiempo es una línea a escala real, las habilidades un mapa habilidad × puesto, las herramientas una vitrina por estado con demo. Nunca copiar la estética de otra sección como plantilla.
+- **Mostrar completo y con pruebas:** capturas, publicaciones reales, links. Nada inventado; si es ejemplo, se rotula "Ejemplo" o "cuenta de ejemplo".
+- **Vender por el problema:** cada herramienta arranca con la pregunta que resuelve ("¿Por qué cayeron tus ventas?") y termina en una acción ("Probalo gratis", "Avisame cuando esté").
+- **Cada herramienta tiene una demo chica pero valiosa** + botón a la versión completa, a una muestra difuminada o al contacto.
+- Colores grafito + amarillo (tokens de `root.css`), claro y oscuro, mobile 390px sin scroll horizontal.
+- **Rechazado:** estilos-disfraz (informe impreso, planilla, cartel suizo, vidriera flúo "infantil", cobalto/lima), catálogos de publicaciones como protagonista de la portada, textos genéricos de "analista", líneas de tiempo decorativas que "van para abajo".
+- Copy en español argentino con voseo, buena onda, sin exageraciones.
