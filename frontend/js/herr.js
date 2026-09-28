@@ -19,7 +19,7 @@ const H = [
   { id: 'competencia', q: '¿Qué está haciendo tu competencia?', imp: ['Saltos de vendidos', 'Cambios de precio', 'Ventas estimadas con rango'], e: 'diseno', n: 'Alertas de competencia', v: 'Te avisa cuando un competidor salta de ventas o cambia el precio', p: 'Vendedores', cta: [['Avisame cuando esté', contacto('competencia')]] },
   { id: 'radar', q: '¿Qué va a pegar antes que el resto?', imp: ['Mercado Libre y afuera'], e: 'diseno', n: 'Radar de demanda', v: 'Productos que empiezan a crecer, antes que el resto', p: 'Vendedores', cta: [['Avisame cuando esté', contacto('radar')]] },
   { id: 'perdida', q: '¿Cuánto gastás de más en publicidad?', imp: ['En pesos por mes', 'Caso real: ACOS 30% → 12%'], e: 'prueba', n: '¿Cuánta plata estás perdiendo?', v: 'Lo que se va en publicidad de más, en pesos por mes', p: 'Vendedores', cta: [['Quiero bajarlo', contacto('acos')]] },
-  { id: 'informe', q: '¿Qué recibís con la auditoría?', imp: ['10 problemas ordenados', 'Plan de acción'], e: 'idea', n: 'Informe de muestra', v: 'Así se ve la auditoría completa que te entrego', p: 'Vendedores', cta: [['Pedir el mío', 'sistema.html#auditar']] },
+  { id: 'informe', q: '¿Qué recibís con la auditoría?', imp: ['10 problemas ordenados', 'Plan de acción'], e: 'funciona', n: 'Informe de muestra', v: 'Así se ve la auditoría completa que te entrego', p: 'Vendedores', cta: [['Ver el informe de muestra', 'informe-muestra.html'], ['Quiero el mío', 'sistema.html#auditar']] },
   { id: 'desarmes', q: '¿Por qué no vende esa publicación?', imp: ['Casos reales', 'Antes y después'], e: 'idea', n: 'Desarmes de publicaciones', v: 'Una publicación real, desarmada: qué falla y cómo lo arreglo', p: 'Vendedores y empresas', cta: [['Desarmá la mía', contacto('desarme')]] },
   { id: 'mail', q: '¿Querés enterarte primero?', imp: ['Cada lunes', 'Un mail corto'], e: 'idea', n: 'Radar semanal por mail', v: 'Las tendencias que más crecieron, cada lunes en tu correo', p: 'Vendedores', cta: [['Quiero recibirlo', contacto('radar-mail')]] },
 ];
@@ -183,7 +183,7 @@ const DEMOS = {
       <p class="hd-doc-h">1. Salud por área</p><span class="is-blur" aria-hidden="true">████████ ████ ██████████ ███</span>
       <p class="hd-doc-h">2. Los 10 problemas que más plata cuestan</p><span class="is-blur" aria-hidden="true">██████ ███████████ ████ █████</span><span class="is-blur" aria-hidden="true">████████████ ████████</span>
       <p class="hd-doc-h">3. Plan de acción en orden</p><span class="is-blur" aria-hidden="true">███████ ██████ ████████████</span></div>
-      <p class="hd-soft">El informe completo sale con los datos de tu cuenta: te lo mando después de la auditoría gratis.</p>`,
+      <p class="hd-soft">La muestra entera, armada con la cuenta de ejemplo, se abre con el botón de abajo. El tuyo sale con los datos de tu cuenta: te lo mando después de la auditoría gratis.</p>`,
   },
   desarmes: {
     html: () => `${ejemplo('Desarme: Mandolina Borner V5')}
