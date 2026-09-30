@@ -25,7 +25,7 @@ const PREV = {
   dias: () => `<ol class="pv-dias" aria-hidden="true"><li style="--w:23%"><b>Días 1–7</b>Diagnosticar</li><li style="--w:47%"><b>8–21</b>Optimizar</li><li style="--w:30%"><b>22–30</b>Medir</li></ol>`,
   lab: () => `<div class="pv-lab" aria-hidden="true">${['ACOS y Product Ads', 'SEO de títulos', 'Anatomía de una publicación', 'Imágenes con IA'].map((t, i) => `<span style="--i:${i}">${t}</span>`).join('')}</div>`,
   prog: () => `<div class="pv-prog"><b>781</b><span>fichas en 12 categorías</span></div>`,
-  web: () => `<ol class="pv-web" aria-hidden="true"><li>Tipo de web</li><li>Estructura</li><li>Estilo</li><li>Receta lista</li></ol>`,
+  web: () => `<ul class="pv-wb" aria-hidden="true"><li><span>Celular</span><i style="--v:.92" class="ok"></i></li><li><span>Google</span><i style="--v:.55" class="warn"></i></li><li><span>Contacto</span><i style="--v:.25" class="bad"></i></li><li><span>Velocidad</span><i style="--v:.7" class="warn"></i></li></ul>`,
 };
 
 const TILES = [
@@ -37,7 +37,7 @@ const TILES = [
   ['dias', 'Para empresas', 'Mis primeros 30 días', 'Qué haría en tu equipo, semana por semana.', 'Ver el plan', '#valor-prop'],
   ['lab', 'Para aprender', 'Lab ML: 8 guías', 'ACOS, SEO, fotos, precios y reputación, explicados con casos para estudiantes y apasionados del e-commerce.', 'Abrir el Lab', 'lab.html'],
   ['prog', 'Base de datos y ejemplos', 'Programación', 'Mi base de conocimiento para construir una web.', 'Explorar', 'programacion.html'],
-  ['web', 'Para armar tu web', 'Armá tu web', 'La receta de tu próximo proyecto, paso a paso.', 'Empezar', 'armar.html'],
+  ['web', 'Para negocios con web', 'Revisá tu web', 'Pegás la dirección y ves qué le falta para traerte clientes.', 'Revisar gratis', 'web.html'],
 ];
 $('pt-map').innerHTML = TILES.map(([id, k, t, d, c, u]) => `<a class="pt-tile t-${id}" href="${u}">
   <div class="pt-prev">${PREV[id]()}</div>

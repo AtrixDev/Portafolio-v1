@@ -3,6 +3,8 @@
 //   · con sesión del panel: resultado completo
 //   · público (chequeo rápido de sistema.html): solo datos verificables, sin puntaje; 5 por persona por día,
 //     100 por día en total y memoria de 24 h por publicación (una publicación repetida no gasta consultas)
+// POST /api/audit?action=web  { url } → diagnóstico de la web de un negocio (web.html); 5 por persona por día, memoria de 24 h
+// POST /api/audit?action=web-velocidad  { url } → velocidad real en celular con PageSpeed (solo si hay PAGESPEED_KEY)
 // POST /api/audit?action=conectar  { nombre, email, whatsapp } → link de Mercado Libre para conectar la cuenta
 //      (auditoría completa gratis; el pedido llega a Mensajes del admin cuando se conecta)
 // GET  /api/audit?action=estado&id=…  → sincroniza por tandas y, al terminar, devuelve el resumen de la auditoría
@@ -14,6 +16,7 @@ import { fetchPublicacion, MLNotLinked, MLForbidden, ML, makeState, authorizeUrl
 import { sincronizar, datosCuenta } from '../lib/tracker-sync.js';
 import { analizarCuenta } from '../lib/tracker.js';
 import { resumenAuditoria } from '../lib/auditoria-cuenta.js';
+import { diagnosticarWeb, velocidadWeb, WebError } from '../lib/diagnostico-web.js';
 import { parseMlaId, esUrlCatalogo, esUrlUserProduct, tituloDesdeUrl, scorePublicacion, planDeAccion, tituloConIA } from '../lib/audit.js';
 
 export default async function handler(req, res) {
@@ -21,6 +24,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   const accion = req.query?.action;
   if (accion === 'conectar' || accion === 'estado') return auditoriaCuenta(req, res, accion);
+  if (accion === 'web' || accion === 'web-velocidad') return auditoriaWeb(req, res, accion);
   if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' });
   const admin = isAdmin(req);
 
@@ -172,5 +176,46 @@ async function auditoriaCuenta(req, res, accion) {
   } catch (err) {
     console.error('[audit estado]', err.message);
     return res.status(200).json({ estado: 'sincronizando', nickname: p.nickname, progreso: { fase: 'reintentando', texto: 'Mercado Libre está lento: sigo intentando' } });
+  }
+}
+
+// ── Diagnóstico de la web de un negocio (web.html) ──
+async function auditoriaWeb(req, res, accion) {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' });
+  const url = String(req.body?.url || '').trim();
+  if (!url) return res.status(400).json({ error: 'Pegá la dirección de tu web, por ejemplo: tunegocio.com.ar' });
+  let db;
+  try { db = await getDB(); } catch { return res.status(503).json({ error: 'El servicio no está disponible en este momento.' }); }
+  const admin = isAdmin(req), cache = db.collection('web_cache');
+  await cache.createIndex({ at: 1 }, { expireAfterSeconds: 86400 }).catch(() => {});
+  let clave;
+  try { const u = new URL(/^https?:\/\//i.test(url) ? url : 'https://' + url); clave = (accion === 'web' ? 'w:' : 'v:') + u.hostname.replace(/^www\./, '').toLowerCase() + u.pathname.replace(/\/$/, ''); }
+  catch { return res.status(400).json({ error: 'Esa dirección no parece una web. Probá con algo como tunegocio.com.ar' }); }
+
+  const guardado = await cache.findOne({ _id: clave });
+  if (guardado) return res.status(200).json({ ...guardado.res, memoria: true });
+
+  if (accion === 'web-velocidad') {
+    if (!process.env.PAGESPEED_KEY) return res.status(200).json({ sinClave: true });
+    if (!admin && !(await rateLimit(db, 'webvel:global', 400, 86400))) return res.status(200).json({ sinClave: true });
+    try {
+      const v = await velocidadWeb(url, process.env.PAGESPEED_KEY);
+      await cache.updateOne({ _id: clave }, { $set: { res: v, at: new Date() } }, { upsert: true });
+      return res.status(200).json(v);
+    } catch (e) { return res.status(502).json({ error: e.message || 'Google no pudo medir la velocidad.' }); }
+  }
+
+  if (!admin) {
+    if (!(await rateLimit(db, `webpub:${clientIp(req)}`, 5, 86400))) return res.status(429).json({ code: 'limite_persona', error: 'Ya revisaste 5 webs hoy: mañana tenés 5 más. Si querés que la mire yo, escribime.' });
+    if (!(await rateLimit(db, 'webpub:global', 150, 86400))) return res.status(429).json({ code: 'limite_global', error: 'Por hoy llegamos al tope de revisiones. Volvé mañana o escribime y la reviso yo.' });
+  }
+  try {
+    const d = await diagnosticarWeb(url);
+    await cache.updateOne({ _id: clave }, { $set: { res: d, at: new Date() } }, { upsert: true });
+    return res.status(200).json(d);
+  } catch (e) {
+    if (e instanceof WebError) return res.status(e.code === 'no_web' ? 422 : 400).json({ code: e.code, error: e.message });
+    console.error('[audit web]', e.message);
+    return res.status(502).json({ error: 'No pude revisar esa web ahora. Probá de nuevo en un rato.' });
   }
 }

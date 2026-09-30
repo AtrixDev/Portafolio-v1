@@ -1,0 +1,1 @@
+En ventas.csv tengo las ventas mensuales de una tienda en Mercado Libre (ventas y publicidad en pesos). Armá un reporte en Excel, reporte.xlsx en esta carpeta, para mostrarle al dueño cómo le fue en estos seis meses: conversión, ACOS y la evolución. En español argentino.

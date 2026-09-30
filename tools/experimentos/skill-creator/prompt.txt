@@ -1,0 +1,1 @@
+Creá una skill para Claude que responda las preguntas de los compradores en mis publicaciones de Mercado Libre con el tono de mi tienda de artículos de cocina: cercano, claro, en español argentino, sin prometer lo que no está en la publicación y siempre invitando a comprar. Dejá la skill en la carpeta responder-preguntas/ de esta carpeta.

@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Página no encontrada | Darío Colángelo</title>
-  <meta name="description" content="Esta página no existe. Volvé al inicio o mirá el Lab.">
+  <title>Revisá tu web gratis: ¿te trae clientes? | Darío Colángelo</title>
+  <meta name="description" content="Pegá la dirección de la web de tu negocio y en segundos ves qué le falta para que la gente te encuentre y te escriba: celular, Google, WhatsApp, velocidad y confianza. Gratis.">
   <meta name="author" content="Darío Colángelo">
-  <meta name="robots" content="noindex, follow">
+  <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#efefec" media="(prefers-color-scheme: light)">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Página no encontrada | Darío Colángelo">
-  <meta property="og:description" content="Esta página no existe. Volvé al inicio o mirá el Lab.">
+  <meta property="og:title" content="Revisá tu web gratis: ¿te trae clientes? | Darío Colángelo">
+  <meta property="og:description" content="Pegá la dirección de la web de tu negocio y en segundos ves qué le falta para que la gente te encuentre y te escriba: celular, Google, WhatsApp, velocidad y confianza. Gratis.">
   <meta property="og:locale" content="es_AR">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ffe14a'/><text x='50%25' y='54%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%23141207'>DC</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,6 +20,7 @@
   <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
   <link rel="stylesheet" href="css/root.css">
   <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/web.css?v=1">
   <link rel="stylesheet" href="css/surfaces.css">
 </head>
 <body>
@@ -59,23 +60,41 @@
 <!-- NAV:end -->
 
 
-<main id="contenido" class="nf">
-  <p class="nf-code mono" aria-hidden="true">404</p>
-  <h1 class="nf-title">Esta publicación no existe.</h1>
-  <p class="nf-sub">Puede que el link esté incompleto o que la página se haya movido. Probá con alguno de estos:</p>
-  <div class="nf-actions">
-    <a href="index.html" class="btn-primary">Ir al inicio</a>
-    <a href="programacion.html" class="btn-secondary">Programación</a>
-    <a href="lab.html" class="btn-secondary">Lab ML</a>
-  </div>
+<main id="contenido">
+
+<section class="wb-hero" aria-labelledby="wb-t">
+  <h1 id="wb-t">¿Tu web te trae <span>clientes?</span></h1>
+  <p class="wb-sub">Pegá la dirección y en segundos te muestro qué le falta para que la gente te encuentre y te escriba. Reviso más de 20 puntos: celular, Google, contacto, velocidad y confianza. Es gratis.</p>
+  <form class="wb-form" id="wb-form" novalidate>
+    <label class="sr-only" for="wb-url">Dirección de tu web</label>
+    <span class="wb-pre" aria-hidden="true">https://</span>
+    <input id="wb-url" name="url" type="text" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" placeholder="tunegocio.com.ar" required>
+    <button type="submit" class="btn-primary" id="wb-go">Revisar mi web</button>
+  </form>
+  <p class="wb-try">¿Querés ver cómo funciona primero? Probá con <button type="button" data-try="odontologiaalmagro.com.ar">odontologiaalmagro.com.ar</button>, una web que hice yo.</p>
+</section>
+
+<section class="wb-out" id="wb-out" aria-live="polite"></section>
+
+<section class="wb-que" aria-labelledby="wb-que-t">
+  <h2 id="wb-que-t">Qué reviso y por qué importa</h2>
+  <ol class="wb-lista">
+    <li><b>Celular</b><span>Que se vea bien y se pueda usar con el dedo. La mayoría de las visitas de un negocio llegan desde el teléfono.</span></li>
+    <li><b>Contacto</b><span>Botón de WhatsApp, teléfono que se toca y llama, formulario y cómo llegar. Si escribirte cuesta, la gente se va a la competencia.</span></li>
+    <li><b>Google</b><span>Título, descripción, ficha de negocio y mapa del sitio: lo que decide si aparecés cuando te buscan y si hacen clic.</span></li>
+    <li><b>Velocidad</b><span>Cuánto tarda en responder, cuánto pesa y si bloquea la carga. Cada segundo de espera se lleva visitas.</span></li>
+    <li><b>Confianza</b><span>Conexión segura, año al día, cómo se ve al compartirla por WhatsApp y si medís tus visitas.</span></li>
+  </ol>
+  <p class="wb-nota">Reviso la página que entrega tu web, sin entrar a tu hosting ni guardar nada tuyo. Si tu web está armada solo con JavaScript, algunas cosas pueden no verse: te lo aviso en el resultado.</p>
+</section>
+
+<section class="wb-sin" aria-labelledby="wb-sin-t">
+  <h2 id="wb-sin-t">¿Todavía no tenés web?</h2>
+  <p>Elegí tu rubro y lo que necesitás, y en dos minutos ves cómo quedaría, en celular y en computadora.</p>
+  <a class="btn-secondary" href="armar.html">Armá la tuya</a>
+</section>
+
 </main>
-<style>
-  .nf { min-height: 100dvh; display: flex; flex-direction: column; justify-content: center; padding: calc(var(--nav-h) + 3rem) var(--pad-x) 4rem; }
-  .nf-code { font-size: clamp(6rem, 22vw, 16rem); font-weight: 700; line-height: .85; letter-spacing: -.06em; color: var(--accent-text); }
-  .nf-title { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 750; letter-spacing: -.045em; line-height: 1; margin-top: 1.5rem; max-width: 18ch; }
-  .nf-sub { margin-top: 1rem; color: var(--text-2); max-width: 48ch; font-size: 1.08rem; }
-  .nf-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
-</style>
 
 <footer>
   <p class="footer-name">Darío Colángelo<span>.</span></p>
@@ -91,5 +110,6 @@
   </div>
 </footer>
 <script src="js/main.js"></script>
+<script src="js/web.js?v=1"></script>
 </body>
 </html>

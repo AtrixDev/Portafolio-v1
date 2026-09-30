@@ -1,0 +1,1 @@
+Tengo una tienda online de yerba mate orgánica, "Yerbal del Monte", con tres packs: 1 kg a $9.500, 3 kg a $26.000 y 6 kg a $48.000. Quiero que la mayoría elija el pack de 3 kg. Hacé la sección de precios como un archivo index.html en esta carpeta (un solo archivo, CSS adentro, sin imágenes externas), con los textos en español argentino.

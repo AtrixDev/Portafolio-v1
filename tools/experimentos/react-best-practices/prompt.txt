@@ -1,0 +1,1 @@
+Revisá el componente Pedidos.jsx de esta carpeta y mejoralo. Dejá la versión nueva en el mismo archivo y explicá los cambios en cambios.md, en español argentino.
