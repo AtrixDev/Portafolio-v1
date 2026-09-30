@@ -17,6 +17,7 @@
 .hr-ic svg { width: 14px; height: 14px; }
 [data-e="funciona"] .hr-ic { color: var(--ok); }
 [data-e="prueba"] .hr-ic { color: var(--accent-text); }
+[data-e="pausa"] .hr-ic { color: var(--warn); }
 [data-e="diseno"] .hr-ic { color: var(--text-2); }
 [data-e="idea"] .hr-ic { color: var(--muted); }
 .hr-grp ul { list-style: none; padding: 0; display: grid; gap: .3rem; }
@@ -40,6 +41,7 @@
 .hr-steps li.done::before { background: var(--text-2); }
 .hr-steps li.now { color: var(--text); font-weight: 600; }
 .hr-steps li.now::before { background: var(--accent); }
+.hr-sh[data-e="pausa"] .hr-steps li.now::before { background: var(--warn); }
 
 .hr-demo { margin: 0 clamp(.75rem, 2vw, 1.25rem); padding: clamp(1rem, 2.4vw, 1.6rem); border-radius: var(--r-card); background: var(--bg); border: 1px solid var(--line); display: grid; gap: .9rem; }
 .hr-demo-k { font: 600 .76rem/1 var(--font-sans); color: var(--accent-text); }
@@ -170,11 +172,11 @@
 .hr-head small { display: grid; gap: .6rem; margin-top: 1rem; }
 .hr-seg { display: flex; gap: 4px; height: 12px; max-width: 26rem; }
 .hr-seg i { flex: var(--n); border-radius: 4px; animation: hrSeg .9s var(--ease-out) both; transform-origin: left; }
-.hr-seg i[data-e="funciona"] { background: var(--ok); } .hr-seg i[data-e="prueba"] { background: var(--accent); animation-delay: .1s; } .hr-seg i[data-e="diseno"] { background: var(--text-2); animation-delay: .2s; } .hr-seg i[data-e="idea"] { background: var(--line-strong); animation-delay: .3s; }
+.hr-seg i[data-e="funciona"] { background: var(--ok); } .hr-seg i[data-e="pausa"] { background: var(--warn); } .hr-seg i[data-e="prueba"] { background: var(--accent); animation-delay: .1s; } .hr-seg i[data-e="diseno"] { background: var(--text-2); animation-delay: .2s; } .hr-seg i[data-e="idea"] { background: var(--line-strong); animation-delay: .3s; }
 @keyframes hrSeg { from { transform: scaleX(0); } }
 .hr-leg { display: flex; flex-wrap: wrap; gap: .3rem .9rem; font: 500 .78rem/1.2 var(--font-sans); color: var(--text-2); }
 .hr-leg span::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: .35rem; background: var(--line-strong); }
-.hr-leg [data-e="funciona"]::before { background: var(--ok); } .hr-leg [data-e="prueba"]::before { background: var(--accent); } .hr-leg [data-e="diseno"]::before { background: var(--text-2); }
+.hr-leg [data-e="funciona"]::before { background: var(--ok); } .hr-leg [data-e="pausa"]::before { background: var(--warn); } .hr-leg [data-e="prueba"]::before { background: var(--accent); } .hr-leg [data-e="diseno"]::before { background: var(--text-2); }
 
 .hr-item { grid-template-columns: 32px minmax(0, 1fr); column-gap: .7rem; align-items: center; }
 .hr-iico { grid-row: span 2; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: var(--surface-2); border: 1px solid var(--line); color: var(--text-2); transition: background-color .2s ease, color .2s ease; }
@@ -184,7 +186,7 @@
 
 .hr-sh { position: relative; overflow: hidden; }
 .hr-sh::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 180px; background: radial-gradient(90% 100% at 0% 0%, var(--st, var(--accent-soft)), transparent 70%); pointer-events: none; }
-.hr-sh[data-e="funciona"] { --st: var(--ok-soft); } .hr-sh[data-e="prueba"] { --st: var(--accent-soft); } .hr-sh[data-e="diseno"] { --st: color-mix(in srgb, var(--text-2) 10%, transparent); } .hr-sh[data-e="idea"] { --st: color-mix(in srgb, var(--muted) 8%, transparent); }
+.hr-sh[data-e="funciona"] { --st: var(--ok-soft); } .hr-sh[data-e="pausa"] { --st: var(--warn-soft); } .hr-sh[data-e="prueba"] { --st: var(--accent-soft); } .hr-sh[data-e="diseno"] { --st: color-mix(in srgb, var(--text-2) 10%, transparent); } .hr-sh[data-e="idea"] { --st: color-mix(in srgb, var(--muted) 8%, transparent); }
 .hr-sh > * { position: relative; }
 .hr-sh-top { display: flex; align-items: center; gap: 1rem; }
 .hr-bigic { display: grid; place-items: center; width: 60px; height: 60px; border-radius: 16px; background: var(--accent); color: var(--accent-ink); box-shadow: 0 12px 26px -12px color-mix(in srgb, var(--accent) 70%, #000); flex: none; }

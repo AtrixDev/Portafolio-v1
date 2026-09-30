@@ -2,19 +2,20 @@
 // y un botón a la versión completa, a una muestra o a "avisame cuando esté".
 import { esc } from './exp-data.js';
 
-const ETAPAS = { funciona: 'Funcionando', prueba: 'Probando', diseno: 'Diseñando', idea: 'En idea' };
+// "pausa": funcionaba, pero Mercado Libre cortó el dato del que depende (se aclara en la nota de cada una)
+const ETAPAS = { funciona: 'Funcionando', pausa: 'En pausa', prueba: 'Probando', diseno: 'Diseñando', idea: 'En idea' };
 const PASOS = ['Idea', 'Diseño', 'Construcción', 'Prueba', 'Funcionando'];
-const NIVEL = { idea: 0, diseno: 1, prueba: 3, funciona: 4 };
+const NIVEL = { idea: 0, diseno: 1, prueba: 3, pausa: 4, funciona: 4 };
 const contacto = a => `contacto.html?asunto=${a}`;
 
 const H = [
   { id: 'tracker', q: '¿Por qué cayeron tus ventas?', imp: ['10 tipos de problema', 'API oficial de Mercado Libre', 'Se actualiza todos los días'], e: 'funciona', n: 'ML Tracker', v: 'Te dice qué publicación se cae, por qué y qué hacer', p: 'Vendedores y empresas', cta: [['Abrir la demo completa', 'sistema.html#demo']] },
   { id: 'auditoria', q: '¿Dónde se te escapa la plata?', imp: ['Gratis', 'En minutos', 'Salud en 6 áreas'], e: 'funciona', n: 'Auditoría de cuenta', v: 'La salud de tu cuenta por área y lo que más plata te cuesta', p: 'Vendedores', cta: [['Auditar mi cuenta gratis', 'sistema.html#auditar']] },
-  { id: 'chequeo', q: '¿Tu publicación está bien armada?', imp: ['Cualquier publicación', 'Sin conectar la cuenta', '5 por día'], e: 'funciona', n: 'Chequeo de publicación', v: 'Pegás un link y ves lo que le falta a la publicación', p: 'Vendedores', cta: [['Auditoría completa de la cuenta', 'sistema.html#auditar']] },
+  { id: 'chequeo', q: '¿Tu publicación está bien armada?', imp: ['Completo con links de catálogo', 'Sin conectar la cuenta', '5 por día'], e: 'funciona', n: 'Chequeo de publicación', v: 'Pegás un link y ves lo que le falta a la publicación', p: 'Vendedores', cta: [['Auditoría completa de la cuenta', 'sistema.html#auditar']] },
   { id: 'simulador', q: '¿Qué le falta a tu publicación?', imp: ['7 criterios', 'Al instante'], e: 'funciona', n: 'Simulador de puntaje', v: 'El criterio con el que reviso una publicación, para mover', p: 'Vendedores', cta: [['Revisar mi publicación real', 'sistema.html#auditar']] },
   { id: 'diagnostico', q: '¿Qué le pasa a tu cuenta?', imp: ['10 problemas típicos', 'Cómo se detecta', 'Qué hacer'], e: 'funciona', n: 'Catálogo de diagnóstico', v: 'Cómo se detecta cada problema típico y qué hacer', p: 'Vendedores y empresas', cta: [['Ver los 10 problemas', 'sistema.html#diagnostico']] },
-  { id: 'opiniones', q: '¿Qué odian los compradores de tu rubro?', imp: ['Hasta 200 opiniones', 'Tuyas o de la competencia'], e: 'funciona', n: 'Minero de opiniones', v: 'Qué critican y qué elogian los compradores, en segundos', p: 'Vendedores', cta: [['Analizar mi producto', contacto('opiniones')]], nota: 'Es de uso interno: con tu producto lo corro yo.' },
-  { id: 'tendencias', q: '¿Qué está por venderse?', imp: ['Por categoría', 'Datos reales de Mercado Libre'], e: 'funciona', n: 'Buscador de tendencias', v: 'Las búsquedas que más crecen en cada categoría', p: 'Vendedores', cta: [['Buscar tendencias ahora', 'sistema.html#tendencias'], ['Pedir la lista completa', contacto('tendencias')]] },
+  { id: 'opiniones', q: '¿Qué odian los compradores de tu rubro?', imp: ['Hasta 200 opiniones', 'De tus publicaciones'], e: 'funciona', n: 'Minero de opiniones', v: 'Qué critican y qué elogian los compradores, en segundos', p: 'Vendedores', cta: [['Analizar mi producto', contacto('opiniones')]], nota: 'Es de uso interno y corre con tu cuenta conectada. Mercado Libre cerró las opiniones de otras cuentas: las de la competencia las reviso a mano.' },
+  { id: 'tendencias', q: '¿Qué está por venderse?', imp: ['Por categoría', 'Datos de Mercado Libre'], e: 'pausa', n: 'Buscador de tendencias', v: 'Las búsquedas que más crecen en cada categoría', p: 'Vendedores', cta: [['Pedime las de mi rubro', contacto('tendencias')], ['Ver cómo funciona', 'sistema.html#tendencias']], nota: 'Mercado Libre dejó de publicar sus tendencias en la API (30/09/2026). Mientras vuelven, las saco a mano del buscador.' },
   { id: 'importacion', q: '¿Te conviene importarlo?', imp: ['Costo por unidad', 'Margen y precio mínimo'], e: 'funciona', n: 'Calculadora de importación', v: 'Cuánto te cuesta un producto importado puesto en tu depósito', p: 'Vendedores', cta: [['Abrir la calculadora completa', 'importar.html'], ['Analizarlo con vos', contacto('importacion')]] },
   { id: 'competencia', q: '¿Qué está haciendo tu competencia?', imp: ['Saltos de vendidos', 'Cambios de precio', 'Ventas estimadas con rango'], e: 'diseno', n: 'Alertas de competencia', v: 'Te avisa cuando un competidor salta de ventas o cambia el precio', p: 'Vendedores', cta: [['Avisame cuando esté', contacto('competencia')]] },
   { id: 'radar', q: '¿Qué va a pegar antes que el resto?', imp: ['Mercado Libre y afuera'], e: 'diseno', n: 'Radar de demanda', v: 'Productos que empiezan a crecer, antes que el resto', p: 'Vendedores', cta: [['Avisame cuando esté', contacto('radar')]] },
@@ -48,6 +49,7 @@ const ic = e => ({
   funciona: '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="4" fill="currentColor"/></svg>',
   prueba: '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 3a5 5 0 0 1 0 10z" fill="currentColor"/></svg>',
   diseno: '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 3a5 5 0 0 1 5 5H8z" fill="currentColor"/></svg>',
+  pausa: '<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="3.5" width="2.6" height="9" rx="1" fill="currentColor"/><rect x="9.4" y="3.5" width="2.6" height="9" rx="1" fill="currentColor"/></svg>',
   idea: '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="2.6 2.2"/></svg>',
 }[e]);
 const ejemplo = t => `<p class="hd-tag">${esc(t)}</p>`;
@@ -146,7 +148,7 @@ const DEMOS = {
     }),
   },
   tendencias: {
-    html: () => `${ejemplo('Así se ve · la versión completa trae datos reales')}
+    html: () => `${ejemplo('Así se ve · ejemplo: Mercado Libre pausó los datos reales')}
       <ol class="hd-trend">${['organizador de cajones', 'dispenser de detergente', 'lámpara de escritorio led'].map((t, i) => `<li><span>${i + 1}</span><b>${t}</b><em>creciendo</em></li>`).join('')}
       ${[4, 5, 6, 7, 8].map(i => `<li class="is-blur" aria-hidden="true"><span>${i}</span><b>${'█'.repeat(8 + (i * 3) % 7)}</b><em>creciendo</em></li>`).join('')}</ol>
       <p class="hd-soft">Los 3 primeros de cada categoría se ven completos. La lista entera, con las que valen la pena, te la paso yo.</p>`,
@@ -228,4 +230,5 @@ abrir(H.some(h => h.id === location.hash.slice(1)) ? location.hash.slice(1) : 't
 $('hr-dock').addEventListener('click', e => { const b = e.target.closest('.hr-item'); if (b) abrir(b.dataset.id, true); });
 Promise.all([pDemo, pDiag]).then(() => { if (['tracker', 'auditoria', 'diagnostico'].includes(actual)) abrir(actual); });
 const cnt = e => H.filter(h => h.e === e).length;
-$('hr-count').innerHTML = `<span class="hr-seg" aria-hidden="true">${Object.keys(ETAPAS).map(e => `<i data-e="${e}" style="--n:${cnt(e)}"></i>`).join('')}</span><span class="hr-leg">${Object.entries(ETAPAS).map(([e, t]) => `<span data-e="${e}">${cnt(e)} ${t.toLowerCase()}</span>`).join('')}</span>`;
+const hay = Object.keys(ETAPAS).filter(e => cnt(e));
+$('hr-count').innerHTML = `<span class="hr-seg" aria-hidden="true">${hay.map(e => `<i data-e="${e}" style="--n:${cnt(e)}"></i>`).join('')}</span><span class="hr-leg">${hay.map(e => `<span data-e="${e}">${cnt(e)} ${ETAPAS[e].toLowerCase()}</span>`).join('')}</span>`;

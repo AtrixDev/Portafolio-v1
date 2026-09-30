@@ -98,7 +98,7 @@ export const PUESTOS = [
       ['¿Cuánto gastás de más en publicidad?', 'Calculadora de ACOS', 'Pesos por mes que se van por encima del ACOS objetivo.', 'herramientas.html#perdida'],
       ['¿Tu publicación está bien armada?', 'Chequeo y simulador', 'Pegás el link y ves qué le falta para vender.', 'herramientas.html#chequeo'],
       ['¿Qué odian los compradores de tu rubro?', 'Minero de opiniones', 'Resume críticas y elogios de cualquier publicación.', 'herramientas.html#opiniones'],
-      ['¿Qué está por venderse?', 'Buscador de tendencias', 'Las búsquedas que más crecen en cada categoría.', 'herramientas.html#tendencias'],
+      ['¿Cuánto te cuesta importarlo?', 'Calculadora de importación', 'El costo real por unidad puesto en tu depósito.', 'herramientas.html#importacion'],
     ],
     aporte: 'Lo que aprendí en cada puesto, convertido en herramientas que cualquiera puede probar.',
   },

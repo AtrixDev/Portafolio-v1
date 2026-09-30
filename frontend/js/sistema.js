@@ -266,9 +266,9 @@
       <div class="au-salud" data-tono="${tonoSalud(r.salud)}">
         <p class="au-num"><b>${r.salud ?? '—'}</b><span>/100</span></p>
         <div><h3>${esc(d.nombre?.split(' ')[0] || 'Listo')}, esta es la salud de ${esc(d.nickname || 'tu cuenta')}</h3>
-        <p>${r.activas} publicaciones activas analizadas. ${r.totalHallazgos ? `Encontré ${r.totalHallazgos} tipos de problema; estos son los que más pesan.` : 'No encontré problemas relevantes: la cuenta se mueve dentro de lo esperado.'}</p></div>
+        <p>${r.activas} ${r.activas === 1 ? 'publicación activa analizada' : 'publicaciones activas analizadas'}. ${r.totalHallazgos ? (r.totalHallazgos === 1 ? 'Encontré un tipo de problema: este es el que más pesa.' : `Encontré ${r.totalHallazgos} tipos de problema; estos son los que más pesan.`) : 'No encontré problemas relevantes: la cuenta se mueve dentro de lo esperado.'}</p></div>
       </div>
-      <ul class="au-areas">${r.areas.map(a => `<li><span>${esc(a.area)}</span><span class="au-bar"><i data-tono="${tonoSalud(a.valor)}" style="transform: scaleX(${(a.valor ?? 0) / 100})"></i></span><b>${a.valor ?? '—'}</b></li>`).join('')}</ul>
+      <ul class="au-areas">${r.areas.map(a => `<li><span>${esc(a.area)}</span><span class="au-bar"><i data-tono="${tonoSalud(a.valor)}" style="transform: scaleX(${a.valor == null ? 0 : Math.max(.04, a.valor / 100)})"></i></span><b data-tono="${tonoSalud(a.valor)}">${a.valor ?? '—'}</b></li>`).join('')}</ul>
       ${r.hallazgos.length ? `<ol class="au-top">${r.hallazgos.map(h => `<li><b>${esc(h.titulo)}</b><span>${h.publicaciones} ${h.publicaciones === 1 ? 'publicación' : 'publicaciones'}${h.monto ? ` · ${plataAR(h.monto)} ${esc(h.montoTxt)}` : ''}</span></li>`).join('')}</ol>` : ''}
       ${r.sinCostos ? '<p class="au-nota">La rentabilidad no se puede medir sin los costos de tus productos: la vemos juntos en el informe.</p>' : ''}
       <div class="au-mas-cta">
