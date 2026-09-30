@@ -1,10 +1,10 @@
 /* ============================================================
    PROGRAMACION-EJEMPLOS.JS — "Así se ve": ejemplos visuales de cada ficha
-   Lo usa renderEntry() de programacion.js (se carga antes).
+   Lo usa renderEntry() de programacion.js (se carga antes). Necesita programacion-rubros.js.
      estilos     → mini interfaz con los colores y efectos del estilo
      landing     → wireframe armado con el orden de secciones
-     paletas     → interfaz de muestra pintada con la paleta
-     rubros      → la paleta del rubro aplicada
+     paletas     → ejemplo de la web del rubro pintado con la paleta (programacion-rubros.js)
+     rubros      → la paleta del rubro aplicada a ese mismo ejemplo
      arquitecturas → diagrama del flujo de un pedido
      soluciones  → sitios reales de ejemplo
      skills      → instalación + prompt de ejemplo
@@ -76,31 +76,55 @@ window.WLExamples = (function () {
     return block('Así se arma', `<div class="wf">${secc}</div>`, 'Wireframe generado con el orden de secciones del patrón.');
   }
 
-  // ── Paletas: interfaz de muestra ──
-  function paletaMock(pal) {
+  // ── Paletas y rubros: la paleta aplicada a un ejemplo de la web de ESE rubro ──
+  // El contenido sale de programacion-rubros.js (familia + texto propio de cada rubro).
+  // Una paleta sin rubro usa un "sitio de negocio" neutro.
+  function pieza(d) {
+    const w = d.w || [];
+    const prog = pct => `<div class="pm-prog"><i style="width:${Math.max(0, Math.min(100, +pct || 0))}%"></i></div>`;
+    switch (d.t) {
+      case 'prog':   return `${prog(w[0])}<p class="pm-meta"><b>${esc(w[1])}</b><span>${esc(w[2])}</span></p>`;
+      case 'slots':  return `<p class="pm-meta"><span>${esc(w[0])}</span></p><div class="pm-slots">${w.slice(1).map((x, i) => `<span class="pm-slot${i ? '' : ' is-on'}">${esc(x)}</span>`).join('')}</div>`;
+      case 'kpis':   return `<div class="pm-kpis">${w.map(([a, b]) => `<div><small>${esc(a)}</small><b>${esc(b)}</b></div>`).join('')}</div>`;
+      case 'precio': return `<p class="pm-price">${esc(w[0])}</p><p class="pm-meta"><span>${esc(w[1])}</span></p>`;
+      case 'campos': return `<div class="pm-fields">${w.map(([a, b]) => `<span><small>${esc(a)}</small>${esc(b)}</span>`).join('')}</div>`;
+      case 'player': return `<div class="pm-player"><span class="pm-play" aria-hidden="true"></span><span><b>${esc(w[0])}</b><small>${esc(w[1])}</small></span></div>${prog(w[2])}`;
+      case 'fecha':  return `<div class="pm-date"><span class="pm-cal"><b>${esc(w[0])}</b><small>${esc(w[1])}</small></span><small>${esc(w[2])}</small></div>`;
+      case 'chat':   return `<div class="pm-chat">${w.map(([a, b], i) => `<p class="${i % 2 ? 'is-me' : ''}"><small>${esc(a)}</small>${esc(b)}</p>`).join('')}</div>`;
+      case 'big':    return `<div class="pm-big"><b>${esc(w[0])}</b><small>${esc(w[1])}</small></div>${w[2] != null ? prog(w[2]) : ''}`;
+      default:       return `<ul class="pm-rows">${w.map(([a, b]) => `<li><span>${esc(a)}</span><b>${esc(b)}</b></li>`).join('')}</ul>`;
+    }
+  }
+  function paletaMock(pal, id) {
     const p = Object.fromEntries(pal);
     const bg = p.Fondo || '#ffffff', fg = p.Texto || '#111111', pri = p.Primario || '#2563eb';
     const acc = p.Acento || pri, card = p.Tarjeta || bg, muted = p.Apagado || bg, border = p.Borde || 'rgba(0,0,0,.1)', bad = p.Destructivo || '#dc2626';
-    return `<div class="ex-stage"><div class="pm" style="--bg:${bg};--fg:${fg};--pri:${pri};--pri-ink:${inkOn(pri)};--acc:${acc};--acc-ink:${inkOn(acc)};--card:${card};--muted:${muted};--line:${border};--bad:${bad}">
-      <div class="pm-bar"><span class="pm-logo"></span><span class="pm-nav"><i></i><i></i></span></div>
+    const d = window.WLRubros ? WLRubros.datos(id) : { t: 'rows', marca: 'Tu Empresa', h: 'Soluciones para tu negocio', p: 'Atención personalizada.', w: [], b: 'Pedir presupuesto', g: 'Conocé más' };
+    return `<div class="ex-stage"><div class="pm pm--${d.t}" style="--bg:${bg};--fg:${fg};--pri:${pri};--pri-ink:${inkOn(pri)};--acc:${acc};--acc-ink:${inkOn(acc)};--card:${card};--muted:${muted};--line:${border};--bad:${bad}">
+      <div class="pm-bar"><span class="pm-brand"><span class="pm-logo"></span>${esc(d.marca)}</span><span class="pm-nav"><i></i><i></i></span></div>
       <div class="pm-body">
         <div class="pm-card">
-          <p class="pm-h">Resumen del mes</p>
-          <p class="pm-p">Ventas +18% y ACOS en 12,4%. Tres publicaciones necesitan fotos.</p>
-          <div class="pm-row"><span class="pm-btn">Ver detalle</span><span class="pm-ghost">Exportar</span><span class="pm-badge">3 alertas</span></div>
+          <p class="pm-h">${esc(d.h)}</p>
+          <p class="pm-p">${esc(d.p)}</p>
+          ${pieza(d)}
+          <div class="pm-row"><span class="pm-btn">${esc(d.b)}</span><span class="pm-ghost">${esc(d.g)}</span></div>
         </div>
-        <div class="pm-muted"><i></i><i></i></div>
+        <div class="pm-muted"><i></i><i></i><i></i></div>
       </div>
     </div></div>`;
   }
+  const notaEjemplo = id => {
+    const d = window.WLRubros?.datos(id);
+    return d && !d.neutro ? ` Ejemplo inventado de una web de este rubro (familia: ${esc(d.familia.toLowerCase())}).` : ' Ejemplo neutro de un sitio de negocio.';
+  };
   function paleta(e) {
-    return e.palette?.length ? block('Así se ve', paletaMock(e.palette), 'La paleta aplicada a una interfaz de ejemplo: fondo, tarjeta, texto, botón principal y alertas.') : '';
+    return e.palette?.length ? block('Así se ve', paletaMock(e.palette, e.id), `La paleta aplicada a una interfaz de ejemplo: fondo, tarjeta, texto, botón principal y botón secundario.${notaEjemplo(e.id)}`) : '';
   }
   async function rubro(e) {
     try {
       const pals = await loadCat('paletas');
       const pal = pals.find(p => p.id === e.id);
-      if (pal) return block('Así se ve (paleta del rubro)', paletaMock(pal.palette), `Paleta recomendada para ${esc(e.name)}. Tocá "Paletas de color" para copiar los códigos.`);
+      if (pal) return block('Así se ve (paleta del rubro)', paletaMock(pal.palette, e.id), `Paleta recomendada para ${esc(e.name)}.${notaEjemplo(e.id)} Tocá "Paletas de color" para copiar los códigos.`);
     } catch (err) {}
     return '';
   }

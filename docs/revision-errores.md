@@ -3,9 +3,118 @@
 Registro de errores detectados para revisar y corregir juntos. Cada uno con dónde está, qué pasa y cómo arreglarlo.
 Estado: `abierto` · `en curso` · `resuelto`.
 
-## 1. Vista previa de rubros y paletas con texto de Mercado Libre — abierto
+## 1. Vista previa de rubros y paletas con texto de Mercado Libre — resuelto
 - **Dónde:** Programación (`programacion.html`) → fichas de "Rubros" (192) y "Paletas de color". Código: `frontend/js/programacion-ejemplos.js`, función `paletaMock()`.
 - **Qué pasa:** todas las fichas muestran la misma interfaz de ejemplo: "Resumen del mes · Ventas +18% y ACOS en 12,4%. Tres publicaciones necesitan fotos." Reportado por Darío en ONG / beneficencia: una ONG no tiene ventas ni ACOS.
 - **Por qué es grave:** la vista previa debería vender lo que se puede hacer para ese rubro; hoy muestra un contenido que no le corresponde y resta credibilidad.
 - **Cómo arreglarlo:** que cada rubro muestre un ejemplo real de su web (ONG: campaña de donación con meta y botón "Donar"; veterinaria: turnos; estudio jurídico: consulta; etc.), con contenido propio por rubro o por familia de rubros, en vez de un texto fijo.
 - **Revisar también:** el resto de las fichas de Programación y Armá tu web (781 fichas) por el mismo tipo de error: contenido genérico o que no corresponde al rubro.
+
+### Qué se hizo (28/09/2026)
+- **Vista previa por rubro.** Los 192 rubros quedan agrupados en 20 familias en `frontend/js/programacion-rubros.js`. Cada familia define qué pieza muestra la interfaz de ejemplo y cada rubro trae su propio texto, creíble para su web:
+  - **Donaciones y causas** (ONG, iglesia, crowdfunding): campaña con meta, barra de avance y botón «Donar».
+  - **Turnos y consultas** (veterinaria, odontología, clínica, spa, telemedicina, plomero, guardería…): horarios disponibles y «Reservar turno».
+  - **Gastronomía** (restaurante, panadería, bodega, delivery): carta con precios y «Reservar mesa» o «Pedir».
+  - **Tiendas** (e-commerce, lujo, florería, farmacia, cajas por suscripción, subastas…): producto con precio y «Agregar al carrito».
+  - **Viajes y alojamiento** (hotel, agencia, aerolínea, road trip): buscador con fechas.
+  - **Avisos y listados** (inmobiliaria, concesionaria, clasificados, bolsa de trabajo, reseñas…): listado con precios.
+  - **Paneles y software** (SaaS, analítica, finanzas, IoT, CRM, stock, ciberseguridad…): indicadores del rubro.
+  - **Educación** (cursos, bootcamp, LMS, idiomas, chicos, instrumento…): avance del curso.
+  - **Contenidos y documentación** (noticias, revista, newsletter, wiki, docs de API…): artículos.
+  - **Audio y video** (música, series, podcasts, meditación…): reproductor.
+  - **Eventos y cultura** (casamientos, congresos, teatro, museo, entradas, club…): fecha destacada y entradas.
+  - **Estudios y servicios profesionales** (legal, agencia, fotografía, arquitectura, seguros…): servicios y «Pedir presupuesto» o «Pedir consulta».
+  - **Apps de seguimiento personal** (hábitos, sueño, agua, ciclo, lectura, plantas, bebé…): el número del día.
+  - **Comunidades y mensajería** (redes, foros, chat, citas, preguntas…): conversación.
+  - **Juegos**, **Finanzas y pagos**, **Gobierno y trámites**, **Ciencia e investigación**, **Movilidad y logística** y **Herramientas de uso diario**, cada una con su pieza.
+- Las **paletas** usan el mismo ejemplo de su rubro. Una paleta sin rubro usa un **sitio de negocio neutro**. Ningún rubro queda con el texto genérico: `paletaMock()` ya no tiene texto fijo.
+- Los nombres de los sitios son inventados y la nota de la ficha lo aclara («Ejemplo inventado de una web de este rubro»).
+- Arreglo de paso: el botón secundario del ejemplo se leía mal en paletas oscuras (usaba el primario sobre un fondo casi igual). Ahora usa el color de texto de la paleta.
+
+### Revisión de las 781 fichas
+Revisé todas las fichas de `frontend/data/weblab/*.json`, con estas pasadas:
+- lectura ficha por ficha;
+- búsqueda de datos de Mercado Libre fuera de lugar y de texto sin traducir;
+- verificación del CSS citado;
+- contraste real de cada paleta y de cada afirmación de contraste.
+
+Armá tu web usa los mismos presets de «Negocios para vender», y no tenían errores.
+
+Las menciones a Mercado Libre que quedan están donde corresponden: la ficha «Marca que vende en Mercado Libre», los ejemplos de tipos de web y los prompts de ejemplo de las skills, que son casos de uso de Darío.
+
+Como las fichas de diseño se importan de la skill ui-ux-pro-max y se regeneran, las correcciones viven en `tools/weblab_correcciones.py` (cada una con su motivo). `build-weblab.py` las aplica después de traducir; también se pueden aplicar solas con `python3 tools/weblab_correcciones.py`. Las fichas curadas se corrigieron además en su fuente (`tools/weblab_curado.py`, `tools/weblab_skills.py`).
+
+**Correcciones (49):**
+
+*Tipos de web*
+- `soluciones/saas` · Ejemplo propio: «ML Tracker: React + Node/Express + MongoDB + OAuth de Mercado Libre.» → «ML Tracker: JavaScript sin framework + funciones serverless en Node (Vercel) + MongoDB + OAuth de Mercado Libre.». ML Tracker no usa React ni Express.
+
+*Arquitecturas*
+- `arquitecturas/spa-api` · Ejemplo propio: «ML Tracker: React + Vite en el cliente, Node/Express + MongoDB en la API.» → «ML Tracker aplica la idea: el panel es una app en JavaScript sin framework que le pide JSON a /api/tracker (una función serverless con MongoDB). Frontend y API se publican juntos en Vercel.». ML Tracker no usa React, Vite ni Express.
+
+*Stacks*
+- `stacks/react-vite` · Lo uso en: «Cliente de ML Tracker.» → (se borra el campo). ML Tracker no usa React.
+- `stacks/node-express` · Lo uso en: «API de ML Tracker.» → «Node sí: las funciones /api de esta web y de ML Tracker corren en Node como funciones serverless, sin Express.». La API de ML Tracker no usa Express.
+- `stacks/mern` · Lo uso en: «ML Tracker.» → (se borra el campo). ML Tracker no usa Express ni React.
+
+*Servicios*
+- `servicios/railway` · Lo uso en: «El backend de ML Tracker está preparado para Railway (railway.json).» → (se borra el campo). No hay railway.json: ML Tracker corre en Vercel.
+- `servicios/claude-api` · Lo uso en: «SEO Creator de ML Tracker.» → (se borra el campo). ML Tracker no llama a la API de Claude (arma prompts para pegar en claude.ai).
+
+*Skills de Claude*
+- `skills/claude-api` · Cuándo usarla: «Al integrar Claude en una app propia, como el generador de títulos de ML Tracker.» → «Al integrar Claude en una app propia, por ejemplo un generador de títulos para publicaciones.». ML Tracker no tiene un generador de títulos con Claude.
+- `skills/react-best-practices` · prompt: «El dashboard del tracker tarda en cargar: revisalo con las buenas prácticas de React y proponé cambios.» → «El dashboard de mi app en Next.js tarda en cargar: revisalo con las buenas prácticas de React y proponé cambios.». El tracker no está hecho en React: el prompt no tenía sentido para esa skill.
+
+*Rubros*
+- `rubros/government-public-service` · resumen: «WCAG AAA mandatory. Trust paramount.» → «WCAG AAA obligatorio. La confianza es lo principal.». Texto en inglés.
+- `rubros/government-public-service` · A tener en cuenta: «WCAG AAA mandatory. Trust paramount.» → «WCAG AAA obligatorio. La confianza es lo principal.». Texto en inglés.
+- `rubros/beauty-spa-wellness-service` · Enfoque de color: «salvia #90EE90» → «verde claro #90EE90». #90EE90 es verde claro, no salvia.
+- `rubros/financial-dashboard` · etiquetas: «portfolio, trading, ganancias y pérdidas» → «cartera, trading, ganancias y pérdidas». “Portfolio” en el sentido de cartera de inversiones.
+- `rubros/wedding-event-planning` · etiquetas: «congreso, evento, meetup» → «casamiento, evento, planificación». Las etiquetas eran de congresos, no de casamientos.
+- `rubros/wedding-event-planning` · Palabras clave: «congreso, evento, meetup, planificación, inscripción, entrada, casamiento» → «casamiento, evento, planificación, organización, invitados, salón, proveedores, fiesta». Las palabras clave eran de congresos, no de casamientos.
+- `rubros/card-board-game` · etiquetas: «cartas, bolsa, ajedrez» → «cartas, tablero, ajedrez». “Board” es tablero, no bolsa.
+- `rubros/water-hydration-reminder` · etiquetas: «riego, hidratación, tomar» → «agua, hidratación, tomar». “Water” es agua: riego es para plantas.
+- `rubros/non-profit-charity` · etiquetas: «beneficencia, sin fines, de lucro» → «beneficencia, sin fines de lucro, ONG». Etiqueta partida al medio.
+- `rubros/job-board-recruitment` · etiquetas: «bolsa, trabajo, reclutamiento» → «bolsa de trabajo, empleo, reclutamiento». Etiqueta partida al medio.
+
+*Estilos de diseño*
+- `estilos/exaggerated-minimalism` · Efectos y animación: «clamp(3rem 10vw 12rem)» → «clamp(3rem, 10vw, 12rem)». CSS inválido: clamp() lleva comas.
+- `estilos/swiss-modernism-2-0` · Efectos y animación: «repeat(12 1fr)» → «repeat(12, 1fr)». CSS inválido: repeat() lleva coma.
+- `estilos/modern-dark-cinema-mobile` · Variables CSS: «cubic-bezier(0.16 1 0.3 1)» → «cubic-bezier(0.16, 1, 0.3, 1)». CSS inválido: cubic-bezier() lleva comas.
+- `estilos/kinetic-brutalism-mobile` · Modo claro: «✓ Oscuro principal» → «◐ Sólo en secciones invertidas». Modo claro y oscuro estaban invertidos.
+- `estilos/kinetic-brutalism-mobile` · Modo oscuro: «◐ Sólo oscuro (secciones invertidas)» → «✓ Oscuro principal». Modo claro y oscuro estaban invertidos.
+- `estilos/bold-typography-mobile-poster` · Modo claro: «✓ Modo oscuro principal» → «◐ Secciones claras opcionales». Modo claro y oscuro estaban invertidos.
+- `estilos/bold-typography-mobile-poster` · Modo oscuro: «◐ Secciones claras opcionales» → «✓ Modo oscuro principal». Modo claro y oscuro estaban invertidos.
+- `estilos/academia-scholarly-mobile` · Modo claro: «✓ Oscuro rico» → «◐ Secciones claras color pergamino». Modo claro y oscuro estaban invertidos.
+- `estilos/academia-scholarly-mobile` · Modo oscuro: «◐ Secciones claras color pergamino» → «✓ Oscuro rico». Modo claro y oscuro estaban invertidos.
+- `estilos/y2k-aesthetic` · Origen: «Y2K 2000s» → «Y2K, años 2000». Quedaba en inglés.
+- `estilos/neumorphism-mobile` · colores: «texto apagado #6B7280» → «texto apagado #596070». #6B7280 sobre #E0E5EC da 3,8:1 y no llega a AA; #596070 da 5:1.
+
+*Patrones de landing*
+- `landing/video-first-hero` · Optimización de conversión: «El video genera un 86% más de engagement.» → «El video suele captar más la atención que una imagen fija: medilo contra una versión sin video.». Cifra sin fuente.
+- `landing/scroll-triggered-storytelling` · Optimización de conversión: «La narrativa triplica el tiempo en la página.» → «Una buena narrativa suele alargar el tiempo en la página.». Cifra sin fuente.
+- `landing/ai-personalization-landing` · Optimización de conversión: «Más de 20% de conversión con personalización.» → «La personalización puede mejorar la conversión: medila con un test A/B.». Cifra sin fuente.
+- `landing/comparison-table-focus` · Optimización de conversión: «35% más de conversión.» → (se borra la frase). Cifra sin fuente.
+- `landing/immersive-interactive-experience` · Optimización de conversión: «40% más de engagement. Hay que resignar rendimiento.» → «Suele generar más engagement, pero hay que resignar rendimiento.». Cifra sin fuente.
+- `landing/before-after-transformation` · Optimización de conversión: «45% más de conversión.» → (se borra la frase). Cifra sin fuente.
+
+*Tipografías*
+- `tipografias/pixel-retro` · etiquetas: «Display + sans» → «Display + mono». VT323 es una monoespaciada.
+- `tipografias/science-tech` · etiquetas: «Sans + sans» → «Sans + mono». Roboto Mono es una monoespaciada.
+- `tipografias/neumorphism-mobile-plus-jakarta-sans-system` · Notas: «#3D4852 (contraste 7.5:1 contra #E0E5EC)» → «#3D4852 (contraste 7.4:1 contra #E0E5EC)». Contraste real: 7,38:1.
+- `tipografias/neumorphism-mobile-plus-jakarta-sans-system` · Notas: «texto apagado #6B7280 (contraste 4.6:1)» → «texto apagado #596070 (contraste 5:1; el #6B7280 da 3.8:1 y no llega a AA)». Contraste real de #6B7280: 3,82:1.
+
+*Buenas prácticas UX*
+- `ux/36-color-contrast` · código bueno: «#333 on white (7:1)» → «#333 on white (12.6:1)». Contraste real: 12,63:1.
+- `ux/68-viewport-meta` · Hacer: «Usá width=device-width initial-scale=1» → «Usá width=device-width, initial-scale=1». Faltaba la coma.
+- `ux/25-tap-delay` · resumen: «Una demora de 300ms al tocar se siente lenta» → «Los navegadores viejos esperaban 300ms después de cada toque». Los navegadores actuales ya no agregan la demora.
+- `ux/25-tap-delay` · Hacer: «Usá touch-action en CSS o fastclick» → «Usá touch-action: manipulation y el meta viewport con width=device-width (FastClick ya no hace falta)». FastClick quedó obsoleto.
+
+*Paletas de color*
+- `paletas/dental-practice` · acento: «#0EA5E9» → «#B7791F». El acento era el mismo celeste del primario (2,6:1) aunque la paleta dice “amarillo sonrisa”; #B7791F da 3,4:1.
+- `paletas/freelancer-platform` · acento: «#16A34A» → «#138A3E». #16A34A daba 2,95:1 sobre el fondo; #138A3E da 4:1.
+- `paletas/digital-products-downloads` · acento: «#16A34A» → «#138A3E». #16A34A daba 2,95:1 sobre el fondo; #138A3E da 4:1.
+- `paletas/language-learning-app` · acento: «#16A34A» → «#138A3E». #16A34A daba 2,95:1 sobre el fondo; #138A3E da 4:1.
+- `paletas/survey-form-builder` · resumen: «Verde azulado pregunta + verde progreso + azul enviar» → «Verde azulado de pregunta + verde de progreso + ámbar para enviar». La paleta no tiene azul: el acento es ámbar.
+
+**Quedó para revisar con Darío:** la vista previa de los 84 estilos muestra siempre la misma tarjeta de producto («Mandolina V5 · Comprar · Envío gratis»). No es un error del rubro porque es la muestra del estilo, pero se podría variar según el «Ideal para» de cada estilo.
