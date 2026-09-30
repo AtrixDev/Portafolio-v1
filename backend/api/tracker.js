@@ -292,9 +292,26 @@ async function tendencias(req, res) {
   }
 
   const cache = db.collection('tendencias_cache');
+  const ultima = db.collection('tendencias_ultima'); // copia permanente del último dato real, para cuando Mercado Libre no responde
   await cache.createIndex({ at: 1 }, { expireAfterSeconds: 86400 }).catch(() => {});
+  // Mercado Libre a veces corta las tendencias públicas ("Not found public trends"). Mientras dure,
+  // se sirve la última copia real (con su fecha) o el ejemplo rotulado, y se reintenta como mucho una vez por hora.
+  const sinTendencias = async () => {
+    await cache.updateOne({ _id: 'caida' }, { $set: { at: new Date() } }, { upsert: true }).catch(() => {});
+    const copia = await ultima.findOne({ _id: 't:' + cat }).catch(() => null);
+    const cats = (await cache.findOne({ _id: 'categorias' }).catch(() => null)) || await ultima.findOne({ _id: 'categorias' }).catch(() => null);
+    if (copia && cats) {
+      const categoria = cat === TODAS ? { id: TODAS, nombre: 'Todo Mercado Libre' } : cats.lista.find(c => c.id === cat) || { id: cat, nombre: 'Categoría' };
+      return res.status(200).json({ demo: false, copia: true, categoria, categorias: cats.lista, actualizado: copia.at, ...recortar(copia.lista, { completo: admin }) });
+    }
+    return demo('ml_sin_tendencias');
+  };
   try {
     let [cats, terms] = await Promise.all([cache.findOne({ _id: 'categorias' }), cache.findOne({ _id: 't:' + cat })]);
+    if (!terms) {
+      const caida = await cache.findOne({ _id: 'caida' });
+      if (caida && Date.now() - +caida.at < 3600e3) return sinTendencias();
+    }
     if (!cats || !terms) {
       if (!admin && !(await rateLimit(db, 'tendpub:global', 300, 86400))) {
         return res.status(429).json({ code: 'limite_global', error: 'Por hoy llegamos al tope de consultas a Mercado Libre. Volvé mañana o escribime y te paso las tendencias de tu rubro.' });
@@ -313,10 +330,15 @@ async function tendencias(req, res) {
           terms = { _id: 't:' + cat, lista: await terminosML(token, cat), at: new Date() };
         } catch (e) {
           if (e.status === 401) return demo('sin_token');
-          if (e.status === 403 || e.status === 404) return res.status(404).json({ error: 'Mercado Libre no publica tendencias para esa categoría. Probá con otra.' });
+          if (e.status === 403 || e.status === 404) return sinTendencias();
           throw e;
         }
         await cache.updateOne({ _id: terms._id }, { $set: { lista: terms.lista, at: terms.at } }, { upsert: true });
+        await Promise.all([
+          ultima.updateOne({ _id: terms._id }, { $set: { lista: terms.lista, at: terms.at } }, { upsert: true }),
+          ultima.updateOne({ _id: 'categorias' }, { $set: { lista: cats.lista, at: cats.at } }, { upsert: true }),
+          cache.deleteOne({ _id: 'caida' }),
+        ]).catch(() => {});
       }
     }
     const categoria = cat === TODAS ? { id: TODAS, nombre: 'Todo Mercado Libre' } : cats.lista.find(c => c.id === cat) || { id: cat, nombre: 'Categoría' };

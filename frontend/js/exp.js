@@ -15,9 +15,9 @@ function bar(p) {
 }
 function escala() {
   const ticks = ['2023', '2024', '2025', '2026'].map(a => `<span style="left:${pos(a + '-01-01')}%">${a}</span>`).join('') + `<span style="left:7%">2018–22</span>`;
-  const lanes = [['Trabajo', 0], ['Formación', 1]].map(([k, c]) =>
+  const lanes = [['Trabajo', 0], ['Proyectos', 2], ['Formación', 1]].map(([k, c]) =>
     `<div class="xp-lane"><span class="xp-lane-k">${k}</span><div class="xp-track">${PUESTOS.filter(p => p.carril === c).map(bar).join('')}${c === 0 ? `<span class="xp-gap" style="left:15%">//</span>` : ''}</div></div>`).join('');
-  scale.innerHTML = `<div class="xp-scale-in" style="--xp-lead-w:6.5rem;--xp-rows:2">
+  scale.innerHTML = `<div class="xp-scale-in" style="--xp-lead-w:6.5rem;--xp-rows:3">
     <div class="xp-axis" style="margin-left:6.5rem">${ticks}</div>
     <div class="xp-lanes" role="tablist" aria-label="Puestos">${lanes}
       <div class="xp-today" style="left:calc(6.5rem + (100% - 6.5rem) * ${pos(HOY) / 100})"><span>hoy</span></div>

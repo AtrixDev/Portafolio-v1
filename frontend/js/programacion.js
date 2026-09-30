@@ -12,7 +12,45 @@ const RECIPE_ORDER = ['soluciones', 'rubros', 'arquitecturas', 'stacks', 'servic
 const $ = id => document.getElementById(id);
 const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
-const state = { cats: [], catById: {}, entries: [], cache: {}, cat: null, query: '', tags: new Set(), limit: PAGE_SIZE };
+const ORDER_KEY  = 'dc-weblab-orden';
+const state = { cats: [], catById: {}, entries: [], cache: {}, cat: null, query: '', tags: new Set(), limit: PAGE_SIZE,
+  valor: '', nivel: 0, orden: (() => { try { return localStorage.getItem(ORDER_KEY) || 'valor'; } catch (e) { return 'valor'; } })() };
+
+// ── Niveles (tools/weblab_niveles.py): valor + dificultad de cada ficha ──
+const VALOR = {
+  imprescindible: { n: 'Imprescindible', d: 'Sin esto una web queda floja o falla: no lo saltees.', o: 0,
+    svg: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.6 14.4 8 8 14.4 1.6 8Z" fill="currentColor"/></svg>' },
+  pro: { n: 'Pro', d: 'Lo que separa un trabajo profesional del resto.', o: 1,
+    svg: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .8c.55 4.1 2.3 5.95 6.4 6.5v1.4c-4.1.55-5.85 2.4-6.4 6.5h-.02C7.45 11.1 5.7 9.25 1.6 8.7V7.3C5.7 6.75 7.45 4.9 8 .8Z" fill="currentColor"/></svg>' },
+  base: { n: 'Base', d: 'Conviene conocerlo: lo vas a cruzar seguido.', o: 2,
+    svg: '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="4.6" fill="none" stroke="currentColor" stroke-width="1.9"/></svg>' },
+};
+const NIVEL = { 1: ['Inicial', 'Se aplica en minutos, sin experiencia previa.'], 2: ['Intermedio', 'Necesita práctica o combinar varias piezas.'], 3: ['Avanzado', 'Requiere experiencia técnica o mucho criterio.'] };
+const ORDENES = { valor: 'Primero lo imprescindible', facil: 'De fácil a difícil', dificil: 'De difícil a fácil', original: 'Orden original' };
+const valorBadge = v => VALOR[v] ? `<span class="wl-val" data-v="${v}" title="${esc(VALOR[v].d)}">${VALOR[v].svg}${VALOR[v].n}</span>` : '';
+const nivelMeter = n => NIVEL[n] ? `<span class="wl-lvl" data-n="${n}" title="Dificultad: ${NIVEL[n][0]}. ${esc(NIVEL[n][1])}"><span class="wl-lvl-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="wl-lvl-t">${NIVEL[n][0]}</span></span>` : '';
+function ordenar(items) {
+  const vo = e => VALOR[e.valor]?.o ?? 3, no = e => e.nivel || 9;
+  const by = {
+    valor: (a, b) => vo(a) - vo(b) || no(a) - no(b),
+    facil: (a, b) => no(a) - no(b) || vo(a) - vo(b),
+    dificil: (a, b) => no(b) - no(a) || vo(a) - vo(b),
+  }[state.orden];
+  return by ? [...items].sort(by) : items;
+}
+function renderTools(base) {
+  const cuenta = (k, v) => base.filter(e => e[k] === v).length;
+  const seg = (grupo, label, opts, actual) => `<div class="wl-seg" role="group" aria-label="${label}">${opts.map(([v, t, extra]) =>
+    `<button type="button" data-${grupo}="${v}" aria-pressed="${String(actual) === String(v)}">${extra || ''}<span>${t}</span></button>`).join('')}</div>`;
+  $('wl-tools').innerHTML = `
+    ${seg('valor', 'Filtrar por valor', [['', `Todo <small>${base.length}</small>`], ...Object.entries(VALOR).map(([k, x]) => [k, `${x.n} <small>${cuenta('valor', k)}</small>`, `<span class="wl-val-ic" data-v="${k}">${x.svg}</span>`])], state.valor)}
+    ${seg('nivel', 'Filtrar por dificultad', [[0, 'Toda'], ...Object.entries(NIVEL).map(([k, [t]]) => [k, `${t} <small>${cuenta('nivel', +k)}</small>`, `<span class="wl-lvl" data-n="${k}"><span class="wl-lvl-bars" aria-hidden="true"><i></i><i></i><i></i></span></span>`])], state.nivel)}
+    <label class="wl-sort"><span>Ordenar</span><select id="wl-orden">${Object.entries(ORDENES).map(([k, t]) => `<option value="${k}"${k === state.orden ? ' selected' : ''}>${t}</option>`).join('')}</select></label>
+    <details class="wl-legend"><summary>¿Qué significa cada nivel?</summary>
+      <dl>${Object.entries(VALOR).map(([k, x]) => `<div><dt><span class="wl-val" data-v="${k}">${x.svg}${x.n}</span></dt><dd>${x.d}</dd></div>`).join('')}
+      ${Object.entries(NIVEL).map(([k, [t, d]]) => `<div><dt>${nivelMeter(+k)}</dt><dd>${d}</dd></div>`).join('')}</dl>
+    </details>`;
+}
 
 // ── Datos ──
 async function loadCat(cat) {
@@ -66,8 +104,9 @@ function markSidebar() {
 function card(e, showCat) {
   const c = state.catById[e.cat];
   const sw = e.swatches?.length ? e.swatches : (e.palette || []).map(p => p[1]);
-  return `<button type="button" class="wl-card" data-open="${e.cat}/${esc(e.id)}">
+  return `<button type="button" class="wl-card" data-v="${esc(e.valor || '')}" data-open="${e.cat}/${esc(e.id)}">
     ${recipe.has(e.cat, e.id) ? `<span class="wl-card-in" title="En tu receta">${icon('bookmark')}</span>` : ''}
+    <span class="wl-card-top">${valorBadge(e.valor)}${nivelMeter(e.nivel)}</span>
     ${showCat ? `<span class="wl-card-cat">${esc(c?.name)}</span>` : ''}
     <h3>${esc(e.name)}</h3>
     ${sw.length ? `<div class="wl-swatches" aria-hidden="true">${sw.slice(0, 8).map(h => `<span style="background:${esc(h)}"></span>`).join('')}</div>` : ''}
@@ -81,6 +120,13 @@ function emptyState(title, text) {
 }
 
 // ── Listado ──
+function aplicarNiveles(items, busqueda) {
+  let out = items;
+  if (state.valor) out = out.filter(e => e.valor === state.valor);
+  if (state.nivel) out = out.filter(e => e.nivel === state.nivel);
+  // En la búsqueda manda la relevancia, salvo que se elija otro orden a mano
+  return busqueda && state.orden === 'valor' ? out : ordenar(out);
+}
 async function renderList() {
   const main = $('wl-main');
   main.setAttribute('aria-busy', 'true');
@@ -92,15 +138,17 @@ async function renderList() {
     // Búsqueda global sobre el índice (todas las categorías)
     const terms = q.split(/\s+/);
     items = state.entries
-      .map(([cat, id, name, summary, tags]) => {
+      .map(([cat, id, name, summary, tags, nivel, valor]) => {
         const hay = norm(`${name} ${summary} ${tags.join(' ')}`);
         if (!terms.every(t => hay.includes(t))) return null;
         const score = (norm(name).includes(q) ? 10 : 0) + (norm(name).startsWith(terms[0]) ? 5 : 0);
-        return { cat, id, name, summary, tags, score };
+        return { cat, id, name, summary, tags, nivel, valor, score };
       })
       .filter(Boolean)
       .sort((a, b) => b.score - a.score);
     showCat = true;
+    renderTools(items);
+    items = aplicarNiveles(items, true);
     $('wl-cat-head').innerHTML = `<h2>Resultados para “${esc(state.query.trim())}”</h2><p>Buscando en las ${state.cats.length} categorías.</p>`;
     $('wl-filters').innerHTML = '';
   } else {
@@ -112,6 +160,8 @@ async function renderList() {
     const top = Object.entries(freq).filter(([, n]) => n > 1 && n < all.length).sort((a, b) => b[1] - a[1]).slice(0, 14).map(([t]) => t);
     $('wl-filters').innerHTML = top.map(t => `<button type="button" class="wl-chip" data-tag="${esc(t)}" aria-pressed="${state.tags.has(t)}">${esc(t)}</button>`).join('');
     items = state.tags.size ? all.filter(e => [...state.tags].every(t => e.tags?.includes(t))) : all;
+    renderTools(items);
+    items = aplicarNiveles(items);
     $('wl-cat-head').innerHTML = `<h2>${icon(c.icon)} ${esc(c.name)} ${c.origin !== 'curado' ? `<span class="wl-origin" title="Datos importados de la base de la skill ui-ux-pro-max, traducidos al castellano">Fuente: ${esc(c.origin)}</span>` : ''}</h2><p>${esc(c.desc)}</p>`;
   }
 
@@ -119,7 +169,7 @@ async function renderList() {
   if (!items.length) {
     $('wl-grid').innerHTML = q
       ? emptyState('No encontré nada con esa búsqueda.', 'Probá con otra palabra (sin tildes también funciona).')
-      : emptyState('Ninguna ficha tiene todas esas etiquetas.', 'Sacá algún filtro para ver más resultados.');
+      : emptyState('Ninguna ficha cumple con esos filtros.', 'Sacá algún filtro para ver más resultados.');
   } else {
     $('wl-grid').innerHTML = items.slice(0, state.limit).map(e => card(e, showCat)).join('') +
       (items.length > state.limit ? `<button type="button" class="btn-secondary wl-more" id="wl-more">Ver ${Math.min(PAGE_SIZE, items.length - state.limit)} más</button>` : '');
@@ -200,19 +250,27 @@ async function renderEntry(cat, id) {
     if (hit) related.push(`<a href="#/${esc(rc)}/${esc(rid)}">${esc(hit[2])} <small>${esc(state.catById[rc]?.name)}</small></a>`);
   }
 
+  // Demo de antes y después (programacion-demos.js): va arriba de todo, es lo primero que conviene ver
+  const demo = window.WLDemos ? WLDemos.render(e, cat) : '';
+  if (demo && cat === 'tipografias') visual = visual.replace(/<div class="wl-d-block"><h3>Vista previa<\/h3>[\s\S]*?<\/div><\/div>/, '');
+  panel.classList.toggle('is-wide', !!demo);
+
   const inRecipe = recipe.has(cat, id);
   const monoLabels = /Variables CSS|CSS técnico|Import CSS|Config Tailwind|Prompt para IA/;
   $('wl-d-body').innerHTML = `
     <h2 class="wl-d-title" id="wl-d-title">${esc(e.name)}</h2>
     ${e.summary ? `<p class="wl-d-summary">${esc(e.summary)}</p>` : ''}
+    ${VALOR[e.valor] ? `<p class="wl-d-nivel">${valorBadge(e.valor)}${nivelMeter(e.nivel)}<span>${esc(VALOR[e.valor].d)} ${esc(NIVEL[e.nivel]?.[1] || '')}</span></p>` : ''}
     <div class="wl-d-actions">
       <button type="button" class="btn-primary wl-d-add" data-toggle="${cat}/${esc(id)}" aria-pressed="${inRecipe}">${icon('bookmark')}<span>${inRecipe ? 'En tu receta' : 'Agregar a mi receta'}</span></button>
     </div>
+    ${demo}
     ${visual}
     ${e.fields?.length ? `<dl class="wl-dl">${e.fields.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd class="${monoLabels.test(k) ? 'mono' : ''}">${fieldValue(v)}</dd></div>`).join('')}</dl>` : ''}
     ${despues}
     ${related.length ? `<div class="wl-d-block"><h3>Relacionado</h3><div class="wl-related">${related.join('')}</div></div>` : ''}
   `;
+  if (demo) WLDemos.mount($('wl-d-body'));
   $('wl-d-body').scrollTop = 0;
   document.title = `${e.name} — Lab de Programación | Darío Colángelo`;
   openDrawer(panel);
@@ -263,7 +321,7 @@ async function copyText(text, btn) {
 async function route() {
   const [, cat, id] = (location.hash.match(/^#\/([^/]+)(?:\/(.+))?$/) || []);
   const validCat = state.catById[cat] ? cat : state.cat || 'soluciones';
-  if (validCat !== state.cat) { state.cat = validCat; state.tags.clear(); state.limit = PAGE_SIZE; }
+  if (validCat !== state.cat) { state.cat = validCat; state.tags.clear(); state.valor = ''; state.nivel = 0; state.limit = PAGE_SIZE; }
   if (id || !state.query) await renderList();
   if (id) await renderEntry(validCat, decodeURIComponent(id));
   else {
@@ -296,6 +354,20 @@ function bindEvents() {
     const c = e.target.closest('[data-open]');
     if (c) { location.hash = `#/${c.dataset.open}`; return; }
     if (e.target.closest('#wl-more')) { state.limit += PAGE_SIZE; renderList(); }
+  });
+  $('wl-tools').addEventListener('click', e => {
+    const b = e.target.closest('[data-valor], [data-nivel]');
+    if (!b) return;
+    if (b.dataset.valor !== undefined) state.valor = b.dataset.valor;
+    else state.nivel = +b.dataset.nivel;
+    state.limit = PAGE_SIZE;
+    renderList();
+  });
+  $('wl-tools').addEventListener('change', e => {
+    if (e.target.id !== 'wl-orden') return;
+    state.orden = e.target.value;
+    try { localStorage.setItem(ORDER_KEY, state.orden); } catch (err) {}
+    renderList();
   });
   $('wl-filters').addEventListener('click', e => {
     const b = e.target.closest('.wl-chip');

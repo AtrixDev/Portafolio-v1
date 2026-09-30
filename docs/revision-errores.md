@@ -118,3 +118,39 @@ Como las fichas de diseño se importan de la skill ui-ux-pro-max y se regeneran,
 - `paletas/survey-form-builder` · resumen: «Verde azulado pregunta + verde progreso + azul enviar» → «Verde azulado de pregunta + verde de progreso + ámbar para enviar». La paleta no tiene azul: el acento es ámbar.
 
 **Quedó para revisar con Darío:** la vista previa de los 84 estilos muestra siempre la misma tarjeta de producto («Mandolina V5 · Comprar · Envío gratis»). No es un error del rubro porque es la muestra del estilo, pero se podría variar según el «Ideal para» de cada estilo.
+
+## 2. Portada: hero cortado y columna izquierda simple — resuelto (falta tu OK)
+- **Dónde:** `index.html`, hero (`css/port.css`).
+- **Qué pasa:** en 1366×768 el botón "Descargar CV" queda fuera de la primera pantalla. La columna izquierda (nombre, bajada, métricas, puertas) se ve plana.
+- **Cómo arreglarlo:** achicar la escala del nombre y el aire vertical para que todo entre en 768 px, y rediseñar la jerarquía de la columna izquierda.
+- **Hecho:** nombre más chico, todo entra en 1366×768 (en pantallas bajas se ocultan las bajadas de las puertas). La fila de números pasó a ser una prueba verificable: recorte real del panel de Métricas ("Ventas brutas +38,9%") + el resultado + link a las capturas. CV y "Escribime" como links de texto.
+
+## 3. "Pasale el mouse o hacé clic" lejos del dragón — resuelto
+- **Dónde:** portada, esquina inferior derecha del hero.
+- **Cómo arreglarlo:** ponerlo justo debajo del dragón.
+
+## 4. Trayectoria: "Herramientas propias" empieza tarde — resuelto (revisar años de práctica)
+- **Dónde:** `js/exp-data.js`.
+- **Qué pasa:** dice dic 2025 – hoy, pero Darío construye herramientas propias desde DemasLed.
+- **Cómo arreglarlo:** que el capítulo arranque en DemasLed (2025).
+- **Hecho:** carril propio "Proyectos" desde ene 2025, en paralelo a DemasLed y Vení a la Cocina. Los años de práctica ahora suman la unión de períodos (sin contar dos veces). Efecto: suben Product Ads 3,3 → 3,8; Imágenes, Precios, Automatización e IA 1,3 → 1,8; Tiendas y webs 3,3 → 3,8. También: "6 webs" → "4 webs" (Odontología Almagro, Tenshi TCG, Lovyme, este portfolio).
+
+## 5. Demasiado espacio entre secciones y fondo liso — resuelto
+- **Dónde:** portada (`--pad-y`, secciones).
+- **Cómo arreglarlo:** reducir el gap entre secciones y darle al fondo un estilo propio.
+- **Hecho:** `--pad-y` de 8,5rem a 5,5rem como máximo (todo el sitio). Fondo "papel milimetrado": grilla de 24 px y línea mayor cada 120 px, fija y desvanecida hacia los bordes, en claro y oscuro.
+
+## 6. Sistema: probar que todo funcione — en curso
+- **Qué hacer:** recorrido completo (demo del Tracker, auditoría con cuenta, chequeo rápido, tendencias, formularios) y anotar lo que falle.
+- **Prueba del 30/09/2026 (Playwright, producción y local):** anda la demo del Tracker (20 publicaciones, el detalle cambia al elegir una), el catálogo de diagnóstico (10 filas, despliega causas), el buscador de prompts (filtra 22 → 12), la validación del formulario de conexión, el chequeo rápido con un link real (Borner /p/MLA27077244) y mobile en 390 px sin scroll horizontal.
+- **Error encontrado: Buscador de tendencias roto.** Mercado Libre responde `404 "Not found public trends"` en `/trends/MLA` y en todas las categorías, aunque el token es válido (`/users/me` da 200). La web decía "Mercado Libre no publica tendencias para esa categoría", que es engañoso porque falla en todas. **Arreglado:** si Mercado Libre corta las tendencias, se muestra la última copia real guardada (colección `tendencias_ultima`, sin vencimiento) con su fecha; si no hay copia, el ejemplo rotulado con un aviso y una oferta de sacarlas a mano. Durante la caída se reintenta como mucho una vez por hora.
+- **Falta probar a mano:** la auditoría con la cuenta conectada (OAuth real con Mercado Libre). Necesita que Darío inicie sesión con VJ999.
+
+## 7. Programación: sin niveles ni demos que prueben el valor — en curso
+- **Qué pasa:** las 781 fichas no tienen nivel de dificultad ni de valor, y las cards no se distinguen. Las fichas explican pero no muestran: por ejemplo, la skill Impeccable no muestra la diferencia entre una web genérica hecha con IA y la misma web hecha con la skill.
+- **Cómo arreglarlo:** clasificar por nivel y por valor, con un símbolo de color en cada card, y sumar demos de antes y después que muestren qué mejora cada ficha.
+- **Hecho:** las 781 fichas tienen dificultad (Inicial / Intermedio / Avanzado, barras) y valor (Base ○ / Imprescindible ◆ / Pro ✦), con filtros y orden (`tools/weblab_niveles.py`, se aplica en el build). Piloto de demos (`js/programacion-demos.js`): Impeccable (comparador), Copywriting, Excel, React Best Practices, 3 reglas UX interactivas (contraste, áreas táctiles, etiquetas), Stacks (vanilla y React) y las 74 tipografías (comparador automático).
+- **Falta:** llevar las demos al resto de las fichas, en tandas.
+
+## 8. Armá tu web: básico y poco valioso — abierto
+- **Qué pasa:** el configurador se siente básico. Hay que decidir si vale la pena y qué rumbo darle.

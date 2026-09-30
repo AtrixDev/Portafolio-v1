@@ -57,6 +57,8 @@
   --dragon-a:     var(--accent-text);
   --dragon-b:     var(--muted);
   --dots:         rgba(255,255,255,.035);
+  --grid-minor:   rgba(255,255,255,.034);
+  --grid-major:   rgba(255,255,255,.065);
   --section-line: var(--line);
 
   /* ── Alias de compatibilidad (páginas del Lab, contacto, programación) ── */
@@ -94,7 +96,7 @@
   --container: 1240px;
   --gutter:    clamp(1rem, 4vw, 3rem);
   --pad-x:     max(var(--gutter), calc((100% - var(--container)) / 2));
-  --pad-y:     clamp(4.5rem, 10vw, 8.5rem);
+  --pad-y:     clamp(3.25rem, 6.5vw, 5.5rem);
   --nav-h:     76px;
 
   /* ── Radios ── */
@@ -166,6 +168,8 @@
   --dragon-b:     #8a8a86;
 
   --dots:         rgba(17,17,19,.07);
+  --grid-minor:   rgba(17,17,19,.04);
+  --grid-major:   rgba(17,17,19,.075);
 
   --section-line: transparent;
 }
@@ -218,6 +222,8 @@
     --dragon-b:     #8a8a86;
 
     --dots:         rgba(17,17,19,.07);
+    --grid-minor:   rgba(17,17,19,.04);
+    --grid-major:   rgba(17,17,19,.075);
 
     --section-line: transparent;
   }
@@ -238,7 +244,7 @@ html {
 }
 
 body {
-  background: var(--bg);
+  background: transparent; /* el fondo lo pinta <html>; así el milimetrado (body::before) queda detrás del contenido */
   color: var(--text);
   font-family: var(--font-sans);
   font-size: 1rem;
@@ -264,6 +270,21 @@ p, li { text-wrap: pretty; }
   outline: 2px solid var(--accent-text);
   outline-offset: 3px;
   border-radius: 4px;
+}
+
+/* Papel milimetrado: grilla fina cada 24px y línea mayor cada 120px, fija y desvanecida hacia los bordes */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background-image:
+    linear-gradient(var(--grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(var(--grid-minor) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  background-position: calc(50% - .5px) -1px;
+  -webkit-mask-image: radial-gradient(ellipse 85% 80% at 50% 38%, #000 25%, rgba(0,0,0,.35) 70%, transparent 100%);
+          mask-image: radial-gradient(ellipse 85% 80% at 50% 38%, #000 25%, rgba(0,0,0,.35) 70%, transparent 100%);
 }
 
 /* Grano fijo (no repinta al scrollear) */
@@ -302,3 +323,5 @@ body::after {
     transition-duration: .01ms !important;
   }
 }
+
+@media print { body::before { display: none; } }

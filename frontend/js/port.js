@@ -1,10 +1,10 @@
 // js/port.js — Portada: quién soy + el dragón de código + el mapa de todo lo que hay en la web, con vista previa de cada cosa
 import { montarDragon } from './dragon.js';
-import { esc, meses, PUESTOS } from './exp-data.js';
+import { esc, mesesUnion, PUESTOS } from './exp-data.js';
 import { AREAS } from './hab-data.js';
 
 // Años de práctica por habilidad, con la misma cuenta que la sección Habilidades
-const anios = s => Object.keys(s.usos || {}).reduce((t, id) => { const p = PUESTOS.find(x => x.id === id); return p ? t + meses(p.desde, p.hasta) : t; }, 0) / 12;
+const anios = s => mesesUnion(Object.keys(s.usos || {}).map(id => PUESTOS.find(x => x.id === id))) / 12;
 const TOP = AREAS.flatMap(a => a.skills).filter(s => s.id !== 'coord').map(s => [s.n, anios(s)]).sort((a, b) => b[1] - a[1]);
 
 montarDragon(document.getElementById('pt-dragon'));

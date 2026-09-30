@@ -1,5 +1,5 @@
 // js/hab.js — Habilidades: mapa de dónde usé cada una, con el tiempo de práctica calculado de la trayectoria real
-import { esc, meses, PUESTOS } from './exp-data.js';
+import { esc, meses, mesesUnion, PUESTOS } from './exp-data.js';
 import { habilidades } from './hab-data.js';
 
 // Solo los puestos de trabajo, en orden cronológico
@@ -7,7 +7,7 @@ const COLS = ['ministerio', 'taki', 'adamas', 'demasled', 'veni', 'propias'].map
 let AREAS = [], APRENDIENDO = [], todas = [], MAX = 1;
 
 const $ = id => document.getElementById(id);
-const practica = s => Object.keys(s.usos || {}).reduce((t, id) => { const p = COLS.find(c => c.id === id); return p ? t + meses(p.desde, p.hasta) : t; }, 0);
+const practica = s => mesesUnion(Object.keys(s.usos || {}).map(id => COLS.find(c => c.id === id)));
 const tiempo = m => m >= 12 ? `${(Math.round(m / 12 * 10) / 10).toLocaleString('es-AR')} años` : `${m} meses`;
 const fmtA = p => `${new Date(p.desde).getUTCFullYear()}${new Date(p.hasta).getUTCFullYear() !== new Date(p.desde).getUTCFullYear() ? '–' + String(new Date(p.hasta).getUTCFullYear()).slice(2) : ''}`;
 

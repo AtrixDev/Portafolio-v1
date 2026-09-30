@@ -11,6 +11,17 @@ export function pos(fecha) {
   return 16 + (Math.min(t, T1) - T0) / (T1 - T0) * 84;
 }
 export const meses = (a, b) => Math.max(1, Math.round((+new Date(b) - +new Date(a)) / 2.63e9));
+// Meses de práctica sin contar dos veces los períodos que se superponen (ej.: herramientas propias en paralelo a un empleo)
+export function mesesUnion(puestos) {
+  const iv = puestos.filter(Boolean).map(p => [+new Date(p.desde), +new Date(p.hasta)]).sort((a, b) => a[0] - b[0]);
+  let total = 0, ini = null, fin = null;
+  for (const [a, b] of iv) {
+    if (ini === null || a > fin) { if (ini !== null) total += fin - ini; ini = a; fin = b; }
+    else fin = Math.max(fin, b);
+  }
+  if (ini !== null) total += fin - ini;
+  return total ? Math.max(1, Math.round(total / 2.63e9)) : 0;
+}
 export const dur = m => m >= 12 ? `${Math.round(m / 12 * 10) / 10} ${m >= 18 ? 'años' : 'año'}`.replace('.', ',') : `${m} meses`;
 
 export const PUESTOS = [
@@ -74,11 +85,11 @@ export const PUESTOS = [
     cta: [['Ver el caso Borner', '#caso-exito']],
   },
   {
-    id: 'propias', carril: 0, desde: '2025-12-01', hasta: HOY, ahora: true,
+    id: 'propias', carril: 2, desde: '2025-01-01', hasta: HOY, ahora: true,
     desafio: 'Los vendedores pierden ventas sin enterarse: una publicación pierde el catálogo, el stock se agota, la publicidad se come el margen.', solucion: 'Herramientas que lo detectan solas, explican por qué pasa y dicen qué hacer. Varias las podés probar gratis.',
-    co: 'Herramientas propias', corto: 'Herramientas propias', rol: 'Consultor freelance', tipo: 'Freelance',
-    alcance: [['1', 'sistema en producción'], ['6', 'webs para negocios']],
-    hizo: ['<b>ML Tracker</b>: conectado a la API oficial; sigue visitas, ventas y conversión y explica qué se cae y por qué.', '<b>Auditoría automática</b> de cuentas, con informe en PDF.', '<b>6 webs</b> para negocios, de punta a punta.'],
+    co: 'Herramientas propias', corto: 'Herramientas propias', rol: 'En paralelo desde DemasLed · consultor freelance desde dic 2025', tipo: 'Proyectos propios',
+    alcance: [['1', 'sistema en producción'], ['4', 'webs de punta a punta']],
+    hizo: ['<b>ML Tracker</b>: conectado a la API oficial; sigue visitas, ventas y conversión y explica qué se cae y por qué.', '<b>Auditoría automática</b> de cuentas, con informe en PDF.', '<b>4 webs</b> de punta a punta: Odontología Almagro, Tenshi TCG, Lovyme y este portfolio.'],
     tools: ['Node.js', 'MongoDB', 'API de Mercado Libre', 'Vercel', 'Claude Code', 'Python'],
     cta: [['Ver todas las herramientas', 'herramientas.html'], ['Auditar una cuenta', 'sistema.html#auditar']],
     sistemas: [

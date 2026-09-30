@@ -128,13 +128,27 @@
       tdSel.value = d.categoria?.id || 'todas'; tdCats = true;
     }
     $('td-fuente').textContent = d.demo ? 'Ejemplo ilustrativo: no son datos de Mercado Libre.'
+      : d.copia ? `Últimos datos reales de Mercado Libre, del ${fechaTd(d.actualizado)}`
       : d.actualizado ? `Datos de Mercado Libre · actualizado el ${fechaTd(d.actualizado)}` : 'Datos de Mercado Libre';
-    const aviso = d.demo ? `<p class="td-aviso">${ic('alert')}<span><b>Estás viendo un ejemplo.</b> La conexión con Mercado Libre no está disponible en este momento, así que estos términos son inventados para mostrarte cómo funciona. No los uses para decidir.</span></p>` : '';
+    const aviso = d.demo && d.motivo === 'ml_sin_tendencias'
+      ? `<p class="td-aviso">${ic('alert')}<span><b>Mercado Libre pausó sus tendencias públicas.</b> Mientras vuelven, te muestro un ejemplo inventado para que veas cómo funciona. No lo uses para decidir: si necesitás las tendencias de tu rubro, escribime y las saco a mano.</span></p>`
+      : d.demo ? `<p class="td-aviso">${ic('alert')}<span><b>Estás viendo un ejemplo.</b> La conexión con Mercado Libre no está disponible en este momento, así que estos términos son inventados para mostrarte cómo funciona. No los uses para decidir.</span></p>`
+      : d.copia ? `<p class="td-aviso">${ic('alert')}<span><b>Mercado Libre no está respondiendo ahora.</b> Te muestro los últimos datos reales que guardé, del ${esc(fechaTd(d.actualizado))}.</span></p>` : '';
     if (!d.total) { tdOut.innerHTML = aviso + '<p class="td-vacio">Mercado Libre no tiene tendencias para esta categoría hoy. Probá con otra.</p>'; return; }
     const cat = d.categoria?.id === 'todas' ? 'todo Mercado Libre' : d.categoria?.nombre || 'esta categoría';
     const fila = x => `<li class="td-fila td-top"><span class="td-pos">${x.pos}</span>
       <span class="td-term">${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.termino)}${ic('external')}<span class="sr-only"> (ver la búsqueda en Mercado Libre, se abre en otra pestaña)</span></a>` : esc(x.termino)}</span>
       <span class="td-der">${tipo(x.tipo)}</span></li>`;
+    // En modo ejemplo no hay "términos escondidos" reales: se muestra solo el top y una oferta honesta
+    if (d.demo) {
+      tdOut.innerHTML = `${aviso}<ol class="td-lista">${d.visibles.map(fila).join('')}</ol>
+        <div class="td-mas">
+          <h3>¿Necesitás las tendencias de tu rubro?</h3>
+          <p>Mientras Mercado Libre no las publique, las saco a mano del buscador y te marco en cuáles vale la pena entrar según tu producto, tu margen y la competencia.</p>
+          <a class="btn-primary" href="contacto.html?motivo=consulta&asunto=tendencias#formulario">Pedime las de mi rubro ${ic('arrow-right').replace('class="icon"', 'class="icon icon-end"')}</a>
+        </div>`;
+      return;
+    }
     const ocultas = d.ocultos.slice(0, MAX_OCULTAS);
     const n = d.ocultos.length;
     tdOut.innerHTML = `${aviso}

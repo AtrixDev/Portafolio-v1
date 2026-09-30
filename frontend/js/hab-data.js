@@ -45,7 +45,7 @@ export const AREAS = [
     { id: 'webs', lab: ['Cómo se arma una web', '/programacion.html'], n: 'Tiendas y webs', usos: {
       adamas: ['Tiendas en WordPress y Tienda Nube'],
       veni: ['"Mi Página" de Borner en Mercado Libre y Tienda Nube'],
-      propias: ['Webs para negocios, de punta a punta', '6 webs'] },
+      propias: ['Webs para negocios, de punta a punta', '4 webs'] },
       tools: ['WordPress', 'Tienda Nube', 'HTML/CSS/JS', 'Vercel'], prueba: ['Ver "Armá tu web"', '/armar.html'] },
     { id: 'ia', lab: ['IA aplicada a Mercado Libre', '/sistema.html#metodo'], n: 'IA aplicada', usos: {
       demasled: ['ChatGPT en el trabajo diario'],

@@ -23,6 +23,7 @@ import weblab_curado as C
 import weblab_skills as SK
 import weblab_negocios as NG
 import weblab_correcciones as CR
+import weblab_niveles as NV
 
 def slug(s):
     s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
@@ -191,6 +192,7 @@ def build():
 
     traducir(data)
     CR.aplicar(data)   # correcciones de contenido (ver tools/weblab_correcciones.py)
+    NV.aplicar(data)   # dificultad y valor de cada ficha (ver tools/weblab_niveles.py)
 
     # Unicidad de ids por categoría
     for cat, items in data.items():
@@ -207,7 +209,7 @@ def build():
         (OUT / f"{cid}.json").write_text(json.dumps(items, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
         index["categories"].append(dict(id=cid, name=name, group=group, icon=icon, desc=desc, origin=origin, count=len(items)))
         for e in items:
-            index["entries"].append([cid, e["id"], e["name"], e.get("summary", "")[:160], e.get("tags", [])])
+            index["entries"].append([cid, e["id"], e["name"], e.get("summary", "")[:160], e.get("tags", []), e.get("nivel", 0), e.get("valor", "")])
     (OUT / "index.json").write_text(json.dumps(index, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
     total = sum(c["count"] for c in index["categories"])
