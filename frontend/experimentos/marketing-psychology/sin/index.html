@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta name="robots" content="noindex"><!-- Experimento del Lab de Programación: salida de Claude sin cambios de diseño -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Precios | Yerbal del Monte</title>
+<style>
+  :root {
+    --verde: #2f5d3a;
+    --verde-oscuro: #1f3f27;
+    --verde-claro: #e8f0e4;
+    --crema: #faf6ec;
+    --tierra: #8a5a2b;
+    --texto: #2b2b25;
+    --gris: #6b6b60;
+    --borde: #ddd6c4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    background: var(--crema);
+    color: var(--texto);
+    line-height: 1.5;
+  }
+  .precios {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 64px 20px;
+  }
+  .precios header { text-align: center; margin-bottom: 48px; }
+  .marca {
+    font-family: system-ui, sans-serif;
+    font-size: .8rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--tierra);
+    margin-bottom: 10px;
+  }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); color: var(--verde-oscuro); margin-bottom: 12px; }
+  .bajada { font-family: system-ui, sans-serif; color: var(--gris); max-width: 540px; margin: 0 auto; }
+
+  .grilla {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: center;
+  }
+  .pack {
+    position: relative;
+    background: #fff;
+    border: 1px solid var(--borde);
+    border-radius: 14px;
+    padding: 32px 24px;
+    text-align: center;
+    font-family: system-ui, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .pack h2 { font-family: Georgia, serif; font-size: 1.3rem; color: var(--verde-oscuro); }
+  .detalle { color: var(--gris); font-size: .9rem; margin-top: 4px; }
+  .precio { font-size: 2.2rem; font-weight: 700; margin: 20px 0 2px; color: var(--texto); }
+  .por-kilo { font-size: .95rem; color: var(--gris); }
+  .ahorro {
+    display: inline-block;
+    margin: 14px auto 0;
+    padding: 4px 12px;
+    border-radius: 99px;
+    background: var(--verde-claro);
+    color: var(--verde);
+    font-size: .85rem;
+    font-weight: 600;
+  }
+  .ahorro.vacio { visibility: hidden; }
+  .pack ul {
+    list-style: none;
+    margin: 22px 0 26px;
+    text-align: left;
+    font-size: .92rem;
+    flex-grow: 1;
+  }
+  .pack li { padding: 6px 0 6px 26px; position: relative; border-top: 1px solid #f0ebdc; }
+  .pack li::before { content: "✓"; position: absolute; left: 4px; color: var(--verde); font-weight: 700; }
+
+  .boton {
+    display: block;
+    padding: 13px 16px;
+    border-radius: 10px;
+    border: 2px solid var(--verde);
+    color: var(--verde);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background .15s, color .15s;
+  }
+  .boton:hover, .boton:focus-visible { background: var(--verde); color: #fff; }
+
+  /* Pack destacado: 3 kg */
+  .pack.destacado {
+    border: 3px solid var(--verde);
+    box-shadow: 0 14px 34px rgba(47, 93, 58, .22);
+    padding: 44px 26px 36px;
+    transform: scale(1.05);
+    z-index: 1;
+  }
+  .pack.destacado .precio { font-size: 2.6rem; color: var(--verde-oscuro); }
+  .pack.destacado .boton { background: var(--verde); color: #fff; font-size: 1.05rem; }
+  .pack.destacado .boton:hover, .pack.destacado .boton:focus-visible { background: var(--verde-oscuro); border-color: var(--verde-oscuro); }
+  .cinta {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--tierra);
+    color: #fff;
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+
+  .nota {
+    text-align: center;
+    margin-top: 40px;
+    font-family: system-ui, sans-serif;
+    font-size: .88rem;
+    color: var(--gris);
+  }
+
+  @media (max-width: 820px) {
+    .grilla { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; gap: 28px; }
+    .pack.destacado { order: -1; transform: none; }
+  }
+</style>
+</head>
+<body>
+<section class="precios" aria-labelledby="titulo-precios">
+  <header>
+    <p class="marca">Yerbal del Monte</p>
+    <h1 id="titulo-precios">Elegí tu pack de yerba mate orgánica</h1>
+    <p class="bajada">Misma yerba, mismo sabor de siempre. Cuanto más llevás, menos pagás por kilo.</p>
+  </header>
+
+  <div class="grilla">
+    <article class="pack">
+      <h2>Pack Probá</h2>
+      <p class="detalle">1 kg</p>
+      <p class="precio">$9.500</p>
+      <p class="por-kilo">$9.500 por kilo</p>
+      <span class="ahorro vacio" aria-hidden="true">&nbsp;</span>
+      <ul>
+        <li>Yerba mate 100% orgánica</li>
+        <li>Ideal para conocerla</li>
+      </ul>
+      <a class="boton" href="#comprar-1kg">Quiero el de 1 kg</a>
+    </article>
+
+    <article class="pack destacado">
+      <span class="cinta">Recomendado</span>
+      <h2>Pack Hogar</h2>
+      <p class="detalle">3 kg</p>
+      <p class="precio">$26.000</p>
+      <p class="por-kilo">$8.667 por kilo</p>
+      <span class="ahorro">Ahorrás $2.500 vs. 3 packs de 1 kg</span>
+      <ul>
+        <li>Yerba mate 100% orgánica</li>
+        <li>Alcanza para varias semanas de mates</li>
+        <li>El mejor equilibrio entre precio y cantidad</li>
+      </ul>
+      <a class="boton" href="#comprar-3kg">Quiero el de 3 kg</a>
+    </article>
+
+    <article class="pack">
+      <h2>Pack Familiar</h2>
+      <p class="detalle">6 kg</p>
+      <p class="precio">$48.000</p>
+      <p class="por-kilo">$8.000 por kilo</p>
+      <span class="ahorro">Ahorrás $9.000 vs. 6 packs de 1 kg</span>
+      <ul>
+        <li>Yerba mate 100% orgánica</li>
+        <li>Para compartir o tener stock todo el año</li>
+      </ul>
+      <a class="boton" href="#comprar-6kg">Quiero el de 6 kg</a>
+    </article>
+  </div>
+
+  <p class="nota">Precios en pesos argentinos, IVA incluido.</p>
+</section>
+</body>
+</html>

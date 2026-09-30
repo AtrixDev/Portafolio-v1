@@ -54,7 +54,7 @@ CATS = [
   ("tipografias",  "Tipografías",         "Diseñar",   "type",    "Combinaciones de fuentes de Google Fonts con vista previa en vivo.", "ui-ux-pro-max"),
   ("paletas",      "Paletas de color",    "Diseñar",   "palette", "Paletas completas (primario, acento, fondo, texto) por tipo de producto.", "ui-ux-pro-max"),
   ("ux",           "Buenas prácticas UX", "Revisar",   "check",   "Qué hacer y qué evitar, con ejemplos de código y severidad.", "ui-ux-pro-max"),
-  ("skills",       "Skills de Claude",    "Con IA",    "flask",   "Las skills más usadas para potenciar a Claude: qué hacen, cómo se instalan y un prompt de ejemplo para probarlas.", "curado"),
+  ("skills",       "Skills de Claude",    "Con IA",    "flask",   "Las skills más usadas para potenciar a Claude. Las marcadas con experimento se probaron de verdad: el mismo prompt sin la skill y con la skill. Lo que muestran: rinden mucho en diseño, en reglas de una plataforma (Mercado Libre, Meta) y en método; poco en lo que Claude ya hace bien solo.", "curado"),
 ]
 
 def curated(cat, items):

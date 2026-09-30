@@ -1,0 +1,64 @@
+{
+ "id": "skill-creator",
+ "fecha": "30/09/2026",
+ "prompt": "Creá una skill para Claude que responda las preguntas de los compradores en mis publicaciones de Mercado Libre con el tono de mi tienda de artículos de cocina: cercano, claro, en español argentino, sin prometer lo que no está en la publicación y siempre invitando a comprar. Dejá la skill en la carpeta responder-preguntas/ de esta carpeta.",
+ "entrada": [],
+ "sin": {
+  "segundos": 57,
+  "pasos": 4,
+  "costo": 0.24,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Hice la skill en `responder-preguntas/`. No la probé con preguntas reales todavía.\n\n**Archivos**\n- `SKILL.md`: las instrucciones de la skill.\n- `ejemplos.md`: seis respuestas de ejemplo sobre una sartén inventada: si sirve para inducción, si hay otro color, un pedido de descuento, un pedido de WhatsApp, el tiempo de envío y un reclamo.\n\n**Cómo responde**\n- **Antes de contestar:** usa la pregunta del comprador y el texto de tu publicación. Si le pasás solo la pregunta, primero te pide los datos de la publicación.\n- **No promete nada que no esté en la publicación:** si falta un dato (por ejemplo, si sirve para inducción o para el lavavajillas), no lo inventa. En la respuesta dice que ese dato no está confirmado y cuenta lo que sí se sabe. Aparte, en una sección **\"Para revisar\"** que no va en la respuesta, te avisa qué dato faltaba para que completes la publicación.\n- **Tono:** cercano y claro, con voseo, de 2 a 4 oraciones y sin emojis. Primero contesta lo que te preguntaron y siempre cierra invitando a comprar, con frases distintas en cada respuesta.\n- **Reglas de Mercado Libre:** nunca pone teléfonos, WhatsApp, links ni propuestas de arreglar por fuera de Mercado Libre. Tampoco promete fechas de entrega exactas ni descuentos que no figuren en la publicación.\n- **Casos frecuentes:** tiene indicaciones para consultas de stock, pedidos de descuento, variantes que no tenés, preguntas técnicas, reclamos y preguntas que ya están respondidas en la descripción.\n- **Formato:** cada respuesta sale lista para copiar y pegar en Mercado Libre.\n\n**Una excepción que tenés que decidir:** ante un reclamo, la skill no invita a comprar. En cambio, cierra ofreciendo ayuda por la mensajería de la compra, porque meter una venta en ese momento queda desubicado. Si preferís que invite a comprar también en ese caso, se cambia en una línea.\n\nSi me decís el nombre de la tienda, si usan emojis o una firma, o políticas fijas como factura A o retiro en persona, lo agrego a la skill.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "responder-preguntas/SKILL.md",
+    "ruta": "sin/responder-preguntas/SKILL.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "sin/responder-preguntas/SKILL.md.html"
+   },
+   {
+    "nombre": "responder-preguntas/ejemplos.md",
+    "ruta": "sin/responder-preguntas/ejemplos.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "sin/responder-preguntas/ejemplos.md.html"
+   }
+  ]
+ },
+ "con": {
+  "segundos": 92,
+  "pasos": 9,
+  "costo": 0.53,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "La skill está armada en `responder-preguntas/` y pasó el chequeo de formato del skill-creator. Todavía no la probé con preguntas reales.\n\n**Qué hay en la carpeta**\n\n- **`SKILL.md`**: las instrucciones principales.\n  - **Tono**: voseo, cercano pero prolijo y respuestas cortas de 2 a 5 oraciones, pensadas para leer en el celular.\n  - **Estructura de cada respuesta**: saludo, respuesta directa a lo que preguntó, un dato útil de la publicación, invitación a comprar y tu firma (si le indicás una).\n  - **Nada de promesas fuera de la publicación**: no inventa medidas, compatibilidades (inducción, horno, lavavajillas), plazos de entrega, descuentos, envío gratis ni garantía. Si le falta un dato, contesta con lo que sí figura y te deja una **nota aparte** con lo que conviene confirmar o sumar a la publicación.\n  - **Reglas de Mercado Libre**: no pasa teléfonos, WhatsApp, emails ni links, y no propone vender por fuera de la plataforma. Así se evitan sanciones a la cuenta.\n  - **Casos frecuentes**: stock, envíos (remite a calcular con el código postal), factura, pedidos de descuento, quejas, preguntas que ya estaban en la descripción y comparaciones entre productos.\n  - **Formato**: la respuesta sale en texto plano, lista para copiar y pegar en Mercado Libre.\n- **`references/ejemplos.md`**: 7 ejemplos de respuestas buenas y malas, por ejemplo cuando piden descuento, piden tu WhatsApp o preguntan si va al horno y la publicación no lo dice.\n- **`evals/evals.json`**: 3 preguntas de prueba ya escritas (inducción y lavavajillas, descuento y contacto por fuera, y plazo de entrega a Córdoba).\n\n**Para que se use sola**, está configurada para activarse cuando pegás preguntas de compradores o pedís \"¿qué le contesto?\", aunque no nombres Mercado Libre.\n\n**Para personalizarla**, faltan dos cosas:\n1. **Nombre de la tienda y firma**: si me los pasás, los dejo fijos en la skill.\n2. **Si hacés factura A/B**: por ahora, cuando le preguntan, te deja una nota para que lo confirmes.\n\nSi querés, el próximo paso es correr esas 3 preguntas de prueba con y sin la skill para que compares las respuestas y ajustemos el tono.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "responder-preguntas/SKILL.md",
+    "ruta": "con/responder-preguntas/SKILL.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "con/responder-preguntas/SKILL.md.html"
+   },
+   {
+    "nombre": "responder-preguntas/evals/evals.json",
+    "ruta": "con/responder-preguntas/evals/evals.json",
+    "aux": false,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "responder-preguntas/references/ejemplos.md",
+    "ruta": "con/responder-preguntas/references/ejemplos.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "con/responder-preguntas/references/ejemplos.md.html"
+   }
+  ]
+ }
+}

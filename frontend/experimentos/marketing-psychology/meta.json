@@ -1,0 +1,42 @@
+{
+ "id": "marketing-psychology",
+ "fecha": "30/09/2026",
+ "prompt": "Tengo una tienda online de yerba mate orgánica, \"Yerbal del Monte\", con tres packs: 1 kg a $9.500, 3 kg a $26.000 y 6 kg a $48.000. Quiero que la mayoría elija el pack de 3 kg. Hacé la sección de precios como un archivo index.html en esta carpeta (un solo archivo, CSS adentro, sin imágenes externas), con los textos en español argentino.",
+ "entrada": [],
+ "sin": {
+  "segundos": 26,
+  "pasos": 2,
+  "costo": 0.12,
+  "modelos": [
+   "claude-sonnet-5-5"
+  ],
+  "resumen": "Armé `index.html` en la carpeta: un solo archivo, con el CSS adentro y sin imágenes externas. No lo abrí en un navegador, así que conviene que lo mires antes de publicarlo.\n\n**Cómo empuja hacia el pack de 3 kg**\n- **Destaque visual:** es la tarjeta del medio, más grande y con borde y sombra verdes. Lleva la cinta \"Recomendado\" y es el único botón relleno. Los otros dos tienen botón con solo el borde.\n- **Precio por kilo:** el de 1 kg sale $9.500, el de 3 kg $8.667 y el de 6 kg $8.000.\n- **Ahorro en pesos:** los packs de 3 y 6 kg dicen cuánto ahorrás contra comprar packs de 1 kg. Son $2.500 y $9.000, calculados con tus precios.\n- **El pack de 6 kg como referencia:** al lado, el de 3 kg parece un punto medio razonable entre probar y comprometerse con mucho.\n- **Celular:** el pack de 3 kg pasa arriba de todo.\n\n**Decisiones que tomé**\n- **\"Recomendado\" en lugar de \"Más elegido\":** no tengo datos de ventas y no quise poner una afirmación que quizás no sea cierta. Si ya es el más vendido, cambiá la cinta.\n- **Textos:** están en voseo argentino (\"Elegí\", \"Llevás\", \"Quiero el de 3 kg\").\n- **Nombres y beneficios:** los nombres de los packs (Probá, Hogar, Familiar) y los textos de beneficios son inventados. Reemplazalos por los reales.\n- **Nota al pie:** dice \"IVA incluido\". Confirmá que sea cierto o sacala.\n- **Botones:** los enlaces apuntan a `#comprar-1kg`, `#comprar-3kg` y `#comprar-6kg`. Cambialos por los links de tu carrito.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "index.html",
+    "ruta": "sin/index.html",
+    "aux": false,
+    "tipo": "pagina"
+   }
+  ]
+ },
+ "con": {
+  "segundos": 35,
+  "pasos": 4,
+  "costo": 0.18,
+  "modelos": [
+   "claude-sonnet-5-5"
+  ],
+  "resumen": "Armé la sección de precios en `index.html`: un solo archivo, con el CSS adentro, sin imágenes externas y con los textos en español argentino. No la abrí en un navegador, así que te conviene mirarla, sobre todo en el celular.\n\n**Cómo empuja hacia el pack de 3 kg**\n- **Destacado visual:** la tarjeta de 3 kg es más grande, tiene borde y sombra, un sello \"Recomendado\" y el único botón relleno. Los otros dos son botones con borde.\n- **Anclaje y contraste:** el pack de 6 kg ($48.000) hace que $26.000 se sienta moderado. El de 1 kg funciona como referencia cara por kilo y como puerta de entrada para quien quiere probar.\n- **Precio por kilo visible:** $9.500, $8.667 y $8.000. Los 3 kg muestran además \"$28.500 comprando 3 de 1 kg\" tachado y \"Ahorrás $2.500\".\n- **Menos dudas:** los textos de cada pack dicen para quién es. El de 3 kg dice \"El equilibrio justo: ahorrás y no se te acaba a la semana\".\n- **Pocas opciones:** son tres y hay un único recomendado. En el celular, el de 3 kg aparece primero.\n\n**Decisiones que tomé**\n- **Sin datos inventados:** no puse \"El más vendido\", ni stock limitado, ni testimonios, porque no sé si son ciertos. Usé \"Recomendado\", que es una opinión tuya y no un dato. Si después tenés números reales de ventas o reseñas, agregarlos refuerza mucho el pack de 3 kg.\n- **Estimación de duración:** puse \"rinde unos 10, 30 o 60 días\" y \"$867 por día\". Es un cálculo a 100 g por día, aclarado en una nota al pie. Si tu cliente típico toma otra cantidad, hay que ajustarlo.\n- **Botones sin conexión:** los botones apuntan a `#comprar-1kg`, `#comprar-3kg` y `#comprar-6kg`. Cambiá esos links por tu carrito o checkout.\n- **Envío:** no mencioné envío gratis ni garantía porque no sé qué ofrecés. Si tenés alguna de las dos, agregala en el pack de 3 kg.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "index.html",
+    "ruta": "con/index.html",
+    "aux": false,
+    "tipo": "pagina"
+   }
+  ]
+ }
+}

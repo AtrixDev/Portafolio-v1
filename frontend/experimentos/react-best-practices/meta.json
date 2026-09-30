@@ -1,0 +1,58 @@
+{
+ "id": "react-best-practices",
+ "fecha": "30/09/2026",
+ "prompt": "Revisá el componente Pedidos.jsx de esta carpeta y mejoralo. Dejá la versión nueva en el mismo archivo y explicá los cambios en cambios.md, en español argentino.",
+ "entrada": [
+  "Pedidos.jsx"
+ ],
+ "sin": {
+  "segundos": 46,
+  "pasos": 4,
+  "costo": 0.19,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Reescribí `Pedidos.jsx` y dejé la explicación en `cambios.md`. No lo compilé ni lo probé, porque en la carpeta no hay proyecto armado (no hay `package.json` ni dependencias).\n\n**Errores que había:**\n- **Bucle infinito:** el `useEffect` no tenía lista de dependencias. Cada cambio de estado volvía a disparar las tres llamadas a la API, y cada tecla en el buscador también. Ahora solo corre cuando cambia `[clienteId]`.\n- **Cambio de cliente a mitad de carga:** una respuesta vieja podía llegar después de la nueva y pisarla. Ahora las llamadas pendientes se cancelan con `AbortController`.\n- **Errores de red:** no se chequeaba `res.ok`, así que un 404 o un 500 se tomaba como datos buenos y rompía el componente. Ahora se muestra un mensaje de error.\n\n**Rendimiento:**\n- Las tres llamadas salen juntas con `Promise.all` en lugar de esperar una a la otra.\n- El stock se busca en un `Map` en vez de recorrer todo el array con `stock.find` por cada pedido.\n- El filtro se recalcula solo cuando cambian los pedidos o el texto buscado.\n\n**Otras mejoras:**\n- Cada pedido usa su `id` como `key` en lugar del índice.\n- Hay mensajes para \"cargando\" y para cuando el filtro no encuentra nada.\n- Los pedidos son botones dentro de una lista, así que se pueden usar con el teclado, y el buscador tiene una etiqueta para lectores de pantalla.\n- El total aparece en pesos con formato argentino (`$ 1.234,50`).\n\n**Lo que no cambié:** el `alert(p.id)` al hacer clic y los estilos inline. En `cambios.md` sugiero reemplazar el `alert` por una prop tipo `onSeleccionarPedido`, y pasar la carga de datos a React Query o SWR si el proyecto ya usa alguno.\n\nAparte: el conector de Vercel necesita autorización (con `/mcp` en una sesión interactiva). No hacía falta para esta tarea.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "Pedidos.jsx",
+    "ruta": "sin/Pedidos.jsx",
+    "aux": false,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "cambios.md",
+    "ruta": "sin/cambios.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "sin/cambios.md.html"
+   }
+  ]
+ },
+ "con": {
+  "segundos": 62,
+  "pasos": 7,
+  "costo": 0.36,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Actualicé `Pedidos.jsx` y expliqué cada cambio en `cambios.md`, con voseo, siguiendo las reglas de la skill `react-best-practices`. No pude chequear la sintaxis: el intento con esbuild vía `npx` falló por un error de npm, y tampoco lo probé en una app. O sea que el código no está ejecutado.\n\n**Lo más importante:**\n1. **Bucle infinito:** el `useEffect` no tenía dependencias. Cada `setState` volvía a disparar el efecto, así que la API recibía consultas sin parar. Ahora el efecto depende solo de `[clienteId]`.\n2. **Consultas en paralelo:** las tres consultas iban una después de la otra aunque no dependen entre sí. Ahora van juntas con `Promise.all`, y los datos se guardan de una sola vez en vez de en tres renders.\n3. **Datos de otro cliente:** si cambiaba `clienteId` con consultas en curso, una respuesta vieja podía pisar la nueva. Ahora las consultas anteriores se cancelan con `AbortController`.\n4. **Errores y carga:** se revisa `res.ok`, y hay mensajes de \"cargando\", de error y de \"sin resultados\" cuando el filtro no encuentra nada.\n\n**Lo demás:**\n- La `key` de cada fila ahora es `p.id` en vez del índice.\n- El stock se busca en un `Map` armado una sola vez, en lugar de recorrer todo el array por cada pedido.\n- El texto del filtro se pasa a minúsculas una sola vez, no por cada pedido.\n- **Accesibilidad:** cada pedido es un `<button>` dentro de una lista `<ul>`, en vez de un `<div>` clickeable, y el buscador tiene `aria-label`.\n- El total se muestra en pesos con formato argentino (`$ 1.234,50`), usando `Intl.NumberFormat`.\n\n**Lo que dejé igual:** mantuve el `alert(p.id)` para no cambiar el comportamiento. No sumé SWR ni React Query para no agregar una dependencia sin saber qué usa el proyecto; en `cambios.md` lo dejo anotado como mejora posible.\n\nAparte: el conector de Vercel (`plugin:vercel:vercel`) necesita autorización. Lo podés habilitar con `/mcp` en una sesión interactiva; esta tarea no lo necesitó.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "Pedidos.jsx",
+    "ruta": "con/Pedidos.jsx",
+    "aux": false,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "cambios.md",
+    "ruta": "con/cambios.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "con/cambios.md.html"
+   }
+  ]
+ }
+}

@@ -107,6 +107,7 @@ function card(e, showCat) {
   return `<button type="button" class="wl-card" data-v="${esc(e.valor || '')}" data-open="${e.cat}/${esc(e.id)}">
     ${recipe.has(e.cat, e.id) ? `<span class="wl-card-in" title="En tu receta">${icon('bookmark')}</span>` : ''}
     <span class="wl-card-top">${valorBadge(e.valor)}${nivelMeter(e.nivel)}</span>
+    ${(t => t ? `<span class="wl-card-demo" data-t="${t}">${t === 'exp' ? 'Experimento real' : 'Demo'}</span>` : '')(window.WLDemos?.tipoDemo(e.cat, e.id))}
     ${showCat ? `<span class="wl-card-cat">${esc(c?.name)}</span>` : ''}
     <h3>${esc(e.name)}</h3>
     ${sw.length ? `<div class="wl-swatches" aria-hidden="true">${sw.slice(0, 8).map(h => `<span style="background:${esc(h)}"></span>`).join('')}</div>` : ''}

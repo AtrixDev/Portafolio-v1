@@ -1,0 +1,44 @@
+{
+ "id": "ad-creative",
+ "fecha": "30/09/2026",
+ "prompt": "Escribí 3 anuncios para Instagram (Meta Ads) para vender la Mandolina Börner V5 con Multibox en una tienda oficial de Mercado Libre. Datos: hecha en Alemania, 5 insertos (rodajas de 3,5 y 7 mm, bastones, juliana y rallado), protector de mano, apta lavavajillas, garantía de 5 años, $38.900 con envío gratis. Público: gente de 28 a 50 años que cocina en casa. Guardá los anuncios en anuncios.md en esta carpeta, en español argentino.",
+ "entrada": [],
+ "sin": {
+  "segundos": 29,
+  "pasos": 4,
+  "costo": 0.16,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Escribí los 3 anuncios en español argentino y los guardé en `anuncios.md`. Cada uno trae texto principal, título, descripción, botón (\"Comprar\") y una idea para la imagen o el video:\n\n1. **Ahorro de tiempo:** empieza con \"¿Cuánto tiempo perdés picando verdura para la cena?\" y muestra los cortes, el Multibox y que es apta lavavajillas. La idea visual es un Reel que compara cortar a cuchillo con usar la mandolina.\n2. **Calidad alemana:** empieza con \"Hecha en Alemania. Pensada para durar.\" y remarca los cortes parejos, los 5 insertos y la garantía de 5 años. La idea visual es un carrusel con una placa para cada inserto.\n3. **Seguridad:** empieza con \"¿Le tenés miedo a la mandolina? Con esta, cortás tranquilo.\" y se apoya en el protector de mano, con la garantía y la limpieza fácil como refuerzo. La idea visual es un video en primer plano del protector.\n\nLos anuncios solo usan los datos que me pasaste, sin cifras ni afirmaciones inventadas. Los títulos y las descripciones son cortos para que no se corten en el celular.\n\nAl final del archivo agregué algunas notas para la campaña: cómo testear los anuncios entre sí, revisar que los datos coincidan con la publicación de Mercado Libre antes de publicar, y evitar textos que hablen de rasgos personales, porque Meta los rechaza.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "anuncios.md",
+    "ruta": "sin/anuncios.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "sin/anuncios.md.html"
+   }
+  ]
+ },
+ "con": {
+  "segundos": 53,
+  "pasos": 8,
+  "costo": 0.42,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Escribí los 3 anuncios con la skill ad-creative y los guardé en `anuncios.md`, en español argentino. Conté los caracteres con un script y todos entran en los límites de Meta. El primer tramo de cada texto (lo que se ve antes del \"más\") tiene como mucho 120 caracteres, así que no se corta. Los títulos tienen hasta 37 caracteres y las descripciones hasta 29.\n\n| # | Ángulo | Título | Descripción | Formato sugerido |\n|---|---|---|---|---|\n| 1 | Ahorrar tiempo y cortar parejo | Picá parejo en cada pasada | $38.900 con envío gratis | Reel que muestra los 5 cortes |\n| 2 | Seguridad y calidad alemana | Hecha en Alemania. 5 años de garantía | Con protector de mano | Imagen o video de feed del protector en uso |\n| 3 | Oferta y todo en uno | 5 cortes en una sola herramienta | Tienda oficial · Envío gratis | Carrusel de 6 tarjetas, una por inserto |\n\nCada anuncio incluye el texto principal completo, el botón \"Comprar\" y una descripción de la imagen o el video.\n\n- **Solo datos reales:** todo lo que dicen los anuncios sale de los datos que me pasaste. No hay reseñas, cifras ni testimonios inventados.\n- **Para agregar después:** cuando tengas opiniones de compradores reales de Mercado Libre, se puede sumar un cuarto anuncio con esas opiniones.\n- **Cómo probarlos:** lanzá los tres juntos en el mismo conjunto de anuncios y esperá a que cada uno tenga unas 1.000 impresiones antes de decidir cuál funciona mejor.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "anuncios.md",
+    "ruta": "con/anuncios.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "con/anuncios.md.html"
+   }
+  ]
+ }
+}

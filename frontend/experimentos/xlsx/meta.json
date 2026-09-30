@@ -1,0 +1,51 @@
+{
+ "id": "xlsx",
+ "fecha": "30/09/2026",
+ "prompt": "En ventas.csv tengo las ventas mensuales de una tienda en Mercado Libre (ventas y publicidad en pesos). Armá un reporte en Excel, reporte.xlsx en esta carpeta, para mostrarle al dueño cómo le fue en estos seis meses: conversión, ACOS y la evolución. En español argentino.",
+ "entrada": [
+  "ventas.csv"
+ ],
+ "sin": {
+  "segundos": 39,
+  "pasos": 5,
+  "costo": 0.11,
+  "modelos": [
+   "claude-sonnet-5-5"
+  ],
+  "resumen": "Armé `reporte.xlsx` en esta carpeta, en una sola hoja. No lo abrí en Excel, así que no vi cómo se ven los gráficos ni el diseño.\n\n**Qué tiene**\n- **Tabla mensual (jun–nov 2025):** ventas, unidades, visitas, publicidad, conversión, ACOS, ticket promedio y variación de ventas contra el mes anterior, con una fila de totales. Las columnas calculadas son fórmulas, así que si cambiás un dato se actualizan solas.\n- **Cuatro indicadores destacados:** crecimiento de ventas, conversión, ACOS y ticket promedio de noviembre.\n- **Lectura para el dueño:** cinco puntos en castellano rioplatense.\n- **Cuatro gráficos:** ventas, ACOS, conversión y publicidad por mes.\n\n**Qué muestran los datos**\n- **Ventas:** subieron todos los meses, de $18,4 M a $25,6 M (+39%).\n- **Conversión:** pasó de 2,91% a 3,08%, con un máximo de 3,10% en octubre.\n- **ACOS:** bajó de 30% a 12%.\n- **Publicidad:** se gastó menos, de $5,5 M a $3,1 M, y se vendió más.\n- **Ticket promedio:** casi no se movió (entre $13.100 y $13.900), así que el crecimiento viene de vender más unidades y no de subir precios.\n\n**Supuestos**\n- Definí **conversión = unidades ÷ visitas**. Mercado Libre la mide a veces por cantidad de compras en lugar de unidades. Si tenés ese dato, el número puede dar un poco más bajo.\n- Definí **ACOS = publicidad ÷ ventas**.\n- El archivo no trae el año de cierre ni una meta, así que no hay comparación contra objetivos.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "reporte.xlsx",
+    "ruta": "sin/reporte.xlsx",
+    "aux": false,
+    "tipo": "documento",
+    "paginas": [
+     "sin/reporte-p-1.png"
+    ]
+   }
+  ]
+ },
+ "con": {
+  "segundos": 54,
+  "pasos": 10,
+  "costo": 0.22,
+  "modelos": [
+   "claude-sonnet-5-5"
+  ],
+  "resumen": "Armé `reporte.xlsx` en la carpeta. Se recalculó con 57 fórmulas y 0 errores, pero no abrí el archivo para revisar cómo se ven los gráficos.\n\n**Hoja \"Resumen\"** (la que va al dueño):\n- Cuatro indicadores arriba: ventas totales ($132,3 M), conversión promedio (3,03%), ACOS del período (17,6%) y ventas por cada $ de publicidad (5,7x).\n- Comparación de junio contra noviembre, con la variación de cada indicador.\n- Cinco conclusiones en castellano llano y cuatro gráficos: ventas vs. publicidad, ACOS, conversión y ventas por peso invertido.\n\n**Hoja \"Datos\"**: los números del CSV en azul, más las métricas calculadas con fórmulas (conversión, ACOS, ticket promedio y ventas por peso invertido), con los totales y las notas de cómo se calcula cada una.\n\n**Cómo le fue en los seis meses:**\n- **Ventas:** subieron 39% (de $18,4 M a $25,6 M) y crecieron todos los meses.\n- **ACOS:** bajó de 30% a 12%, o sea que hoy gasta $12 en publicidad por cada $100 vendidos, contra $30 en junio.\n- **Publicidad:** invirtió 44% menos y vendió más.\n- **Conversión:** mejoró de 2,91% a 3,08%, con un máximo de 3,10% en octubre.\n\nLa conversión la calculé como unidades ÷ visitas, porque el CSV no trae cantidad de órdenes. Si hay órdenes con más de una unidad, la conversión real por orden es algo menor. Lo dejé aclarado en la hoja de datos.\n\nLas conclusiones de la hoja Resumen son texto fijo; si cambiás los datos, las tablas y los gráficos se actualizan solos pero esas frases no.\n\nEste entorno no tenía `openpyxl`, así que lo instalé en un entorno virtual temporal en `/tmp`. No toqué nada más del sistema.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "reporte.xlsx",
+    "ruta": "con/reporte.xlsx",
+    "aux": false,
+    "tipo": "documento",
+    "paginas": [
+     "con/reporte-p-1.png",
+     "con/reporte-p-2.png"
+    ]
+   }
+  ]
+ }
+}

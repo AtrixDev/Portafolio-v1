@@ -150,7 +150,9 @@ Como las fichas de diseño se importan de la skill ui-ux-pro-max y se regeneran,
 - **Qué pasa:** las 781 fichas no tienen nivel de dificultad ni de valor, y las cards no se distinguen. Las fichas explican pero no muestran: por ejemplo, la skill Impeccable no muestra la diferencia entre una web genérica hecha con IA y la misma web hecha con la skill.
 - **Cómo arreglarlo:** clasificar por nivel y por valor, con un símbolo de color en cada card, y sumar demos de antes y después que muestren qué mejora cada ficha.
 - **Hecho:** las 781 fichas tienen dificultad (Inicial / Intermedio / Avanzado, barras) y valor (Base ○ / Imprescindible ◆ / Pro ✦), con filtros y orden (`tools/weblab_niveles.py`, se aplica en el build). Piloto de demos (`js/programacion-demos.js`): Impeccable (comparador), Copywriting, Excel, React Best Practices, 3 reglas UX interactivas (contraste, áreas táctiles, etiquetas), Stacks (vanilla y React) y las 74 tipografías (comparador automático).
+- **Cambio de método (30/09):** las demos de skills pasan a ser experimentos reales (mismo prompt con Claude, sin skills y con la skill; `tools/experimentos/`). La de Impeccable ya es real. Las hechas a mano quedan rotuladas como ilustración hasta reemplazarlas.
 - **Falta:** llevar las demos al resto de las fichas, en tandas.
 
-## 8. Armá tu web: básico y poco valioso — abierto
+## 8. Armá tu web: básico y poco valioso — resuelto (nuevo: Revisá tu web)
 - **Qué pasa:** el configurador se siente básico. Hay que decidir si vale la pena y qué rumbo darle.
+- **Hecho (30/09):** nueva página `web.html`, "Revisá tu web" (en el menú en lugar de "Armá tu web"). Pegás la URL y revisa más de 20 puntos en celular, velocidad, Google, contacto y confianza, con prioridades y cómo arreglar cada uno, y termina en "¿Te la arreglo?". El configurador queda en `armar.html` para quien no tiene web. **Falta:** una clave gratis de Google PageSpeed (`PAGESPEED_KEY` en Vercel) para sumar la velocidad real en celular.

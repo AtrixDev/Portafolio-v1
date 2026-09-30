@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta name="robots" content="noindex"><!-- Experimento del Lab de Programación: salida de Claude sin cambios de diseño -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Consultorio Dra. Lucía Paz · Odontología general y estética en Caballito</title>
+<meta name="description" content="Odontología general y estética en Caballito, Buenos Aires. Limpieza, arreglos, blanqueamiento, ortodoncia invisible e implantes. Atendemos OSDE, Swiss Medical y Galeno. Turnos por WhatsApp.">
+<meta name="theme-color" content="#0E7490">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230E7490'/%3E%3Cpath d='M32 14c-5-4-14-3-16 5-1 6 2 10 3 16 1 6 2 13 6 13 3 0 3-8 7-8s4 8 7 8c4 0 5-7 6-13 1-6 4-10 3-16-2-8-11-9-16-5z' fill='%23fff'/%3E%3C/svg%3E">
+
+<style>
+/* ---------- Tokens ---------- */
+:root{
+  --primary:#0E7490;        /* 5.4:1 sobre blanco */
+  --primary-dark:#155E75;
+  --primary-soft:#CFFAFE;
+  --wa:#047857;             /* 5.5:1 con texto blanco */
+  --wa-dark:#065F46;
+  --bg:#F3FCFD;
+  --surface:#FFFFFF;
+  --ink:#164E63;
+  --ink-soft:#3B5F6E;       /* 6.5:1 sobre --bg */
+  --line:#BDE6EE;
+  --muted:#E3F4F8;
+  --focus:#F59E0B;
+
+  --r-sm:10px; --r-md:16px; --r-lg:24px;
+  --shadow:0 1px 2px rgba(22,78,99,.06),0 8px 24px -12px rgba(22,78,99,.18);
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --t:200ms;
+
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-head:ui-rounded,"Nunito","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  --wrap:1120px;
+}
+
+/* ---------- Base ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--font);font-size:1rem;line-height:1.65;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img,svg{display:block;max-width:100%}
+h1,h2,h3{font-family:var(--font-head);line-height:1.15;margin:0;letter-spacing:-.01em;font-weight:800}
+p{margin:0}
+a{color:inherit}
+ul{margin:0;padding:0;list-style:none}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:6px}
+.wrap{width:min(100% - 2.5rem,var(--wrap));margin-inline:auto}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:1rem;top:-4rem;background:var(--ink);color:#fff;padding:.75rem 1rem;border-radius:var(--r-sm);z-index:1000;transition:top var(--t)}
+.skip:focus{top:1rem}
+
+/* ---------- Botones ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;min-height:48px;padding:.8rem 1.4rem;border-radius:999px;font:700 1rem/1.2 var(--font);text-decoration:none;border:2px solid transparent;cursor:pointer;touch-action:manipulation;transition:background-color var(--t) var(--ease),transform var(--t) var(--ease),box-shadow var(--t) var(--ease),border-color var(--t)}
+.btn svg{width:22px;height:22px;flex:none}
+.btn-wa{background:var(--wa);color:#fff;box-shadow:0 8px 20px -10px rgba(4,120,87,.7)}
+.btn-wa:hover{background:var(--wa-dark)}
+.btn-wa:active{transform:scale(.98)}
+.btn-ghost{background:transparent;color:var(--primary-dark);border-color:var(--primary)}
+.btn-ghost:hover{background:var(--primary-soft)}
+.btn-lg{min-height:56px;padding-inline:1.8rem;font-size:1.0625rem}
+
+/* ---------- Header ---------- */
+.top{position:sticky;top:0;z-index:50;background:rgba(243,252,253,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:68px}
+.brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;font-family:var(--font-head);font-weight:800;line-height:1.1}
+.brand-mark{width:40px;height:40px;border-radius:12px;background:var(--primary);display:grid;place-items:center;flex:none}
+.brand-mark svg{width:24px;height:24px}
+.brand small{display:block;font:600 .75rem/1.2 var(--font);color:var(--ink-soft);letter-spacing:.02em}
+.nav{display:none}
+.nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 .9rem;text-decoration:none;font-weight:600;border-radius:999px;color:var(--ink);transition:background-color var(--t)}
+.nav a:hover{background:var(--muted)}
+.top .btn{min-height:44px;padding:.55rem 1.1rem;font-size:.95rem}
+.top .btn .long{display:none}
+
+/* ---------- Hero ---------- */
+.hero{padding:clamp(2.5rem,7vw,5.5rem) 0 clamp(2.5rem,6vw,4.5rem);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-20% -10% auto auto;width:min(640px,80vw);aspect-ratio:1;background:radial-gradient(closest-side,var(--primary-soft),transparent);opacity:.8;z-index:-1}
+.hero .wrap{display:grid;gap:2.5rem;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem .9rem;background:var(--surface);border:1px solid var(--line);border-radius:999px;font-size:.875rem;font-weight:600;color:var(--ink-soft)}
+.dot{width:10px;height:10px;border-radius:50%;background:#94A3B8;flex:none}
+.pill[data-open="true"] .dot{background:#059669;box-shadow:0 0 0 4px rgba(5,150,105,.18)}
+.hero h1{font-size:clamp(2.1rem,6.2vw,3.6rem);margin-top:1.1rem;text-wrap:balance}
+.hero h1 em{font-style:normal;color:var(--primary)}
+.lead{margin-top:1.1rem;font-size:clamp(1.05rem,2.2vw,1.2rem);color:var(--ink-soft);max-width:54ch}
+.cta-row{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.8rem}
+.facts{display:flex;flex-wrap:wrap;gap:.6rem 1.6rem;margin-top:1.8rem;font-size:.95rem;color:var(--ink-soft);font-weight:500}
+.facts li{display:flex;align-items:center;gap:.5rem}
+.facts svg{width:20px;height:20px;color:var(--primary);flex:none}
+.hero-art{justify-self:center;width:min(100%,420px)}
+.hero-art .card-art{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:1.4rem;box-shadow:var(--shadow)}
+
+/* ---------- Secciones ---------- */
+section{padding:clamp(3rem,7vw,5.5rem) 0}
+.eyebrow{font:700 .8125rem/1 var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--primary-dark)}
+.sec-head{max-width:640px;margin-bottom:2.2rem}
+.sec-head h2{font-size:clamp(1.7rem,4vw,2.5rem);margin-top:.7rem;text-wrap:balance}
+.sec-head p{margin-top:.9rem;color:var(--ink-soft);font-size:1.05rem}
+
+/* Obras sociales */
+.cover{padding:1.6rem 0;background:var(--surface);border-block:1px solid var(--line)}
+.cover .wrap{display:grid;gap:1rem;align-items:center}
+.cover p{font-weight:600}
+.cover ul{display:flex;flex-wrap:wrap;gap:.6rem}
+.cover li{padding:.55rem 1.1rem;border:1.5px solid var(--line);border-radius:999px;font-weight:800;font-family:var(--font-head);background:var(--bg)}
+.cover small{display:block;color:var(--ink-soft);font-size:.875rem;margin-top:.2rem}
+
+/* Servicios */
+.grid{display:grid;gap:1rem}
+.svc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:1.5rem;display:flex;flex-direction:column;gap:.7rem;transition:border-color var(--t),box-shadow var(--t) var(--ease),transform var(--t) var(--ease)}
+.svc:hover{border-color:var(--primary);box-shadow:var(--shadow);transform:translateY(-3px)}
+.ico{width:52px;height:52px;border-radius:14px;background:var(--primary-soft);color:var(--primary-dark);display:grid;place-items:center}
+.ico svg{width:28px;height:28px}
+.svc h3{font-size:1.3rem}
+.svc p{color:var(--ink-soft)}
+.svc a{margin-top:auto;padding-top:.4rem;display:inline-flex;align-items:center;gap:.4rem;min-height:44px;font-weight:700;color:var(--primary-dark);text-decoration:none}
+.svc a:hover{text-decoration:underline;text-underline-offset:4px}
+.svc a svg{width:18px;height:18px;transition:transform var(--t) var(--ease)}
+.svc a:hover svg{transform:translateX(3px)}
+
+/* Pasos */
+.steps-wrap{background:var(--primary-dark);color:#fff}
+.steps-wrap .eyebrow{color:#A5F3FC}
+.steps-wrap .sec-head p{color:#D5F3F9}
+.steps{display:grid;gap:1rem;counter-reset:s}
+.steps li{counter-increment:s;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);border-radius:var(--r-md);padding:1.5rem}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#fff;color:var(--primary-dark);font:800 1.1rem var(--font-head);margin-bottom:.9rem}
+.steps h3{font-size:1.2rem}
+.steps p{margin-top:.4rem;color:#D5F3F9}
+.steps-cta{margin-top:2rem}
+.steps-wrap .btn-wa{background:#fff;color:var(--wa-dark);box-shadow:none}
+.steps-wrap .btn-wa:hover{background:var(--primary-soft)}
+
+/* Dónde */
+.where{display:grid;gap:1.2rem}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:clamp(1.4rem,3vw,2rem)}
+.panel h3{font-size:1.25rem;margin-bottom:1rem}
+.rows{display:grid;gap:1rem}
+.rows li{display:grid;grid-template-columns:28px 1fr;gap:.8rem;align-items:start}
+.rows svg{width:24px;height:24px;color:var(--primary)}
+.rows strong{display:block}
+.rows span{color:var(--ink-soft)}
+.hours{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.hours th,.hours td{padding:.65rem 0;text-align:left;border-bottom:1px solid var(--line);font-weight:500}
+.hours td{text-align:right;font-weight:700}
+.hours tr:last-child th,.hours tr:last-child td{border-bottom:0}
+.hours .off{color:var(--ink-soft);font-weight:500}
+.hours tr.today th,.hours tr.today td{color:var(--primary-dark);font-weight:800}
+.map-link{margin-top:1.2rem}
+
+/* FAQ */
+.faq{display:grid;gap:.75rem;max-width:760px}
+.faq details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md)}
+.faq summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:56px;padding:.9rem 1.3rem;font-weight:700;font-family:var(--font-head);font-size:1.05rem}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";width:20px;height:20px;flex:none;background:currentColor;color:var(--primary);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") center/contain no-repeat;transition:transform var(--t) var(--ease)}
+.faq details[open] summary::after{transform:rotate(180deg)}
+.faq details p{padding:0 1.3rem 1.2rem;color:var(--ink-soft)}
+
+/* Cierre + footer */
+.final{text-align:center}
+.final .box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:clamp(2rem,5vw,3.5rem) 1.5rem;box-shadow:var(--shadow)}
+.final h2{font-size:clamp(1.7rem,4vw,2.4rem);text-wrap:balance}
+.final p{margin:.9rem auto 1.6rem;max-width:48ch;color:var(--ink-soft)}
+footer{padding:2rem 0 6.5rem;border-top:1px solid var(--line);color:var(--ink-soft);font-size:.9rem}
+footer .wrap{display:grid;gap:.4rem}
+footer strong{color:var(--ink)}
+
+/* WhatsApp flotante (solo móvil) */
+.fab{position:fixed;right:max(1rem,env(safe-area-inset-right));bottom:max(1rem,env(safe-area-inset-bottom));z-index:60;box-shadow:0 10px 26px -8px rgba(4,120,87,.75)}
+
+/* ---------- Animación de entrada ---------- */
+.rise{animation:rise 600ms var(--ease) both}
+.rise.d1{animation-delay:80ms}.rise.d2{animation-delay:160ms}.rise.d3{animation-delay:240ms}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ---------- Responsive ---------- */
+@media (min-width:640px){
+  .grid.g3{grid-template-columns:repeat(2,1fr)}
+  .steps{grid-template-columns:repeat(3,1fr)}
+  .top .btn .long{display:inline}
+  .cover .wrap{grid-template-columns:auto 1fr;gap:2rem}
+}
+@media (min-width:900px){
+  .nav{display:flex;gap:.2rem}
+  .hero .wrap{grid-template-columns:1.15fr .85fr;gap:3.5rem}
+  .grid.g3{grid-template-columns:repeat(3,1fr)}
+  .where{grid-template-columns:1fr 1fr}
+  .fab{display:none}
+  footer{padding-bottom:2rem}
+  footer .wrap{grid-template-columns:1fr auto;align-items:end}
+}
+@media (max-width:899px){ .svc:last-child:nth-child(odd){grid-column:1/-1} }
+@media (max-width:420px){ .brand small{display:none} .btn-lg{width:100%} }
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition-duration:1ms!important}
+  .svc:hover{transform:none}
+}
+@media (prefers-contrast:more){ :root{--ink-soft:#0F3A4A;--line:#6FB5C6} }
+</style>
+</head>
+
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+
+<!-- SVG sprite de íconos (trazo 2px, familia única) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12.04 2a9.9 9.9 0 0 0-8.44 15.1L2 22l5.05-1.32A9.9 9.9 0 1 0 12.04 2Zm0 1.8a8.1 8.1 0 1 1-4.15 15.05l-.3-.18-3 .78.8-2.92-.2-.31A8.1 8.1 0 0 1 12.04 3.8Zm-3.2 3.9c-.2 0-.52.08-.8.38-.27.3-1.04 1.02-1.04 2.48 0 1.47 1.07 2.88 1.22 3.08.15.2 2.07 3.3 5.1 4.5 2.52 1 3.03.8 3.58.75.55-.05 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.27-.47-2.4-1.48-.89-.8-1.5-1.78-1.67-2.08-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.66-1.64-.92-2.24-.23-.55-.47-.57-.67-.58h-.57Z"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></g></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v5.5c0 4.7-3.2 8.3-8 9.5-4.8-1.2-8-4.8-8-9.5V6l8-3Z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></g></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></g></symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"/><path d="M19 16v4M17 18h4"/></g></symbol>
+    <symbol id="i-drop" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3.5 4 6 7 6 10a6 6 0 0 1-12 0c0-3 2.5-6 6-10Z"/><path d="M9.5 14a2.5 2.5 0 0 0 2.5 2.5"/></g></symbol>
+    <symbol id="i-tooth" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.5 5 7 4.5 5.8 7.4c-.8 2 .3 3.8.6 5.6.3 1.9.5 6 2.2 6 1.5 0 1.3-4 3.4-4s1.9 4 3.4 4c1.7 0 1.9-4.100 2.200-6 .3-1.800 1.400-3.600.6-5.600C17 4.500 13.500 5 12 6.500Z"/></g></symbol>
+    <symbol id="i-aligner" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11c0-3 4-5 9-5s9 2 9 5v1c0 1.500-1 2-2 2h-1.500c-1 0-1.500-.5-2-1.500-.5-1-1.200-1.500-2.500-1.500s-2 .5-2.500 1.500c-.5 1-1 1.500-2 1.500H5c-1 0-2-.5-2-2v-1Z"/><path d="M8 17.500c1 1 2.500 1.500 4 1.500s3-.5 4-1.500"/></g></symbol>
+    <symbol id="i-implant" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.500h10c.6 4-.6 6-2 7H9c-1.400-1-2.600-3-2-7Z"/><path d="M9.500 13.500h5M10 16.500h4M11 19.500h2M12 11v2"/></g></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.500 4.500 4.500L19 7.500"/></g></symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="Consultorio Dra. Lucía Paz, ir al inicio">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" color="#fff"><use href="#i-tooth"/></svg></span>
+      <span>Dra. Lucía Paz<small>Odontología · Caballito</small></span>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#servicios">Servicios</a>
+      <a href="#turnos">Cómo sacar turno</a>
+      <a href="#donde">Dónde estamos</a>
+      <a href="#preguntas">Preguntas</a>
+    </nav>
+    <a class="btn btn-wa" href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20sacar%20un%20turno%20con%20la%20Dra.%20Luc%C3%ADa%20Paz." data-wa>
+      <svg aria-hidden="true"><use href="#i-wa"/></svg><span>Pedir <span class="long">turno</span><span class="sr-only"> por WhatsApp</span></span>
+    </a>
+  </div>
+</header>
+
+<main id="contenido">
+
+<!-- HERO -->
+<div class="hero" id="inicio">
+  <div class="wrap">
+    <div>
+      <p class="pill rise" id="estado" data-open="false"><span class="dot" aria-hidden="true"></span><span id="estado-txt">Lunes a viernes de 9 a 19 h</span></p>
+      <h1 class="rise d1">Una sonrisa sana, <em>sin vueltas</em> y sin apuro.</h1>
+      <p class="lead rise d2">Odontología general y estética en Caballito. Te explicamos cada paso del tratamiento antes de empezar, para que decidas con tranquilidad.</p>
+      <div class="cta-row rise d3">
+        <a class="btn btn-wa btn-lg" href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20sacar%20un%20turno%20con%20la%20Dra.%20Luc%C3%ADa%20Paz." data-wa>
+          <svg aria-hidden="true"><use href="#i-wa"/></svg>Sacá tu turno por WhatsApp
+        </a>
+        <a class="btn btn-ghost btn-lg" href="#servicios">Ver tratamientos</a>
+      </div>
+      <ul class="facts rise d3">
+        <li><svg aria-hidden="true"><use href="#i-pin"/></svg>Av. Rivadavia 5400, piso 3</li>
+        <li><svg aria-hidden="true"><use href="#i-shield"/></svg>OSDE, Swiss Medical y Galeno</li>
+      </ul>
+    </div>
+
+    <div class="hero-art rise d2" aria-hidden="true">
+      <div class="card-art">
+        <svg viewBox="0 0 360 300" role="presentation">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E3F4F8"/></linearGradient>
+          </defs>
+          <rect width="360" height="300" rx="18" fill="#ECFEFF"/>
+          <circle cx="300" cy="50" r="70" fill="#CFFAFE"/>
+          <circle cx="50" cy="270" r="60" fill="#CFFAFE" opacity=".7"/>
+          <path d="M180 62c-28-24-86-18-98 34-8 36 12 60 18 96 6 38 12 80 36 80 18 0 18-52 44-52s26 52 44 52c24 0 30-42 36-80 6-36 26-60 18-96-12-52-70-58-98-34Z" fill="url(#g1)" stroke="#0E7490" stroke-width="6" stroke-linejoin="round" transform="translate(0 -14) scale(1 .92) translate(0 18)"/>
+          <path d="M120 100c6-14 20-20 34-16" fill="none" stroke="#67E8F9" stroke-width="7" stroke-linecap="round"/>
+          <g fill="#0E7490">
+            <path d="M286 150l6 16 16 6-16 6-6 16-6-16-16-6 16-6 6-16Z"/>
+            <path d="M62 120l4 10 10 4-10 4-4 10-4-10-10-4 10-4 4-10Z" opacity=".6"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OBRAS SOCIALES -->
+<div class="cover" aria-labelledby="cover-t">
+  <div class="wrap">
+    <p id="cover-t">Trabajamos con:<small>Consultanos por tu plan y cobertura antes de pedir el turno.</small></p>
+    <ul>
+      <li>OSDE</li>
+      <li>Swiss Medical</li>
+      <li>Galeno</li>
+    </ul>
+  </div>
+</div>
+
+<!-- SERVICIOS -->
+<section id="servicios" aria-labelledby="serv-t">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Tratamientos</p>
+      <h2 id="serv-t">Todo lo que necesitás para cuidar tu boca</h2>
+      <p>Desde el control de rutina hasta la estética y la rehabilitación. Cada caso arranca con una consulta en la que revisamos tu situación y te contamos las opciones.</p>
+    </div>
+
+    <div class="grid g3">
+      <article class="svc">
+        <div class="ico"><svg aria-hidden="true"><use href="#i-drop"/></svg></div>
+        <h3>Limpieza dental</h3>
+        <p>Eliminamos sarro y manchas superficiales, y revisamos el estado de tus encías. Es la base para prevenir caries y mal aliento.</p>
+        <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20un%20turno%20para%20una%20limpieza%20dental." data-wa>Pedir turno <svg aria-hidden="true"><use href="#i-arrow"/></svg><span class="sr-only">para limpieza dental</span></a>
+      </article>
+
+      <article class="svc">
+        <div class="ico"><svg aria-hidden="true"><use href="#i-tooth"/></svg></div>
+        <h3>Arreglos</h3>
+        <p>Tratamos caries, reponemos obturaciones y reparamos piezas dañadas, cuidando que el resultado se vea natural y dure.</p>
+        <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20un%20turno%20para%20un%20arreglo%20dental." data-wa>Pedir turno <svg aria-hidden="true"><use href="#i-arrow"/></svg><span class="sr-only">para arreglos</span></a>
+      </article>
+
+      <article class="svc">
+        <div class="ico"><svg aria-hidden="true"><use href="#i-sparkle"/></svg></div>
+        <h3>Blanqueamiento</h3>
+        <p>Aclaramos el color de tus dientes de forma controlada y segura, previa evaluación de tu caso.</p>
+        <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20consultar%20por%20un%20blanqueamiento." data-wa>Consultar <svg aria-hidden="true"><use href="#i-arrow"/></svg><span class="sr-only">por blanqueamiento</span></a>
+      </article>
+
+      <article class="svc">
+        <div class="ico"><svg aria-hidden="true"><use href="#i-aligner"/></svg></div>
+        <h3>Ortodoncia invisible</h3>
+        <p>Alineadores transparentes y removibles para acomodar tus dientes sin los brackets de siempre.</p>
+        <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20consultar%20por%20ortodoncia%20invisible." data-wa>Consultar <svg aria-hidden="true"><use href="#i-arrow"/></svg><span class="sr-only">por ortodoncia invisible</span></a>
+      </article>
+
+      <article class="svc">
+        <div class="ico"><svg aria-hidden="true"><use href="#i-implant"/></svg></div>
+        <h3>Implantes</h3>
+        <p>Reemplazamos piezas faltantes con implantes para recuperar la masticación y la sonrisa. Primero evaluamos si sos candidato o candidata.</p>
+        <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20consultar%20por%20implantes%20dentales." data-wa>Consultar <svg aria-hidden="true"><use href="#i-arrow"/></svg><span class="sr-only">por implantes</span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- TURNOS -->
+<section class="steps-wrap" id="turnos" aria-labelledby="turn-t">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Turnos</p>
+      <h2 id="turn-t">Sacar turno lleva un minuto</h2>
+      <p>Todo se coordina por WhatsApp, sin llamadas ni esperas en línea.</p>
+    </div>
+    <ol class="steps">
+      <li><h3>Escribinos</h3><p>Contanos qué necesitás y si tenés OSDE, Swiss Medical o Galeno.</p></li>
+      <li><h3>Elegí el horario</h3><p>Te proponemos días y horarios disponibles, de lunes a viernes entre las 9 y las 19 h.</p></li>
+      <li><h3>Venite al consultorio</h3><p>Te esperamos en Av. Rivadavia 5400, piso 3, en Caballito.</p></li>
+    </ol>
+    <div class="steps-cta">
+      <a class="btn btn-wa btn-lg" href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20sacar%20un%20turno%20con%20la%20Dra.%20Luc%C3%ADa%20Paz." data-wa>
+        <svg aria-hidden="true"><use href="#i-wa"/></svg>Escribinos por WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- DÓNDE -->
+<section id="donde" aria-labelledby="donde-t">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Dónde estamos</p>
+      <h2 id="donde-t">En pleno Caballito, sobre Rivadavia</h2>
+    </div>
+    <div class="where">
+      <div class="panel">
+        <h3>Dirección</h3>
+        <ul class="rows">
+          <li><svg aria-hidden="true"><use href="#i-pin"/></svg><div><strong>Av. Rivadavia 5400, piso 3</strong><span>Caballito, Ciudad de Buenos Aires</span></div></li>
+          <li><svg aria-hidden="true"><use href="#i-shield"/></svg><div><strong>Obras sociales</strong><span>OSDE, Swiss Medical y Galeno</span></div></li>
+          <li><svg aria-hidden="true"><use href="#i-wa"/></svg><div><strong>Turnos</strong><span>Solo por WhatsApp</span></div></li>
+        </ul>
+        <a class="btn btn-ghost map-link" href="https://www.google.com/maps/search/?api=1&query=Av.+Rivadavia+5400+Caballito+Buenos+Aires" target="_blank" rel="noopener">Cómo llegar<span class="sr-only"> (se abre en una pestaña nueva)</span></a>
+      </div>
+
+      <div class="panel">
+        <h3>Horarios de atención</h3>
+        <table class="hours" id="horarios">
+          <caption class="sr-only">Horarios de atención</caption>
+          <tbody>
+            <tr data-d="1"><th scope="row">Lunes</th><td>9 a 19 h</td></tr>
+            <tr data-d="2"><th scope="row">Martes</th><td>9 a 19 h</td></tr>
+            <tr data-d="3"><th scope="row">Miércoles</th><td>9 a 19 h</td></tr>
+            <tr data-d="4"><th scope="row">Jueves</th><td>9 a 19 h</td></tr>
+            <tr data-d="5"><th scope="row">Viernes</th><td>9 a 19 h</td></tr>
+            <tr data-d="6"><th scope="row">Sábado</th><td class="off">Cerrado</td></tr>
+            <tr data-d="0"><th scope="row">Domingo</th><td class="off">Cerrado</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="preguntas" aria-labelledby="faq-t" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Preguntas frecuentes</p>
+      <h2 id="faq-t">Lo que más nos preguntan</h2>
+    </div>
+    <div class="faq">
+      <details>
+        <summary>¿Con qué obras sociales trabajan?</summary>
+        <p>Trabajamos con OSDE, Swiss Medical y Galeno. La cobertura depende de tu plan y del tratamiento, así que escribinos por WhatsApp con tu credencial y te confirmamos antes del turno.</p>
+      </details>
+      <details>
+        <summary>¿Cómo pido un turno?</summary>
+        <p>Por WhatsApp. Tocá cualquiera de los botones verdes de esta página, contanos qué necesitás y coordinamos día y horario.</p>
+      </details>
+      <details>
+        <summary>¿Qué días y horarios atienden?</summary>
+        <p>De lunes a viernes, de 9 a 19 h. Sábados y domingos el consultorio está cerrado.</p>
+      </details>
+      <details>
+        <summary>¿Hace falta una consulta antes de un blanqueamiento, ortodoncia invisible o implantes?</summary>
+        <p>Sí. Son tratamientos que se indican según cada boca, por eso arrancamos con una evaluación para ver si son adecuados para vos y explicarte cómo sería el proceso.</p>
+      </details>
+      <details>
+        <summary>¿Dónde queda el consultorio?</summary>
+        <p>En Av. Rivadavia 5400, piso 3, en el barrio de Caballito, Ciudad de Buenos Aires.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- CIERRE -->
+<section class="final" style="padding-top:0" aria-labelledby="fin-t">
+  <div class="wrap">
+    <div class="box">
+      <h2 id="fin-t">¿Hace rato que venís postergando la visita?</h2>
+      <p>Escribinos y buscamos juntos un horario que te quede cómodo.</p>
+      <a class="btn btn-wa btn-lg" href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20sacar%20un%20turno%20con%20la%20Dra.%20Luc%C3%ADa%20Paz." data-wa>
+        <svg aria-hidden="true"><use href="#i-wa"/></svg>Sacá tu turno por WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <strong>Consultorio Dra. Lucía Paz</strong><br>
+      Odontología general y estética · Av. Rivadavia 5400, piso 3, Caballito, CABA
+    </div>
+    <div>Lunes a viernes de 9 a 19 h · OSDE · Swiss Medical · Galeno</div>
+  </div>
+</footer>
+
+<a class="btn btn-wa btn-lg fab" href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20sacar%20un%20turno%20con%20la%20Dra.%20Luc%C3%ADa%20Paz." data-wa>
+  <svg aria-hidden="true"><use href="#i-wa"/></svg>Turno por WhatsApp
+</a>
+
+<script>
+/* ============================================================
+   Número de WhatsApp: reemplazá 5491100000000 por el real
+   (formato internacional sin + ni espacios: 549 + código de área + número).
+   El script de abajo lo cambia en todos los botones a la vez.
+   ============================================================ */
+(function () {
+  var NUMERO = "5491100000000";
+  document.querySelectorAll("a[data-wa]").forEach(function (a) {
+    a.href = a.href.replace("5491100000000", NUMERO);
+  });
+
+  // Estado "abierto / cerrado" según hora de Buenos Aires
+  try {
+    var p = new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/Argentina/Buenos_Aires",
+      weekday: "short", hour: "numeric", hour12: false
+    }).formatToParts(new Date());
+    var wd = p.find(function (x) { return x.type === "weekday"; }).value;
+    var h = parseInt(p.find(function (x) { return x.type === "hour"; }).value, 10) % 24;
+    var dias = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+    var d = dias[wd];
+    var abierto = d >= 1 && d <= 5 && h >= 9 && h < 19;
+    var pill = document.getElementById("estado");
+    var txt = document.getElementById("estado-txt");
+    pill.dataset.open = abierto;
+    txt.textContent = abierto
+      ? "Abierto ahora · hasta las 19 h"
+      : "Cerrado ahora · lunes a viernes de 9 a 19 h";
+    var fila = document.querySelector('#horarios tr[data-d="' + d + '"]');
+    if (fila) fila.classList.add("today");
+  } catch (e) { /* queda el texto por defecto */ }
+})();
+</script>
+</body>
+</html>

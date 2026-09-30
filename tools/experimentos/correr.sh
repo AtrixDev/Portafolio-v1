@@ -10,7 +10,7 @@ rm -rf "$BASE"; mkdir -p "$BASE/sin" "$BASE/con"
 [ -d "$AQUI/$ID/entrada" ] && cp -r "$AQUI/$ID/entrada/." "$BASE/sin/" && cp -r "$AQUI/$ID/entrada/." "$BASE/con/"
 [ -n "$SRC" ] && mkdir -p "$BASE/con/.claude/skills" && cp -r "$SRC" "$BASE/con/.claude/skills/$SKILL"
 PROMPT="$(cat "$AQUI/$ID/prompt.txt")"
-( cd "$BASE/sin" && claude -p "$PROMPT" --disable-slash-commands --permission-mode bypassPermissions --output-format json > "$BASE/sin.json" 2> "$BASE/sin.err" ) &
-( cd "$BASE/con" && claude -p "$PROMPT Usá la skill $SKILL." --permission-mode bypassPermissions --output-format json > "$BASE/con.json" 2> "$BASE/con.err" ) &
+( cd "$BASE/sin" && claude -p "$PROMPT" --model "${MODELO:-claude-opus-5-5}" --disable-slash-commands --permission-mode bypassPermissions --output-format json > "$BASE/sin.json" 2> "$BASE/sin.err" ) &
+( cd "$BASE/con" && claude -p "$PROMPT Usá la skill $SKILL." --model "${MODELO:-claude-opus-5-5}" --permission-mode bypassPermissions --output-format json > "$BASE/con.json" 2> "$BASE/con.err" ) &
 wait
 echo "listo: $BASE"

@@ -1,0 +1,23 @@
+{
+  "skill_name": "responder-preguntas",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Me preguntaron esto en la publicación de la olla: 'hola sirve para induccion y va al lavavajillas?'. La publicación dice: 'Olla de acero inoxidable 18/10, 22 cm, 4 litros, fondo encapsulado apto inducción, tapa de acero.' Qué le respondo?",
+      "expected_output": "Confirma inducción (está en la publicación), no afirma lavavajillas (no figura) y deja nota para verificar; voseo; invita a comprar; texto plano.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Respondeme estas dos preguntas del juego de cuchillos (Set 5 cuchillos acero inoxidable con taco de madera, envío gratis, 12 cuotas sin interés): 1) 'si te compro 3 sets me haces descuento?' 2) 'pasame tu cel asi te pago por transferencia'",
+      "expected_output": "No ofrece descuento, destaca cuotas y envío gratis; rechaza amablemente compartir contacto y pago por fuera citando reglas de ML; ambas invitan a comprar.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "un comprador preguntó en la sartén de 26cm: 'cuando me llega a cordoba capital si compro hoy?? la necesito para el sabado'. La publicacion tiene mercado envios, no es full.",
+      "expected_output": "No promete fecha; remite al cálculo con código postal; tono cercano; invita a comprar hoy.",
+      "files": []
+    }
+  ]
+}

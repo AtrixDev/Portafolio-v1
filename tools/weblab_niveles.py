@@ -36,7 +36,7 @@ CURADO = {
     "slack-gif-creator": (1, B), "superpowers": (2, P), "impeccable": (2, P), "ui-ux-pro-max": (1, I),
     "web-design-guidelines": (1, I), "react-best-practices": (3, P), "trailofbits": (3, P),
     "remotion": (3, P), "grill-me": (1, I), "claude-ads": (2, P), "ad-creative": (1, P),
-    "copywriting": (1, I), "marketing-psychology": (1, P), "image": (1, I), "video": (2, P),
+    "copywriting": (1, I), "marketing-psychology": (1, B), "image": (1, I), "video": (2, P),
   },
   "stacks": {
     "vanilla": (1, I), "react-vite": (2, I), "nextjs": (3, P), "astro": (2, P), "vue": (2, B),

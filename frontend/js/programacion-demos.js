@@ -113,59 +113,6 @@ window.WLDemos = (function () {
       ]),
       'En la versión con Impeccable probá armar la reserva: elegí personas, día y hora, y mirá cómo se arma el mensaje.'),
 
-    'skills/copywriting': () => bloque('Antes y después', tabs({ panes: [
-      { label: 'Texto típico', tone: 'bad', html: `<article class="dm-copy">
-        <p class="dm-copy-t">Mandolina Borner V5 Multibox Cortador Profesional Alemán</p>
-        <p>¡Bienvenido a nuestra tienda! Ofrecemos productos de la más alta calidad. Esta mandolina es ideal para tu cocina. Es muy práctica y fácil de usar. ¡No te la pierdas! Stock disponible. Consultanos.</p>
-        <span class="dm-copy-btn">Comprar</span></article>` },
-      { label: 'Texto trabajado', tone: 'good', html: `<article class="dm-copy is-good">
-        <p class="dm-copy-t">Cortes parejos en segundos, sin tocar la hoja</p>
-        <p>La Mandolina V5 de Borner corta, ralla y hace juliana con cinco placas intercambiables. Hecha en Alemania y con cinco años de garantía.</p>
-        <ul><li>Rodajas de 3,5 y 7 mm: papas fritas, ensaladas y gratinados.</li><li>Protector de mano incluido: los dedos nunca llegan a la hoja.</li><li>Las cinco placas se guardan en la Multibox, sin cajones revueltos.</li></ul>
-        <span class="dm-copy-btn">Comprar con envío gratis</span></article>` },
-    ] }) + notas('Qué cambió', [
-      ['', 'Beneficio antes que producto', 'El titular dice qué ganás ("cortes parejos") y no repite el nombre.'],
-      ['', 'Datos concretos', 'Medidas, cantidad de placas, origen y garantía, en vez de "alta calidad".'],
-      ['', 'Responde la objeción', 'El miedo con una mandolina es cortarse: el protector aparece arriba.'],
-      ['', 'El botón dice qué conseguís', '"Comprar con envío gratis" en lugar de "Comprar".'],
-    ]), 'Ilustración escrita a mano con un producto que trabajé (Borner). El experimento real (mismo prompt sin y con la skill) está en preparación.'),
-
-    'skills/xlsx': () => bloque('Antes y después', tabs({ panes: [
-      { label: 'Datos crudos (CSV)', tone: 'bad', html: `<pre class="dm-csv">mes,ventas,unidades,publicidad
-2025-06,18420300,1402,5526090
-2025-07,19880150,1511,4771236
-2025-08,21104700,1590,3587799
-2025-09,22950420,1702,3212059
-2025-10,24310900,1788,3160417
-2025-11,25601200,1846,3072144</pre>` },
-      { label: 'Planilla trabajada', tone: 'good', html: sheet() },
-    ] }) + notas('Qué hace la skill', [
-      ['', 'Formato de moneda y miles', 'Los números se leen de un vistazo: $ 18.420.300 en vez de 18420300.'],
-      ['', 'Fórmulas vivas', 'Totales, variación y ACOS se calculan con fórmulas: si cambiás un dato, se actualiza todo.'],
-      ['', 'Formato condicional', 'El ACOS se pinta según pasa o no el objetivo del 15%.'],
-      ['', 'Encabezado fijo y gráfico', 'La primera fila queda quieta al bajar y el gráfico sale de los mismos datos.'],
-    ]), 'Ilustración hecha a mano con la forma de un reporte mensual de Mercado Libre. Tocá una celda del total para ver su fórmula. El experimento real está en preparación.'),
-
-    'skills/react-best-practices': () => bloque('Antes y después', `<div class="dm dm--race" data-dm="race">
-      <div class="dm-race">
-        <div class="dm-lane"><p><b>Antes</b><span>Pedidos en cadena (cascada)</span></p>
-          <div class="dm-track"><i style="--s:0;--d:.42" data-l="usuario"></i><i style="--s:.42;--d:.35" data-l="pedidos"></i><i style="--s:.77;--d:.38" data-l="stock"></i></div><output>1,15 s</output></div>
-        <div class="dm-lane is-good"><p><b>Después</b><span>Los tres a la vez (Promise.all)</span></p>
-          <div class="dm-track"><i style="--s:0;--d:.42" data-l="usuario"></i><i style="--s:0;--d:.35" data-l="pedidos"></i><i style="--s:0;--d:.38" data-l="stock"></i></div><output>0,42 s</output></div>
-        <div class="dm-scale" aria-hidden="true"><span>0 s</span><span>0,5 s</span><span>1 s</span></div>
-      </div>
-      <button type="button" class="dm-play" data-dm-play>Reproducir otra vez</button>
-      <div class="dm-code2"><div><small>Antes</small><pre>const user = await getUser(id)
-const orders = await getOrders(id)
-const stock = await getStock()</pre></div><div class="is-good"><small>Después</small><pre>const [user, orders, stock] =
-  await Promise.all([
-    getUser(id), getOrders(id), getStock(),
-  ])</pre></div></div>
-    </div>` + notas('Por qué importa', [
-      ['', 'La regla de mayor impacto', 'Eliminar cascadas de pedidos es la primera de la lista: la página carga en el tiempo del pedido más lento, no en la suma de todos.'],
-      ['', 'Cómo te ayuda Claude', 'Con la skill instalada, detecta estos patrones solo al revisar tu código y propone el cambio.'],
-    ]), 'Tiempos ilustrativos de tres pedidos independientes.'),
-
     // ── Buenas prácticas UX ──
     'ux/36-color-contrast': () => bloque('Probalo', `<div class="dm dm--contrast" data-dm="contrast">
       <div class="dm-cs-prev"><p class="dm-cs-h">Envío gratis desde $ 30.000</p><p class="dm-cs-p">Llega mañana si comprás antes de las 15 h. Devolución gratis durante 30 días.</p></div>
@@ -229,29 +176,104 @@ export function Carrito() {
 }`, 'Declarás cómo se ve según el estado (n) y React redibuja cuando cambia. Conviene cuando la pantalla tiene muchas partes que dependen de los mismos datos.'),
   };
 
+  // ═══════════════ Experimentos reales publicados (tools/experimentos/publicar.py → experimentos/<id>/meta.json) ═══════════════
+  // ficha → qué skill, con qué nombre se muestra y qué observé al comparar las dos salidas (se escribe después de verlas)
+  const EXPERIMENTOS = {
+    'skills/copywriting': { exp: 'copywriting', con: 'Con Copywriting', notas: [
+      ['', 'El título entra en Mercado Libre', 'Sin la skill: 79 caracteres (Mercado Libre corta en 60). Con la skill: 57, con marca y modelo adelante, y dos alternativas.'],
+      ['', 'Sabe dónde se publica', 'Avisa que Mercado Libre muestra la descripción como texto plano y la escribe con mayúsculas y guiones. La otra usa negritas de Markdown, que en la publicación salen como asteriscos.'],
+      ['', 'Responde antes de que pregunten', 'Suma preguntas frecuentes (lavavajillas, protector, garantía) y un cierre que invita a comprar.'],
+      ['', 'No inventa', 'Marca qué datos conviene agregar (material, medidas, importador) en lugar de rellenarlos, y sugiere qué fotos subir.'],
+    ], pie: 'Datos del producto dados en el prompt. La diferencia es de oficio, no de estilo: las dos se entienden, pero una está lista para publicar.' },
+    'skills/marketing-psychology': { exp: 'marketing-psychology', con: 'Con Marketing Psychology', notas: [
+      ['', 'La diferencia es chica', 'Sin la skill, Claude ya destaca el pack del medio, lo marca "Recomendado" y muestra el precio por kilo y el ahorro. Esos recursos ya los conoce.'],
+      ['', 'Lo que suma la skill', 'El costo por día ($867), el precio tachado de comprar tres de 1 kg, cuánto rinde cada pack y botones con texto propio ("Probar con 1 kg").'],
+      ['', 'Cuida lo que afirma', 'Explica por qué no puso "el más vendido" ni stock limitado: no sabe si es cierto. Las dos evitan inventar.'],
+      ['', 'Cuándo conviene', 'Para ofertas, precios y promociones más complejas. En una tabla de tres precios, el modelo solo ya resuelve bastante.'],
+    ] },
+    'skills/xlsx': { exp: 'xlsx', con: 'Con la skill de Excel', notas: [
+      ['', 'Las dos sirven', 'Sin la skill ya sale una planilla con fórmulas, totales, lectura para el dueño y cuatro gráficos.'],
+      ['', 'Resumen y datos, separados', 'Con la skill arma una hoja para el dueño (indicadores, junio contra noviembre, conclusiones y gráficos) y otra con los datos y las métricas.'],
+      ['', 'Convenciones de planilla profesional', 'Los datos de origen van en azul y los cálculos en negro, con una sección de supuestos que explica cada fórmula.'],
+      ['', 'Verificada', 'Recalculó el archivo y revisó que sus 57 fórmulas no tengan errores antes de entregar.'],
+    ], pie: 'Datos de partida: seis meses de ventas en un CSV. Las imágenes son cada hoja exportada a PDF; descargá el .xlsx para ver las fórmulas.' },
+    'skills/react-best-practices': { exp: 'react-best-practices', con: 'Con React Best Practices', notas: [
+      ['', 'Casi empate', 'Las dos encontraron el bug grave (el efecto sin dependencias pedía datos a la API sin parar), la cascada de pedidos, la condición de carrera, los errores sin manejar y los problemas de accesibilidad.'],
+      ['', 'Con la skill, cada cambio con su regla', 'Nombra la regla que respalda cada cambio (async-parallel, js-index-maps…) y los ordena de más grave a más cosmético.'],
+      ['', 'Optimiza solo donde hace falta', 'No memoiza el filtro y el total: son cálculos baratos y se derivan en el render. La otra versión suma useMemo que no aporta.'],
+      ['', 'Conclusión', 'En una revisión puntual, el modelo solo ya es muy bueno. La skill rinde más en proyectos grandes, donde hay que aplicar las mismas reglas en cientos de archivos.'],
+    ], pie: 'Partieron del mismo componente con errores a propósito (lo podés ver en la ficha del experimento).' },
+    'skills/pptx': { exp: 'pptx', con: 'Con la skill de PowerPoint', notas: [
+      ['', 'Empate', 'Las dos presentaciones son profesionales, con gráficos y un mensaje claro por diapositiva. Sin la skill hasta suma un dato más (el ticket promedio subió 4,9%).'],
+      ['', 'Con la skill, más visual', 'Íconos, títulos que concluyen ("La publicidad rinde 2,5 veces más") y menos texto por diapositiva.'],
+      ['', 'Conclusión', 'Para una presentación de cinco diapositivas, el modelo solo ya alcanza. La skill suma más cuando hay que partir de una plantilla de la empresa o editar un archivo existente.'],
+    ], pie: 'Los datos son los de mi caso real en Vení a la Cocina. Cada diapositiva se exportó a imagen; descargá el .pptx para abrirlo.' },
+    'skills/ad-creative': { exp: 'ad-creative', con: 'Con Ad Creative', notas: [
+      ['', 'Respeta los límites de Meta', 'Cuenta los caracteres de cada parte: el gancho entra en los primeros 125 (lo que se ve antes de "más"), el título en 40 y la descripción en 30.'],
+      ['', 'Pensados por ubicación', 'Indica para qué formato va cada anuncio (feed 4:5, reels 9:16, carrusel) y describe la pieza visual.'],
+      ['', 'Sin la skill también rinde', 'Tres ángulos claros (tiempo, calidad, seguridad), ideas de creatividad y consejos para testear y no chocar con las políticas de Meta.'],
+    ] },
+    'skills/skill-creator': { exp: 'skill-creator', con: 'Con Skill Creator', notas: [
+      ['', 'Se puede medir', 'Con la skill, la nueva skill trae un archivo de evaluaciones (evals.json) con casos de prueba para comprobar que responde bien. Sin la skill, no hay forma de medirla.'],
+      ['', 'Se activa cuando corresponde', 'La descripción cubre más formas de pedirlo ("¿qué le contesto?", "armame la respuesta"), aunque no se nombre Mercado Libre.'],
+      ['', 'Explica el porqué', 'Cada regla dice por qué importa (una promesa incumplida termina en reclamo y baja la reputación), así Claude decide mejor en casos que no están escritos.'],
+      ['', 'Contenido parecido', 'Las dos cubren tono, reglas de Mercado Libre y casos frecuentes: el oficio está en la estructura y en poder probarla.'],
+    ] },
+    'skills/ui-ux-pro-max': { exp: 'ui-ux-pro-max', con: 'Con UI UX Pro Max', notas: [
+      ['', 'Diferencia moderada', 'Sin la skill sale una landing prolija de consultorio: servicios, obras sociales, cómo sacar turno y ubicación.'],
+      ['', 'Elige estilo y paleta con criterio', 'Tomó de su base el estilo "Accesible y ético" para salud y ajustó los colores para que el texto de los botones cumpla contraste 4,5:1.'],
+      ['', 'Más útil para el paciente', 'Muestra si está abierto ahora, los horarios con el día de hoy marcado, las obras sociales arriba y preguntas frecuentes.'],
+    ] },
+  };
+  function experimento(id) {
+    const x = EXPERIMENTOS[id];
+    return bloque('Antes y después', `<div class="dm dm--exp" data-dm="exp" data-exp="${escH(x.exp)}" data-con="${escH(x.con)}"><div class="dm-exp-load" aria-busy="true"><span></span><span></span><span></span></div></div>` +
+      (x.notas ? notas('Qué cambió', x.notas) : ''), x.pie || '');
+  }
+  const seg2 = s => s >= 60 ? `${Math.floor(s / 60)} min ${s % 60} s` : `${s} s`;
+  const usd = n => 'USD ' + (n ?? 0).toFixed(2).replace('.', ',');
+  async function montarExp(el) {
+    const id = el.dataset.exp, con = el.dataset.con, base = `experimentos/${id}/`;
+    let m;
+    try { m = await (await fetch(base + 'meta.json')).json(); } catch (e) { el.innerHTML = '<p class="ex-note">No se pudo cargar el experimento.</p>'; return; }
+    const lados = [['sin', 'Sin la skill'], ['con', con]];
+    const principal = l => m[l].archivos.filter(a => !a.aux);
+    const tipo = (principal('con')[0] || principal('sin')[0] || {}).tipo;
+    const fichaHtml = ficha({ modelo: 'Claude ' + (m.con.modelos?.[0] || m.sin.modelos?.[0] || '').replace('claude-', '').replace(/-(\d)-(\d)/, ' $1.$2').replace(/^./, c => c.toUpperCase()) + ' (Claude Code)', fecha: m.fecha, con,
+      prompt: m.prompt + (m.entrada.length ? ` (Archivos de partida: ${m.entrada.join(', ')})` : '') + ` (Con la skill se agregó: "Usá la skill…")`,
+      filas: [['Tiempo', seg2(m.sin.segundos), seg2(m.con.segundos)], ['Pasos', String(m.sin.pasos ?? '—'), String(m.con.pasos ?? '—')], ['Costo de la corrida', usd(m.sin.costo), usd(m.con.costo)]],
+      como: 'Cada versión se generó en una carpeta vacía con el mismo prompt. La de "sin la skill" corrió con todas las skills desactivadas. Las salidas se muestran tal cual: sin retoques.' });
+    let cuerpo = '';
+    if (tipo === 'pagina') {
+      const src = l => base + principal(l).find(a => a.tipo === 'pagina')?.ruta;
+      cuerpo = visor({ w: 1280, h: 800, antes: { label: 'Sin la skill', src: src('sin') }, despues: { label: con, src: src('con') } });
+    } else {
+      const col = async l => {
+        const as = principal(l);
+        if (!as.length) return '<p class="dm-exp-vacio">No generó archivos.</p>';
+        const partes = await Promise.all(as.map(async a => {
+          const dl = `<a class="dm-exp-dl" href="${base + a.ruta}" download>${escH(a.nombre)}</a>`;
+          if (a.tipo === 'texto') return `<div class="dm-md">${await (await fetch(base + a.vista)).text()}</div>`;
+          if (a.tipo === 'documento') return `<div class="dm-pags">${(a.paginas || []).map((pg, i) => `<a href="${base + pg}" target="_blank" rel="noopener" title="Ver en grande"><img src="${base + pg}" alt="${escH(a.nombre)}, página ${i + 1}" loading="lazy"></a>`).join('')}</div>${dl}`;
+          if (a.tipo === 'codigo') return `<p class="dm-exp-fn">${escH(a.nombre)}</p><pre class="dm-exp-code">${escH(await (await fetch(base + a.ruta)).text())}</pre>`;
+          return dl;
+        }));
+        return partes.join('');
+      };
+      const [a, b] = await Promise.all([col('sin'), col('con')]);
+      cuerpo = `<div class="dm-cols">${[[a, 'Sin la skill', 'bad'], [b, con, 'good']].map(([h, t, tone]) => `<section class="dm-col" data-tone="${tone}"><h4>${escH(t)}</h4><div class="dm-col-in">${h}</div></section>`).join('')}</div>`;
+    }
+    const dijo = lados.map(([l, t]) => m[l].resumen ? `<details class="dm-dijo"><summary>Lo que dijo Claude al entregar (${escH(t.toLowerCase())})</summary><div>${escH(m[l].resumen).replace(/\n/g, '<br>')}</div></details>` : '').join('');
+    const partida = m.entrada.length ? `<p class="dm-exp-partida">Archivos de partida (iguales para las dos): ${m.entrada.map(f => `<a href="${base}entrada/${escH(f)}" target="_blank" rel="noopener">${escH(f)}</a>`).join(', ')}</p>` : '';
+    el.innerHTML = fichaHtml + partida + cuerpo + dijo;
+    mount(el);
+  }
+
   function stackDemo(nombre, codigo, nota) {
     return bloque('El mismo botón, en ' + nombre, `<div class="dm dm--stack" data-dm="stack">
       <div class="dm-stack-live"><button type="button" class="dm-stack-btn" data-stack-add>Agregar al carrito</button><span class="dm-stack-n" aria-live="polite"><b data-stack-n>0</b> en el carrito</span></div>
       <pre class="dm-stack-code">${codigo}</pre>
     </div>`, escH(nota) + ' Compará con las otras fichas de Stacks: es el mismo ejemplo en cada una.');
-  }
-
-  // Planilla de ejemplo (skill xlsx)
-  function sheet() {
-    const filas = [['jun 2025', 18420300, 1402, 5526090], ['jul 2025', 19880150, 1511, 4771236], ['ago 2025', 21104700, 1590, 3587799], ['sep 2025', 22950420, 1702, 3212059], ['oct 2025', 24310900, 1788, 3160417], ['nov 2025', 25601200, 1846, 3072144]];
-    const plata = n => '$ ' + Math.round(n).toLocaleString('es-AR');
-    const tot = filas.reduce((a, f) => [a[0] + f[1], a[1] + f[2], a[2] + f[3]], [0, 0, 0]);
-    const max = Math.max(...filas.map(f => f[1]));
-    return `<div class="dm-xl" data-dm="xl">
-      <div class="dm-xl-fx"><span class="dm-xl-ref" data-xl-ref>A1</span><span class="dm-xl-f" data-xl-f>Mes</span></div>
-      <div class="dm-xl-grid" role="table" aria-label="Planilla de ejemplo">
-        <div class="dm-xl-r is-cols" role="row"><span></span><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span></div>
-        <div class="dm-xl-r is-head" role="row"><span>1</span><span data-f="Mes">Mes</span><span data-f="Ventas">Ventas</span><span data-f="Unidades">Unidades</span><span data-f="Publicidad">Publicidad</span><span data-f="ACOS">ACOS</span></div>
-        ${filas.map((f, i) => { const acos = f[3] / f[1] * 100; return `<div class="dm-xl-r" role="row"><span>${i + 2}</span><span data-f="${f[0]}">${f[0]}</span><span data-f="${f[1]}">${plata(f[1])}</span><span data-f="${f[2]}">${f[2].toLocaleString('es-AR')}</span><span data-f="${f[3]}">${plata(f[3])}</span><span class="${acos <= 15 ? 'ok' : 'bad'}" data-f="=D${i + 2}/B${i + 2}">${acos.toFixed(1).replace('.', ',')}%</span></div>`; }).join('')}
-        <div class="dm-xl-r is-tot" role="row"><span>8</span><span data-f="Total">Total</span><span data-f="=SUMA(B2:B7)">${plata(tot[0])}</span><span data-f="=SUMA(C2:C7)">${tot[1].toLocaleString('es-AR')}</span><span data-f="=SUMA(D2:D7)">${plata(tot[2])}</span><span data-f="=D8/B8">${(tot[2] / tot[0] * 100).toFixed(1).replace('.', ',')}%</span></div>
-      </div>
-      <div class="dm-xl-chart" aria-hidden="true">${filas.map(f => `<i style="--v:${f[1] / max}"><small>${f[0].slice(0, 3)}</small></i>`).join('')}</div>
-    </div>`;
   }
 
   // ═══════════════ Demos generadas para categorías enteras ═══════════════
@@ -264,6 +286,7 @@ export function Carrito() {
   }
 
   function render(e, cat) {
+    if (EXPERIMENTOS[`${cat}/${e.id}`]) return experimento(`${cat}/${e.id}`);
     const f = DEMOS[`${cat}/${e.id}`];
     if (f) return f(e);
     if (cat === 'tipografias') return tipografia(e);
@@ -278,6 +301,7 @@ export function Carrito() {
     root.querySelectorAll('[data-dm="slider"]').forEach(montarSlider);
     root.querySelectorAll('[data-dm="tabs"]').forEach(montarTabs);
     root.querySelectorAll('[data-dm="visor"]').forEach(montarVisor);
+    root.querySelectorAll('[data-dm="exp"]').forEach(el => { if (!el.dataset.ok) { el.dataset.ok = 1; montarExp(el); } });
     root.querySelectorAll('[data-dm="xl"]').forEach(montarXl);
     root.querySelectorAll('[data-dm="race"]').forEach(montarRace);
     root.querySelectorAll('[data-dm="contrast"]').forEach(montarContraste);
@@ -385,5 +409,10 @@ export function Carrito() {
     });
   }
 
-  return { render, mount };
+  // Para las tarjetas: 'exp' si la ficha tiene un experimento real, 'demo' si tiene una demo interactiva
+  function tipoDemo(cat, id) {
+    const k = `${cat}/${id}`;
+    return EXPERIMENTOS[k] || k === 'skills/impeccable' ? 'exp' : DEMOS[k] || cat === 'tipografias' ? 'demo' : '';
+  }
+  return { render, mount, tipoDemo };
 })();

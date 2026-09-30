@@ -1,0 +1,42 @@
+{
+ "id": "ui-ux-pro-max",
+ "fecha": "30/09/2026",
+ "prompt": "Hacé la landing de \"Consultorio Dra. Lucía Paz\", odontología general y estética en Caballito (Buenos Aires). Atiende lunes a viernes de 9 a 19 h en Av. Rivadavia 5400, piso 3. Trabaja con OSDE, Swiss Medical y Galeno. Turnos por WhatsApp. Servicios: limpieza, arreglos, blanqueamiento, ortodoncia invisible e implantes. Entregá un solo archivo index.html en esta carpeta, con el CSS adentro y sin imágenes externas, con los textos en español argentino.",
+ "entrada": [],
+ "sin": {
+  "segundos": 69,
+  "pasos": 2,
+  "costo": 0.19,
+  "modelos": [
+   "claude-sonnet-5-5"
+  ],
+  "resumen": "Armé la landing en un solo `index.html` en la carpeta de trabajo, con el CSS adentro, sin imágenes externas y con los textos en español argentino. No la abrí en el navegador para revisarla.\n\n**Falta cargar el número de WhatsApp.** Los botones usan el número de relleno `5491100000000`. Reemplazalo en el archivo (hay 6 ocurrencias de `wa.me/5491100000000`) por el número real, con formato `549` + código de área + número, sin signos ni espacios.\n\n**Qué incluye**\n- **Encabezado fijo** con el nombre y un botón de turno.\n- **Portada** con el título, los horarios y la dirección.\n- **Servicios:** limpieza, arreglos, blanqueamiento, ortodoncia invisible e implantes, más una tarjeta para quien no sabe qué necesita.\n- **Obras sociales:** OSDE, Swiss Medical y Galeno, con un aviso de que la cobertura depende del plan.\n- **Turnos por WhatsApp** en tres pasos.\n- **Dónde estamos:** dirección, horarios y un enlace a Google Maps.\n- **Botón flotante de WhatsApp** y pie de página.\n\nEl diseño se adapta a celular, y las pautas de accesibilidad están cubiertas (foco visible, salto al contenido, respeto por \"reducir movimiento\").\n\nSolo usé los datos que me diste. No inventé precios, años de experiencia, matrícula ni testimonios. Si querés sumar la matrícula, una foto o una presentación de la doctora, conviene agregarlas con datos reales.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "index.html",
+    "ruta": "sin/index.html",
+    "aux": false,
+    "tipo": "pagina"
+   }
+  ]
+ },
+ "con": {
+  "segundos": 112,
+  "pasos": 6,
+  "costo": 0.43,
+  "modelos": [
+   "claude-sonnet-5-5"
+  ],
+  "resumen": "Armé la landing en `index.html`, en la carpeta de trabajo: un solo archivo, con el CSS adentro, sin imágenes externas y con textos en español argentino (voseo). No la abrí en un navegador ni la probé en pantalla, así que no revisé cómo se ve ni que los botones funcionen.\n\n**Antes de publicarla, cargá el número de WhatsApp.** No me lo pasaste, así que todos los botones apuntan a un número de relleno, `5491100000000`. Cambialo en la constante `NUMERO` del `<script>` al final del archivo, con formato `549` + código de área + número, sin `+` ni espacios. Ese script actualiza todos los botones a la vez.\n\n**Diseño:** usé la skill ui-ux-pro-max con el estilo \"Accessible & Ethical\" para salud y la paleta cian y verde que propuso. Oscurecí el cian y el verde del botón para que el texto blanco cumpla contraste 4.5:1. Para la tipografía dejé fuentes del sistema en lugar de las de Google Fonts, así no hay pedidos externos.\n\n**Secciones:**\n- **Hero:** título, botón de WhatsApp y una etiqueta \"Abierto ahora / Cerrado ahora\" según la hora de Buenos Aires, calculada con JavaScript.\n- **Obras sociales:** OSDE, Swiss Medical y Galeno.\n- **Servicios:** las cinco tarjetas (limpieza, arreglos, blanqueamiento, ortodoncia invisible e implantes). Cada una abre WhatsApp con un mensaje ya escrito sobre ese tratamiento.\n- **Cómo sacar turno:** tres pasos.\n- **Dónde estamos:** dirección, botón \"Cómo llegar\" a Google Maps y tabla de horarios, con el día de hoy resaltado.\n- **Preguntas frecuentes** y un cierre con llamado a sacar turno.\n- **Botón flotante de WhatsApp:** aparece solo en celular.\n\n**Accesibilidad y adaptación:** el sitio se adapta a celular, tablet y escritorio. Los botones miden al menos 44 px, el foco con teclado se ve, hay un enlace para saltar al contenido y se respeta la opción de reducir movimiento. Los íconos son SVG propios, sin emojis.\n\n**Contenido:** no inventé precios, testimonios, años de experiencia, matrícula ni promesas de resultados. En las obras sociales aclaro que la cobertura depende del plan y se confirma por WhatsApp. En blanqueamiento, ortodoncia invisible e implantes aclaro que primero hay una evaluación.\n\nLas ilustraciones (el diente del hero) son SVG dibujados a mano por mí, simples. Si tenés fotos reales del consultorio o de la Dra., conviene sumarlas después.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "index.html",
+    "ruta": "con/index.html",
+    "aux": false,
+    "tipo": "pagina"
+   }
+  ]
+ }
+}

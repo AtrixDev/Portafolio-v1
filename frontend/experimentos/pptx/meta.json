@@ -1,0 +1,62 @@
+{
+ "id": "pptx",
+ "fecha": "30/09/2026",
+ "prompt": "Armá una presentación de 5 diapositivas, resultados.pptx en esta carpeta, para contarle a la dirección de una empresa los resultados de seis meses gestionando sus tiendas oficiales en Mercado Libre (junio a noviembre de 2025): ventas +38,9%, unidades +32,4%, el ACOS de Product Ads bajó de 30% a 12%, y se rehicieron más de 200 publicaciones (fotos, títulos y fichas). En español argentino.",
+ "entrada": [],
+ "sin": {
+  "segundos": 112,
+  "pasos": 18,
+  "costo": 0.48,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Ya está `resultados.pptx` en esta carpeta: 5 láminas en formato 16:9, con los colores de Mercado Libre (azul y amarillo). Lo convertí a imágenes y revisé cada lámina: no quedan textos cortados ni superpuestos.\n\n1. **Portada:** \"Seis meses en Mercado Libre: vendemos más y gastamos mejor\", junio a noviembre de 2025.\n2. **Resumen:** cuatro tarjetas con +38,9% en ventas, +32,4% en unidades, ACOS del 12% (era 30%) y más de 200 publicaciones rehechas.\n3. **Crecimiento comercial:** barras con índice 100 al inicio y una columna que explica qué significan los números.\n4. **Product Ads:** gráfico del ACOS (30% → 12%) y lo que implica: por cada $100 vendidos con anuncios se invierten $12 en vez de $30.\n5. **Catálogo:** fotos, títulos y fichas técnicas, y una frase de cierre que une todo.\n\n**Revisá esto antes de presentarla:**\n\n- **Cifras calculadas por mí:** algunas no las pasaste vos, las saqué de tus datos:\n  - Ticket promedio ≈ +4,9% (1,389 / 1,324).\n  - El ACOS bajó 60% (18 puntos).\n  - Cada peso invertido en anuncios genera 2,5 veces más ventas (100/12 contra 100/30).\n\n  Las cuentas están bien, pero confirmá que querés mostrarlas.\n- **Descripciones que redacté yo:** en la lámina 5, las explicaciones de cada mejora son genéricas (por ejemplo, \"reescritos con las palabras que usa el comprador para buscar\"). Ajustalas a lo que efectivamente se hizo.\n- **Supuesto sobre el margen:** en la lámina 4 dice que los $18 de diferencia \"quedan como margen\". Eso vale si se mira la misma venta publicitada, pero no quiere decir que el gasto total en publicidad haya bajado.\n- **Base de comparación:** no aclaro contra qué se mide el +38,9% (el semestre anterior, el mismo período de 2024, etc.). La dirección probablemente lo pregunte.\n- **Inflación:** si las ventas están en pesos corrientes, conviene aclarar si el crecimiento es nominal o real. El +32,4% en unidades sirve como respaldo, porque no depende de la inflación.\n\n`generar.py` es el script que arma la presentación, por si querés cambiar textos y volver a generarla con `python3 generar.py`.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "generar.py",
+    "ruta": "sin/generar.py",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "resultados.pptx",
+    "ruta": "sin/resultados.pptx",
+    "aux": false,
+    "tipo": "documento",
+    "paginas": [
+     "sin/resultados-p-1.png",
+     "sin/resultados-p-2.png",
+     "sin/resultados-p-3.png",
+     "sin/resultados-p-4.png",
+     "sin/resultados-p-5.png"
+    ]
+   }
+  ]
+ },
+ "con": {
+  "segundos": 116,
+  "pasos": 12,
+  "costo": 0.65,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Ya está: `resultados.pptx` está en esta carpeta. Pasa la validación de archivo y revisé cómo se ve cada diapositiva renderizada; no hay textos cortados ni elementos superpuestos.\n\n**Cómo quedó.** Usé azul marino con acentos amarillos, como referencia a Mercado Libre. Las dos diapositivas oscuras abren y cierran, y las del medio son claras. Todas tienen notas del orador en español argentino.\n\n1. **Portada:** \"Seis meses de tiendas oficiales en Mercado Libre\", junio–noviembre 2025.\n2. **El semestre en cuatro números:** cuatro tarjetas con +38,9% en ventas, +32,4% en unidades, ACOS del 12% (antes 30%) y +200 publicaciones.\n3. **Crecimos en facturación y en volumen:** gráfico de ventas contra unidades. El mensaje es que las unidades suben 32,4%, así que el crecimiento no viene solo de precio.\n4. **La publicidad rinde 2,5 veces más:** por cada $100 vendidos con Product Ads, antes se invertían $30 y ahora $12. Eso es 18 puntos menos de ACOS, o un 60% menos de costo publicitario sobre ventas. Incluye un gráfico \"al inicio / al cierre\".\n5. **Más de 200 publicaciones rehechas:** fotos, títulos y fichas técnicas, con una frase de cierre.\n\nLos gráficos son nativos de PowerPoint, así que se pueden editar.\n\n**Conviene revisar:**\n- **No indiqué contra qué período se compara el +38,9% y el +32,4%**, porque no lo sé. Si es contra el semestre anterior o contra junio–noviembre de 2024, vale la pena agregarlo en la diapositiva 3.\n- **Tampoco sé si las ventas están en pesos nominales o ajustadas por inflación.** Si son nominales, la dirección puede preguntar cuánto es crecimiento real. Por eso armé la diapositiva 3 sobre las unidades, que no dependen de la inflación. La viñeta que dice que el ticket promedio \"también subió\" solo vale en términos nominales; si se discute la inflación, conviene sacarla.\n- **Las frases que describen cada tipo de mejora en la diapositiva 5 las escribí yo** (por ejemplo, \"títulos reescritos para aparecer en las búsquedas\"). Ajustalas a lo que realmente se hizo.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "resultados.pptx",
+    "ruta": "con/resultados.pptx",
+    "aux": false,
+    "tipo": "documento",
+    "paginas": [
+     "con/resultados-p-1.png",
+     "con/resultados-p-2.png",
+     "con/resultados-p-3.png",
+     "con/resultados-p-4.png",
+     "con/resultados-p-5.png"
+    ]
+   }
+  ]
+ }
+}

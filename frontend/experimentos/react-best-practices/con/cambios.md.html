@@ -1,0 +1,51 @@
+<h1>Cambios en <code>Pedidos.jsx</code></h1>
+<p>Revisé el componente siguiendo las reglas de <em>Vercel React Best Practices</em>. Abajo tenés cada cambio, ordenado de lo más grave a lo más cosmético, con la regla que lo respalda.</p>
+<h2>1. Bucle infinito de pedidos a la API (bug crítico)</h2>
+<p><strong>Antes:</strong> el <code>useEffect</code> no tenía array de dependencias, así que corría después de <em>cada</em> render. Como adentro se hacían tres <code>setState</code>, cada uno disparaba otro render → otro efecto → otras tres consultas… y así para siempre. La API recibía pedidos sin parar.</p>
+<p><strong>Ahora:</strong> el efecto depende sólo de <code>[clienteId]</code>. Se ejecuta al montar el componente y cada vez que cambia el cliente, nada más.</p>
+<h2>2. Consultas en cascada → en paralelo (<code>async-parallel</code>)</h2>
+<p><strong>Antes:</strong> se esperaba al cliente, después a los pedidos, después al stock. Las tres consultas no dependen entre sí, pero el tiempo total era la suma de las tres.</p>
+<p><strong>Ahora:</strong> van juntas con <code>Promise.all</code>, así que el tiempo total es el de la más lenta. Además, los datos se guardan con un único <code>setDatos</code>, en vez de tres renders intermedios con la pantalla a medio llenar.</p>
+<h2>3. Condición de carrera al cambiar de cliente</h2>
+<p><strong>Antes:</strong> si <code>clienteId</code> cambiaba mientras había consultas en vuelo, la respuesta vieja podía llegar después de la nueva y pisarla: veías los pedidos de otro cliente.</p>
+<p><strong>Ahora:</strong> cada ejecución del efecto crea un <code>AbortController</code>. La función de limpieza cancela las consultas pendientes y, antes de guardar el resultado, se verifica <code>signal.aborted</code>, así que las respuestas viejas se descartan.</p>
+<h2>4. Manejo de errores y estado de carga</h2>
+<p><strong>Antes:</strong> si una consulta fallaba (404, 500, red caída), la promesa se rechazaba sin que nadie la atrapara y el usuario no se enteraba de nada. Además, <code>fetch</code> no rechaza con errores HTTP, así que se intentaba parsear como JSON una página de error.</p>
+<p><strong>Ahora:</strong></p>
+<ul>
+<li>La función <code>obtenerJSON</code> revisa <code>res.ok</code> y tira un error con el código HTTP.</li>
+<li>Hay un estado <code>estado</code> (<code>'cargando' | 'listo' | 'error'</code>) que muestra "Cargando pedidos…" o el mensaje de error, con <code>role="status"</code> y <code>role="alert"</code> para que los lectores de pantalla lo anuncien.</li>
+<li>También aparece un mensaje cuando el filtro no encuentra ningún pedido.</li>
+</ul>
+<h2>5. <code>key</code> estable (<code>key={p.id}</code> en vez del índice)</h2>
+<p><strong>Antes:</strong> se usaba el índice como <code>key</code>. Al filtrar, los índices se corren y React reutiliza nodos que no corresponden, con el riesgo de mezclar estado del DOM entre filas.</p>
+<p><strong>Ahora:</strong> se usa <code>p.id</code>, que identifica al pedido de verdad.</p>
+<h2>6. Búsqueda de stock con <code>Map</code> (<code>js-index-maps</code>, <code>js-set-map-lookups</code>)</h2>
+<p><strong>Antes:</strong> por cada pedido se hacía <code>stock.find(...)</code>, que recorre todo el array: O(pedidos × stock) en cada render, incluso con cada tecla del buscador.</p>
+<p><strong>Ahora:</strong> se arma una vez un <code>Map</code> de <code>productoId → cantidad</code> con <code>useMemo</code> (sólo se recalcula cuando cambia <code>stock</code>) y cada consulta es O(1). Si un producto no figura en el stock, se muestra "—" en lugar de quedar vacío.</p>
+<h2>7. Filtro más eficiente (<code>js-cache-function-results</code>, <code>js-early-exit</code>)</h2>
+<p><strong>Antes:</strong> <code>filtro.toLowerCase()</code> se recalculaba para cada pedido.</p>
+<p><strong>Ahora:</strong> el término se calcula una sola vez (con <code>trim()</code> además, para ignorar espacios sueltos) y, si está vacío, directamente se usa la lista completa sin filtrar.</p>
+<p>El filtrado y el total se siguen derivando durante el render (<code>rerender-derived-state-no-effect</code>): no hace falta guardarlos en estado ni memoizarlos, son cálculos baratos.</p>
+<h2>8. Accesibilidad: <code>button</code> en vez de <code>div</code> clickeable</h2>
+<p><strong>Antes:</strong> cada fila era un <code>&lt;div onClick&gt;</code>. No se puede enfocar con Tab ni activar con Enter/Espacio, y los lectores de pantalla no lo anuncian como interactivo.</p>
+<p><strong>Ahora:</strong></p>
+<ul>
+<li>Cada pedido es un <code>&lt;button type="button"&gt;</code> dentro de un <code>&lt;li&gt;</code>, en una lista <code>&lt;ul&gt;</code> (semántica correcta de lista).</li>
+<li>El input tiene <code>type="search"</code> y <code>aria-label</code>, porque el <code>placeholder</code> solo no sirve como etiqueta.</li>
+<li>El contenedor pasó de <code>&lt;div&gt;</code> a <code>&lt;section&gt;</code>.</li>
+</ul>
+<h2>9. Formato de moneda</h2>
+<p><strong>Antes:</strong> <code>$${total}</code> mostraba cosas como <code>$1234.5</code> o, por errores de coma flotante, <code>$10.200000000000001</code>.</p>
+<p><strong>Ahora:</strong> se usa <code>Intl.NumberFormat('es-AR', { currency: 'ARS' })</code>, que muestra <code>$ 1.234,50</code>. El formateador se crea una sola vez a nivel de módulo en lugar de en cada render.</p>
+<h2>10. Detalles menores</h2>
+<ul>
+<li><code>clienteId</code> se pasa por <code>encodeURIComponent</code> antes de meterlo en la URL.</li>
+<li>El objeto de estilo <code>{ padding: 8 }</code> se sacó afuera del componente (<code>estiloItem</code>) para no crear uno nuevo por fila en cada render (<code>rendering-hoist-jsx</code>).</li>
+</ul>
+<h2>Cosas que dejé como estaban (y posibles mejoras a futuro)</h2>
+<ul>
+<li><strong><code>alert(p.id)</code></strong>: mantuve el comportamiento original, pero lo ideal sería reemplazarlo por algo real (navegar al detalle, abrir un modal, etc.).</li>
+<li><strong>SWR / React Query</strong> (<code>client-swr-dedup</code>): si el proyecto ya usa (o puede sumar) alguna de estas librerías, conviene pasar las consultas ahí. Te dan caché, deduplicación y revalidación, y te ahorran todo el manejo manual del <code>AbortController</code> y los estados. Por ejemplo, <code>/api/stock</code> no depende del cliente y se podría compartir entre componentes. No lo agregué para no meter una dependencia nueva sin saber qué usa el proyecto.</li>
+<li><strong>Listas muy largas</strong>: si los pedidos llegan a ser cientos o miles, se puede sumar <code>useDeferredValue</code> sobre el filtro (<code>rerender-use-deferred-value</code>) o virtualizar la lista.</li>
+</ul>

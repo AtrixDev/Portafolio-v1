@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta name="robots" content="noindex"><!-- Experimento del Lab de Programación: salida de Claude sin cambios de diseño -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Precios | Yerbal del Monte – Yerba mate orgánica</title>
+<style>
+  :root {
+    --verde-900: #1f3a2a;
+    --verde-700: #2f5d3f;
+    --verde-500: #4c8a5e;
+    --verde-100: #e6efe3;
+    --crema: #faf6ec;
+    --tierra: #8a5a2b;
+    --dorado: #c8922a;
+    --texto: #26302a;
+    --suave: #5d675f;
+    --borde: #ddd6c3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    background: var(--crema);
+    color: var(--texto);
+    line-height: 1.5;
+  }
+  .sans, button, .btn, .badge, .ahorro, .detalle, .nota { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+
+  section.precios { max-width: 1040px; margin: 0 auto; padding: 72px 20px 80px; }
+
+  header.encabezado { text-align: center; max-width: 620px; margin: 0 auto 48px; }
+  .marca {
+    font-family: system-ui, sans-serif;
+    text-transform: uppercase; letter-spacing: .14em; font-size: .78rem;
+    color: var(--verde-500); font-weight: 600; margin-bottom: 14px;
+  }
+  h1 { font-size: clamp(1.9rem, 4.5vw, 2.7rem); line-height: 1.15; color: var(--verde-900); margin-bottom: 14px; }
+  .bajada { color: var(--suave); font-size: 1.08rem; }
+
+  .grilla {
+    display: grid;
+    grid-template-columns: 1fr 1.12fr 1fr;
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  .pack {
+    position: relative;
+    background: #fff;
+    border: 1px solid var(--borde);
+    border-radius: 16px;
+    padding: 32px 26px 28px;
+    display: flex; flex-direction: column;
+  }
+  .pack h2 { font-size: 1.35rem; color: var(--verde-900); }
+  .para-quien { font-family: system-ui, sans-serif; font-size: .92rem; color: var(--suave); margin: 4px 0 20px; min-height: 2.8em; }
+
+  .precio { font-size: 2.3rem; font-weight: 700; color: var(--verde-900); line-height: 1; }
+  .precio small { font-size: 1rem; font-weight: 400; color: var(--suave); }
+  .por-kilo { font-family: system-ui, sans-serif; margin-top: 8px; font-size: .95rem; color: var(--suave); }
+  .por-kilo strong { color: var(--texto); }
+
+  .ahorro {
+    display: inline-block; margin-top: 14px;
+    font-size: .85rem; font-weight: 600;
+    padding: 4px 10px; border-radius: 999px;
+    background: var(--verde-100); color: var(--verde-700);
+  }
+  .ahorro.vacio { background: transparent; color: var(--suave); font-weight: 400; padding-left: 0; }
+
+  ul.detalle { list-style: none; margin: 22px 0 26px; font-size: .94rem; color: var(--texto); flex: 1; }
+  ul.detalle li { padding: 7px 0 7px 26px; position: relative; border-top: 1px solid #efeadb; }
+  ul.detalle li::before {
+    content: ""; position: absolute; left: 4px; top: 13px;
+    width: 6px; height: 11px; border: solid var(--verde-500); border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+
+  .btn {
+    display: block; text-align: center; text-decoration: none;
+    padding: 14px 18px; border-radius: 10px; font-weight: 600; font-size: 1rem;
+    border: 2px solid var(--verde-700); color: var(--verde-700); background: transparent;
+    transition: background .15s, color .15s, transform .15s;
+  }
+  .btn:hover { background: var(--verde-700); color: #fff; }
+  .btn:focus-visible { outline: 3px solid var(--dorado); outline-offset: 3px; }
+
+  /* Pack destacado: 3 kg */
+  .pack.destacado {
+    border: 2px solid var(--verde-700);
+    box-shadow: 0 14px 34px rgba(31, 58, 42, .16);
+    padding-top: 40px; padding-bottom: 34px;
+    background: linear-gradient(180deg, #fff 0%, #f4f9f1 100%);
+  }
+  .pack.destacado .precio { font-size: 2.7rem; }
+  .pack.destacado .btn { background: var(--verde-700); color: #fff; padding: 17px 18px; font-size: 1.08rem; }
+  .pack.destacado .btn:hover { background: var(--verde-900); border-color: var(--verde-900); }
+  .badge {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: var(--dorado); color: #fff; font-weight: 700; font-size: .8rem;
+    letter-spacing: .06em; text-transform: uppercase;
+    padding: 6px 16px; border-radius: 999px; white-space: nowrap;
+  }
+
+  .nota { text-align: center; margin-top: 34px; color: var(--suave); font-size: .9rem; }
+  .nota span { display: inline-block; margin: 0 10px; }
+
+  @media (max-width: 820px) {
+    .grilla { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; gap: 26px; }
+    .pack.destacado { order: -1; }
+    .para-quien { min-height: 0; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .pack.destacado .btn:hover { transform: translateY(-1px); }
+  }
+</style>
+</head>
+<body>
+
+<section class="precios" id="precios" aria-labelledby="titulo-precios">
+  <header class="encabezado">
+    <p class="marca">Yerbal del Monte · Yerba mate orgánica</p>
+    <h1 id="titulo-precios">Elegí cuánta yerba querés tener en tu alacena</h1>
+    <p class="bajada">Misma yerba orgánica en los tres packs. Cuanto más llevás, menos pagás por kilo.</p>
+  </header>
+
+  <div class="grilla">
+
+    <!-- 1 kg -->
+    <article class="pack">
+      <h2>Pack 1 kg</h2>
+      <p class="para-quien">Para probarla y conocer el sabor.</p>
+      <div class="precio">$9.500</div>
+      <p class="por-kilo"><strong>$9.500</strong> por kg</p>
+      <span class="ahorro vacio">Precio de lista</span>
+      <ul class="detalle">
+        <li>1 kg de yerba mate orgánica</li>
+        <li>Rinde unos 10 días*</li>
+        <li>Ideal para la primera compra</li>
+      </ul>
+      <a class="btn" href="#comprar-1kg">Probar con 1 kg</a>
+    </article>
+
+    <!-- 3 kg (destacado) -->
+    <article class="pack destacado" aria-label="Pack recomendado">
+      <span class="badge">Recomendado</span>
+      <h2>Pack 3 kg</h2>
+      <p class="para-quien">El equilibrio justo: ahorrás y no se te acaba a la semana.</p>
+      <div class="precio">$26.000</div>
+      <p class="por-kilo"><strong>$8.667</strong> por kg &nbsp;·&nbsp; <s>$28.500 comprando 3 de 1 kg</s></p>
+      <span class="ahorro">Ahorrás $2.500</span>
+      <ul class="detalle">
+        <li>3 kg de yerba mate orgánica</li>
+        <li>Rinde alrededor de 30 días*</li>
+        <li>Menos pedidos, menos vueltas: reponés una vez por mes</li>
+        <li>Te cuesta unos $867 por día*</li>
+      </ul>
+      <a class="btn" href="#comprar-3kg">Quiero el pack de 3 kg</a>
+    </article>
+
+    <!-- 6 kg -->
+    <article class="pack">
+      <h2>Pack 6 kg</h2>
+      <p class="para-quien">Para familias, oficinas o mateadores de tiempo completo.</p>
+      <div class="precio">$48.000</div>
+      <p class="por-kilo"><strong>$8.000</strong> por kg</p>
+      <span class="ahorro">Ahorrás $9.000</span>
+      <ul class="detalle">
+        <li>6 kg de yerba mate orgánica</li>
+        <li>Rinde unos 60 días*</li>
+        <li>El mejor precio por kilo</li>
+      </ul>
+      <a class="btn" href="#comprar-6kg">Llevar 6 kg</a>
+    </article>
+
+  </div>
+
+  <p class="nota">
+    <span>* Estimado a 100 g por día; varía según cuánto mateés.</span>
+    <span>Ahorros calculados contra el precio del pack de 1 kg.</span>
+  </p>
+</section>
+
+</body>
+</html>

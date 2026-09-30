@@ -1,0 +1,41 @@
+<h1>Cambios en <code>Pedidos.jsx</code></h1>
+<h2>Bugs que había que arreglar sí o sí</h2>
+<h3>1. Bucle infinito de pedidos a la API</h3>
+<p>El <code>useEffect</code> no tenía array de dependencias, así que corría <strong>después de cada render</strong>. Como adentro se hacían <code>setCliente</code>, <code>setPedidos</code> y <code>setStock</code>, cada respuesta provocaba un render nuevo, que volvía a disparar el efecto… y así para siempre. Encima, cada tecla en el buscador también relanzaba las tres llamadas.</p>
+<p><strong>Ahora:</strong> el efecto depende solo de <code>[clienteId]</code>. Se ejecuta al montar y cada vez que cambia el cliente, nada más.</p>
+<h3>2. Condición de carrera al cambiar de cliente</h3>
+<p>Si <code>clienteId</code> cambiaba mientras había pedidos en vuelo, la respuesta vieja podía llegar después que la nueva y pisarla, mostrando datos del cliente equivocado.</p>
+<p><strong>Ahora:</strong> se usa un <code>AbortController</code>. La función de limpieza del efecto cancela los <code>fetch</code> pendientes, así que solo se guardan los datos del <code>clienteId</code> actual (y tampoco se hace <code>setState</code> sobre un componente desmontado).</p>
+<h3>3. Errores de red ignorados</h3>
+<p><code>fetch</code> no tira error con un 404 o un 500: devolvía el cuerpo de error como si fueran datos válidos, y después <code>pedidos.filter</code> o <code>p.producto.toLowerCase()</code> podían romper todo el componente.</p>
+<p><strong>Ahora:</strong> la función <code>obtenerJson</code> chequea <code>respuesta.ok</code> y lanza un error si falla. El error se guarda en estado y se muestra un mensaje (con <code>role="alert"</code> para lectores de pantalla). Los <code>AbortError</code> se ignoran porque son cancelaciones a propósito.</p>
+<h2>Rendimiento</h2>
+<h3>4. Pedidos en paralelo en vez de en cascada</h3>
+<p>Las tres llamadas se hacían una atrás de la otra (cada <code>await</code> esperaba a la anterior), aunque ninguna depende de otra. El tiempo total era la suma de las tres.</p>
+<p><strong>Ahora:</strong> se lanzan juntas con <code>Promise.all</code>, así que se tarda lo que tarde la más lenta. Además se hace un solo <code>setState</code> por dato al final, sin renders intermedios con datos a medias.</p>
+<h3>5. Búsqueda de stock O(n·m) → O(1)</h3>
+<p>Por cada pedido se hacía <code>stock.find(...)</code>, recorriendo todo el array de stock. Con muchos pedidos y muchos productos eso escala mal.</p>
+<p><strong>Ahora:</strong> se arma un <code>Map</code> (<code>stockPorProducto</code>) una sola vez con <code>useMemo</code> cada vez que cambia <code>stock</code>, y cada consulta es un <code>.get()</code> directo. Si un producto no está en el stock se muestra <code>—</code> en lugar de quedar vacío.</p>
+<h3>6. Filtro memorizado</h3>
+<p>El filtrado se recalculaba en cada render y hacía <code>filtro.toLowerCase()</code> una vez por pedido.</p>
+<p><strong>Ahora:</strong> se calcula con <code>useMemo</code> según <code>[pedidos, filtro]</code>, se normaliza el texto una sola vez (con <code>trim()</code> para ignorar espacios sueltos) y si el buscador está vacío se devuelve la lista tal cual, sin filtrar.</p>
+<h2>Buenas prácticas de React</h2>
+<h3>7. <code>key</code> estable</h3>
+<p>Se usaba el índice (<code>key={i}</code>) como key. Al filtrar, los índices cambian y React puede reutilizar mal los elementos. <strong>Ahora</strong> se usa <code>p.id</code>, que identifica cada pedido de forma única.</p>
+<h3>8. Estados de carga y vacío</h3>
+<p>Antes, mientras cargaba, se veía un título vacío y un total de <code>$0</code>, que confunde. <strong>Ahora</strong> hay un estado <code>cargando</code> con su mensaje, y si el filtro no encuentra nada se muestra "No hay pedidos para mostrar.".</p>
+<h2>Accesibilidad y UX</h2>
+<h3>9. Elementos clickeables accesibles</h3>
+<p>Los pedidos eran <code>&lt;div&gt;</code> con <code>onClick</code>: no se podían enfocar con el teclado ni los anunciaban como interactivos los lectores de pantalla. <strong>Ahora</strong> son <code>&lt;button type="button"&gt;</code> dentro de una lista (<code>&lt;ul&gt;</code>/<code>&lt;li&gt;</code>), que es la estructura semántica correcta.</p>
+<h3>10. Input con etiqueta</h3>
+<p>El buscador solo tenía <code>placeholder</code>, que no sirve como etiqueta accesible. Se agregó <code>aria-label</code> y <code>type="search"</code>.</p>
+<h3>11. Formato de moneda</h3>
+<p>El total se mostraba como <code>$1234.5</code>. <strong>Ahora</strong> se usa <code>Intl.NumberFormat('es-AR', { currency: 'ARS' })</code>, que da <code>$ 1.234,50</code>. El formateador se crea una sola vez fuera del componente.</p>
+<h3>12. Parámetros de URL escapados</h3>
+<p><code>clienteId</code> se mete en la URL con <code>encodeURIComponent</code>, por si llega con caracteres especiales.</p>
+<h2>Lo que quedó igual (a propósito)</h2>
+<ul>
+<li>El <code>alert(p.id)</code> al hacer clic se mantuvo para no cambiar el comportamiento. Lo ideal sería reemplazarlo por una prop tipo <code>onSeleccionarPedido(pedido)</code> para que el componente padre decida qué hacer.</li>
+<li>Los estilos inline se dejaron como estaban. Si el proyecto usa CSS Modules o algún otro sistema, convendría pasarlos ahí.</li>
+<li>Si el proyecto ya usa algo como React Query o SWR, conviene mover la carga de datos ahí: resuelve caché, reintentos y cancelación sin tener que escribirlo a mano.</li>
+</ul>
