@@ -1,0 +1,51 @@
+{
+ "id": "web-design-guidelines",
+ "fecha": "30/09/2026",
+ "prompt": "Revisá la landing index.html de esta carpeta y decime qué problemas tiene (accesibilidad, rendimiento, experiencia de uso). Escribí la revisión en revision.md, ordenada por importancia, en español argentino. No modifiques el HTML.",
+ "entrada": [
+  "index.html"
+ ],
+ "sin": {
+  "skills": [],
+  "segundos": 104,
+  "pasos": 3,
+  "costo": 0.42,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Escribí la revisión en `revision.md`, ordenada de más a menos importante. No toqué el `index.html`.\n\nLo más grave es que **hoy nadie podría reservar desde la página**, por dos motivos:\n\n1. **El número de WhatsApp es de mentira** (`5491100000000`, línea 442). Todos los botones de reserva mandan a ese número.\n2. **Todos los botones de reserva tienen `href=\"#\"` y dependen de JavaScript.** Si el script falla o no carga, el botón te lleva al principio de la página y nada más. La solución es escribir la dirección de WhatsApp directamente en cada botón.\n\nDespués vienen tres problemas importantes:\n\n3. **Solo se puede reservar por WhatsApp y el número no aparece en ningún lado.** En la compu eso obliga a entrar a WhatsApp Web, y quien prefiere llamar no tiene cómo.\n4. **En celulares desaparecen los links del menú** (\"La carta\", \"Nosotros\", \"Cómo llegar\") y no hay nada que los reemplace.\n5. **En celulares hay dos botones \"Reservar\" fijos** (el de arriba y el flotante), y el flotante tapa el final de la página.\n\nEl documento sigue con problemas medios y menores, todos con la línea del HTML y cómo arreglarlos:\n- **Medios:** los enlaces abren otra pestaña sin avisar, los títulos de sección quedan tapados por la barra de arriba al saltar a ellos, y el cartel de \"Abierto/Cerrado\" no se actualiza solo, tapa el horario y no contempla feriados. Además, el resplandor animado de la portada puede andar lento en celulares baratos.\n- **Menores:** detalles para lectores de pantalla, una etiqueta con letra muy chica, falta la vista previa al compartir el link por WhatsApp y hay algunos textos repetidos.\n\nTambién puse los puntos que ya están bien. Los contrastes de color principales pasan el nivel AA (los calculé a mano) y la página es liviana: no carga fuentes externas ni imágenes.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "revision.md",
+    "ruta": "sin/revision.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "sin/revision.md.html"
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "web-design-guidelines"
+  ],
+  "segundos": 104,
+  "pasos": 9,
+  "costo": 0.58,
+  "modelos": [
+   "claude-opus-5-5",
+   "claude-haiku-4-5-20251001"
+  ],
+  "resumen": "Dejé la revisión en `revision.md`, ordenada de lo más grave a lo menos grave y con referencias `index.html:línea`. El HTML no lo toqué. Usé las guías de la skill `web-design-guidelines`, calculé a mano el contraste de colores y revisé el script. No abrí la página en un navegador.\n\n**Lo más grave:**\n1. **El número de WhatsApp es de prueba** (`5491100000000`). Los 5 botones de reserva llevan ahí, así que si la página se publica así, nadie puede reservar.\n2. **Los botones de reserva necesitan JavaScript para funcionar.** Tienen `href=\"#\"` y el script les pone el enlace real después. Si el JS falla o no carga, tocar \"Reservar\" solo te sube al principio de la página.\n3. **El encabezado fijo tapa los títulos de sección** cuando entrás desde el menú, y también tapa el foco del teclado. Falta `scroll-padding-top`.\n4. **En pantallas de menos de 640 px desaparece el menú** y no hay nada que lo reemplace.\n5. **El botón flotante de reserva:**\n   - En la parte de abajo del iPhone no respeta el área segura, así que queda encima de la barra de inicio.\n   - Al final de la página tapa el texto del pie.\n   - En algunos anchos se ven tres botones \"Reservar\" a la vez en la misma pantalla.\n\n**Nivel medio:**\n- No hay ninguna foto de la comida ni del local.\n- Faltan las etiquetas Open Graph, así que el link compartido por WhatsApp sale sin imagen ni vista previa.\n- No hay otra forma de contacto aparte de WhatsApp.\n- El título \"Lo que sale hoy\" no cuadra con una carta que está fija en el HTML.\n- \"20 a 00 h\" se entiende a medias.\n\n**Lo que está bien:** todos los colores que medí pasan el mínimo de contraste de WCAG AA. Los títulos siguen un orden correcto. Tiene enlace para saltar al contenido y el foco del teclado se ve. Las animaciones respetan la preferencia de reducir movimiento. La página es muy liviana: sin fuentes externas ni imágenes.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "revision.md",
+    "ruta": "con/revision.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "con/revision.md.html"
+   }
+  ]
+ }
+}

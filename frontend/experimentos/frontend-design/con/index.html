@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta name="robots" content="noindex"><!-- Experimento del Lab de Programación: salida de Claude sin cambios de diseño -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brasa — Parrilla de barrio en Villa Crespo</title>
+<meta name="description" content="Parrilla de barrio en Villa Crespo desde 2014. Martes a domingo de 20 a 00 h en Thames 1234. Reservas por WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;800;900&family=Big+Shoulders+Text:wght@400;500;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --estraza: #D5BD96;
+    --estraza-oscuro: #C4A87D;
+    --hollin: #2E211B;
+    --pizarra: #1F2B26;
+    --tiza: #EFEBDF;
+    --brasa: #E0561F;
+    --madera: #6B4A30;
+
+    --display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+    --texto: "Big Shoulders Text", "Arial Narrow", sans-serif;
+    --mano: "Kalam", "Comic Sans MS", cursive;
+
+    --medida: 72rem;
+    --margen: clamp(1.25rem, 4vw, 3rem);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--estraza);
+    color: var(--hollin);
+    font-family: var(--texto);
+    font-size: 1.35rem;
+    line-height: 1.45;
+    /* fibra del papel de estraza */
+    background-image:
+      repeating-linear-gradient(97deg, rgba(46,33,27,.035) 0 1px, transparent 1px 7px),
+      repeating-linear-gradient(3deg, rgba(255,255,255,.05) 0 2px, transparent 2px 11px);
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--hollin); outline-offset: 3px; }
+
+  .envoltura { max-width: var(--medida); margin: 0 auto; padding: 0 var(--margen); }
+
+  /* Botón principal */
+  .boton {
+    display: inline-flex; align-items: center; gap: .6em;
+    background: var(--pizarra); color: var(--tiza);
+    font-family: var(--display); font-weight: 800; font-size: 1.3rem;
+    letter-spacing: .02em;
+    padding: .75em 1.25em; border-radius: 3px;
+    text-decoration: none;
+    transition: background-color .15s ease, transform .15s ease;
+  }
+  .boton:hover { background: var(--hollin); }
+  .boton:active { transform: translateY(1px); }
+  .boton svg { width: 1.1em; height: 1.1em; flex: none; }
+  .boton--chico { font-size: 1.05rem; padding: .55em 1em; }
+
+  /* Barra superior */
+  .barra {
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    padding-block: 1.25rem;
+  }
+  .barra__horario { font-weight: 500; margin: 0; }
+
+  /* Hero */
+  .hero { padding-bottom: 0; }
+  .marca {
+    margin: clamp(1rem, 4vw, 2.5rem) 0 0;
+    font-family: var(--display); font-weight: 900;
+    font-size: clamp(5rem, calc((100vw - 2 * var(--margen)) / 2.45), 27.5rem);
+    line-height: .78;
+    letter-spacing: -.01em;
+    text-transform: uppercase;
+    color: var(--hollin);
+  }
+  .hero__pie {
+    display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 1.5rem 3rem;
+    margin: clamp(1.25rem, 3vw, 2rem) 0 clamp(1.5rem, 4vw, 2.5rem);
+  }
+  .bajada {
+    margin: 0; max-width: 28ch;
+    font-family: var(--display); font-weight: 500;
+    font-size: clamp(1.6rem, 3.4vw, 2.4rem); line-height: 1.1;
+  }
+  .puntaje { display: flex; align-items: center; gap: .9rem; margin: 0; text-decoration: none; }
+  .puntaje__numero { font-family: var(--display); font-weight: 900; font-size: 3.2rem; line-height: 1; }
+  .puntaje__detalle { font-size: 1.05rem; line-height: 1.25; }
+  .estrellas {
+    --relleno: 96%; /* 4,8 de 5 */
+    display: block; font-size: 1.2rem; letter-spacing: .08em; line-height: 1;
+    background: linear-gradient(90deg, var(--hollin) var(--relleno), rgba(46,33,27,.25) var(--relleno));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    margin-bottom: .2rem;
+  }
+
+  /* La parrilla: el momento del sitio */
+  .parrilla {
+    position: relative;
+    height: clamp(9rem, 22vw, 15rem);
+    background: #140d0a;
+    overflow: hidden;
+    border-top: 10px solid #1a1411;
+    border-bottom: 10px solid #1a1411;
+  }
+  .parrilla__brasas,
+  .parrilla__resplandor { position: absolute; inset: 0; }
+  .parrilla__brasas {
+    background:
+      radial-gradient(ellipse 9% 40% at 8% 70%, #ffb347 0%, var(--brasa) 35%, transparent 70%),
+      radial-gradient(ellipse 12% 45% at 22% 85%, #ff9a3c 0%, #c23a12 40%, transparent 72%),
+      radial-gradient(ellipse 8% 35% at 35% 60%, #ffcf6b 0%, var(--brasa) 40%, transparent 70%),
+      radial-gradient(ellipse 14% 50% at 51% 88%, #ffa54a 0%, #b8330f 45%, transparent 72%),
+      radial-gradient(ellipse 9% 38% at 64% 65%, #ffc15e 0%, var(--brasa) 38%, transparent 70%),
+      radial-gradient(ellipse 12% 45% at 78% 82%, #ff9440 0%, #c23a12 42%, transparent 72%),
+      radial-gradient(ellipse 9% 36% at 92% 62%, #ffb850 0%, var(--brasa) 38%, transparent 70%),
+      radial-gradient(ellipse 80% 70% at 50% 120%, #7a1f08 0%, #2a0f07 60%, #140d0a 100%);
+  }
+  .parrilla__resplandor {
+    background:
+      radial-gradient(ellipse 30% 60% at 30% 80%, rgba(255,170,70,.55), transparent 70%),
+      radial-gradient(ellipse 30% 60% at 72% 75%, rgba(255,140,50,.5), transparent 70%);
+    mix-blend-mode: screen;
+    animation: titilar 5s ease-in-out infinite alternate;
+  }
+  .parrilla__resplandor--b {
+    background:
+      radial-gradient(ellipse 25% 55% at 50% 85%, rgba(255,190,90,.5), transparent 70%),
+      radial-gradient(ellipse 20% 50% at 12% 70%, rgba(255,150,60,.45), transparent 70%),
+      radial-gradient(ellipse 20% 50% at 90% 70%, rgba(255,150,60,.45), transparent 70%);
+    animation-duration: 3.7s;
+    animation-delay: -1.8s;
+  }
+  /* Los fierros en V */
+  .parrilla__fierros {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,.55), transparent 30%, transparent 75%, rgba(0,0,0,.5)),
+      repeating-linear-gradient(90deg,
+        transparent 0 calc(2.2rem - 9px),
+        #0d0907 calc(2.2rem - 9px) calc(2.2rem - 6px),
+        #4a3a31 calc(2.2rem - 6px) calc(2.2rem - 4px),
+        #1c1512 calc(2.2rem - 4px) 2.2rem);
+  }
+  @keyframes titilar {
+    0%   { opacity: .35; }
+    40%  { opacity: .8; }
+    60%  { opacity: .55; }
+    100% { opacity: 1; }
+  }
+
+  .datos {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem 2rem;
+    padding-block: 1.5rem;
+    font-family: var(--display); font-weight: 800; font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+  }
+  .datos p { margin: 0; }
+  .datos__lista { display: flex; flex-wrap: wrap; gap: .25rem 2.5rem; }
+
+  /* Pizarra */
+  .seccion-pizarra {
+    padding-block: clamp(3.5rem, 9vw, 7rem);
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+  .titulo {
+    margin: 0 0 1rem;
+    font-family: var(--display); font-weight: 900;
+    font-size: clamp(2.6rem, 6vw, 4.2rem); line-height: .95;
+  }
+  .seccion-pizarra__texto p { margin: 0 0 1rem; max-width: 34ch; }
+
+  .pizarra {
+    position: relative;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.06), transparent 60%),
+      radial-gradient(ellipse at 80% 90%, rgba(255,255,255,.04), transparent 50%),
+      var(--pizarra);
+    color: var(--tiza);
+    border: 14px solid var(--madera);
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 2px #4d3321, inset 0 0 40px rgba(0,0,0,.45), 0 18px 30px -18px rgba(46,33,27,.7);
+    padding: clamp(1.5rem, 4vw, 2.75rem) clamp(1.25rem, 4vw, 2.75rem) clamp(1.5rem, 3vw, 2rem);
+    font-family: var(--mano);
+    transform: rotate(-.6deg);
+  }
+  .pizarra__fecha {
+    margin: 0 0 1.25rem;
+    font-size: clamp(1.7rem, 3.5vw, 2.3rem); font-weight: 700; line-height: 1.1;
+  }
+  .pizarra ul { list-style: none; margin: 0; padding: 0; }
+  .pizarra li {
+    display: flex; align-items: baseline; gap: .6rem;
+    padding: .45rem 0;
+    font-size: clamp(1.2rem, 2.6vw, 1.55rem); line-height: 1.25;
+    opacity: .96;
+  }
+  .pizarra li:nth-child(2n) { transform: translateX(.2rem) rotate(.3deg); }
+  .pizarra__plato { flex: 0 1 auto; }
+  .pizarra__puntos {
+    flex: 1 1 1.5rem; min-width: 1.5rem;
+    border-bottom: 2px dotted rgba(239,235,223,.45);
+    transform: translateY(-.3em);
+  }
+  .pizarra__precio { flex: none; font-weight: 700; white-space: nowrap; }
+  .pizarra__nota {
+    margin: 1.5rem 0 0; font-size: 1.05rem; opacity: .7;
+  }
+
+  /* Visitanos */
+  .visita {
+    background: var(--hollin); color: var(--estraza);
+    padding-block: clamp(3.5rem, 8vw, 6rem);
+  }
+  .visita .titulo { color: var(--tiza); max-width: 16ch; }
+  .visita__grilla {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem 3rem;
+    margin-top: 2.5rem;
+  }
+  .visita h3 {
+    margin: 0 0 .4rem;
+    font-family: var(--display); font-weight: 800; font-size: 1.6rem; color: var(--tiza);
+  }
+  .visita p { margin: 0; max-width: 30ch; }
+  .visita .boton { background: var(--brasa); color: #1d0e07; margin-top: 1rem; }
+  .visita .boton:hover { background: #f06a33; }
+  .visita :focus-visible { outline-color: var(--tiza); }
+
+  .pie {
+    padding-block: 1.75rem;
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 2rem;
+    font-size: 1rem;
+  }
+  .pie p { margin: 0; }
+  .pie strong { font-family: var(--display); font-weight: 900; font-size: 1.3rem; letter-spacing: .02em; }
+
+  @media (max-width: 52rem) {
+    .hero__pie { grid-template-columns: 1fr; }
+    .seccion-pizarra { grid-template-columns: 1fr; }
+    .visita__grilla { grid-template-columns: 1fr; }
+    .pizarra { transform: none; }
+  }
+  @media (max-width: 30rem) {
+    .barra__horario { display: none; }
+    .datos { flex-direction: column; align-items: flex-start; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .parrilla__resplandor { animation: none; opacity: .7; }
+    .boton { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="envoltura barra">
+  <p class="barra__horario">Martes a domingo, de 20 a 00 h</p>
+  <a class="boton boton--chico" href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20reservar%20una%20mesa%20en%20Brasa" target="_blank" rel="noopener">Reservar por WhatsApp</a>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="marca">
+    <div class="envoltura">
+      <h1 class="marca" id="marca">Brasa</h1>
+      <div class="hero__pie">
+        <p class="bajada">Parrilla de barrio en Villa Crespo. Prendemos el fuego todas las noches desde 2014.</p>
+        <a class="puntaje" href="https://www.google.com/maps/search/?api=1&query=Brasa+Thames+1234+Buenos+Aires" target="_blank" rel="noopener" aria-label="4,8 de 5 estrellas en Google, 1.247 reseñas">
+          <span class="puntaje__numero" aria-hidden="true">4,8</span>
+          <span class="puntaje__detalle" aria-hidden="true">
+            <span class="estrellas">★★★★★</span>
+            1.247 reseñas en Google
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <div class="parrilla" role="img" aria-label="Brasas encendidas debajo de los fierros de la parrilla">
+      <div class="parrilla__brasas"></div>
+      <div class="parrilla__resplandor"></div>
+      <div class="parrilla__resplandor parrilla__resplandor--b"></div>
+      <div class="parrilla__fierros"></div>
+    </div>
+
+    <div class="envoltura datos">
+      <div class="datos__lista">
+        <p>Thames 1234, Villa Crespo</p>
+        <p>Martes a domingo, 20 a 00 h</p>
+      </div>
+      <a class="boton" href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20reservar%20una%20mesa%20en%20Brasa" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3a.5.5 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.7 11.7 0 0 0 4.5 4c1.7.7 2.3.8 3.1.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3Z"/></svg>
+        Reservar por WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <section class="envoltura seccion-pizarra" aria-labelledby="titulo-pizarra">
+    <div class="seccion-pizarra__texto">
+      <h2 class="titulo" id="titulo-pizarra">Lo que sale hoy de la parrilla</h2>
+      <p>La carta es corta y cambia según lo que conseguimos en el día. Lo anotamos en la pizarra apenas llega el pedido.</p>
+      <p>Si querés algo en particular, avisanos cuando reserves y te lo guardamos.</p>
+    </div>
+
+    <div class="pizarra">
+      <p class="pizarra__fecha">Hoy</p>
+      <ul>
+        <li><span class="pizarra__plato">Vacío a las brasas</span><span class="pizarra__puntos" aria-hidden="true"></span><span class="pizarra__precio">$18.400</span></li>
+        <li><span class="pizarra__plato">Ojo de bife de 400 g</span><span class="pizarra__puntos" aria-hidden="true"></span><span class="pizarra__precio">$21.900</span></li>
+        <li><span class="pizarra__plato">Mollejas al limón</span><span class="pizarra__puntos" aria-hidden="true"></span><span class="pizarra__precio">$12.600</span></li>
+        <li><span class="pizarra__plato">Provoleta con orégano</span><span class="pizarra__puntos" aria-hidden="true"></span><span class="pizarra__precio">$7.900</span></li>
+        <li><span class="pizarra__plato">Flan con dulce de leche</span><span class="pizarra__puntos" aria-hidden="true"></span><span class="pizarra__precio">$5.200</span></li>
+      </ul>
+      <p class="pizarra__nota">Precios de hoy, pueden cambiar mañana.</p>
+    </div>
+  </section>
+
+  <section class="visita" aria-labelledby="titulo-visita">
+    <div class="envoltura">
+      <h2 class="titulo" id="titulo-visita">Vení a comer a Villa Crespo</h2>
+      <div class="visita__grilla">
+        <div>
+          <h3>Dónde estamos</h3>
+          <p>Thames 1234, Villa Crespo, Buenos Aires.</p>
+        </div>
+        <div>
+          <h3>Cuándo abrimos</h3>
+          <p>De martes a domingo, de 20 a 00 h. Los lunes descansamos.</p>
+        </div>
+        <div>
+          <h3>Cómo reservar</h3>
+          <p>Escribinos por WhatsApp con el día, la hora y cuántos son.</p>
+          <a class="boton" href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20reservar%20una%20mesa%20en%20Brasa" target="_blank" rel="noopener">Reservar por WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="envoltura pie">
+  <p><strong>Brasa</strong>, parrilla de barrio desde 2014</p>
+  <p>Thames 1234, Villa Crespo, Buenos Aires</p>
+</footer>
+
+</body>
+</html>

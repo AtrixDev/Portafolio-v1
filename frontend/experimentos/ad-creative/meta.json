@@ -4,6 +4,7 @@
  "prompt": "Escribí 3 anuncios para Instagram (Meta Ads) para vender la Mandolina Börner V5 con Multibox en una tienda oficial de Mercado Libre. Datos: hecha en Alemania, 5 insertos (rodajas de 3,5 y 7 mm, bastones, juliana y rallado), protector de mano, apta lavavajillas, garantía de 5 años, $38.900 con envío gratis. Público: gente de 28 a 50 años que cocina en casa. Guardá los anuncios en anuncios.md en esta carpeta, en español argentino.",
  "entrada": [],
  "sin": {
+  "skills": [],
   "segundos": 29,
   "pasos": 4,
   "costo": 0.16,
@@ -23,6 +24,9 @@
   ]
  },
  "con": {
+  "skills": [
+   "ad-creative"
+  ],
   "segundos": 53,
   "pasos": 8,
   "costo": 0.42,

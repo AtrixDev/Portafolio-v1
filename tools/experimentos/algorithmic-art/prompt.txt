@@ -1,0 +1,1 @@
+Creá una obra de arte generativo sobre el fuego de una parrilla, que se vea en el navegador y cambie cada vez que se recarga. Un solo archivo index.html en esta carpeta.

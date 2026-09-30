@@ -1,0 +1,50 @@
+{
+ "id": "webapp-testing",
+ "fecha": "30/09/2026",
+ "prompt": "Probá la app index.html de esta carpeta (una calculadora de ganancia por venta) como lo haría un usuario y decime si funciona bien. Escribí lo que encontraste en informe.md, en español argentino. No la arregles: solo probala e informá.",
+ "entrada": [
+  "index.html"
+ ],
+ "sin": {
+  "skills": [],
+  "segundos": 52,
+  "pasos": 5,
+  "costo": 0.21,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "La probé en Chrome como lo haría un usuario: tipeé 11 combinaciones de valores, apreté \"Calcular\" y la miré también en tamaño de celular. El informe completo quedó en `informe.md`. No toqué el código.\n\n**Veredicto: la cuenta da bien, pero la app todavía no está lista para usar.** Con los valores que trae cargados calcula bien: $38.900 − $21.000 − $5.446 de comisión − $4.500 de envío = $7.954, o sea un 20,45 % de margen.\n\n**Problemas más graves:**\n- **Precio vacío o en 0:** muestra \"Te quedan $-25500 (-Infinity% de margen)\", sin ningún aviso.\n- **Campos vacíos:** los toma como 0 sin avisar. Si borrás el costo, te dice que te quedan $28.954, como si el producto te hubiera salido gratis.\n- **Valores sin sentido:** acepta costos negativos y comisiones de más del 100 % sin quejarse.\n\n**Problemas de formato:**\n- El margen sale con 15 decimales: \"20.447300771208226%\".\n- Con centavos aparecen errores de redondeo: \"$49.89999999999999\" donde debería decir $49,90.\n- No usa el formato argentino: sin punto de miles (\"$7954\") y con punto decimal en vez de coma.\n\n**Detalles de uso:**\n- Apretar Enter no calcula.\n- Si cambiás un valor y no apretás \"Calcular\", queda en pantalla el resultado viejo.\n- Falta la etiqueta que adapta la página al celular. En la prueba simulada se veía bien, pero no la probé en un teléfono real, donde probablemente se vea achicada. Además, en pantalla chica los campos se cortan apenas por la derecha.\n\nEn la consola del navegador no apareció ningún error. En el informe también dejé una tabla con todos los casos probados y algunas recomendaciones, sin aplicarlas.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "informe.md",
+    "ruta": "sin/informe.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "sin/informe.md.html"
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "webapp-testing"
+  ],
+  "segundos": 58,
+  "pasos": 7,
+  "costo": 0.33,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "La cuenta da bien, pero la app todavía no está para usarla en serio. Si cargás todo perfecto el número es correcto; si te equivocás o dejás algo vacío, igual te tira un número que parece válido y está mal, sin ningún aviso. El detalle quedó en `informe.md`, y el `index.html` no lo toqué.\n\nProbé 13 casos en el navegador y además revisé Enter, el recálculo y cómo se ve en celular y en escritorio. No hubo errores en la consola.\n\n**Lo que anda bien:** con los valores de ejemplo da $7954, que está bien (38.900 − 21.000 − 5.446 − 4.500). Si tipeás la coma decimal (\"38900,50\"), la toma bien.\n\n**Lo más grave:**\n1. **Campos vacíos:** los cuenta como $0 sin avisar. Si borrás el envío, te dice que te quedan $12.454 en vez de $7.954.\n2. **Punto de miles:** si escribís \"38.900\", como se escribe acá, lo toma como 38,9 pesos. El resultado es \"$-25466.546 (-65466.7 % de margen)\".\n3. **\"NaN\" e \"-Infinity\" en pantalla:** aparecen con el precio en 0, con todo vacío o si tipeás letras.\n\n**Otros problemas:**\n- El margen sale con un montón de decimales (\"20.447300771208226 %\") y hay errores de redondeo como \"$0.09999999999999998\".\n- Los números no tienen formato argentino: sale \"$7954\" en vez de \"$7.954\" y los decimales van con punto.\n- Acepta negativos y comisiones de más del 100 % sin quejarse.\n- Enter no calcula, y si cambiás un valor sigue mostrando el resultado viejo hasta que vuelvas a tocar \"Calcular\".\n- Una pérdida no se diferencia de una ganancia: no hay color ni mensaje.\n- En el celular los campos quedan pegados al borde izquierdo.\n\nAparte: el conector de Vercel necesita autorización (desde `claude mcp` o `/mcp` en una sesión interactiva), pero para esta prueba no hizo falta.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "informe.md",
+    "ruta": "con/informe.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "con/informe.md.html"
+   }
+  ]
+ }
+}

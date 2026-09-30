@@ -77,6 +77,9 @@ def publicar_lado(lado: str, base: Path, dest: Path, entrada: set):
                 item.update(tipo="documento", paginas=[f"{lado}/{rel.parent / n}" if str(rel.parent) != "." else f"{lado}/{n}" for n in pngs])
             except Exception as e:
                 item.update(tipo="descarga", error=str(e)[:120])
+        elif ext in (".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp"):
+            shutil.copy2(p, destino)
+            item.update(tipo="imagen", paginas=[f"{lado}/{rel}"])
         elif ext in (".js", ".jsx", ".ts", ".tsx", ".css", ".py", ".json", ".csv"):
             shutil.copy2(p, destino)
             item["tipo"] = "codigo"
@@ -85,10 +88,17 @@ def publicar_lado(lado: str, base: Path, dest: Path, entrada: set):
             item["tipo"] = "descarga"
         salida.append(item)
     # Si generó un documento, los scripts que usó para armarlo son auxiliares (se publican pero no se muestran primero)
-    if any(i["tipo"] in ("documento", "pagina") for i in salida):
+    if any(i["tipo"] in ("documento", "pagina", "imagen") for i in salida):
         for i in salida:
             if i["tipo"] == "codigo": i["aux"] = True
     return salida
+
+
+def skills_usadas(session_id: str):
+    """Skills que Claude cargó en la sesión, leídas de la transcripción (prueba de que el experimento es limpio)."""
+    for f in (Path.home() / ".claude" / "projects").rglob(f"{session_id}.jsonl"):
+        return sorted(set(re.findall(r'"skill":"([^"]+)"', f.read_text(encoding="utf-8", errors="replace"))))
+    return None
 
 
 def metricas(base: Path, lado: str):
@@ -97,6 +107,7 @@ def metricas(base: Path, lado: str):
     except Exception:
         return {"error": "sin datos de la corrida"}
     return {
+        "skills": skills_usadas(d.get("session_id", "")),
         "segundos": round(d.get("duration_ms", 0) / 1000),
         "pasos": d.get("num_turns"),
         "costo": round(d.get("total_cost_usd") or 0, 2),

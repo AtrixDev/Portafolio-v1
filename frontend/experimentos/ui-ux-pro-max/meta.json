@@ -4,6 +4,7 @@
  "prompt": "Hacé la landing de \"Consultorio Dra. Lucía Paz\", odontología general y estética en Caballito (Buenos Aires). Atiende lunes a viernes de 9 a 19 h en Av. Rivadavia 5400, piso 3. Trabaja con OSDE, Swiss Medical y Galeno. Turnos por WhatsApp. Servicios: limpieza, arreglos, blanqueamiento, ortodoncia invisible e implantes. Entregá un solo archivo index.html en esta carpeta, con el CSS adentro y sin imágenes externas, con los textos en español argentino.",
  "entrada": [],
  "sin": {
+  "skills": [],
   "segundos": 69,
   "pasos": 2,
   "costo": 0.19,
@@ -22,6 +23,9 @@
   ]
  },
  "con": {
+  "skills": [
+   "ui-ux-pro-max"
+  ],
   "segundos": 112,
   "pasos": 6,
   "costo": 0.43,

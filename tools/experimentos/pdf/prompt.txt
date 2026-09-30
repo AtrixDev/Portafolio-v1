@@ -1,0 +1,1 @@
+Convertí el informe.md de esta carpeta en un PDF prolijo para mandarle al cliente, informe.pdf en esta carpeta. En español argentino.

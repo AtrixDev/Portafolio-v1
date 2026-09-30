@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta name="robots" content="noindex"><!-- Experimento del Lab de Programación: salida de Claude sin cambios de diseño -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brasa · Parrilla de barrio en Villa Crespo</title>
+<meta name="description" content="Brasa, parrilla de barrio en Villa Crespo desde 2014. Thames 1234. De martes a domingo de 20 a 00 h. Reservas por WhatsApp.">
+<style>
+  :root {
+    --carbon: #16110e;
+    --carbon-2: #211a15;
+    --ceniza: #3a2f27;
+    --hueso: #f3e9dc;
+    --hueso-2: #cbbba8;
+    --brasa: #e2541b;
+    --brasa-2: #ff8a3d;
+    --oro: #f2b441;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--carbon);
+    color: var(--hueso);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  .contenedor { width: min(1100px, 100% - 3rem); margin-inline: auto; }
+
+  /* Navegación */
+  header.nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(22, 17, 14, .85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--ceniza);
+  }
+  .nav .contenedor {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    font-family: var(--serif); font-size: 1.6rem; font-weight: 700;
+    letter-spacing: .02em; text-decoration: none;
+    display: flex; align-items: center; gap: .5rem;
+  }
+  .logo svg { width: 22px; height: 22px; }
+  .nav ul { display: flex; gap: 1.75rem; list-style: none; font-size: .95rem; }
+  .nav ul a { text-decoration: none; color: var(--hueso-2); transition: color .2s; }
+  .nav ul a:hover { color: var(--hueso); }
+
+  .boton {
+    display: inline-flex; align-items: center; gap: .6rem;
+    background: var(--brasa); color: #fff;
+    padding: .85rem 1.5rem; border-radius: 999px;
+    font-weight: 600; text-decoration: none;
+    transition: background .2s, transform .2s;
+  }
+  .boton:hover { background: var(--brasa-2); transform: translateY(-2px); }
+  .boton svg { width: 20px; height: 20px; fill: currentColor; }
+  .boton--chico { padding: .55rem 1.1rem; font-size: .9rem; }
+  .boton--borde {
+    background: transparent; border: 1px solid var(--hueso-2); color: var(--hueso);
+  }
+  .boton--borde:hover { background: var(--hueso); color: var(--carbon); }
+
+  /* Hero */
+  .hero {
+    position: relative; overflow: hidden;
+    padding: 7rem 0 6rem;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 115%, rgba(226, 84, 27, .55), transparent 70%),
+      radial-gradient(ellipse 40% 30% at 50% 105%, rgba(242, 180, 65, .35), transparent 70%),
+      var(--carbon);
+  }
+  .hero::after {
+    /* parrilla */
+    content: ""; position: absolute; inset: auto 0 0 0; height: 120px;
+    background: repeating-linear-gradient(90deg, transparent 0 38px, rgba(0,0,0,.45) 38px 44px);
+    mask-image: linear-gradient(to top, #000, transparent);
+    -webkit-mask-image: linear-gradient(to top, #000, transparent);
+    pointer-events: none;
+  }
+  .hero .contenedor { position: relative; z-index: 1; text-align: center; }
+  .etiqueta {
+    display: inline-block; font-size: .8rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--oro); margin-bottom: 1.25rem;
+  }
+  .hero h1 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: clamp(3.5rem, 12vw, 8.5rem); line-height: .95;
+    letter-spacing: -.02em;
+  }
+  .hero h1 span { color: var(--brasa-2); }
+  .hero p.bajada {
+    max-width: 560px; margin: 1.5rem auto 2.25rem;
+    font-size: 1.15rem; color: var(--hueso-2);
+  }
+  .hero .acciones { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+  .rating {
+    margin-top: 2.75rem; display: inline-flex; align-items: center; gap: .75rem;
+    background: rgba(255,255,255,.05); border: 1px solid var(--ceniza);
+    padding: .6rem 1.1rem; border-radius: 999px; font-size: .95rem;
+  }
+  .estrellas { color: var(--oro); letter-spacing: .1em; }
+  .rating strong { font-size: 1.05rem; }
+  .rating small { color: var(--hueso-2); }
+
+  /* Chispas */
+  .chispa {
+    position: absolute; bottom: -10px; width: 4px; height: 4px; border-radius: 50%;
+    background: var(--oro); box-shadow: 0 0 8px 2px var(--brasa-2);
+    animation: subir linear infinite; opacity: 0;
+  }
+  @keyframes subir {
+    0%   { transform: translate(0, 0); opacity: 0; }
+    10%  { opacity: 1; }
+    100% { transform: translate(var(--dx, 20px), -420px); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chispa { display: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  /* Secciones */
+  section { padding: 6rem 0; }
+  .titulo-seccion { text-align: center; margin-bottom: 3.5rem; }
+  .titulo-seccion h2 {
+    font-family: var(--serif); font-size: clamp(2.2rem, 5vw, 3.2rem); line-height: 1.1;
+  }
+  .titulo-seccion p { color: var(--hueso-2); margin-top: .75rem; }
+
+  /* Carta */
+  .carta { background: var(--carbon-2); }
+  .pizarra {
+    max-width: 760px; margin-inline: auto;
+    border: 1px solid var(--ceniza); border-radius: 6px;
+    padding: 2.75rem clamp(1.25rem, 5vw, 3.5rem);
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.02), transparent),
+      #1b1511;
+    box-shadow: 0 30px 60px -30px rgba(0,0,0,.8);
+  }
+  .pizarra .fecha {
+    text-align: center; font-size: .8rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--oro); margin-bottom: 2rem;
+  }
+  .plato {
+    display: grid; grid-template-columns: auto 1fr auto; align-items: baseline; gap: .75rem;
+    padding: 1.1rem 0; border-bottom: 1px dashed var(--ceniza);
+  }
+  .plato:last-child { border-bottom: 0; }
+  .plato h3 { font-family: var(--serif); font-size: 1.35rem; font-weight: 600; }
+  .plato .puntos { border-bottom: 2px dotted var(--ceniza); transform: translateY(-5px); }
+  .plato .precio { font-weight: 700; color: var(--brasa-2); font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+  .plato p { grid-column: 1 / -1; color: var(--hueso-2); font-size: .95rem; margin-top: -.25rem; }
+  .pizarra .nota { text-align: center; color: var(--hueso-2); font-size: .85rem; margin-top: 2rem; }
+
+  /* Historia */
+  .historia .contenedor {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+  .historia h2 { font-family: var(--serif); font-size: clamp(2.2rem, 5vw, 3.2rem); line-height: 1.1; margin-bottom: 1.25rem; }
+  .historia p { color: var(--hueso-2); margin-bottom: 1rem; font-size: 1.05rem; }
+  .datos { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .dato {
+    border: 1px solid var(--ceniza); border-radius: 6px; padding: 1.75rem 1.5rem;
+    background: var(--carbon-2);
+  }
+  .dato strong {
+    display: block; font-family: var(--serif); font-size: 2.6rem; line-height: 1; color: var(--brasa-2);
+  }
+  .dato span { color: var(--hueso-2); font-size: .95rem; }
+
+  /* Visitanos */
+  .visitanos { background: var(--carbon-2); }
+  .tarjetas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+  .tarjeta {
+    border: 1px solid var(--ceniza); border-radius: 6px; padding: 2rem;
+    background: var(--carbon);
+  }
+  .tarjeta svg { width: 28px; height: 28px; stroke: var(--brasa-2); fill: none; stroke-width: 1.8; margin-bottom: 1rem; }
+  .tarjeta h3 { font-family: var(--serif); font-size: 1.35rem; margin-bottom: .5rem; }
+  .tarjeta p { color: var(--hueso-2); }
+  .tarjeta p strong { color: var(--hueso); font-weight: 600; }
+  .tarjeta a { color: var(--brasa-2); }
+
+  /* Reservas */
+  .reservas {
+    text-align: center;
+    background: radial-gradient(ellipse 60% 80% at 50% 100%, rgba(226, 84, 27, .35), transparent 70%), var(--carbon);
+  }
+  .reservas h2 { font-family: var(--serif); font-size: clamp(2.4rem, 6vw, 4rem); line-height: 1.05; margin-bottom: 1rem; }
+  .reservas p { color: var(--hueso-2); max-width: 520px; margin: 0 auto 2rem; font-size: 1.1rem; }
+
+  footer {
+    border-top: 1px solid var(--ceniza); padding: 2rem 0;
+    color: var(--hueso-2); font-size: .9rem;
+  }
+  footer .contenedor { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+
+  /* Botón flotante */
+  .flotante {
+    position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 20;
+    width: 58px; height: 58px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: #25d366; color: #fff;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,.6);
+    transition: transform .2s;
+  }
+  .flotante:hover { transform: scale(1.08); }
+  .flotante svg { width: 30px; height: 30px; fill: currentColor; }
+
+  :focus-visible { outline: 2px solid var(--oro); outline-offset: 3px; }
+
+  @media (max-width: 860px) {
+    .nav ul { display: none; }
+    .historia .contenedor { grid-template-columns: 1fr; gap: 2.5rem; }
+    .tarjetas { grid-template-columns: 1fr; }
+    section { padding: 4.5rem 0; }
+    .hero { padding: 5rem 0 5rem; }
+  }
+  @media (max-width: 480px) {
+    .plato { grid-template-columns: 1fr auto; }
+    .plato .puntos { display: none; }
+    .rating { flex-wrap: wrap; justify-content: center; border-radius: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SVG reutilizables -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-whatsapp" viewBox="0 0 24 24">
+    <path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.9-9.88 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.89 9.88zm8.41-18.3A11.81 11.81 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.16-3.48-8.41z"/>
+  </symbol>
+  <symbol id="i-llama" viewBox="0 0 24 24">
+    <path fill="#e2541b" d="M12 1c1 4 5 6 5 11a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 2 1 3 2 3-1-3 0-7 1-9.5z"/>
+    <path fill="#f2b441" d="M12 12c.6 1.6 2.5 2.5 2.5 4.5a2.5 2.5 0 0 1-5 0c0-1.3.9-2.2 1.5-2.7.2.8.6 1.2 1 1.2-.3-1-.1-2.1 0-3z"/>
+  </symbol>
+</svg>
+
+<header class="nav">
+  <div class="contenedor">
+    <a href="#inicio" class="logo"><svg aria-hidden="true"><use href="#i-llama"/></svg>Brasa</a>
+    <nav aria-label="Principal">
+      <ul>
+        <li><a href="#carta">La carta</a></li>
+        <li><a href="#historia">Nosotros</a></li>
+        <li><a href="#visitanos">Visitanos</a></li>
+      </ul>
+    </nav>
+    <a class="boton boton--chico js-whatsapp" href="#reservas">Reservá</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="inicio">
+    <div class="contenedor">
+      <span class="etiqueta">Parrilla de barrio · Villa Crespo · Desde 2014</span>
+      <h1>Fuego lento,<br><span>mesa larga.</span></h1>
+      <p class="bajada">Carne a las brasas, leña de verdad y el ritmo de siempre. Vení a comer como en casa, pero sin lavar los platos.</p>
+      <div class="acciones">
+        <a class="boton js-whatsapp" href="#reservas">
+          <svg aria-hidden="true"><use href="#i-whatsapp"/></svg>Reservá por WhatsApp
+        </a>
+        <a class="boton boton--borde" href="#carta">Ver la carta de hoy</a>
+      </div>
+      <div class="rating" aria-label="4,8 de 5 estrellas en Google, 1.247 reseñas">
+        <span class="estrellas" aria-hidden="true">★★★★★</span>
+        <strong>4,8</strong>
+        <small>en Google · 1.247 reseñas</small>
+      </div>
+    </div>
+  </section>
+
+  <section class="carta" id="carta">
+    <div class="contenedor">
+      <div class="titulo-seccion">
+        <h2>Lo que sale hoy de la parrilla</h2>
+        <p>La pizarra cambia según lo que conseguimos. Esto es lo de hoy.</p>
+      </div>
+      <div class="pizarra">
+        <p class="fecha" id="fecha-hoy">La carta de hoy</p>
+
+        <div class="plato">
+          <h3>Vacío a las brasas</h3><span class="puntos"></span><span class="precio">$18.400</span>
+          <p>Hecho despacio, crocante por fuera y jugoso por dentro.</p>
+        </div>
+        <div class="plato">
+          <h3>Ojo de bife de 400 g</h3><span class="puntos"></span><span class="precio">$21.900</span>
+          <p>El corte de la casa. Decinos el punto y nosotros nos encargamos.</p>
+        </div>
+        <div class="plato">
+          <h3>Mollejas al limón</h3><span class="puntos"></span><span class="precio">$12.600</span>
+          <p>Doraditas, con un toque de limón recién exprimido.</p>
+        </div>
+        <div class="plato">
+          <h3>Provoleta con orégano</h3><span class="puntos"></span><span class="precio">$7.900</span>
+          <p>Fundida en la plancha, para arrancar compartiendo.</p>
+        </div>
+        <div class="plato">
+          <h3>Flan con dulce de leche</h3><span class="puntos"></span><span class="precio">$5.200</span>
+          <p>Casero, como tiene que ser. El cierre obligado.</p>
+        </div>
+
+        <p class="nota">Precios en pesos argentinos.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="historia" id="historia">
+    <div class="contenedor">
+      <div>
+        <span class="etiqueta">Nosotros</span>
+        <h2>Una parrilla de barrio, de las de antes.</h2>
+        <p>Abrimos en 2014 en una esquina de Villa Crespo con una idea simple: buena carne, fuego bien manejado y una mesa donde te sentís como en casa.</p>
+        <p>Desde entonces, los vecinos se volvieron habitués y los habitués se volvieron amigos. La receta no cambió.</p>
+      </div>
+      <div class="datos">
+        <div class="dato"><strong id="anios">+10</strong><span>años prendiendo el fuego</span></div>
+        <div class="dato"><strong>4,8★</strong><span>de puntaje en Google</span></div>
+        <div class="dato"><strong>1.247</strong><span>reseñas de gente que volvió</span></div>
+        <div class="dato"><strong>6</strong><span>noches por semana, de martes a domingo</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="visitanos" id="visitanos">
+    <div class="contenedor">
+      <div class="titulo-seccion">
+        <h2>Visitanos</h2>
+        <p>Te esperamos en el corazón de Villa Crespo.</p>
+      </div>
+      <div class="tarjetas">
+        <div class="tarjeta">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          <h3>Dirección</h3>
+          <p><strong>Thames 1234</strong><br>Villa Crespo, Buenos Aires</p>
+          <p style="margin-top:.75rem"><a href="https://www.google.com/maps/search/?api=1&amp;query=Thames+1234,+Villa+Crespo,+Buenos+Aires" target="_blank" rel="noopener">Cómo llegar →</a></p>
+        </div>
+        <div class="tarjeta">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <h3>Horarios</h3>
+          <p><strong>Martes a domingo</strong><br>de 20 a 00 h</p>
+          <p style="margin-top:.75rem">Lunes cerrado.</p>
+        </div>
+        <div class="tarjeta">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19.1z"/></svg>
+          <h3>Reservas</h3>
+          <p><strong>Solo por WhatsApp</strong><br>Escribinos y te confirmamos la mesa.</p>
+          <p style="margin-top:.75rem"><a class="js-whatsapp" href="#reservas">Escribinos →</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reservas" id="reservas">
+    <div class="contenedor">
+      <h2>¿Venís esta noche?</h2>
+      <p>Reservá tu mesa por WhatsApp. Decinos cuántos son, qué día y a qué hora, y te guardamos un lugar cerca del fuego.</p>
+      <a class="boton js-whatsapp" href="#reservas">
+        <svg aria-hidden="true"><use href="#i-whatsapp"/></svg>Reservá por WhatsApp
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="contenedor">
+    <span>© <span id="anio-actual">2026</span> Brasa · Parrilla de barrio</span>
+    <span>Thames 1234, Villa Crespo · Mar a dom, 20 a 00 h</span>
+  </div>
+</footer>
+
+<a class="flotante js-whatsapp" href="#reservas" aria-label="Reservá por WhatsApp">
+  <svg aria-hidden="true"><use href="#i-whatsapp"/></svg>
+</a>
+
+<script>
+  // ⚠️ Reemplazá por el número real de WhatsApp de Brasa (formato internacional, sin + ni espacios).
+  const WHATSAPP = "5491100000000";
+  const MENSAJE = "¡Hola Brasa! Quiero reservar una mesa para ___ personas el día ___ a las ___ h.";
+
+  const url = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(MENSAJE)}`;
+  document.querySelectorAll(".js-whatsapp").forEach(a => {
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener";
+  });
+
+  // Fecha de hoy en la pizarra
+  const hoy = new Date();
+  const fecha = hoy.toLocaleDateString("es-AR", { weekday: "long", day: "numeric", month: "long" });
+  document.getElementById("fecha-hoy").textContent = "La carta de hoy · " + fecha;
+  document.getElementById("anio-actual").textContent = hoy.getFullYear();
+  document.getElementById("anios").textContent = hoy.getFullYear() - 2014;
+
+  // Chispas en el hero
+  const hero = document.querySelector(".hero");
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    for (let i = 0; i < 26; i++) {
+      const c = document.createElement("span");
+      c.className = "chispa";
+      c.style.left = (15 + Math.random() * 70) + "%";
+      c.style.setProperty("--dx", (Math.random() * 80 - 40) + "px");
+      c.style.animationDuration = (4 + Math.random() * 5) + "s";
+      c.style.animationDelay = (Math.random() * 8) + "s";
+      const s = 2 + Math.random() * 3;
+      c.style.width = c.style.height = s + "px";
+      hero.appendChild(c);
+    }
+  }
+</script>
+</body>
+</html>

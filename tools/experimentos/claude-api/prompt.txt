@@ -1,0 +1,1 @@
+Escribí un script en Python, clasificar.py en esta carpeta, que use la API de Claude para clasificar preguntas de compradores de Mercado Libre en: stock, envío, medidas, compatibilidad, precio u otra. Tiene que procesar un CSV con cientos de preguntas por día sin gastar de más. Agregá un README.md corto en español argentino.

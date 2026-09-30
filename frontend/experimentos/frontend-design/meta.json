@@ -1,0 +1,46 @@
+{
+ "id": "frontend-design",
+ "fecha": "30/09/2026",
+ "prompt": "Hacé la landing page de Brasa, una parrilla de barrio en Villa Crespo (Buenos Aires), abierta desde 2014. Abre de martes a domingo de 20 a 00 h, en Thames 1234. Los platos y precios de hoy son: Vacío a las brasas $18.400, Ojo de bife de 400 g $21.900, Mollejas al limón $12.600, Provoleta con orégano $7.900 y Flan con dulce de leche $5.200. Las reservas son por WhatsApp. Tiene 4,8 estrellas en Google con 1.247 reseñas. Entregá un solo archivo index.html en esta carpeta, con el CSS adentro y sin imágenes externas, con los textos en español argentino.",
+ "entrada": [],
+ "sin": {
+  "skills": [],
+  "segundos": 84,
+  "pasos": 2,
+  "costo": 0.36,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Hice la landing de Brasa en un solo archivo, `index.html`, en esta carpeta. No la abrí en un navegador, así que conviene que la mires antes de publicarla.\n\n**Antes de publicar:** no me pasaste el número de WhatsApp, así que dejé uno inventado (`5491100000000`). Mientras no lo cambies, todos los botones de reserva mandan a un número que no es el de ustedes. Se cambia en la constante `WHATSAPP` del `<script>`, al final del archivo. Todos los botones abren WhatsApp con este mensaje ya escrito: \"¡Hola Brasa! Quiero reservar una mesa para ___ personas el día ___ a las ___ h.\"\n\n**Qué tiene la página:**\n- **Portada:** \"Fuego lento, mesa larga.\", con el botón de reserva por WhatsApp y las 4,8 estrellas en Google con 1.247 reseñas. De fondo hay un resplandor naranja y unas chispas animadas que se apagan si el dispositivo tiene activada la opción de reducir el movimiento.\n- **Carta de hoy:** una pizarra con los cinco platos y sus precios. La fecha se pone sola según el día en que se abra la página.\n- **Nosotros:** la historia desde 2014 y cuatro datos destacados. Los años abiertos se calculan solos y hoy muestra 12.\n- **Visitanos:** la dirección en Thames 1234 con un enlace a Google Maps para llegar, los horarios (martes a domingo de 20 a 00 h) y cómo reservar.\n- **Cierre:** una sección final para reservar, el pie de página y un botón verde de WhatsApp que queda siempre visible en una esquina.\n\nTodo el CSS está dentro del archivo y no usa imágenes externas: los íconos y el logo están dibujados en el mismo código. Tampoco carga tipografías de afuera, usa las que ya trae cada dispositivo. Se adapta al celular y los textos están en español argentino, con voseo (\"Reservá\", \"Vení\", \"Escribinos\").\n\nAdemás de los datos que me diste, agregué dos cosas: una descripción corta para cada plato y la línea \"Lunes cerrado.\" Si alguna no va, se borra en el HTML.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "index.html",
+    "ruta": "sin/index.html",
+    "aux": false,
+    "tipo": "pagina"
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "frontend-design"
+  ],
+  "segundos": 131,
+  "pasos": 14,
+  "costo": 0.66,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Terminé la landing de Brasa: es un solo `index.html` en esta carpeta, con el CSS adentro, sin imágenes y con los textos en español argentino. La revisé con capturas en escritorio (1440 px) y en celular (390 px). La primera versión del nombre se salía de la pantalla en escritorio; lo corregí y ahora entra bien en los dos tamaños.\n\n**La idea visual** sale de las parrillas de barrio: el fondo imita el papel de estraza, el nombre **BRASA** ocupa todo el ancho como un cartel pintado y abajo hay una franja con los fierros de la parrilla sobre brasas que titilan. Es lo único que se mueve en la página, y se queda quieto si el usuario tiene activada la opción de reducir el movimiento. Todo está dibujado con CSS.\n\n**Qué tiene la página:**\n- **Arriba:** el nombre, \"Parrilla de barrio en Villa Crespo. Prendemos el fuego todas las noches desde 2014.\" y el 4,8 con las estrellas y las 1.247 reseñas en Google.\n- **Datos:** Thames 1234, martes a domingo de 20 a 00 h y el botón para reservar.\n- **La pizarra de hoy:** una pizarra con marco de madera y letra de tiza, con los cinco platos y sus precios.\n- **Cómo visitarnos:** dónde están, cuándo abren (aclara que los lunes descansan) y cómo reservar.\n\nTodos los botones dicen lo mismo, \"Reservar por WhatsApp\", y abren el chat con un mensaje ya escrito.\n\n**Antes de publicarla hay que resolver dos cosas:**\n1. **El número de WhatsApp es inventado.** Como no me lo pasaste, puse `5491100000000`. Hay que cambiarlo en los 3 enlaces `wa.me/...` por el número real.\n2. **Las tipografías vienen de Google Fonts** (Big Shoulders y Kalam). No son imágenes, pero se descargan de afuera. Si la página no tiene internet se ve con letras del sistema, así que el diseño cambia bastante. Si preferís que no dependa de nada externo, puedo meter las tipografías dentro del archivo.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "index.html",
+    "ruta": "con/index.html",
+    "aux": false,
+    "tipo": "pagina"
+   }
+  ]
+ }
+}

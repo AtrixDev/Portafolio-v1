@@ -1,0 +1,54 @@
+{
+ "id": "pdf",
+ "fecha": "30/09/2026",
+ "prompt": "Convertí el informe.md de esta carpeta en un PDF prolijo para mandarle al cliente, informe.pdf en esta carpeta. En español argentino.",
+ "entrada": [
+  "informe.md"
+ ],
+ "sin": {
+  "skills": [],
+  "segundos": 28,
+  "pasos": 4,
+  "costo": 0.12,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Ya está: `informe.pdf` quedó en esta carpeta. Es una página A4 y la revisé renderizada.\n\nEl PDF tiene:\n- **Encabezado:** Tienda Cocina Norte, Informe mensual, octubre 2025.\n- **Resultados del mes:** seis indicadores en tarjetas (ventas con el +5,9% contra septiembre, unidades, visitas, conversión, inversión en Product Ads y ACOS).\n- **Lo que funcionó:** en un recuadro verde.\n- **Lo que no funcionó:** en un recuadro rojo.\n- **Próximo mes:** una lista con las tres acciones.\n\nNo agregué ni cambié ningún dato; solo ordené el texto y lo pasé en limpio. Verifiqué que los números cierran entre sí: $3.160.417 sobre $24.310.900 da el 13% de ACOS, y 1.788 unidades sobre 57.640 visitas dan el 3,10% de conversión.\n\nHay un dato que conviene aclarar antes de mandarlo. Las 12 publicaciones rehechas subieron al 3,4%, pero la conversión general del mes fue 3,10%. El cliente podría confundir las dos cifras. Si querés, agrego una nota que lo explique.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "informe.pdf",
+    "ruta": "sin/informe.pdf",
+    "aux": false,
+    "tipo": "documento",
+    "paginas": [
+     "sin/informe-p-1.png"
+    ]
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "anthropic-skills:pdf"
+  ],
+  "segundos": 48,
+  "pasos": 9,
+  "costo": 0.34,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Listo: armé `informe.pdf` en la misma carpeta. Es una página A4 y la revisé renderizada.\n\n**Cómo quedó:**\n- **Encabezado:** \"Informe mensual · Tienda Cocina Norte · Octubre 2025\".\n- **Resumen del mes:** los números principales en recuadros: ventas ($24.310.900, +5,9% vs. septiembre), unidades, visitas, conversión, inversión en Product Ads y ACOS.\n- **Tres secciones con una barra de color al costado:** *Lo que funcionó* en verde, *Lo que no* en rojo y *Próximo mes* en azul, este último con las tres acciones en viñetas.\n- **Pie de página:** nombre de la tienda, período y número de página.\n\nEl texto y los números son los mismos del `.md`, sin nada agregado. Solo reordené el contenido y destaqué en negrita los datos clave.\n\nInstalé `reportlab` para generarlo. El script quedó en `/tmp/claude-1000/gen_informe.py`, fuera de la carpeta del cliente, por si lo querés usar para los informes de los próximos meses.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "informe.pdf",
+    "ruta": "con/informe.pdf",
+    "aux": false,
+    "tipo": "documento",
+    "paginas": [
+     "con/informe-p-1.png"
+    ]
+   }
+  ]
+ }
+}

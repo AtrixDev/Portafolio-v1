@@ -1,0 +1,159 @@
+<h1>Informe de prueba: Calculadora de ganancia por venta (<code>index.html</code>)</h1>
+<p><strong>Fecha:</strong> 30/09/2026
+<strong>Cómo se probó:</strong> abrí la página en Chromium sin interfaz (Playwright, vía <code>file://</code>), cargué distintos valores como lo haría un usuario, apreté "Calcular" y leí el resultado. También la miré en pantalla de celular (375 px) y de escritorio. No toqué el código.</p>
+<h2>Veredicto corto</h2>
+<p><strong>La cuenta básica está bien, pero la app no está lista para usarla en serio.</strong> Con datos normales y enteros da el número correcto. El problema es todo lo demás: el resultado se ve feo y confunde, y cuando el usuario se equivoca o deja un campo vacío, la app calcula igual y muestra un número que parece válido pero está mal, sin avisar nada.</p>
+<h2>Lo que funciona bien</h2>
+<ul>
+<li><strong>La fórmula es correcta.</strong> Con los valores de ejemplo (precio $38.900, costo $21.000, comisión 14 %, envío $4.500): 38.900 − 21.000 − 5.446 − 4.500 = <strong>$7.954</strong>. La app da $7954. ✔</li>
+<li>Caso redondo (10.000 / 5.000 / 10 % / 1.000) → $3000 y 30 % de margen. ✔</li>
+<li>Si hay pérdida, la muestra como negativo (−$4900, −49 %). La cuenta es correcta.</li>
+<li>Si escribís la coma decimal (<code>38900,50</code>), Chrome la toma bien como 38900.50.</li>
+<li>No aparecieron errores en la consola en ningún caso.</li>
+<li>Cada campo tiene su etiqueta asociada, así que lectores de pantalla y el clic en el texto funcionan.</li>
+</ul>
+<h2>Problemas encontrados</h2>
+<p>Ordenados de más grave a menos grave.</p>
+<h3>1. Campos vacíos se toman como 0 sin avisar (grave)</h3>
+<p>Si borrás un campo, la app calcula igual como si fuera $0 y te muestra una ganancia inflada:</p>
+<ul>
+<li>Envío vacío → "Te quedan $12454" (en vez de $7954).</li>
+<li>Costo vacío → "Te quedan $28954 (74,4 % de margen)".</li>
+</ul>
+<p>Para el usuario esto es peligroso: puede creer que gana mucho más de lo que gana. Debería avisar que falta un dato.</p>
+<h3>2. Escribir "38.900" (punto de miles, como se escribe en Argentina) da un resultado absurdo (grave)</h3>
+<p>El campo toma <code>38.900</code> como <strong>38,9 pesos</strong>, no treinta y ocho mil novecientos. Resultado: "Te quedan $-25466.546 (-65466.699228791775% de margen)". Es muy probable que un usuario argentino escriba el precio así. No hay ningún aviso.</p>
+<h3>3. Si escribís letras, el campo queda vacío y el cálculo sale mal</h3>
+<p>Al tipear "abc" en el precio, el campo queda vacío (no deja letras), pero al calcular muestra "Te quedan $-25500 (-Infinity% de margen)". Mismo problema que el punto 1.</p>
+<h3>4. Aparecen "NaN" e "-Infinity" en pantalla</h3>
+<ul>
+<li>Todo vacío, o precio en 0 → "Te quedan $0 (<strong>NaN</strong>% de margen)".</li>
+<li>Precio 0 con algún costo → "Te quedan $-100 (<strong>-Infinity</strong>% de margen)".</li>
+</ul>
+<p>Son textos técnicos que un usuario común no entiende. Debería decir algo como "Cargá un precio de venta mayor a 0".</p>
+<h3>5. El margen sale con un montón de decimales</h3>
+<ul>
+<li>"20.447300771208226% de margen"</li>
+<li>"66.66666666666666% de margen"</li>
+<li>"$0.09999999999999998" (en vez de $0,10, típico error de redondeo)</li>
+</ul>
+<p>Lo esperable es algo como <strong>20,4 %</strong> o <strong>20,45 %</strong>, y plata con dos decimales como mucho.</p>
+<h3>6. Los números no tienen formato argentino</h3>
+<ul>
+<li>Se muestra "$7954" en vez de "$7.954".</li>
+<li>Los decimales salen con punto ("565.1825") en vez de coma ("565,18").</li>
+<li>La pérdida sale como "$-4900" en vez de "−$4.900".</li>
+<li>Un número grande sale como "$85999999998.14", imposible de leer de un vistazo.</li>
+</ul>
+<h3>7. Acepta valores sin sentido</h3>
+<p>No hay ningún límite ni validación:</p>
+<ul>
+<li>Valores negativos (precio −5000, comisión −10 %) → calcula igual y da "107 % de margen" con una pérdida.</li>
+<li>Comisión de 150 % → la toma sin chistar.</li>
+</ul>
+<h3>8. Detalles de uso</h3>
+<ul>
+<li><strong>Enter no calcula:</strong> si estás en un campo y apretás Enter, no pasa nada; hay que ir al botón sí o sí.</li>
+<li><strong>El resultado queda desactualizado:</strong> si cambiás un valor después de calcular, sigue mostrando el resultado viejo hasta que vuelvas a apretar "Calcular". Puede confundir (estás viendo un número que no corresponde a lo que tenés cargado).</li>
+<li><strong>Pérdida no se distingue:</strong> "Te quedan $-4900" no llama la atención; no hay color ni mensaje tipo "Estás perdiendo plata".</li>
+<li><strong>En celular</strong> los campos quedan pegados al borde izquierdo de la pantalla, sin margen lateral. Se usa, pero se ve apretado.</li>
+<li><strong>El resultado no se ve como resultado:</strong> es un texto chico al pie, igual que el resto; no está destacado.</li>
+</ul>
+<h2>Tabla de casos probados</h2>
+<table>
+<thead>
+<tr>
+<th>Caso</th>
+<th>Datos</th>
+<th>Resultado de la app</th>
+<th>¿Bien?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Valores por defecto</td>
+<td>38900 / 21000 / 14 % / 4500</td>
+<td>$7954 (20.447300771208226 %)</td>
+<td>Cuenta bien, formato mal</td>
+</tr>
+<tr>
+<td>Números redondos</td>
+<td>10000 / 5000 / 10 % / 1000</td>
+<td>$3000 (30 %)</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>Con pérdida</td>
+<td>10000 / 9000 / 14 % / 4500</td>
+<td>$-4900 (-49 %)</td>
+<td>Cuenta bien, formato mal</td>
+</tr>
+<tr>
+<td>Envío vacío</td>
+<td>resto por defecto</td>
+<td>$12454 (32.0 %)</td>
+<td>✘ calcula como 0</td>
+</tr>
+<tr>
+<td>Costo vacío</td>
+<td>resto por defecto</td>
+<td>$28954 (74.4 %)</td>
+<td>✘ calcula como 0</td>
+</tr>
+<tr>
+<td>Todo vacío</td>
+<td>—</td>
+<td>$0 (NaN %)</td>
+<td>✘</td>
+</tr>
+<tr>
+<td>Precio 0</td>
+<td>0 / 100 / 14 % / 0</td>
+<td>$-100 (-Infinity %)</td>
+<td>✘</td>
+</tr>
+<tr>
+<td>Negativos</td>
+<td>-5000 / -100 / -10 % / -50</td>
+<td>$-5350 (107 %)</td>
+<td>✘ no valida</td>
+</tr>
+<tr>
+<td>Comisión 150 %</td>
+<td>resto por defecto</td>
+<td>$-44950 (-115.55 %)</td>
+<td>✘ no valida</td>
+</tr>
+<tr>
+<td>Precio "38.900"</td>
+<td>tipeado con punto de miles</td>
+<td>$-25466.546 (-65466.7 %)</td>
+<td>✘ grave</td>
+</tr>
+<tr>
+<td>Precio "38900,50"</td>
+<td>tipeado con coma</td>
+<td>$7954.43</td>
+<td>✔ (formato mal)</td>
+</tr>
+<tr>
+<td>Letras "abc" en precio</td>
+<td>—</td>
+<td>$-25500 (-Infinity %)</td>
+<td>✘</td>
+</tr>
+<tr>
+<td>Decimales flotantes</td>
+<td>0.3 / 0.1 / 0 % / 0.1</td>
+<td>$0.09999999999999998</td>
+<td>✘ redondeo</td>
+</tr>
+</tbody>
+</table>
+<h2>Conclusión</h2>
+<p>La lógica de la cuenta es correcta, así que la base sirve. Pero hoy <strong>solo da resultados confiables si el usuario carga todo perfecto, con números enteros y sin puntos de miles</strong>. Antes de dársela a alguien, lo mínimo sería:</p>
+<ol>
+<li>validar campos vacíos, negativos y precio en 0, con mensajes claros;</li>
+<li>redondear y formatear los números en formato argentino ($7.954 · 20,4 %);</li>
+<li>resolver el tema del punto de miles, que es lo que más va a confundir a un usuario de acá.</li>
+</ol>

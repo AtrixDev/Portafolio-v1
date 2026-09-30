@@ -6,6 +6,7 @@
   "Pedidos.jsx"
  ],
  "sin": {
+  "skills": [],
   "segundos": 46,
   "pasos": 4,
   "costo": 0.19,
@@ -31,6 +32,9 @@
   ]
  },
  "con": {
+  "skills": [
+   "vercel:react-best-practices"
+  ],
   "segundos": 62,
   "pasos": 7,
   "costo": 0.36,

@@ -11,7 +11,7 @@
 
 window.WLDemos = (function () {
   const escH = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const W = 1200, H = 820; // tamaño de diseño de las páginas de ejemplo
+  const W = 1200, H = 820; // tamaño de diseño por defecto de las páginas de ejemplo
 
   // ═══════════════ Páginas de ejemplo (se muestran en iframes aislados) ═══════════════
   const doc = (head, body) => `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=${W}">${head}</head><body>${body}</body></html>`;
@@ -98,21 +98,6 @@ window.WLDemos = (function () {
   // ═══════════════ Demos por ficha ═══════════════
   const DEMOS = {
     // ── Skills ──
-    'skills/impeccable': () => bloque('Antes y después',
-      ficha({ modelo: 'Claude Opus 5.5 (Claude Code)', fecha: '30/09/2026', con: 'Con Impeccable',
-        prompt: 'Hacé la landing page de Brasa, una parrilla de barrio en Villa Crespo (Buenos Aires), abierta desde 2014. Abre de martes a domingo de 20 a 00 h, en Thames 1234. Los platos y precios de hoy son: Vacío a las brasas $18.400, Ojo de bife de 400 g $21.900, Mollejas al limón $12.600, Provoleta con orégano $7.900 y Flan con dulce de leche $5.200. Las reservas son por WhatsApp. Tiene 4,8 estrellas en Google con 1.247 reseñas. Entregá un solo archivo index.html en esta carpeta, con el CSS adentro y sin imágenes externas, con los textos en español argentino. (Con la skill se agregó: "Usá la skill impeccable para diseñarla.")',
-        filas: [['Tiempo', '1 min 47 s', '7 min 33 s'], ['Pasos', '4', '30'], ['Costo de la corrida', 'USD 0,44', 'USD 2,11'], ['Revisó su trabajo', 'No', 'Sí: capturas en escritorio y celular, dos rondas']],
-        como: 'Cada versión se generó en una carpeta vacía. La de "sin la skill" corrió con todas las skills desactivadas (--disable-slash-commands). Las páginas se muestran tal cual salieron; solo se les agregó una etiqueta para que Google no las indexe. Brasa es un negocio inventado.' }) +
-      visor({ w: 1280, h: 800, antes: { label: 'Sin la skill', src: 'experimentos/impeccable/sin.html' }, despues: { label: 'Con Impeccable', src: 'experimentos/impeccable/con.html' } }) +
-      notas('Qué cambió', [
-        ['', 'Sin la skill ya sale prolija', 'Paleta de brasas, carta con precios y reserva por WhatsApp. Pero es una plantilla: etiqueta chica sobre el título, tres tarjetas "01 / 02 / 03" iguales y un bloque de cierre genérico.'],
-        ['', 'Con Impeccable, un mundo propio', 'La página es el mantel de papel madera: lo que imprime la casa en rojo, lo que anota el mozo en birome azul, botones con forma de sello.'],
-        ['', 'Una función que vende', 'Elegís cuántos son, el día y la hora, tildás platos, y el mensaje de WhatsApp sale armado. La otra versión solo abre el chat vacío.'],
-        ['', 'Datos que se entienden de un vistazo', 'La semana con el lunes tachado y el día de hoy marcado, y una línea que cambia según la hora ("hoy abrimos a las 20").'],
-        ['', 'El costo de la diferencia', 'Cinco veces más caro y cuatro veces más lento: la skill hace que Claude piense la dirección, construya y se revise antes de entregar.'],
-      ]),
-      'En la versión con Impeccable probá armar la reserva: elegí personas, día y hora, y mirá cómo se arma el mensaje.'),
-
     // ── Buenas prácticas UX ──
     'ux/36-color-contrast': () => bloque('Probalo', `<div class="dm dm--contrast" data-dm="contrast">
       <div class="dm-cs-prev"><p class="dm-cs-h">Envío gratis desde $ 30.000</p><p class="dm-cs-p">Llega mañana si comprás antes de las 15 h. Devolución gratis durante 30 días.</p></div>
@@ -179,6 +164,12 @@ export function Carrito() {
   // ═══════════════ Experimentos reales publicados (tools/experimentos/publicar.py → experimentos/<id>/meta.json) ═══════════════
   // ficha → qué skill, con qué nombre se muestra y qué observé al comparar las dos salidas (se escribe después de verlas)
   const EXPERIMENTOS = {
+    'skills/impeccable': { exp: 'impeccable', con: 'Con Impeccable', notas: [
+      ['', 'Sin la skill ya sale prolija', 'Paleta de brasas, carta con precios y reserva por WhatsApp. Pero es una plantilla: etiqueta chica sobre el título, tres tarjetas "01 / 02 / 03" iguales y un bloque de cierre genérico.'],
+      ['', 'Con Impeccable, un mundo propio', 'La página es el mantel de papel madera: lo que imprime la casa en rojo, lo que anota el mozo en birome azul, botones con forma de sello.'],
+      ['', 'Una función que vende', 'Elegís cuántos son, el día y la hora, tildás platos, y el mensaje de WhatsApp sale armado. La otra versión solo abre el chat vacío.'],
+      ['', 'Se revisó antes de entregar', 'Sacó capturas en escritorio y celular en dos rondas y corrigió lo que vio. Por eso tardó cuatro veces más y costó cinco veces más.'],
+    ], pie: 'En la versión con Impeccable probá armar la reserva: elegí personas, día y hora, y mirá cómo se arma el mensaje. Brasa es un negocio inventado.' },
     'skills/copywriting': { exp: 'copywriting', con: 'Con Copywriting', notas: [
       ['', 'El título entra en Mercado Libre', 'Sin la skill: 79 caracteres (Mercado Libre corta en 60). Con la skill: 57, con marca y modelo adelante, y dos alternativas.'],
       ['', 'Sabe dónde se publica', 'Avisa que Mercado Libre muestra la descripción como texto plano y la escribe con mayúsculas y guiones. La otra usa negritas de Markdown, que en la publicación salen como asteriscos.'],
@@ -219,6 +210,30 @@ export function Carrito() {
       ['', 'Explica el porqué', 'Cada regla dice por qué importa (una promesa incumplida termina en reclamo y baja la reputación), así Claude decide mejor en casos que no están escritos.'],
       ['', 'Contenido parecido', 'Las dos cubren tono, reglas de Mercado Libre y casos frecuentes: el oficio está en la estructura y en poder probarla.'],
     ] },
+    'skills/frontend-design': { exp: 'frontend-design', con: 'Con Frontend Design', notas: [
+      ['', 'Sin la skill, plantilla', 'Etiqueta chica sobre el título, fila de cuatro números (12 años, 4,8★, 1.247, 6 noches) y tarjetas iguales para dirección, horario y reservas.'],
+      ['', 'Con la skill, identidad', 'Tipografía de cartel condensada, una franja de brasas como imagen principal y la carta escrita en una pizarra.'],
+      ['', 'Mismo prompt que Impeccable', 'Se puede comparar con la ficha de Impeccable: Frontend Design tardó 2 min 11 s y costó USD 0,66; Impeccable, 7 min 33 s y USD 2,11, pero sumó la reserva interactiva y se revisó sola.'],
+    ], pie: 'Brasa es un negocio inventado. Mismo prompt que el experimento de Impeccable.' },
+    'skills/web-design-guidelines': { exp: 'web-design-guidelines', con: 'Con Web Design Guidelines', notas: [
+      ['', 'Casi empate', 'Las dos encontraron lo grave: el número de WhatsApp de relleno, los botones que dependen de JavaScript y la navegación que desaparece en el celular.'],
+      ['', 'Un hallazgo más', 'Con la skill detectó que el encabezado fijo tapa los títulos y el foco del teclado al navegar (WCAG 2.4.11).'],
+      ['', 'Más fácil de corregir', 'Cita la pauta de cada problema y marca archivo y línea exactos.'],
+    ], pie: 'Revisaron la landing que hizo Claude sin skills en el experimento de Impeccable (la podés ver en la ficha).' },
+    'skills/docx': { exp: 'docx', con: 'Con la skill de Word', notas: [
+      ['', 'Empate', 'Las dos propuestas son profesionales, con alcance, plan por mes, inversión con lugares para completar y condiciones.'],
+      ['', 'Sin la skill, hasta más completa', 'Suma "Qué necesitamos de Cocina Norte" y un bloque para firmar.'],
+      ['', 'Con la skill, formato de documento', 'Encabezado y pie con número de página, y una sección de "Qué vas a recibir".'],
+    ], pie: 'Cada página se exportó a imagen; descargá el .docx para abrirlo en Word.' },
+    'skills/pdf': { exp: 'pdf', con: 'Con la skill de PDF', notas: [
+      ['', 'Empate', 'Para pasar un informe corto a PDF, las dos salieron prolijas y con los números bien destacados.'],
+      ['', 'Dónde rinde la skill', 'En tareas más difíciles con PDF: completar formularios, unir o dividir archivos, extraer tablas o leer documentos escaneados.'],
+    ] },
+    'skills/webapp-testing': { exp: 'webapp-testing', con: 'Con Webapp Testing', notas: [
+      ['', 'Las dos probaron de verdad', 'Abrieron la app en un navegador automatizado, cargaron datos como un usuario y encontraron los campos vacíos que se toman como 0, el "NaN" y el "-Infinity".'],
+      ['', 'Un bug más, y muy argentino', 'Solo con la skill encontró que si escribís "38.900" (con punto de miles, como se escribe acá) la app lo toma como 38,9 pesos.'],
+      ['', 'Más casos', 'Probó 13 casos, además de Enter, el recálculo y el escritorio.'],
+    ], pie: 'Partieron de la misma calculadora con errores a propósito (en la ficha del experimento).' },
     'skills/ui-ux-pro-max': { exp: 'ui-ux-pro-max', con: 'Con UI UX Pro Max', notas: [
       ['', 'Diferencia moderada', 'Sin la skill sale una landing prolija de consultorio: servicios, obras sociales, cómo sacar turno y ubicación.'],
       ['', 'Elige estilo y paleta con criterio', 'Tomó de su base el estilo "Accesible y ético" para salud y ajustó los colores para que el texto de los botones cumpla contraste 4,5:1.'],
@@ -241,7 +256,8 @@ export function Carrito() {
     const tipo = (principal('con')[0] || principal('sin')[0] || {}).tipo;
     const fichaHtml = ficha({ modelo: 'Claude ' + (m.con.modelos?.[0] || m.sin.modelos?.[0] || '').replace('claude-', '').replace(/-(\d)-(\d)/, ' $1.$2').replace(/^./, c => c.toUpperCase()) + ' (Claude Code)', fecha: m.fecha, con,
       prompt: m.prompt + (m.entrada.length ? ` (Archivos de partida: ${m.entrada.join(', ')})` : '') + ` (Con la skill se agregó: "Usá la skill…")`,
-      filas: [['Tiempo', seg2(m.sin.segundos), seg2(m.con.segundos)], ['Pasos', String(m.sin.pasos ?? '—'), String(m.con.pasos ?? '—')], ['Costo de la corrida', usd(m.sin.costo), usd(m.con.costo)]],
+      filas: [['Tiempo', seg2(m.sin.segundos), seg2(m.con.segundos)], ['Pasos', String(m.sin.pasos ?? '—'), String(m.con.pasos ?? '—')], ['Costo de la corrida', usd(m.sin.costo), usd(m.con.costo)],
+        ...(m.con.skills ? [['Skills que cargó', m.sin.skills?.length ? m.sin.skills.join(', ') : 'Ninguna', m.con.skills.join(', ') || 'Ninguna']] : [])],
       como: 'Cada versión se generó en una carpeta vacía con el mismo prompt. La de "sin la skill" corrió con todas las skills desactivadas. Las salidas se muestran tal cual: sin retoques.' });
     let cuerpo = '';
     if (tipo === 'pagina') {
@@ -254,6 +270,7 @@ export function Carrito() {
         const partes = await Promise.all(as.map(async a => {
           const dl = `<a class="dm-exp-dl" href="${base + a.ruta}" download>${escH(a.nombre)}</a>`;
           if (a.tipo === 'texto') return `<div class="dm-md">${await (await fetch(base + a.vista)).text()}</div>`;
+          if (a.tipo === 'imagen') return `<div class="dm-pags">${(a.paginas || []).map(pg => `<a href="${base + pg}" target="_blank" rel="noopener" title="Ver en grande"><img src="${base + pg}" alt="${escH(a.nombre)}" loading="lazy"></a>`).join('')}</div>`;
           if (a.tipo === 'documento') return `<div class="dm-pags">${(a.paginas || []).map((pg, i) => `<a href="${base + pg}" target="_blank" rel="noopener" title="Ver en grande"><img src="${base + pg}" alt="${escH(a.nombre)}, página ${i + 1}" loading="lazy"></a>`).join('')}</div>${dl}`;
           if (a.tipo === 'codigo') return `<p class="dm-exp-fn">${escH(a.nombre)}</p><pre class="dm-exp-code">${escH(await (await fetch(base + a.ruta)).text())}</pre>`;
           return dl;
@@ -301,6 +318,7 @@ export function Carrito() {
     root.querySelectorAll('[data-dm="slider"]').forEach(montarSlider);
     root.querySelectorAll('[data-dm="tabs"]').forEach(montarTabs);
     root.querySelectorAll('[data-dm="visor"]').forEach(montarVisor);
+    root.querySelectorAll('[data-ux]').forEach(el => { if (!el.dataset.ok && MONTADORES[el.dataset.ux]) { el.dataset.ok = 1; MONTADORES[el.dataset.ux](el); } });
     root.querySelectorAll('[data-dm="exp"]').forEach(el => { if (!el.dataset.ok) { el.dataset.ok = 1; montarExp(el); } });
     root.querySelectorAll('[data-dm="xl"]').forEach(montarXl);
     root.querySelectorAll('[data-dm="race"]').forEach(montarRace);
@@ -414,5 +432,9 @@ export function Carrito() {
     const k = `${cat}/${id}`;
     return EXPERIMENTOS[k] || k === 'skills/impeccable' ? 'exp' : DEMOS[k] || cat === 'tipografias' ? 'demo' : '';
   }
-  return { render, mount, tipoDemo };
+  // Registro desde otros archivos (programacion-ux.js): demos por ficha y montadores por tipo (data-ux="…")
+  const MONTADORES = {};
+  function agregar(demos, montadores = {}) { Object.assign(DEMOS, demos); Object.assign(MONTADORES, montadores); }
+  const util = { bloque, notas, escH };
+  return { render, mount, tipoDemo, agregar, util };
 })();

@@ -8,9 +8,15 @@ ID="$1"; SKILL="$2"; SRC="${3:-}"
 AQUI="$(cd "$(dirname "$0")" && pwd)"; BASE="${EXP_DIR:-/tmp/experimentos}/$ID"
 rm -rf "$BASE"; mkdir -p "$BASE/sin" "$BASE/con"
 [ -d "$AQUI/$ID/entrada" ] && cp -r "$AQUI/$ID/entrada/." "$BASE/sin/" && cp -r "$AQUI/$ID/entrada/." "$BASE/con/"
-[ -n "$SRC" ] && mkdir -p "$BASE/con/.claude/skills" && cp -r "$SRC" "$BASE/con/.claude/skills/$SKILL"
+# La skill se copia solo dentro de la carpeta "con" (no se instala en el Claude del usuario).
+# Si SRC es una colección (sin SKILL.md arriba), se copian todas sus skills.
+if [ -n "$SRC" ]; then
+  mkdir -p "$BASE/con/.claude/skills"
+  if [ -f "$SRC/SKILL.md" ]; then cp -r "$SRC" "$BASE/con/.claude/skills/$SKILL"
+  else find "$SRC" -name SKILL.md -printf '%h\n' | while read -r d; do cp -r "$d" "$BASE/con/.claude/skills/"; done; fi
+fi
 PROMPT="$(cat "$AQUI/$ID/prompt.txt")"
 ( cd "$BASE/sin" && claude -p "$PROMPT" --model "${MODELO:-claude-opus-5-5}" --disable-slash-commands --permission-mode bypassPermissions --output-format json > "$BASE/sin.json" 2> "$BASE/sin.err" ) &
-( cd "$BASE/con" && claude -p "$PROMPT Usá la skill $SKILL." --model "${MODELO:-claude-opus-5-5}" --permission-mode bypassPermissions --output-format json > "$BASE/con.json" 2> "$BASE/con.err" ) &
+( cd "$BASE/con" && claude -p "$PROMPT ${SUFIJO:-Usá la skill $SKILL.}" --model "${MODELO:-claude-opus-5-5}" --permission-mode bypassPermissions --output-format json > "$BASE/con.json" 2> "$BASE/con.err" ) &
 wait
 echo "listo: $BASE"

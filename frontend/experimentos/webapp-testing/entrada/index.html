@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Calculadora de ganancia</title>
+<style>body{font-family:system-ui;max-width:420px;margin:40px auto}label{display:block;margin:10px 0}input{width:100%;padding:6px}</style></head>
+<body>
+<h1>¿Cuánto te queda por venta?</h1>
+<label>Precio de venta ($)<input id="precio" type="number" value="38900"></label>
+<label>Costo del producto ($)<input id="costo" type="number" value="21000"></label>
+<label>Comisión de Mercado Libre (%)<input id="comision" type="number" value="14"></label>
+<label>Envío a tu cargo ($)<input id="envio" type="number" value="4500"></label>
+<button id="calc">Calcular</button>
+<p id="out"></p>
+<script>
+document.getElementById('calc').onclick = () => {
+  const precio = document.getElementById('precio').value
+  const costo = document.getElementById('costo').value
+  const comision = precio * document.getElementById('comision').value / 100
+  const envio = document.getElementById('envio').value
+  const ganancia = precio - costo - comision - envio
+  const margen = ganancia / precio * 100
+  document.getElementById('out').textContent = 'Te quedan $' + ganancia + ' (' + margen + '% de margen)'
+}
+</script>
+</body></html>

@@ -1,0 +1,72 @@
+<h1>Revisión de <code>index.html</code> — Brasa, parrilla de barrio</h1>
+<p>Revisión hecha con las <a href="https://github.com/vercel-labs/web-interface-guidelines">Web Interface Guidelines</a> de Vercel (skill <code>web-design-guidelines</code>), más chequeo manual de contraste y de la lógica del script. No se tocó el HTML.</p>
+<p>Los problemas están ordenados de más grave a menos grave. Las referencias son <code>archivo:línea</code>.</p>
+<hr />
+<h2>🔴 Crítico: rompen la conversión (reservar)</h2>
+<h3>1. El número de WhatsApp es de mentira</h3>
+<p><code>index.html:442</code> — <code>const WHATSAPP = "5491100000000";</code></p>
+<p>Todos los botones de reserva (son 5: header, portada, tarjeta, bloque final y botón flotante) mandan a este número. Si la página sale así, <strong>nadie puede reservar</strong>. Hay un comentario ⚠️, pero es lo primero que hay que cambiar antes de publicar.</p>
+<h3>2. Sin JavaScript, los CTA de reserva no van a ningún lado</h3>
+<p><code>index.html:292</code>, <code>:309</code>, <code>:413</code>, <code>:420</code>, <code>:436</code> — <code>href="#"</code> que el script reemplaza recién en <code>:446-450</code>.</p>
+<p>Si el JS no carga, tarda, o falla (bloqueadores, conexión mala, error de sintaxis futuro), tocar "Reservar" te sube al principio de la página y listo. Es la acción principal del sitio y no debería depender de JS.
+<strong>Arreglo:</strong> poner la URL <code>https://wa.me/…?text=…</code> directamente en el <code>href</code> (o sea, generarla una vez y pegarla en el HTML). El script sobra para esto.</p>
+<hr />
+<h2>🟠 Alto: accesibilidad y uso en celulares</h2>
+<h3>3. El encabezado fijo tapa los títulos al navegar por anclas y el foco del teclado</h3>
+<p><code>index.html:52-57</code> (<code>.cabecera</code> con <code>position: sticky</code>) — falta <code>scroll-margin-top</code> / <code>scroll-padding-top</code>.</p>
+<p>Al tocar "La carta", "Nosotros" o "Cómo llegar", la sección arranca debajo del header (~65 px), así que el título <code>h2</code> queda escondido. Lo mismo al tabular: los enlaces pueden quedar tapados por el header (WCAG 2.4.11, <em>Focus Not Obscured</em>).
+<strong>Arreglo:</strong> <code>html { scroll-padding-top: 5rem; }</code>.</p>
+<h3>4. En celulares desaparece toda la navegación</h3>
+<p><code>index.html:71</code> — <code>@media (max-width: 640px) { .nav a:not(.boton) { display: none; } }</code></p>
+<p>Por debajo de 640 px se ocultan "La carta", "Nosotros" y "Cómo llegar" sin dar ninguna alternativa (ni menú hamburguesa ni links en otro lado). Justo en el dispositivo donde más se va a usar la página, la única forma de llegar a la carta o a la dirección es scrollear.
+<strong>Arreglo:</strong> una fila de links compacta con scroll horizontal, o un <code>&lt;details&gt;</code>/menú simple.</p>
+<h3>5. El botón flotante tapa contenido y no respeta el área segura</h3>
+<p><code>index.html:261-265</code> (<code>.flotante</code>).</p>
+<ul>
+<li><code>bottom: 1rem</code> sin <code>env(safe-area-inset-bottom)</code>: en iPhone queda encima de la barra de inicio. Falta además <code>viewport-fit=cover</code> en <code>:5</code> si se quiere usar el inset.</li>
+<li>El <code>footer</code> (<code>:256</code>) no tiene espacio abajo, así que al final de la página el botón <strong>tapa el texto del pie</strong> (horario y dirección).</li>
+<li>Entre 641 y 820 px se ven a la vez el "Reservar" del header y el flotante; en la portada, además, conviven con el CTA grande. Tres botones iguales en la misma pantalla.
+<strong>Arreglo:</strong> <code>bottom: calc(1rem + env(safe-area-inset-bottom))</code>, <code>padding-bottom</code> extra en el footer, y mostrar el flotante recién cuando el CTA de la portada sale de pantalla (o esconder el del header cuando está el flotante).</li>
+</ul>
+<h3>6. Links que abren otra pestaña sin avisar, y flechas que el lector de pantalla lee</h3>
+<p><code>index.html:402</code>, <code>:413</code> (y todos los <code>.js-whatsapp</code> por <code>:448</code>).</p>
+<p>Se abren en pestaña nueva con <code>target="_blank"</code> sin decirlo. Además, el <code>↗</code> de "Abrir en Google Maps ↗" y "Escribinos ahora ↗" lo leen los lectores de pantalla como "flecha hacia arriba a la derecha".
+<strong>Arreglo:</strong> <code>&lt;span aria-hidden="true"&gt;↗&lt;/span&gt;</code> más un texto oculto "(se abre en otra pestaña)". Para WhatsApp en celular, el <code>target="_blank"</code> directamente no hace falta.</p>
+<hr />
+<h2>🟡 Medio: experiencia de uso y contenido</h2>
+<h3>7. No hay ni una foto de la comida</h3>
+<p>Es una parrilla y la landing no muestra un solo plato ni el lugar. Todo el peso de la decisión queda en el texto. Suele ser lo que más convence en rubro gastronómico. Si se agregan fotos: <code>width</code>/<code>height</code> explícitos, <code>loading="lazy"</code> debajo del pliegue, <code>fetchpriority="high"</code> en la de portada y formatos AVIF/WebP.</p>
+<h3>8. Sin vista previa al compartir por WhatsApp o redes</h3>
+<p><code>index.html:3-10</code> — faltan las etiquetas Open Graph (<code>og:title</code>, <code>og:description</code>, <code>og:image</code>, <code>og:url</code>) y Twitter Card.</p>
+<p>Irónico para un negocio que vive de WhatsApp: cuando alguien pase el link al grupo, sale sin imagen ni tarjeta. También convendría un JSON-LD <code>Restaurant</code> (dirección, horarios, <code>aggregateRating</code>) para aparecer mejor en Google Maps y la búsqueda local.</p>
+<h3>9. No hay alternativa a WhatsApp</h3>
+<p>La única forma de reservar o consultar es WhatsApp. No hay teléfono (<code>tel:</code>), ni mail, ni link a Instagram. A alguien sin WhatsApp (turistas, gente mayor, desktop sin la app) no le queda opción.</p>
+<h3>10. "Lo que sale hoy" es una carta fija</h3>
+<p><code>index.html:326-328</code> — el título y el texto dicen que "la pizarra cambia según lo que consigamos en el día", pero la lista es HTML estático. Si un día no hay mollejas, la página igual las promete. Cambiar el texto a algo como "Nuestros clásicos" o aclarar que es una muestra.</p>
+<h3>11. El horario "20 a 00 h" se entiende a medias</h3>
+<p><code>index.html:317</code>, <code>:406</code>, <code>:432</code>, <code>:465</code> — "de 20 a 00 h" y "hasta las 00 h" son raros de leer. "de 20 a 24 h" o "de 20 h a medianoche" es más claro. Ojo que al estar abierto, el script reemplaza el horario de la portada por "Abierto ahora · hasta las 00 h" y se pierde la info de qué días abren.</p>
+<h3>12. La calificación no se puede verificar</h3>
+<p><code>index.html:315</code>, <code>:381-387</code> — "4,8 en Google · 1.247 reseñas" no enlaza a las reseñas. Un link a la ficha de Google suma credibilidad. Detalle menor: se muestran 5 estrellas llenas para un 4,8, y en la cita el lector de pantalla oye "4,8 en Google" sin el "de 5".</p>
+<hr />
+<h2>🟢 Bajo: pulido</h2>
+<ul>
+<li><code>index.html:2</code> — falta <code>color-scheme: dark</code> en <code>:root</code>/<code>html</code>: la barra de scroll y los controles nativos salen en modo claro sobre el fondo oscuro.</li>
+<li><code>index.html:286</code>, <code>:431</code> — la marca "Brasa" sin <code>translate="no"</code>: el traductor automático de Chrome la puede convertir en "Ember" a los turistas.</li>
+<li><code>index.html:337</code>, <code>:317</code>, <code>:406</code> — espacios no separables entre número y unidad (<code>400&amp;nbsp;g</code>, <code>20&amp;nbsp;h</code>) para que no queden cortados en dos líneas.</li>
+<li><code>index.html:332</code> — la etiqueta "La de la casa" está adentro del <code>&lt;h3&gt;</code>, así que el nombre del título queda "Vacío a las brasas La de la casa". Mejor sacarla del heading o que el lector la lea separada.</li>
+<li><code>index.html:284</code> — el logo apunta a <code>href="#"</code>. Mejor <code>href="/"</code> o <code>href="#contenido"</code>.</li>
+<li><code>index.html:54-55</code>, <code>:92-101</code> — <code>backdrop-filter: blur()</code> en el header fijo más un gradiente con <code>filter: blur(10px)</code> animado en loop infinito: en celulares de gama baja puede trabar un poco el scroll. La animación sí respeta <code>prefers-reduced-motion</code> (bien).</li>
+<li>Falta <code>touch-action: manipulation</code> y definir <code>-webkit-tap-highlight-color</code> en botones y links (se ve el flash gris al tocar en Android/iOS).</li>
+<li><code>index.html:454-467</code> — el estado abierto/cerrado se calcula una sola vez al cargar; si alguien deja la pestaña abierta desde las 19:50, sigue diciendo "Hoy abrimos a las 20 h". Un <code>setInterval</code> cada minuto lo resuelve. (La lógica en sí está bien, incluido el caso de las 00 h.)</li>
+</ul>
+<hr />
+<h2>✅ Lo que está bien</h2>
+<ul>
+<li><code>lang="es-AR"</code>, <code>meta description</code>, <code>theme-color</code> que coincide con el fondo, favicon inline.</li>
+<li>Link para saltar al contenido, <code>nav</code> con <code>aria-label</code>, jerarquía de títulos correcta (un <code>h1</code>, <code>h2</code> por sección, <code>h3</code> adentro).</li>
+<li>Íconos decorativos con <code>aria-hidden="true"</code>; el botón flotante tiene <code>aria-label</code> que incluye el texto visible.</li>
+<li>Foco visible con <code>:focus-visible</code>; sin <code>outline: none</code>.</li>
+<li><code>prefers-reduced-motion</code> respetado en el scroll suave y en la animación de la portada; <code>transition</code> con propiedades explícitas (no <code>all</code>).</li>
+<li><strong>Contrastes medidos, todos pasan WCAG AA</strong>: texto secundario <code>#a8988a</code> sobre fondo 6,6:1; naranja <code>#ff8a3d</code> sobre fondo 7,8:1; botón 5,7:1; precios <code>#8f3312</code> sobre crema 6,7:1; notas <code>#6d5a4d</code> 5,5:1.</li>
+<li>Rendimiento de base excelente: sin fuentes externas, sin imágenes, CSS inline, un script chiquito. <code>font-variant-numeric: tabular-nums</code> en precios y <code>text-wrap: balance</code> en el <code>h1</code>.</li>
+</ul>

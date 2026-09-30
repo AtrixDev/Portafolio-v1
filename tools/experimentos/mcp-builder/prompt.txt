@@ -1,0 +1,1 @@
+Armá un servidor MCP en Node para que Claude pueda consultar la API pública de Mercado Libre Argentina: buscar un producto de catálogo por su ID y ver sus datos, y listar las publicaciones que compiten en ese catálogo con su precio. Dejalo en la carpeta mcp-ml/ de esta carpeta, con un README en español argentino que explique cómo instalarlo y conectarlo a Claude.

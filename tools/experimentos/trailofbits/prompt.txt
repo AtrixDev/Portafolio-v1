@@ -1,0 +1,1 @@
+Revisá la seguridad de server.js (la API de una tienda online) antes de publicarla. Escribí los hallazgos en seguridad.md, en esta carpeta, ordenados por gravedad y con cómo arreglar cada uno, en español argentino. No modifiques el código.

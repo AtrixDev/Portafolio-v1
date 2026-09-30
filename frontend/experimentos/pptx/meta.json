@@ -4,6 +4,7 @@
  "prompt": "Armá una presentación de 5 diapositivas, resultados.pptx en esta carpeta, para contarle a la dirección de una empresa los resultados de seis meses gestionando sus tiendas oficiales en Mercado Libre (junio a noviembre de 2025): ventas +38,9%, unidades +32,4%, el ACOS de Product Ads bajó de 30% a 12%, y se rehicieron más de 200 publicaciones (fotos, títulos y fichas). En español argentino.",
  "entrada": [],
  "sin": {
+  "skills": [],
   "segundos": 112,
   "pasos": 18,
   "costo": 0.48,
@@ -35,6 +36,9 @@
   ]
  },
  "con": {
+  "skills": [
+   "anthropic-skills:pptx"
+  ],
   "segundos": 116,
   "pasos": 12,
   "costo": 0.65,

@@ -1,0 +1,1 @@
+Probá la app index.html de esta carpeta (una calculadora de ganancia por venta) como lo haría un usuario y decime si funciona bien. Escribí lo que encontraste en informe.md, en español argentino. No la arregles: solo probala e informá.

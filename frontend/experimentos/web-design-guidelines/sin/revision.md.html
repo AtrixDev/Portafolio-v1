@@ -1,0 +1,129 @@
+<h1>Revisión de <code>index.html</code> — Brasa, parrilla de barrio</h1>
+<p>Revisé accesibilidad, rendimiento y experiencia de uso. Los problemas están ordenados de más a menos importante. Las referencias de línea apuntan a <code>index.html</code>.</p>
+<p>En general la base está bien: <code>lang="es-AR"</code>, jerarquía de títulos correcta (h1 → h2 → h3), link para saltar al contenido, <code>focus-visible</code> definido, se respeta <code>prefers-reduced-motion</code> en el scroll y en la animación, no hay fuentes externas ni imágenes pesadas, y los contrastes principales pasan AA (por ejemplo, el texto del botón sobre naranja da ~5,7:1, el precio <code>#8f3312</code> sobre hueso ~6,6:1 y <code>--humo</code> sobre carbón ~6,5:1). Lo que sigue es lo que hay que corregir.</p>
+<hr />
+<h2>🔴 Crítico</h2>
+<h3>1. El número de WhatsApp es de mentira</h3>
+<p><strong>Líneas 441-442.</strong> <code>const WHATSAPP = "5491100000000";</code> es un placeholder, y el comentario mismo lo avisa. <strong>Todos</strong> los botones de reserva (cabecera, portada, tarjeta "Reservas", bloque final y botón flotante) mandan a ese número. Como la página tiene un solo objetivo, que es conseguir reservas, así como está no convierte nada.</p>
+<p><strong>Qué hacer:</strong> poner el número real antes de publicar. Conviene revisarlo a mano abriendo el <code>wa.me</code> desde un celular.</p>
+<h3>2. Todos los botones de reserva dependen de JavaScript (<code>href="#"</code>)</h3>
+<p><strong>Líneas 292, 309, 413, 420, 436.</strong> En el HTML los enlaces tienen <code>href="#"</code> y el script después les pone la URL. Si el JS no carga, tira error o lo bloquea una extensión, o si el visitante lo abre en un navegador embebido que falla, el botón <strong>lleva al principio de la página</strong> y no pasa nada más. Además, los buscadores y las vistas previas ven <code>#</code> como destino.</p>
+<p><strong>Qué hacer:</strong> escribir la URL de <code>https://wa.me/…?text=…</code> directamente en el <code>href</code> de cada enlace (con <code>target="_blank" rel="noopener"</code>). El JS queda opcional o se saca.</p>
+<hr />
+<h2>🟠 Alto</h2>
+<h3>3. La única forma de reservar es WhatsApp, y el número no aparece en ningún lado</h3>
+<p>No hay teléfono visible ni enlace <code>tel:</code>. En la compu, <code>wa.me</code> abre WhatsApp Web, que pide escanear un QR. Mucha gente (la más grande, sobre todo, o quien no tiene WhatsApp en ese dispositivo) prefiere llamar o anotar el número. Encima, la tarjeta "Reservas" (líneas 409-414) dice "Por WhatsApp" pero no muestra el número.</p>
+<p><strong>Qué hacer:</strong> mostrar el número en texto (en la tarjeta "Reservas" y en el pie) y sumar un <code>&lt;a href="tel:+54911…"&gt;</code> como alternativa.</p>
+<h3>4. En celulares desaparece la navegación</h3>
+<p><strong>Línea 71.</strong> Por debajo de 640 px se ocultan "La carta", "Nosotros" y "Cómo llegar" con <code>display: none</code> y no se ofrece nada a cambio: ni menú hamburguesa ni links en otro lado. Justo el público de celular, que es el que más busca "cómo llegar", pierde el acceso directo.</p>
+<p><strong>Qué hacer:</strong> o bien un menú colapsable (un <code>&lt;button aria-expanded&gt;</code> que muestre los links), o bien dejar los tres links en una fila compacta y con scroll horizontal debajo de la marca. Con tres links cortos, la segunda opción alcanza.</p>
+<h3>5. El botón flotante tapa contenido y duplica al de la cabecera</h3>
+<p><strong>Líneas 261-265 y 436-438.</strong> En pantallas de hasta 820 px aparecen <strong>dos</strong> botones "Reservar" fijos todo el tiempo: el de la cabecera sticky y el flotante. Además, el flotante queda encima del contenido del final: el texto del pie, el enlace "Escribinos ahora" y el propio botón "Reservar por WhatsApp" del bloque final. No hay <code>padding-bottom</code> que le deje lugar.</p>
+<p><strong>Qué hacer:</strong></p>
+<ul>
+<li>Elegir uno: o se oculta el botón de la cabecera en celulares o se saca el flotante.</li>
+<li>Si se queda el flotante, agregar espacio al final (por ejemplo <code>footer { padding-bottom: 5rem }</code> en móvil) y usar <code>bottom: max(1rem, env(safe-area-inset-bottom))</code> para los iPhone con barra inferior.</li>
+<li>Se puede ocultar cuando el bloque <code>.reserva-final</code> está a la vista (con un <code>IntersectionObserver</code>), para no tener dos botones iguales uno arriba del otro.</li>
+</ul>
+<hr />
+<h2>🟡 Medio</h2>
+<h3>6. Enlaces que abren otra pestaña sin avisar, y la flecha "↗" se lee en voz alta</h3>
+<p><strong>Líneas 402 y 413</strong>, más todos los <code>.js-whatsapp</code>, porque el script les pone <code>target="_blank"</code>. Quien usa lector de pantalla no se entera de que se abre otra pestaña. Además, el "↗" se anuncia literalmente ("flecha hacia arriba a la derecha").</p>
+<p><strong>Qué hacer:</strong> envolver la flecha en <code>&lt;span aria-hidden="true"&gt;↗&lt;/span&gt;</code> y agregar un texto oculto visualmente: <code>&lt;span class="sr-only"&gt;(se abre en otra pestaña)&lt;/span&gt;</code>.</p>
+<h3>7. Las secciones quedan medio pegadas o tapadas por la cabecera sticky</h3>
+<p><strong>Línea 53</strong> (<code>position: sticky</code>). Al tocar "La carta" o "Cómo llegar", la sección arranca en el borde superior y queda detrás de la cabecera, que mide unos 65-70 px. En celular el padding superior de la sección es de 4rem (64 px), así que el título queda justo al ras o apenas tapado. Lo mismo pasa con "Saltar al contenido".</p>
+<p><strong>Qué hacer:</strong> <code>section[id], main { scroll-margin-top: 5rem; }</code>.</p>
+<h3>8. El cartel "Abierto / Cerrado" tiene casos flojos</h3>
+<p><strong>Líneas 452-467.</strong></p>
+<ul>
+<li><strong>No se actualiza:</strong> si alguien entra a las 19:55 y deja la pestaña abierta, sigue diciendo "Hoy abrimos a las 20 h" después de las 20. Conviene recalcularlo cada minuto con <code>setInterval</code> o al volver a la pestaña con <code>visibilitychange</code>.</li>
+<li><strong>Pisa el horario:</strong> el texto reemplaza a "Mar. a dom. · 20 a 00 h". El que entra un martes a la tarde ve "Hoy abrimos a las 20 h" pero ya no ve qué días abren. Mejor mostrar el estado <strong>además</strong> del horario, no en su lugar.</li>
+<li><strong>Feriados y cierres excepcionales:</strong> no están contemplados. Si algún día cierran, la página va a decir "Abierto ahora" igual. Como mínimo, tener una lista de fechas cerradas en el script.</li>
+</ul>
+<h3>9. Rendimiento: blur animado a pantalla completa y <code>backdrop-filter</code></h3>
+<p><strong>Líneas 92-101 y 55.</strong> El resplandor de la portada es un pseudo-elemento enorme (120 % de ancho y 90 % de alto) con <code>filter: blur(10px)</code> y una animación de opacidad <strong>infinita</strong>. A eso se suma el <code>backdrop-filter: blur(8px)</code> de la cabecera sticky, que se recalcula en cada scroll. En celulares de gama baja eso se nota en fluidez y en batería. El resto de la página es liviano, así que es lo único que pesa.</p>
+<p><strong>Qué hacer:</strong></p>
+<ul>
+<li>Sacar el <code>filter: blur(10px)</code>: los <code>radial-gradient</code> ya tienen bordes suaves y visualmente casi no cambia.</li>
+<li>Agregar <code>will-change: opacity</code> al <code>::before</code> para que la animación quede en el compositor, o directamente frenar la animación cuando la portada sale de pantalla.</li>
+<li>Evaluar si el <code>backdrop-filter</code> hace falta: con un fondo al 88 % de opacidad casi no se ve el desenfoque.</li>
+</ul>
+<hr />
+<h2>🟢 Bajo</h2>
+<h3>10. Detalles de lectores de pantalla en títulos y datos</h3>
+<ul>
+<li><strong>Línea 332:</strong> la etiqueta "La de la casa" está <strong>dentro</strong> del <code>&lt;h3&gt;</code>, así que el título se anuncia como "Vacío a las brasas La de la casa". Conviene sacarla del <code>&lt;h3&gt;</code> o separarla con texto oculto (", la de la casa").</li>
+<li><strong>Líneas 368, 372, 376:</strong> los números "01", "02" y "03" se leen como parte del título ("cero uno El fuego"). Son decorativos: <code>aria-hidden="true"</code>.</li>
+<li><strong>Líneas 315 y 382:</strong> se esconden las estrellas (bien), pero entonces se anuncia "4,8 en Google" sin decir sobre cuánto. Agregar "de 5" en texto oculto.</li>
+</ul>
+<h3>11. La etiqueta "La de la casa" es muy chica</h3>
+<p><strong>Línea 188.</strong> <code>font-size: .7rem</code> equivale a ~11 px, en mayúsculas y con tracking. Es difícil de leer en celular. Subirla a <code>.75rem</code>-<code>.8rem</code> como mínimo.</p>
+<h3>12. Datos útiles que no son enlaces</h3>
+<ul>
+<li><strong>Línea 316:</strong> "Thames 1234" en la portada es texto plano. Si fuera un enlace a Google Maps ahorraría el scroll hasta "Cómo llegar".</li>
+<li><strong>Líneas 315 y 385:</strong> "4,8 en Google · 1.247 reseñas" no enlaza a las reseñas. Enlazarlas suma confianza.</li>
+</ul>
+<h3>13. Sin vistas previas para compartir ni datos estructurados</h3>
+<p>No hay etiquetas Open Graph (<code>og:title</code>, <code>og:description</code>, <code>og:image</code>). Justamente para un restaurante que vive de WhatsApp, cuando alguien comparta el link en un grupo va a salir sin imagen y con una vista pobre. Tampoco hay JSON-LD de tipo <code>Restaurant</code> (dirección, horario, rango de precios), que ayuda a aparecer bien en búsquedas locales y en Maps. Falta además un <code>apple-touch-icon</code>, porque el favicon SVG embebido no sirve para "Agregar a inicio" en iOS.</p>
+<h3>14. <code>color-mix()</code> sin respaldo</h3>
+<p><strong>Línea 54.</strong> En navegadores que no soportan <code>color-mix()</code> (Safari anterior a 16.2, Chrome anterior a 111) la declaración se descarta y la cabecera sticky queda <strong>transparente</strong>, con el texto encima del contenido. Hoy es poca gente, pero el arreglo es trivial: poner antes <code>background: rgba(26,19,16,.88);</code>.</p>
+<h3>15. Movimiento en hover sin respetar <code>prefers-reduced-motion</code></h3>
+<p><strong>Línea 80.</strong> El <code>translateY(-1px)</code> del botón es mínimo, pero para ser consistentes con el resto conviene anularlo dentro del <code>@media (prefers-reduced-motion: reduce)</code>.</p>
+<h3>16. Textos repetidos</h3>
+<p>"Mesa larga" (h1) y "sobremesa larga" (bajada) aparecen uno debajo del otro. "Trato de vecino" se repite en la bajada y en la intro de "Nosotros". No es un error, pero se nota al leer de corrido. Conviene variar alguna de las dos.</p>
+<hr />
+<h2>Resumen de prioridades</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Problema</th>
+<th>Impacto</th>
+<th>Esfuerzo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Número de WhatsApp placeholder</td>
+<td>Nadie puede reservar</td>
+<td>Mínimo</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>href="#"</code> dependiente de JS</td>
+<td>Reservas rotas si falla el JS</td>
+<td>Bajo</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Sin teléfono ni alternativa a WhatsApp</td>
+<td>Se pierden reservas desde la compu</td>
+<td>Bajo</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Sin navegación en celular</td>
+<td>Mala orientación en móvil</td>
+<td>Bajo/medio</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Botón flotante duplicado que tapa contenido</td>
+<td>Molestia en móvil</td>
+<td>Bajo</td>
+</tr>
+<tr>
+<td>6-9</td>
+<td>Nuevas pestañas, anclas, estado abierto, blur</td>
+<td>Accesibilidad y fluidez</td>
+<td>Bajo</td>
+</tr>
+<tr>
+<td>10-16</td>
+<td>Detalles de lectura, SEO y pulido</td>
+<td>Menor</td>
+<td>Mínimo</td>
+</tr>
+</tbody>
+</table>

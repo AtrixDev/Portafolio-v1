@@ -1,0 +1,1 @@
+Armá con Remotion (React) un video vertical de 15 segundos para Instagram que presente la Mandolina Börner V5: 5 cortes, hecha en Alemania, $38.900 con envío gratis. Dejá el proyecto en la carpeta video/ de esta carpeta (solo el código; no hace falta renderizarlo), con un README en español argentino.

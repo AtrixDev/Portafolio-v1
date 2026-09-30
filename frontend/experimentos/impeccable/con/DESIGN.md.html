@@ -1,0 +1,68 @@
+<h1>Design: Brasa</h1>
+<h2>World</h2>
+<p>Mantel de papel madera de parrilla. La casa imprime en rojo; el mozo escribe en birome azul. Dos tintas, nada más. Sin fotos ni ilustraciones: la tipografía y los trazos hacen el trabajo.</p>
+<h2>Color tokens</h2>
+<table>
+<thead>
+<tr>
+<th>token</th>
+<th>valor</th>
+<th>uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>--kraft</td>
+<td>#c8995f</td>
+<td>fondo total (drenched), con grano SVG y pliegues</td>
+</tr>
+<tr>
+<td>--kraft-hondo</td>
+<td>#b8874d</td>
+<td>pista de scrollbar</td>
+</tr>
+<tr>
+<td>--papel</td>
+<td>#f3e3c8</td>
+<td>texto calado sobre sellos rojos</td>
+</tr>
+<tr>
+<td>--rojo</td>
+<td>#971a10</td>
+<td>impresos grandes (≥24px o bold ≥18.7px), guardas, filetes, sellos</td>
+</tr>
+<tr>
+<td>--rojo-tinta</td>
+<td>#6a120b</td>
+<td>texto impreso de cuerpo (≥4.5:1 sobre kraft)</td>
+</tr>
+<tr>
+<td>--birome</td>
+<td>#172672</td>
+<td>todo lo manuscrito, foco, selección</td>
+</tr>
+<tr>
+<td>--vino</td>
+<td>rgb(110 24 34 / .1–.35)</td>
+<td>aros de copa (mancha, no tinta)</td>
+</tr>
+</tbody>
+</table>
+<h2>Type</h2>
+<ul>
+<li>Impresa: Archivo variable. Display 900 con wdth 62, en mayúsculas y line-height .9. Cuerpo entre 400 y 700 con wdth 88–92.</li>
+<li>Birome: Kalam 400/700, con leves rotaciones (−2° a 1.5°).</li>
+<li>Display máx. 6rem; el logo BRASA es un SVG <code>&lt;text&gt;</code> con filtro de tinta porosa.</li>
+</ul>
+<h2>Components</h2>
+<ul>
+<li><strong>Sello</strong>: botón rojo con máscara de grano, filete interior calado, rotado −2°; al hover se endereza y sube.</li>
+<li><strong>Guarda</strong>: banda impresa con texto repetido entre filetes dobles (arriba y abajo de la página).</li>
+<li><strong>Filete de sección</strong>: doble línea roja de 2px (pseudo-elemento).</li>
+<li><strong>Selección = círculo de birome</strong> (chips de día y hora, día de hoy, puntaje). <strong>Tilde de birome</strong> para los platos marcados.</li>
+<li><strong>Renglones</strong>: caja con renglones azules para el mensaje de WhatsApp.</li>
+</ul>
+<h2>Motion</h2>
+<p>Un momento: la birome dibuja el círculo del puntaje y el subrayado de "Hoy hay" (stroke-dashoffset, ease-out expo). Los tildes se dibujan al marcar. Todo se desactiva con prefers-reduced-motion.</p>
+<h2>Layout</h2>
+<p>Contenido de 78rem de ancho máximo. Portada 7/5, comanda 5/7 y dónde 1/1; pasa a una columna a 880px. En el celular hay una barra-sello fija que se oculta mientras se ve el CTA de la portada o la comanda.</p>

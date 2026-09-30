@@ -1,0 +1,1 @@
+Hacé un one-pager en HTML (onepager.html, en esta carpeta) que presente la API de Claude a dueños de tiendas online, con los colores y la tipografía de la marca Anthropic. En español argentino.

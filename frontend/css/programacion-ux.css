@@ -1,0 +1,130 @@
+/* ============================================================
+   PROGRAMACION-UX.CSS — Demos "Así no / Así sí" de Buenas prácticas UX (js/programacion-ux.js)
+   Las mini interfaces son "la web de un cliente": fondo claro propio, igual en tema claro y oscuro.
+   ============================================================ */
+.ux-prueba { margin-bottom: .7rem; font-size: .88rem; color: var(--text-2); }
+.ux-prueba b { color: var(--text); }
+.ux-par { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
+.ux-lado { border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--surface); }
+.ux-lado h4 { display: flex; align-items: center; gap: .4rem; padding: .55rem .85rem; font: 700 .8rem/1 var(--font-sans); border-bottom: 1px solid var(--line); }
+.ux-lado h4::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--bad); }
+.ux-lado[data-lado="bien"] h4::before { background: var(--ok); }
+.ux-in { --u-bg: #ffffff; --u-fg: #1f2328; --u-mut: #5f6368; --u-line: #dfe1e5; --u-acc: #2563eb;
+  position: relative; min-height: 150px; padding: 1rem; background: var(--u-bg); color: var(--u-fg); font: 400 .9rem/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+.ux > .dm-play { margin-top: .7rem; }
+.ux-mini { font-size: .8rem; color: var(--u-mut, var(--muted)); margin-top: .5rem; }
+.ux-mini.is-mal { color: #c5221f; font-weight: 600; } .ux-mini.is-bien { color: #137333; font-weight: 600; }
+.ux-btn { display: inline-flex; align-items: center; gap: .4rem; min-height: 38px; padding: .45rem .9rem; border: 0; border-radius: 8px; background: var(--u-acc, #2563eb); color: #fff; font: 600 .86rem/1 system-ui, sans-serif; cursor: pointer; }
+.ux-btn.is-sec { background: #fff; color: var(--u-fg, #1f2328); box-shadow: inset 0 0 0 1px var(--u-line, #dfe1e5); }
+.ux-btn:disabled { opacity: .75; cursor: progress; }
+.ux-link { padding: 0; border: 0; background: none; color: var(--u-acc, #2563eb); font: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: .2em; cursor: pointer; }
+.ux-fila { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+
+/* Scroll suave */
+.ux-scroller { height: 170px; overflow: auto; padding-right: .3rem; }
+.ux-relleno { height: 420px; margin: .6rem 0; border-radius: 8px; background: repeating-linear-gradient(#f1f3f4 0 14px, #fff 14px 26px); }
+.ux-scroller h5 { font: 700 1rem/1.2 system-ui, sans-serif; }
+
+/* Navegador de juguete */
+.ux-nav { border-radius: 10px; overflow: hidden; border: 1px solid var(--u-line); }
+.ux-nav-bar { display: flex; align-items: center; gap: .5rem; padding: .35rem .5rem; background: #f1f3f4; font: 500 .76rem/1 ui-monospace, monospace; color: var(--u-mut); }
+.ux-nav-bar button { width: 30px; height: 26px; border: 0; border-radius: 6px; background: #fff; box-shadow: inset 0 0 0 1px var(--u-line); cursor: pointer; font-size: .95rem; }
+.ux-nav-pag { padding: .7rem .8rem; min-height: 100px; }
+.ux-items { list-style: none; display: grid; gap: .35rem; padding: 0; }
+.ux-items li { display: flex; justify-content: space-between; align-items: center; gap: .5rem; padding: .35rem .5rem; border-radius: 7px; background: #f8f9fa; }
+.ux-x { padding: .2rem .5rem; border: 0; border-radius: 6px; background: #fce8e6; color: #a50e0e; font: 600 .74rem/1 system-ui, sans-serif; cursor: pointer; }
+.ux-toast { margin-top: .6rem; padding: .5rem .7rem; border-radius: 8px; background: #202124; color: #fff; font-size: .8rem; }
+.ux-toast .ux-link { color: #8ab4f8; margin-left: .3rem; }
+
+/* Movimiento */
+.ux-mov { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+.ux-mov b { flex-basis: 100%; font-size: 1.05rem; }
+.ux-badge { padding: .2rem .5rem; border-radius: 6px; background: #fbbc04; color: #202124; font: 700 .72rem/1 system-ui, sans-serif; }
+.ux-chip { padding: .2rem .5rem; border-radius: 99px; background: #e8f0fe; color: #1967d2; font-size: .76rem; }
+.is-mucho > * { animation: ux-rebote .9s ease-in-out infinite alternate; }
+.is-mucho > *:nth-child(2) { animation-duration: .7s; } .is-mucho > *:nth-child(3) { animation-name: ux-gira; animation-duration: 1.2s; } .is-mucho > *:nth-child(4) { animation-duration: .5s; } .is-mucho .ux-btn { animation-name: ux-pulso; }
+@keyframes ux-rebote { to { transform: translateY(-6px); } } @keyframes ux-gira { to { transform: rotate(8deg) scale(1.08); } } @keyframes ux-pulso { to { transform: scale(1.12); } }
+.is-uno .ux-btn { animation: ux-entra .6s var(--ease-out) .2s both; }
+@keyframes ux-entra { from { opacity: 0; transform: translateY(8px); } }
+.ux-mov .ux-link { flex-basis: 100%; font-size: .78rem; }
+.ux-par-mov { display: grid; justify-items: center; gap: .6rem; }
+.ux-orbita { position: relative; width: 90px; height: 90px; border-radius: 50%; border: 2px dashed var(--u-line); }
+.ux-orbita i { position: absolute; top: -8px; left: 37px; width: 16px; height: 16px; border-radius: 50%; background: var(--u-acc); transform-origin: 8px 53px; animation: ux-orb 1.4s linear infinite; }
+@keyframes ux-orb { to { transform: rotate(360deg); } }
+.is-quieto .ux-orbita i { animation-play-state: paused; }
+
+/* Carga */
+.ux-lista { display: grid; gap: .4rem; margin-top: .7rem; min-height: 110px; }
+.ux-it { padding: .55rem .65rem; border-radius: 8px; background: #f8f9fa; animation: dm-in .25s var(--ease-out); }
+.ux-sk { height: 34px; border-radius: 8px; background: linear-gradient(90deg, #f1f3f4 25%, #e8eaed 50%, #f1f3f4 75%); background-size: 200% 100%; animation: ux-brillo 1.1s linear infinite; }
+@keyframes ux-brillo { to { background-position: -200% 0; } }
+
+/* Menús */
+.ux-menu { position: relative; display: inline-block; }
+.ux-menu ul { position: absolute; top: calc(100% + 4px); left: 0; min-width: 140px; list-style: none; padding: .3rem; border-radius: 8px; background: #fff; box-shadow: 0 6px 20px rgba(0,0,0,.18); }
+.ux-menu li { padding: .35rem .5rem; border-radius: 6px; } .ux-menu li:hover { background: #f1f3f4; }
+.is-tactil .ux-in { cursor: none; }
+.ux-zi { position: relative; height: 170px; overflow: hidden; border-radius: 8px; background: #f8f9fa; }
+.ux-zi-head { position: absolute; top: 0; left: 0; right: 0; padding: .5rem .7rem; background: #202124; color: #fff; font-size: .78rem; }
+.ux-zi .ux-menu { position: absolute; top: 44px; left: .7rem; }
+.ux-zi .ux-menu ul { top: auto; bottom: calc(100% + 4px); }
+
+/* Saltos de contenido */
+.ux-salto { display: grid; gap: .5rem; justify-items: start; }
+.ux-foto { width: 100%; height: 0; border-radius: 8px; background: linear-gradient(135deg, #c9d6df, #e2e8ec); transition: none; }
+.ux-foto.is-lista { height: 90px; }
+.ux-foto.is-reserva { height: 90px; background: #f1f3f4; } .ux-foto.is-reserva.is-lista { background: linear-gradient(135deg, #c9d6df, #e2e8ec); }
+.ux-fig { display: grid; gap: .5rem; justify-items: start; margin: 0; }
+.ux-voz { font-size: .82rem; color: var(--u-fg, var(--text)); font-style: italic; min-height: 1.2em; }
+.ux-lado > .ux-in > .ux-voz { margin-top: .5rem; }
+.ux-ico { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 8px; box-shadow: inset 0 0 0 1px var(--u-line); font-size: 1rem; }
+
+/* Foco */
+.is-sin-foco button:focus, .is-sin-foco button:focus-visible { outline: none; }
+.is-con-foco button:focus-visible, .is-con-foco [tabindex]:focus-visible { outline: 3px solid #1a73e8; outline-offset: 2px; }
+.ux-falso { display: inline-flex; min-height: 38px; align-items: center; padding: .45rem .9rem; border-radius: 8px; box-shadow: inset 0 0 0 1px var(--u-line); cursor: pointer; font-weight: 600; font-size: .86rem; }
+.ux-opc { list-style: none; display: flex; gap: .3rem; padding: 0; } .ux-opc li { padding: .3rem .6rem; border-radius: 6px; background: #f1f3f4; }
+
+/* Pagos */
+.ux-spin { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; animation: ux-orb .7s linear infinite; }
+
+/* Errores de formulario */
+.ux-form { display: grid; gap: .45rem; }
+.ux-form label { font-weight: 600; font-size: .84rem; }
+.sr-only-vis { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.ux-form input { min-height: 40px; padding: .45rem .6rem; border-radius: 8px; border: 1px solid #c7ccd3; font: inherit; color: inherit; background: #fff; }
+.ux-form input.is-err { border: 2px solid #d93025; }
+.ux-err { display: flex; align-items: flex-start; gap: .35rem; font-size: .8rem; color: #a50e0e; }
+.ux-err svg { width: 16px; height: 16px; flex: none; color: #d93025; margin-top: 1px; }
+.ux-form .ux-btn { justify-self: start; }
+
+/* Solo color */
+.ux-est { list-style: none; display: grid; gap: .45rem; padding: 0; }
+.ux-est li { display: flex; align-items: center; gap: .5rem; } .ux-est i { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+.is-gris .ux-in { filter: grayscale(1); }
+
+/* Peso de imágenes */
+.ux-peso { display: grid; gap: .35rem; font-size: .84rem; }
+.ux-peso span { font: 700 1.3rem/1 system-ui, sans-serif; }
+.ux-barra { height: 8px; border-radius: 99px; background: #f1f3f4; overflow: hidden; }
+.ux-barra i { display: block; height: 100%; background: var(--u-acc); transform: scaleX(0); transform-origin: left; }
+
+/* Celulares */
+.ux-cel { width: 190px; height: 170px; margin: 0 auto; padding: .7rem; border-radius: 18px; border: 5px solid #202124; overflow: hidden auto; background: #fff; }
+.ux-cel.is-980 { overflow: hidden; }
+.ux-cel.is-scroll { overflow-x: auto; }
+.ux-cel p { line-height: 1.45; }
+.ux-cel.is-980 { padding: 0; } .ux-pag980 { width: 980px; padding: 40px; transform: scale(.183); transform-origin: 0 0; }
+.ux-pag980 h5, .ux-pag h5 { font: 700 1.05rem/1.2 system-ui, sans-serif; margin-bottom: .3rem; } .ux-pag980 h5 { font-size: 40px; } .ux-pag980 p { font-size: 22px; margin: 16px 0; } .ux-pag980 .ux-btn { font-size: 20px; padding: 12px 24px; }
+.ux-pag p { font-size: .84rem; margin: .4rem 0 .6rem; }
+.ux-tab { border-collapse: collapse; font-size: .8rem; } .ux-tab th, .ux-tab td { border: 1px solid var(--u-line); padding: .3rem .5rem; text-align: left; white-space: nowrap; }
+.ux-dl div { display: flex; justify-content: space-between; padding: .3rem 0; border-bottom: 1px solid var(--u-line); font-size: .82rem; } .ux-dl dt { color: var(--u-mut); }
+
+/* Chat */
+.ux-chat { display: grid; gap: .5rem; justify-items: start; }
+.ux-chat-h { font-weight: 700; font-size: .84rem; display: flex; align-items: center; gap: .35rem; }
+.ux-ia { padding: .1rem .35rem; border-radius: 5px; background: #e8f0fe; color: #1967d2; font-size: .68rem; font-weight: 700; }
+.ux-msg { padding: .5rem .7rem; border-radius: 10px 10px 10px 3px; background: #f1f3f4; font-size: .84rem; max-width: 95%; }
+
+@media (max-width: 720px) { .ux-par { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .is-mucho > * { animation: none; } }

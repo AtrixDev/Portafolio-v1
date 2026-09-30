@@ -1,0 +1,66 @@
+{
+ "id": "docx",
+ "fecha": "30/09/2026",
+ "prompt": "Armá en Word (propuesta.docx, en esta carpeta) una propuesta comercial de 2 páginas para \"Cocina Norte\", una marca de artículos de cocina que vende en Mercado Libre: gestión de su cuenta durante 3 meses (auditoría inicial, optimización de 40 publicaciones, Product Ads y un informe mensual). Sin precios: dejá el lugar marcado para completarlos. En español argentino.",
+ "entrada": [],
+ "sin": {
+  "skills": [],
+  "segundos": 75,
+  "pasos": 10,
+  "costo": 0.32,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Armé `propuesta.docx` en esta carpeta. Son 2 páginas A4, en español argentino y tratando de \"vos\" al cliente. Lo convertí a PDF y revisé cómo quedan las dos páginas.\n\n**Página 1**\n- **Encabezado:** título, quién la prepara, fecha y validez de 15 días.\n- **1. Contexto y objetivo.**\n- **2. Alcance del servicio:** auditoría inicial, optimización de 40 publicaciones, Product Ads e informe mensual con una reunión de 30 minutos para repasarlo.\n- **3. Plan de trabajo:** una tabla mes a mes. Las 40 publicaciones se reparten en 15 el primer mes, 15 el segundo y 10 el tercero.\n\n**Página 2**\n- **4. Qué necesitamos de Cocina Norte:** acceso a la cuenta, información de producto, presupuesto de Product Ads y una persona que apruebe los cambios.\n- **5. Inversión:** una tabla sin precios.\n- **6. Condiciones.**\n- **7. Próximos pasos:** con espacio para la firma de las dos partes.\n\n**Para completar:** todos los lugares pendientes están en negrita, resaltados en amarillo y entre corchetes:\n- Los importes de la auditoría, el honorario mensual, el total de los 3 meses y el presupuesto de Product Ads.\n- Si los precios incluyen IVA o no, y la forma de pago.\n- Tu nombre o agencia, la fecha, el email y el teléfono.\n\n**Para revisar antes de mandarla:**\n- Aclaré que la inversión en Product Ads se paga directamente a Mercado Libre y no está incluida en los honorarios.\n- En las condiciones puse que las ventas también dependen de factores externos, para no prometer resultados.\n- Cambiá o sacá cualquiera de estas decisiones, o el reparto de 15/15/10, si no coincide con lo que acordaste con el cliente.\n\nTambién quedó en la carpeta `generar.py`, el script que usé para crear el documento. Sirve para volver a generarlo si querés cambios, y si no, lo podés borrar.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "generar.py",
+    "ruta": "sin/generar.py",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "propuesta.docx",
+    "ruta": "sin/propuesta.docx",
+    "aux": false,
+    "tipo": "documento",
+    "paginas": [
+     "sin/propuesta-p-1.png",
+     "sin/propuesta-p-2.png"
+    ]
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "anthropic-skills:docx"
+  ],
+  "segundos": 70,
+  "pasos": 10,
+  "costo": 0.44,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "La propuesta está lista en `propuesta.docx`, en esta carpeta. La convertí a PDF para revisarla y ocupa exactamente 2 páginas A4.\n\n**Página 1**\n- **Contexto y objetivo:** el punto de partida de Cocina Norte en Mercado Libre y el objetivo de los 3 meses.\n- **Qué incluye el servicio:** la auditoría inicial, la optimización de 40 publicaciones, Product Ads y el informe mensual, con el detalle de cada uno.\n- **Cómo lo vamos a trabajar:** una tabla mes a mes. Las publicaciones se reparten en 15 el primer mes, 15 el segundo y 10 el tercero.\n- **Qué vas a recibir:** los entregables concretos.\n\n**Página 2**\n- **Inversión:** una tabla con la auditoría (pago único), la gestión mensual y el total de los 3 meses. También aclara que el gasto de Product Ads lo paga Cocina Norte directamente a Mercado Libre, aparte de los honorarios.\n- **Condiciones:** forma de pago, acceso a la cuenta como colaborador, qué queda a cargo del cliente y validez de la propuesta.\n- **Próximos pasos** y datos de contacto.\n\nTodos los lugares para completar dicen **[COMPLETAR]** y están resaltados en amarillo, así se encuentran rápido:\n- los precios y el presupuesto de publicidad sugerido;\n- si los precios incluyen IVA;\n- la fecha de la propuesta;\n- la forma de pago;\n- los días de validez;\n- los datos de contacto.\n\nEl texto usa voseo y un tono cercano pero profesional. También quedó en la carpeta `build.js`, el script que genera el documento, por si querés volver a generarlo con cambios. Si no lo necesitás, lo podés borrar.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "build.js",
+    "ruta": "con/build.js",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "propuesta.docx",
+    "ruta": "con/propuesta.docx",
+    "aux": false,
+    "tipo": "documento",
+    "paginas": [
+     "con/propuesta-p-1.png",
+     "con/propuesta-p-2.png"
+    ]
+   }
+  ]
+ }
+}

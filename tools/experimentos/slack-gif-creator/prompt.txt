@@ -1,0 +1,1 @@
+Hacé un GIF animado para mandar por Slack al equipo cuando lleguemos a 1.000 ventas en el mes, que diga "¡1.000 ventas!". Guardalo como mil-ventas.gif en esta carpeta.

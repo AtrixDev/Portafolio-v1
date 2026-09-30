@@ -1,0 +1,1 @@
+Armá un panel interactivo en un solo archivo panel.html (en esta carpeta) para seguir las ventas de una tienda en Mercado Libre: ventas y ACOS por mes (junio a noviembre de 2025: ventas 18,4 / 19,9 / 21,1 / 23,0 / 24,3 / 25,6 millones de pesos; ACOS 30 / 24 / 17 / 14 / 13 / 12 %), con filtro por mes y un resumen arriba. En español argentino.

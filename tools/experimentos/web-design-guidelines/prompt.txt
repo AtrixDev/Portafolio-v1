@@ -1,0 +1,1 @@
+Revisá la landing index.html de esta carpeta y decime qué problemas tiene (accesibilidad, rendimiento, experiencia de uso). Escribí la revisión en revision.md, ordenada por importancia, en español argentino. No modifiques el HTML.

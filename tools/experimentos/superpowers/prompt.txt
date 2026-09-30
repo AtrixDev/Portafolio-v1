@@ -1,0 +1,1 @@
+En precios.js de esta carpeta agregá una función que calcule el precio de venta mínimo para no perder plata en Mercado Libre, teniendo en cuenta costo, comisión, envío a cargo del vendedor, IIBB y el ACOS de la publicidad. Hacelo bien, porque lo vamos a usar para fijar precios reales.

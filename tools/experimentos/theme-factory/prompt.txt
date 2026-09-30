@@ -1,0 +1,1 @@
+Aplicale un tema visual profesional al informe.html de esta carpeta, que va para el dueño de una marca de artículos de cocina. Dejá el resultado en informe-con-tema.html, en esta carpeta.

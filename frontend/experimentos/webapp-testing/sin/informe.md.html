@@ -1,0 +1,180 @@
+<h1>Informe de prueba: Calculadora de ganancia por venta (<code>index.html</code>)</h1>
+<p><strong>Fecha:</strong> 30/09/2026
+<strong>Cómo la probé:</strong> abrí la página en Google Chrome (automatizado con Playwright), cargué distintos valores en los campos tipeándolos como un usuario, apreté "Calcular" y leí el resultado. También la miré en tamaño de celular (375 px de ancho). No toqué el código.</p>
+<h2>Veredicto corto</h2>
+<p><strong>La cuenta está bien, pero la app no está lista para usar tal como está.</strong> Con datos normales el resultado es correcto, pero lo muestra feo (margen con 15 decimales, sin separador de miles, centavos con error de redondeo) y no te avisa nada cuando cargás datos que no tienen sentido (campos vacíos, precio 0, números negativos): te tira un número igual, y en algunos casos sale "-Infinity%".</p>
+<p>No aparecieron errores en la consola del navegador.</p>
+<h2>Lo que funciona bien</h2>
+<ul>
+<li><strong>La cuenta es correcta.</strong> Con los valores que trae por defecto (precio $38.900, costo $21.000, comisión 14 %, envío $4.500):</li>
+<li>Comisión: 38.900 × 14 % = $5.446</li>
+<li>Ganancia: 38.900 − 21.000 − 5.446 − 4.500 = <strong>$7.954</strong> ✔️ (la app da $7954)</li>
+<li>Margen: 7.954 / 38.900 = <strong>20,45 %</strong> ✔️</li>
+<li>Con comisión decimal (13,5 %) también calcula bien.</li>
+<li>Cuando hay pérdida, la muestra como negativa (precio $10.000, costo $12.000 → "Te quedan $-7900 (-79% de margen)"), que es correcto.</li>
+<li>En celular se lee bien y no se rompe el diseño.</li>
+</ul>
+<h2>Problemas encontrados</h2>
+<p>Ordenados de más a menos grave.</p>
+<h3>1. Precio vacío o en 0 → "-Infinity% de margen" (grave)</h3>
+<p>Si borrás el precio o ponés 0 y apretás Calcular, sale:</p>
+<blockquote>
+<p>Te quedan $-25500 (-Infinity% de margen)</p>
+</blockquote>
+<p>No hay ningún aviso de que falta el precio; el usuario ve "Infinity", que no significa nada para él.</p>
+<h3>2. Los campos vacíos se toman como 0 sin avisar (grave)</h3>
+<p>Si borrás el costo (por ejemplo, sin querer) la app calcula igual como si el producto te hubiera salido gratis:</p>
+<blockquote>
+<p>Te quedan $28954 (74.4318766066838% de margen)</p>
+</blockquote>
+<p>Pasa lo mismo con la comisión y el envío. Es fácil sacar conclusiones equivocadas con un número que parece válido.</p>
+<h3>3. Acepta valores que no tienen sentido (medio)</h3>
+<ul>
+<li><strong>Costos o envío negativos:</strong> costo −5.000 y envío −100 → "Te quedan $38554 (99.11…% de margen)". No hay validación.</li>
+<li><strong>Comisión mayor a 100 %:</strong> comisión 150 % → la calcula sin chistar.</li>
+<li><strong>Notación científica:</strong> el campo acepta "1e3" y lo toma como 1.000. Un usuario difícilmente lo tipee, pero muestra que no hay controles.</li>
+</ul>
+<h3>4. El margen sale con un montón de decimales (medio, muy visible)</h3>
+<p>Con los valores por defecto muestra <strong>"20.447300771208226% de margen"</strong>. Debería redondear a 1 o 2 decimales (por ejemplo "20,4 %"). Es lo primero que ve cualquiera que la use.</p>
+<h3>5. Errores de redondeo con centavos (medio)</h3>
+<p>Precio $100,10, costo $50,20, sin comisión ni envío:</p>
+<blockquote>
+<p>Te quedan $49.89999999999999</p>
+</blockquote>
+<p>Debería decir $49,90. Tampoco redondea la ganancia cuando la comisión da con centavos (ej.: "$8234.135", con tres decimales).</p>
+<h3>6. Formato de números no argentino (menor)</h3>
+<ul>
+<li>No usa separador de miles: "$7954" en lugar de "$7.954".</li>
+<li>Usa punto como separador decimal ("20.44…") en lugar de coma.</li>
+<li>Los negativos se ven como "$-7900" en vez de "-$7.900".</li>
+<li>Si el usuario tipea una coma decimal ("38900,50"), el resultado depende de la configuración del navegador; en mi prueba Chrome lo interpretó como 38900.50, pero en otros navegadores/idiomas puede ignorarse o tomarse como inválido.</li>
+</ul>
+<h3>7. Detalles de uso (menor)</h3>
+<ul>
+<li><strong>Apretar Enter no calcula.</strong> Hay que hacer clic sí o sí en el botón (no hay un <code>&lt;form&gt;</code>).</li>
+<li><strong>El resultado no se actualiza solo</strong> al cambiar un valor; si cambiás algo y te olvidás de apretar Calcular, queda en pantalla el resultado viejo, que ya no corresponde a lo que ves en los campos.</li>
+<li><strong>Falta la etiqueta <code>&lt;meta name="viewport"&gt;</code></strong>: en un celular real la página probablemente se vea achicada (como versión de escritorio) y haya que hacer zoom. En mi captura se veía bien porque la simulación no aplica ese comportamiento.</li>
+<li>En pantalla chica, los campos quedan apenas más anchos que el contenedor (ancho 100 % + relleno) y se cortan un poquito por la derecha.</li>
+</ul>
+<h2>Tabla de casos probados</h2>
+<table>
+<thead>
+<tr>
+<th>Caso</th>
+<th>Precio</th>
+<th>Costo</th>
+<th>Comisión</th>
+<th>Envío</th>
+<th>Resultado de la app</th>
+<th>¿OK?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Valores por defecto</td>
+<td>38900</td>
+<td>21000</td>
+<td>14</td>
+<td>4500</td>
+<td>$7954 (20.447300771208226%)</td>
+<td>Cuenta ✔️, formato ❌</td>
+</tr>
+<tr>
+<td>Comisión decimal</td>
+<td>38999</td>
+<td>21000</td>
+<td>13.5</td>
+<td>4500</td>
+<td>$8234.135 (21.113708043795995%)</td>
+<td>Cuenta ✔️, formato ❌</td>
+</tr>
+<tr>
+<td>Precio vacío</td>
+<td>(vacío)</td>
+<td>21000</td>
+<td>14</td>
+<td>4500</td>
+<td>$-25500 (-Infinity%)</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Precio 0</td>
+<td>0</td>
+<td>21000</td>
+<td>14</td>
+<td>4500</td>
+<td>$-25500 (-Infinity%)</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Costo vacío</td>
+<td>38900</td>
+<td>(vacío)</td>
+<td>14</td>
+<td>4500</td>
+<td>$28954 (74.43…%)</td>
+<td>❌ sin aviso</td>
+</tr>
+<tr>
+<td>Venta a pérdida</td>
+<td>10000</td>
+<td>12000</td>
+<td>14</td>
+<td>4500</td>
+<td>$-7900 (-79%)</td>
+<td>✔️</td>
+</tr>
+<tr>
+<td>Negativos</td>
+<td>38900</td>
+<td>-5000</td>
+<td>14</td>
+<td>-100</td>
+<td>$38554 (99.11…%)</td>
+<td>❌ sin validación</td>
+</tr>
+<tr>
+<td>Comisión 150 %</td>
+<td>38900</td>
+<td>21000</td>
+<td>150</td>
+<td>4500</td>
+<td>$-44950 (-115.55…%)</td>
+<td>❌ sin validación</td>
+</tr>
+<tr>
+<td>Notación "1e3"</td>
+<td>1e3</td>
+<td>21000</td>
+<td>14</td>
+<td>4500</td>
+<td>$-24640 (-2464%)</td>
+<td>⚠️</td>
+</tr>
+<tr>
+<td>Centavos</td>
+<td>100.10</td>
+<td>50.20</td>
+<td>0</td>
+<td>0</td>
+<td>$49.89999999999999</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Enter en un campo</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>No pasa nada</td>
+<td>⚠️</td>
+</tr>
+</tbody>
+</table>
+<h2>Recomendaciones (sin aplicar)</h2>
+<ol>
+<li>Validar los campos: obligatorios, no negativos, precio mayor a 0, comisión entre 0 y 100; mostrar un mensaje claro si algo falla.</li>
+<li>Redondear y formatear con formato argentino (<code>toLocaleString('es-AR', …)</code>): "$7.954" y "20,4 %".</li>
+<li>Envolver los campos en un <code>&lt;form&gt;</code> para que Enter calcule, o recalcular automáticamente al cambiar cualquier valor.</li>
+<li>Agregar <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code> y <code>box-sizing: border-box</code> en los inputs.</li>
+</ol>

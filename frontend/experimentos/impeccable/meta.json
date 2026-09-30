@@ -1,0 +1,60 @@
+{
+ "id": "impeccable",
+ "fecha": "30/09/2026",
+ "prompt": "Hacé la landing page de Brasa, una parrilla de barrio en Villa Crespo (Buenos Aires), abierta desde 2014. Abre de martes a domingo de 20 a 00 h, en Thames 1234. Los platos y precios de hoy son: Vacío a las brasas $18.400, Ojo de bife de 400 g $21.900, Mollejas al limón $12.600, Provoleta con orégano $7.900 y Flan con dulce de leche $5.200. Las reservas son por WhatsApp. Tiene 4,8 estrellas en Google con 1.247 reseñas. Entregá un solo archivo index.html en esta carpeta, con el CSS adentro y sin imágenes externas, con los textos en español argentino.",
+ "entrada": [],
+ "sin": {
+  "skills": [],
+  "segundos": 107,
+  "pasos": 4,
+  "costo": 0.44,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Hice la landing en `index.html`, en esta carpeta. Es un solo archivo, con el CSS adentro y sin imágenes, fuentes ni librerías externas. No la abrí en un navegador, así que conviene que la mires antes de publicarla.\n\n**Antes de publicarla, falta el número de WhatsApp.** No me lo pasaste, así que puse uno de ejemplo (`5491100000000`) en la constante `WHATSAPP` del `<script>`, al final del archivo. Hasta que pongas el real, todos los botones de reserva llevan a un número que no existe. Con ese cambio se actualizan todos a la vez. Además, los botones ya abren WhatsApp con un mensaje escrito: \"¡Hola Brasa! Quiero reservar una mesa para ___ personas…\".\n\n**Qué tiene:**\n- **Portada:** \"Parrilla de barrio · Villa Crespo · Desde 2014\", un botón para reservar y una línea con las 4,8 estrellas y las 1.247 reseñas de Google, la dirección y el horario.\n- **Carta de hoy:** los 5 platos con sus precios, en formato de pizarra y con una aclaración de que los precios pueden cambiar.\n- **Nosotros:** tres textos cortos (el fuego, la carne, el barrio) y un recuadro con la puntuación de Google.\n- **Cómo llegar:** dirección con enlace a Google Maps, horario (\"Martes a domingo de 20 a 00 h\", con el lunes cerrado) y reservas, más un cierre con otro botón para reservar.\n- **Abierto o cerrado:** un indicador que usa la hora de Buenos Aires y dice \"Abierto ahora\", \"Hoy abrimos a las 20 h\" u \"Hoy cerrado\". Si no puede calcularlo, muestra el horario fijo.\n- **Diseño:** fondo oscuro con un resplandor de brasas hecho con CSS y la carta en color hueso. En el celular aparece un botón flotante de \"Reservar\". Se ve bien en pantallas chicas.\n\n**Textos que agregué yo:** las descripciones cortas de cada plato (por ejemplo, \"Casero, como corresponde\"), la etiqueta \"La de la casa\" en el vacío y las frases de la sección \"Nosotros\". No salen de datos que me hayas dado. Revisalas y cambiá lo que no sea cierto de Brasa.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "index.html",
+    "ruta": "sin/index.html",
+    "aux": false,
+    "tipo": "pagina"
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "impeccable"
+  ],
+  "segundos": 453,
+  "pasos": 30,
+  "costo": 2.11,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "La landing está en `index.html`, en esta carpeta: un solo archivo con el CSS adentro y sin imágenes externas. La revisé con capturas en escritorio (1440 px) y celular (390 px), en dos rondas.\n\n**La idea:** la página es el mantel de papel madera de la parrilla. Lo que imprime la casa va en rojo: el logo BRASA con textura de tinta, una guarda arriba y abajo con el texto \"Brasa · Parrilla de barrio · Thames 1234…\" y los botones con forma de sello de goma. Lo que anota el mozo va en birome azul: la carta de hoy, el 4,8 de Google encerrado en un círculo y un aro de copa de vino como mancha. No hay fotos: el trabajo lo hacen la tipografía y los trazos.\n\n**Qué tiene:**\n- **Portada:** el nombre, \"Parrilla de barrio en Villa Crespo, desde 2014\" y una línea escrita a mano que cambia según la hora de Buenos Aires (\"hoy abrimos a las 20\", \"hoy estamos abiertos hasta las 00\" o \"los lunes descansamos\"). Al lado van el botón \"Reservá por WhatsApp\", las 4,8 estrellas con sus 1.247 reseñas (enlazan a Google Maps) y la carta con los cinco platos y precios.\n- **Carta:** se pueden tildar platos y la suma aparece escrita abajo.\n- **Reserva:** se elige cuántas personas son, el día (solo de martes a domingo) y la hora. El mensaje de WhatsApp se arma solo e incluye los platos tildados.\n- **Dirección y horario:** Thames 1234 con enlace a Google Maps y la semana con el lunes tachado y el día de hoy marcado.\n- **Cierre y celular:** un cierre con botón de reserva y, en el celular, una barra fija \"Reservá por WhatsApp\" que se esconde cuando ya se ve otro botón de reserva.\n\n**Lo que tenés que completar o revisar:**\n1. **El número de WhatsApp no me lo pasaste.** Hay uno de relleno (`5491100000000`) en la constante `WHATSAPP` del script y en los enlaces directos que funcionan sin JavaScript (buscá `wa.me/5491100000000` y reemplazalo).\n2. **Horarios de reserva:** puse turnos de 20:00 a 23:00, cada media hora. Es una suposición mía; ajustá la lista `HORAS` si la cocina cierra antes.\n3. **Frases de relleno:** agregué algunas que no estaban en tu pedido: \"La carta cambia según lo que entra\", \"Te confirmamos por el mismo chat. Si no hay lugar a esa hora, te ofrecemos otra\" y \"El fuego se prende a las 20\". Si alguna no corresponde, cambiala.\n4. **Tipografías:** las únicas cosas que se cargan de afuera son las tipografías de Google Fonts (Archivo y Kalam), que no son imágenes. Si no cargan, la página usa letras del sistema.\n\n**Sobre el proceso de la skill impeccable:**\n- Esta sesión no era interactiva, así que no te pude hacer la entrevista inicial ni mostrarte direcciones de diseño para elegir. Todo sale de tu mensaje y el estilo lo definió el sorteo de la skill.\n- La revisión final la hice yo mismo en vez del revisor independiente de la skill, que no estaba disponible acá.\n- Quedan algunos avisos del detector automático que dejé a propósito porque son parte del estilo del mantel: las mayúsculas de la guarda, los renglones del mensaje y el filete doble entre secciones. Además, el detector marca contraste bajo en los títulos rojos grandes. Miden 3,3:1, que alcanza para texto grande pero no para texto chico.\n\nOtros archivos que quedaron en la carpeta:\n- `PRODUCT.md`: los datos del negocio, con lo que supuse marcado como tal.\n- `DESIGN.md` y `.impeccable/design.json`: el sistema visual (colores, tipografías, componentes).\n- `.impeccable/surfaces/index-html.md`: el brief de la página.\n- `.impeccable/review/`: las capturas.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "DESIGN.md",
+    "ruta": "con/DESIGN.md",
+    "aux": true,
+    "tipo": "texto",
+    "vista": "con/DESIGN.md.html"
+   },
+   {
+    "nombre": "PRODUCT.md",
+    "ruta": "con/PRODUCT.md",
+    "aux": true,
+    "tipo": "texto",
+    "vista": "con/PRODUCT.md.html"
+   },
+   {
+    "nombre": "index.html",
+    "ruta": "con/index.html",
+    "aux": false,
+    "tipo": "pagina"
+   }
+  ]
+ }
+}

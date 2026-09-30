@@ -1,0 +1,1 @@
+Auditá mis campañas de Meta Ads del último mes (meta-campanias.csv, en esta carpeta; valores en pesos) para mi tienda de artículos de cocina. Decime qué está mal y qué hago primero. Escribí la auditoría en auditoria.md, en esta carpeta, en español argentino.
