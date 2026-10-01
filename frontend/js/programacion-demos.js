@@ -394,29 +394,87 @@ export function BotonCarrito({ onAgregar }) {
       ['', 'Una aclaración sobre lo que se probó', 'De todo lo que trae Trail of Bits, en esta corrida se cargó una sola skill (sharp-edges). Y ninguna ejecutó el código: fue lectura. Un informe así no reemplaza una auditoría.'],
     ] },
   };
+
+  // ── Veredicto de cada experimento: qué tanto cambió con la skill (0 casi empate · 1 algo · 2 mucho) ──
+  // Salen de las notas y de los archivos de cada corrida; si una skill no tiene experimento figura como "Sin probar".
+  const VEREDICTO = {
+    impeccable: [2, 'De plantilla a una página con identidad propia y una reserva que arma el mensaje de WhatsApp. A cambio, tardó 4 veces más y costó 5.'],
+    'frontend-design': [2, 'Dejó de ser plantilla: tipografía de cartel, franja de brasas y la carta en una pizarra. Cuesta menos que Impeccable, pero no suma la reserva interactiva.'],
+    copywriting: [2, 'El título entra en los 60 caracteres de Mercado Libre (79 sin la skill) y la descripción sale lista para publicar, sin Markdown.'],
+    'marketing-psychology': [1, 'Sin la skill ya destacaba el pack del medio. La skill suma el costo por día, el precio tachado y botones con texto propio.'],
+    xlsx: [1, 'Las dos planillas sirven. La skill separa el resumen del dueño de los datos y revisa que las 57 fórmulas no tengan errores.'],
+    'react-best-practices': [0, 'Las dos encontraron los mismos errores. La skill nombra la regla detrás de cada cambio; en una revisión puntual, el modelo solo ya alcanza.'],
+    pptx: [0, 'Dos presentaciones profesionales. La skill usa títulos que concluyen y más íconos; la otra hasta suma un dato.'],
+    'ad-creative': [1, 'Cuenta los caracteres contra los límites de Meta y piensa cada anuncio por ubicación (feed, reels, carrusel).'],
+    'skill-creator': [1, 'La skill nueva trae evaluaciones para medir si responde bien. El contenido es parecido; cambia que se puede probar.'],
+    'web-design-guidelines': [0, 'Las dos encontraron lo grave. La skill suma un hallazgo (el encabezado fijo tapa el foco del teclado) y cita la pauta de cada problema.'],
+    docx: [0, 'Dos propuestas completas. La sin skill hasta suma un bloque de firma; la otra, encabezado y pie con número de página.'],
+    pdf: [0, 'Para pasar un informe corto a PDF, las dos salieron prolijas. La skill rinde en formularios, uniones y escaneos.'],
+    'webapp-testing': [1, 'Encontró un bug que la otra no vio: si escribís 38.900 (punto de miles), la app lo toma como 38,9 pesos.'],
+    'mcp-builder': [1, 'Las dos funcionan. La skill lo deja listo para mantener: validación, código separado y guía de errores. La otra es más simple.'],
+    'claude-api': [1, 'Usa funciones nuevas de la API, pero eligió el modelo más caro para algo que resuelve el más barato.'],
+    'web-artifacts-builder': [0, 'Mismo panel y mismo contenido: 17 KB sin la skill, 256 KB con ella. Para algo simple no hace falta.'],
+    'ui-ux-pro-max': [1, 'Eligió estilo y paleta con criterio de salud y cuidó el contraste. La landing ya salía prolija sin la skill.'],
+    'canvas-design': [1, 'Una pieza más de autor, pero la versión directa se lee más rápido. La skill sube la ambición, no necesariamente las ventas.'],
+    'algorithmic-art': [1, 'Una obra con panel de controles y semilla repetible, pero necesita internet. La otra tardó más y funciona sola.'],
+    'theme-factory': [0, 'Los dos informes quedan prolijos. La skill aporta un tema con nombre que se puede repetir en otros documentos.'],
+    'brand-guidelines': [1, 'Más fiel a la marca y más completo, pero con precios y condiciones escritos sin verificar.'],
+    'internal-comms': [1, 'Otro formato (Progreso, Planes, Problemas), más corto y estándar. Lo urgente queda al final.'],
+    'doc-coauthoring': [1, 'No inventa nada: arma el esqueleto y te hace preguntas. Es más lento a propósito.'],
+    'slack-gif-creator': [1, 'Formato y validación de Slack, a más del doble de peso. La otra salió más liviana.'],
+    superpowers: [1, 'Frena para que apruebes el diseño antes de escribir código. Sirve para cálculos de plata; en tareas chicas estorba.'],
+    trailofbits: [0, 'Las dos encontraron los mismos problemas graves. La skill solo clasifica con más severidad.'],
+  };
+  const VER_ROT = ['Casi empate', 'Cambia algo', 'Cambia mucho'], VER_KEY = ['empate', 'algo', 'mucho'];
+  function veredicto(cat, id) {
+    if (cat !== 'skills') return null;
+    const v = VEREDICTO[id];
+    return v ? { n: v[0], key: VER_KEY[v[0]], label: VER_ROT[v[0]], texto: v[1] } : { n: -1, key: 'sin', label: 'Sin probar', texto: '' };
+  }
+
   function experimento(id) {
     const x = EXPERIMENTOS[id];
-    return bloque('Antes y después', `<div class="dm dm--exp" data-dm="exp" data-exp="${escH(x.exp)}" data-con="${escH(x.con)}"><div class="dm-exp-load" aria-busy="true"><span></span><span></span><span></span></div></div>` +
-      (x.notas ? notas('Qué cambió', x.notas) : ''), x.pie || '');
+    return bloque('Mismo prompt, con y sin la skill', `<div class="dm dm--exp" data-dm="exp" data-key="${escH(id)}" data-exp="${escH(x.exp)}" data-con="${escH(x.con)}"><div class="dm-exp-load" aria-busy="true"><span></span><span></span><span></span></div></div>`, x.pie || '');
   }
   const seg2 = s => s >= 60 ? `${Math.floor(s / 60)} min ${s % 60} s` : `${s} s`;
   const usd = n => 'USD ' + (n ?? 0).toFixed(2).replace('.', ',');
+  const ICO_OPEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 4h6v6M20 4l-8 8M10 5H5v14h14v-5"/></svg>';
+  // Las dos páginas, una al lado de la otra (o una sobre otra si se quiere leer en grande)
+  function parLado(o) {
+    const w = o.w || 1280, h = o.h || 900;
+    return `<div class="xp-pair-wrap" data-dm="pair" data-w="${w}">
+      <div class="xp-pair-bar"><div class="dm-seg" role="group" aria-label="Disposición de las dos versiones">
+        <button type="button" data-xp-mode="side" aria-pressed="true">Lado a lado</button><button type="button" data-xp-mode="stack" aria-pressed="false">Una sobre otra</button></div></div>
+      <div class="xp-pair">${[o.sin, o.con].map((v, i) => `<figure class="xp-side" data-tone="${i ? 'good' : 'bad'}">
+        <figcaption><b>${escH(v.label)}</b><button type="button" class="dm-open" data-xp-open="${escH(v.src)}">Abrir en grande ${ICO_OPEN}</button></figcaption>
+        <div class="dm-frame dm-frame--visor" style="aspect-ratio:${w} / ${h}"><iframe class="is-on" title="${escH(v.label)}" src="${escH(v.src)}" loading="lazy" width="${w}" height="${h}" style="width:${w}px;height:${h}px"></iframe></div></figure>`).join('')}</div>
+      <p class="dm-vis-tip">Son las páginas reales: podés scrollear y tocar adentro de cada marco.</p>
+    </div>`;
+  }
+  const dif = (a, b, f) => `<span class="xp-a">${f(a)}</span><span class="xp-arrow" aria-label="contra"> → </span><b>${f(b)}</b>`;
   async function montarExp(el) {
-    const id = el.dataset.exp, con = el.dataset.con, base = `experimentos/${id}/`;
+    const id = el.dataset.exp, con = el.dataset.con, key = el.dataset.key, x = EXPERIMENTOS[key], base = `experimentos/${id}/`;
     let m;
     try { m = await (await fetch(base + 'meta.json')).json(); } catch (e) { el.innerHTML = '<p class="ex-note">No se pudo cargar el experimento.</p>'; return; }
-    const lados = [['sin', 'Sin la skill'], ['con', con]];
+    const v = veredicto('skills', id) || { n: -1, key: 'sin', label: 'Sin probar', texto: '' };
     const principal = l => m[l].archivos.filter(a => !a.aux);
     const tipo = ['con', 'sin'].some(l => principal(l).some(a => a.tipo === 'pagina')) ? 'pagina' : (principal('con')[0] || principal('sin')[0] || {}).tipo;
-    const fichaHtml = ficha({ modelo: 'Claude ' + (m.con.modelos?.[0] || m.sin.modelos?.[0] || '').replace('claude-', '').replace(/-(\d)-(\d)/, ' $1.$2').replace(/^./, c => c.toUpperCase()) + ' (Claude Code)', fecha: m.fecha, con,
-      prompt: m.prompt + (m.entrada.length ? ` (Archivos de partida: ${m.entrada.join(', ')})` : '') + ` (Con la skill se agregó: "Usá la skill…")`,
-      filas: [['Tiempo', seg2(m.sin.segundos), seg2(m.con.segundos)], ['Pasos', String(m.sin.pasos ?? '—'), String(m.con.pasos ?? '—')], ['Costo de la corrida', usd(m.sin.costo), usd(m.con.costo)],
-        ...(m.con.skills ? [['Skills que cargó', m.sin.skills?.length ? m.sin.skills.join(', ') : 'Ninguna', m.con.skills.join(', ') || 'Ninguna']] : [])],
-      como: 'Cada versión se generó en una carpeta vacía con el mismo prompt. La de "sin la skill" corrió con todas las skills desactivadas. Las salidas se muestran tal cual: sin retoques. Es una sola corrida por lado: otra corrida podría dar algo distinto, y las skills que piden conversar (preguntarte antes de seguir) quedan en desventaja porque acá no había nadie que respondiera.' });
+    const skill = ((m.con.skills || [])[0] || id).replace(/^[^:]*:/, '');
+
+    // 1) Veredicto: lo primero que se lee
+    const veredictoHtml = `<section class="xp-verdict" data-k="${v.key}" aria-label="Veredicto del experimento">
+      <h4 class="xp-v-h">${escH(v.label)}</h4>
+      <p class="xp-v-p">${escH(v.texto)}</p>
+      <ol class="xp-scale" aria-label="Cuánto cambió con la skill">${VER_ROT.map((t, k) => `<li${k === v.n ? ' aria-current="true"' : ''}>${t}</li>`).join('')}</ol>
+      <dl class="xp-nums"><div><dt>Tiempo</dt><dd>${dif(m.sin.segundos, m.con.segundos, seg2)}</dd></div><div><dt>Costo</dt><dd>${dif(m.sin.costo, m.con.costo, usd)}</dd></div><div><dt>Pasos</dt><dd>${dif(m.sin.pasos ?? '—', m.con.pasos ?? '—', String)}</dd></div></dl>
+      <p class="xp-v-n">Sin la skill → con la skill. Una sola corrida por lado.</p>
+    </section>`;
+
+    // 2) Las dos salidas
     let cuerpo = '';
     if (tipo === 'pagina') {
       const src = l => base + principal(l).find(a => a.tipo === 'pagina')?.ruta;
-      cuerpo = visor({ w: 1280, h: 800, antes: { label: 'Sin la skill', src: src('sin') }, despues: { label: con, src: src('con') } });
+      cuerpo = parLado({ sin: { label: 'Sin la skill', src: src('sin') }, con: { label: con, src: src('con') } });
     } else {
       const col = async l => {
         const as = principal(l);
@@ -434,10 +492,44 @@ export function BotonCarrito({ onAgregar }) {
       const [a, b] = await Promise.all([col('sin'), col('con')]);
       cuerpo = `<div class="dm-cols">${[[a, 'Sin la skill', 'bad'], [b, con, 'good']].map(([h, t, tone]) => `<section class="dm-col" data-tone="${tone}"><h4>${escH(t)}</h4><div class="dm-col-in">${h}</div></section>`).join('')}</div>`;
     }
-    const dijo = lados.map(([l, t]) => m[l].resumen ? `<details class="dm-dijo"><summary>Lo que dijo Claude al entregar (${escH(t.toLowerCase())})</summary><div>${escH(m[l].resumen).replace(/\n/g, '<br>')}</div></details>` : '').join('');
-    const partida = m.entrada.length ? `<p class="dm-exp-partida">Archivos de partida (iguales para las dos): ${m.entrada.map(f => `<a href="${base}entrada/${escH(f)}" target="_blank" rel="noopener">${escH(f)}</a>`).join(', ')}</p>` : '';
-    el.innerHTML = fichaHtml + partida + cuerpo + dijo;
+
+    // 3) Qué cambió, con detalle
+    const cambios = x.notas ? `<h5 class="xp-h">Qué cambió</h5>${notas('Qué cambió', x.notas)}` : '';
+
+    // 4) Para repetirlo
+    const hayInstall = !!el.closest('#wl-d-body')?.querySelector('.sk-install');
+    const partida = m.entrada.length ? ` Archivos de partida, para que sea el mismo punto de arranque: ${m.entrada.map(f => `<a href="${base}entrada/${escH(f)}" target="_blank" rel="noopener">${escH(f)}</a>`).join(', ')}.` : '';
+    const repetir = `<h5 class="xp-h">Para repetirlo</h5><ol class="xp-steps">
+      <li><b>Instalá la skill.</b> ${hayInstall ? '<button type="button" class="xp-link" data-xp-install>Ver el comando de instalación</button>' : 'Seguí las instrucciones de su fuente (más abajo en esta ficha).'}</li>
+      <li><b>Corré este prompt, sin la skill, en una carpeta vacía.</b>${partida}
+        <div class="sk-prompt"><p>${escH(m.prompt)}</p><button type="button" class="sk-copy" data-copy="${escH(m.prompt)}">${typeof icon === 'function' ? icon('copy') : ''}<span>Copiar</span></button></div></li>
+      <li><b>Repetilo con la skill.</b> Mismo prompt, agregando <q>Usá la skill ${escH(skill)}</q>. Compará con lo que ves arriba.</li></ol>`;
+
+    // 5) Cómo se hizo + lo que dijo Claude (desplegables)
+    const fichaHtml = ficha({ modelo: 'Claude ' + (m.con.modelos?.[0] || m.sin.modelos?.[0] || '').replace('claude-', '').replace(/-(\d)-(\d)/, ' $1.$2').replace(/^./, c => c.toUpperCase()) + ' (Claude Code)', fecha: m.fecha, con,
+      prompt: m.prompt + (m.entrada.length ? ` (Archivos de partida: ${m.entrada.join(', ')})` : '') + ` (Con la skill se agregó: "Usá la skill…")`,
+      filas: [['Tiempo', seg2(m.sin.segundos), seg2(m.con.segundos)], ['Pasos', String(m.sin.pasos ?? '—'), String(m.con.pasos ?? '—')], ['Costo de la corrida', usd(m.sin.costo), usd(m.con.costo)],
+        ...(m.con.skills ? [['Skills que cargó', m.sin.skills?.length ? m.sin.skills.join(', ') : 'Ninguna', m.con.skills.join(', ') || 'Ninguna']] : [])],
+      como: 'Cada versión se generó en una carpeta vacía con el mismo prompt. La de "sin la skill" corrió con todas las skills desactivadas. Las salidas se muestran tal cual: sin retoques. Es una sola corrida por lado: otra corrida podría dar algo distinto, y las skills que piden conversar (preguntarte antes de seguir) quedan en desventaja porque acá no había nadie que respondiera.' });
+    const dijo = [['sin', 'Sin la skill'], ['con', con]].map(([l, t]) => m[l].resumen ? `<details class="dm-dijo"><summary>Lo que dijo Claude al entregar (${escH(t.toLowerCase())})</summary><div>${escH(m[l].resumen).replace(/\n/g, '<br>')}</div></details>` : '').join('');
+
+    el.innerHTML = veredictoHtml + cuerpo + cambios + repetir + fichaHtml + dijo;
     mount(el);
+    el.querySelector('[data-xp-install]')?.addEventListener('click', () => {
+      const t = el.closest('#wl-d-body')?.querySelector('.sk-install'); if (!t) return;
+      t.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+      t.classList.remove('xp-flash'); void t.offsetWidth; t.classList.add('xp-flash');
+    });
+  }
+
+  function montarPar(el) {
+    const ancho = +el.dataset.w || 1280, pair = el.querySelector('.xp-pair');
+    el.querySelectorAll('.dm-frame').forEach(fr => { const fit = () => fr.style.setProperty('--s', fr.clientWidth / ancho); fit(); new ResizeObserver(fit).observe(fr); });
+    el.querySelectorAll('[data-xp-mode]').forEach(b => b.addEventListener('click', () => {
+      pair.classList.toggle('is-stack', b.dataset.xpMode === 'stack');
+      el.querySelectorAll('[data-xp-mode]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    }));
+    el.querySelectorAll('[data-xp-open]').forEach(b => b.addEventListener('click', () => window.open(b.dataset.xpOpen, '_blank', 'noopener')));
   }
 
   function stackDemo(nombre, codigo, nota) {
@@ -472,6 +564,7 @@ export function BotonCarrito({ onAgregar }) {
     root.querySelectorAll('[data-dm="slider"]').forEach(montarSlider);
     root.querySelectorAll('[data-dm="tabs"]').forEach(montarTabs);
     root.querySelectorAll('[data-dm="visor"]').forEach(montarVisor);
+    root.querySelectorAll('[data-dm="pair"]').forEach(montarPar);
     root.querySelectorAll('[data-ux]').forEach(el => { if (!el.dataset.ok && MONTADORES[el.dataset.ux]) { el.dataset.ok = 1; MONTADORES[el.dataset.ux](el); } });
     root.querySelectorAll('[data-dm="exp"]').forEach(el => { if (!el.dataset.ok) { el.dataset.ok = 1; montarExp(el); } });
     root.querySelectorAll('[data-dm="xl"]').forEach(montarXl);
@@ -590,5 +683,5 @@ export function BotonCarrito({ onAgregar }) {
   const MONTADORES = {};
   function agregar(demos, montadores = {}) { Object.assign(DEMOS, demos); Object.assign(MONTADORES, montadores); }
   const util = { bloque, notas, escH };
-  return { render, mount, tipoDemo, agregar, util };
+  return { render, mount, tipoDemo, agregar, util, veredicto, VER_ROT, VER_KEY };
 })();

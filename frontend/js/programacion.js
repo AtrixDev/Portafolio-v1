@@ -26,28 +26,45 @@ const VALOR = {
     svg: '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="4.6" fill="none" stroke="currentColor" stroke-width="1.9"/></svg>' },
 };
 const NIVEL = { 1: ['Inicial', 'Se aplica en minutos, sin experiencia previa.'], 2: ['Intermedio', 'Necesita práctica o combinar varias piezas.'], 3: ['Avanzado', 'Requiere experiencia técnica o mucho criterio.'] };
+// Qué se muestra como "valor" en cada categoría:
+//  skills → el veredicto de su experimento (cuánto cambió con la skill); Servicios, Stacks, Arquitecturas y Tipos de web → nada (no hay criterio medible);
+//  el resto → la clasificación de siempre.
+const SIN_VALOR = ['servicios', 'stacks', 'arquitecturas', 'soluciones'];
+const modoValor = cat => cat === 'skills' ? 'veredicto' : SIN_VALOR.includes(cat) ? 'ninguno' : 'valor';
+const ver = e => window.WLDemos?.veredicto('skills', e.id);
+const VER_D = { mucho: 'Con la skill el resultado es claramente otro.', algo: 'Cambia el enfoque o suma cosas, pero no es un salto.', empate: 'Sale casi igual sin la skill.', sin: 'Todavía no hice el experimento: no sé cuánto cambia.' };
+const verBadge = v => v ? `<span class="wl-ver" data-k="${v.key}" title="${esc(VER_D[v.key])}">${v.label}</span>` : '';
 const ORDENES = { valor: 'Primero lo imprescindible', facil: 'De fácil a difícil', dificil: 'De difícil a fácil', original: 'Orden original' };
 const valorBadge = v => VALOR[v] ? `<span class="wl-val" data-v="${v}" title="${esc(VALOR[v].d)}">${VALOR[v].svg}${VALOR[v].n}</span>` : '';
 const nivelMeter = n => NIVEL[n] ? `<span class="wl-lvl" data-n="${n}" title="Dificultad: ${NIVEL[n][0]}. ${esc(NIVEL[n][1])}"><span class="wl-lvl-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="wl-lvl-t">${NIVEL[n][0]}</span></span>` : '';
 function ordenar(items) {
-  const vo = e => VALOR[e.valor]?.o ?? 3, no = e => e.nivel || 9;
+  const vo = e => state.cat === 'skills' && !state.query ? (({ mucho: 0, algo: 1, empate: 2, sin: 3 })[ver(e)?.key] ?? 3) : (VALOR[e.valor]?.o ?? 3), no = e => e.nivel || 9;
   const by = {
     valor: (a, b) => vo(a) - vo(b) || no(a) - no(b),
     facil: (a, b) => no(a) - no(b) || vo(a) - vo(b),
     dificil: (a, b) => no(b) - no(a) || vo(a) - vo(b),
   }[state.orden];
+  if (state.orden === 'valor' && !state.query && modoValor(state.cat) === 'ninguno') return items;   // sin criterio de valor: orden original
   return by ? [...items].sort(by) : items;
 }
 function renderTools(base) {
   const cuenta = (k, v) => base.filter(e => e[k] === v).length;
   const seg = (grupo, label, opts, actual) => `<div class="wl-seg" role="group" aria-label="${label}">${opts.map(([v, t, extra]) =>
     `<button type="button" data-${grupo}="${v}" aria-pressed="${String(actual) === String(v)}">${extra || ''}<span>${t}</span></button>`).join('')}</div>`;
+  const modo = state.query ? 'ninguno' : modoValor(state.cat);
+  const cuentaVer = k => base.filter(e => ver(e)?.key === k).length;
+  const segValor = modo === 'valor'
+    ? seg('valor', 'Filtrar por valor', [['', `Todo <small>${base.length}</small>`], ...Object.entries(VALOR).map(([k, x]) => [k, `${x.n} <small>${cuenta('valor', k)}</small>`, `<span class="wl-val-ic" data-v="${k}">${x.svg}</span>`])], state.valor)
+    : modo === 'veredicto'
+      ? seg('valor', 'Filtrar por lo que cambia con la skill', [['', `Todas <small>${base.length}</small>`], ['mucho', `Cambia mucho <small>${cuentaVer('mucho')}</small>`], ['algo', `Cambia algo <small>${cuentaVer('algo')}</small>`], ['empate', `Casi empate <small>${cuentaVer('empate')}</small>`], ['sin', `Sin probar <small>${cuentaVer('sin')}</small>`]], state.valor)
+      : '';
   $('wl-tools').innerHTML = `
-    ${seg('valor', 'Filtrar por valor', [['', `Todo <small>${base.length}</small>`], ...Object.entries(VALOR).map(([k, x]) => [k, `${x.n} <small>${cuenta('valor', k)}</small>`, `<span class="wl-val-ic" data-v="${k}">${x.svg}</span>`])], state.valor)}
+    ${segValor}
     ${seg('nivel', 'Filtrar por dificultad', [[0, 'Toda'], ...Object.entries(NIVEL).map(([k, [t]]) => [k, `${t} <small>${cuenta('nivel', +k)}</small>`, `<span class="wl-lvl" data-n="${k}"><span class="wl-lvl-bars" aria-hidden="true"><i></i><i></i><i></i></span></span>`])], state.nivel)}
-    <label class="wl-sort"><span>Ordenar</span><select id="wl-orden">${Object.entries(ORDENES).map(([k, t]) => `<option value="${k}"${k === state.orden ? ' selected' : ''}>${t}</option>`).join('')}</select></label>
-    <details class="wl-legend"><summary>¿Qué significa cada nivel?</summary>
-      <dl>${Object.entries(VALOR).map(([k, x]) => `<div><dt><span class="wl-val" data-v="${k}">${x.svg}${x.n}</span></dt><dd>${x.d}</dd></div>`).join('')}
+    <label class="wl-sort"><span>Ordenar</span><select id="wl-orden">${Object.entries(ORDENES).map(([k, t]) => [k, k === 'valor' ? (modo === 'veredicto' ? 'Primero lo que más cambia' : modo === 'ninguno' ? 'Orden original' : t) : t]).filter(([k, t], i, arr) => !(k === 'original' && modo === 'ninguno')).map(([k, t]) => `<option value="${k}"${k === state.orden ? ' selected' : ''}>${t}</option>`).join('')}</select></label>
+    <details class="wl-legend"><summary>${modo === 'veredicto' ? '¿Qué significa cada veredicto?' : '¿Qué significa cada nivel?'}</summary>
+      <dl>${modo === 'valor' ? Object.entries(VALOR).map(([k, x]) => `<div><dt><span class="wl-val" data-v="${k}">${x.svg}${x.n}</span></dt><dd>${x.d}</dd></div>`).join('')
+        : modo === 'veredicto' ? Object.entries(VER_D).map(([k, d]) => `<div><dt>${verBadge({ key: k, label: ({ mucho: 'Cambia mucho', algo: 'Cambia algo', empate: 'Casi empate', sin: 'Sin probar' })[k] })}</dt><dd>${d}</dd></div>`).join('') : ''}
       ${Object.entries(NIVEL).map(([k, [t, d]]) => `<div><dt>${nivelMeter(+k)}</dt><dd>${d}</dd></div>`).join('')}</dl>
     </details>`;
 }
@@ -105,9 +122,9 @@ function markSidebar() {
 function card(e, showCat) {
   const c = state.catById[e.cat];
   const sw = e.swatches?.length ? e.swatches : (e.palette || []).map(p => p[1]);
-  return `<button type="button" class="wl-card" data-v="${esc(e.valor || '')}" data-open="${e.cat}/${esc(e.id)}">
+  return `<button type="button" class="wl-card" data-v="${modoValor(e.cat) === 'valor' ? esc(e.valor || '') : ''}" data-open="${e.cat}/${esc(e.id)}">
     ${recipe.has(e.cat, e.id) ? `<span class="wl-card-in" title="En tu receta">${icon('bookmark')}</span>` : ''}
-    <span class="wl-card-top">${valorBadge(e.valor)}${nivelMeter(e.nivel)}</span>
+    <span class="wl-card-top">${modoValor(e.cat) === 'veredicto' ? verBadge(ver(e)) : modoValor(e.cat) === 'valor' ? valorBadge(e.valor) : ''}${nivelMeter(e.nivel)}</span>
     ${(t => t ? `<span class="wl-card-demo" data-t="${t}">${t === 'exp' ? 'Experimento real' : 'Demo'}</span>` : '')(window.WLDemos?.tipoDemo(e.cat, e.id))}
     ${showCat ? `<span class="wl-card-cat">${esc(c?.name)}</span>` : ''}
     <h3>${esc(e.name)}</h3>
@@ -124,7 +141,7 @@ function emptyState(title, text) {
 // ── Listado ──
 function aplicarNiveles(items, busqueda) {
   let out = items;
-  if (state.valor) out = out.filter(e => e.valor === state.valor);
+  if (state.valor) out = out.filter(e => (modoValor(e.cat || state.cat) === 'veredicto' ? ver(e)?.key : e.valor) === state.valor);
   if (state.nivel) out = out.filter(e => e.nivel === state.nivel);
   // En la búsqueda manda la relevancia, salvo que se elija otro orden a mano
   return busqueda && state.orden === 'valor' ? out : ordenar(out);
@@ -212,6 +229,12 @@ function loadFont(url) {
   document.head.appendChild(l);
 }
 
+function nivelFicha(e, cat) {
+  const modo = modoValor(cat), n = NIVEL[e.nivel]?.[1] || '';
+  if (modo === 'veredicto') { const v = ver(e); return `<p class="wl-d-nivel">${verBadge(v)}${nivelMeter(e.nivel)}<span>${esc(VER_D[v.key])} ${esc(n)}</span></p>`; }
+  if (modo === 'ninguno') return e.nivel ? `<p class="wl-d-nivel">${nivelMeter(e.nivel)}<span>${esc(n)}</span></p>` : '';
+  return VALOR[e.valor] ? `<p class="wl-d-nivel">${valorBadge(e.valor)}${nivelMeter(e.nivel)}<span>${esc(VALOR[e.valor].d)} ${esc(n)}</span></p>` : '';
+}
 async function renderEntry(cat, id) {
   const e = await findEntry(cat, id);
   const panel = $('wl-drawer');
@@ -233,7 +256,8 @@ async function renderEntry(cat, id) {
       <p class="fp-b" style="font-family:'${esc(e.fonts.body)}', sans-serif">Títulos con las keywords correctas, 7 fotos que cuentan una historia y una descripción que responde las preguntas antes de que las hagan.</p>
       <p class="fp-meta">${esc(e.fonts.heading)} + ${esc(e.fonts.body)}</p></div></div>`;
   }
-  if (e.code && (e.code.good || e.code.bad)) {
+  // Si la regla tiene demo para probar, el ejemplo Bien/Mal en texto solo repetiría lo mismo
+  if (e.code && (e.code.good || e.code.bad) && !(cat === 'ux' && window.WLDemos?.tipoDemo(cat, e.id))) {
     visual += `<div class="wl-d-block"><h3>Ejemplo</h3><div class="wl-code">
       ${e.code.good ? `<div><small>Bien</small><pre class="good${(e.code.tx || '').includes('g') ? ' tx' : ''}">${esc(e.code.good)}</pre></div>` : ''}
       ${e.code.bad ? `<div><small>Mal</small><pre class="bad${(e.code.tx || '').includes('b') ? ' tx' : ''}">${esc(e.code.bad)}</pre></div>` : ''}</div></div>`;
@@ -264,7 +288,7 @@ async function renderEntry(cat, id) {
   $('wl-d-body').innerHTML = `
     <h2 class="wl-d-title" id="wl-d-title">${esc(e.name)}</h2>
     ${e.summary ? `<p class="wl-d-summary">${esc(e.summary)}</p>` : ''}
-    ${VALOR[e.valor] ? `<p class="wl-d-nivel">${valorBadge(e.valor)}${nivelMeter(e.nivel)}<span>${esc(VALOR[e.valor].d)} ${esc(NIVEL[e.nivel]?.[1] || '')}</span></p>` : ''}
+    ${nivelFicha(e, cat)}
     <div class="wl-d-actions">
       <button type="button" class="btn-primary wl-d-add" data-toggle="${cat}/${esc(id)}" aria-pressed="${inRecipe}">${icon('bookmark')}<span>${inRecipe ? 'En tu receta' : 'Agregar a mi receta'}</span></button>
     </div>

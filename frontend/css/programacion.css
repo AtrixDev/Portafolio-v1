@@ -85,6 +85,10 @@
 .wl-val[data-v="base"] { color:var(--text-2); background:var(--surface-2); box-shadow:inset 0 0 0 1px var(--line); }
 .wl-val[data-v="imprescindible"] { color:var(--accent-text); background:var(--accent-soft); box-shadow:inset 0 0 0 1px var(--accent-line); }
 .wl-val[data-v="pro"] { color:var(--accent-ink); background:var(--accent); box-shadow:0 1px 0 rgba(255,255,255,.3) inset; }
+.wl-ver { display:inline-flex; align-items:center; padding:.24rem .5rem; border-radius:7px; font:600 .72rem/1 var(--font-sans); letter-spacing:.01em; white-space:nowrap; color:var(--text-2); background:var(--surface-2); box-shadow:inset 0 0 0 1px var(--line); }
+.wl-ver[data-k="mucho"] { color:var(--accent-ink); background:var(--accent); box-shadow:none; }
+.wl-ver[data-k="algo"] { color:var(--accent-text); background:var(--accent-soft); box-shadow:inset 0 0 0 1px var(--accent-line); }
+.wl-ver[data-k="sin"] { color:var(--muted); background:none; box-shadow:inset 0 0 0 1px var(--line-strong); font-weight:500; }
 .wl-val-ic { display:inline-grid; place-items:center; }
 .wl-val-ic[data-v="base"] { color:var(--text-2); } .wl-val-ic[data-v="imprescindible"], .wl-val-ic[data-v="pro"] { color:var(--accent-text); }
 
