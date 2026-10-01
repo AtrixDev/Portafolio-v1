@@ -1,0 +1,161 @@
+<h1>mcp-ml — Mercado Libre Argentina para Claude</h1>
+<p>Servidor <a href="https://modelcontextprotocol.io">MCP</a> en Node que le da a Claude dos herramientas para consultar el catálogo de Mercado Libre Argentina:</p>
+<table>
+<thead>
+<tr>
+<th>Herramienta</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ml_obtener_producto</code></td>
+<td>Trae los datos de un producto de catálogo a partir de su ID (<code>MLA14086325</code>) o de su URL (<code>https://www.mercadolibre.com.ar/.../p/MLA14086325</code>): nombre, estado, atributos, características, fotos y la publicación que gana la <em>buy box</em>.</td>
+</tr>
+<tr>
+<td><code>ml_listar_publicaciones</code></td>
+<td>Lista las publicaciones que compiten en ese catálogo, con precio, vendedor, condición, envío y link. Suma un resumen con precio mínimo, máximo y promedio. Acepta <code>limit</code> (1-100), <code>offset</code> para paginar y <code>orden</code> (<code>relevancia</code>, <code>precio_asc</code>, <code>precio_desc</code>).</td>
+</tr>
+</tbody>
+</table>
+<p>Las dos son de solo lectura: no publican ni modifican nada en tu cuenta.</p>
+<blockquote>
+<p><strong>Ojo con el orden:</strong> <code>orden</code> ordena solamente la página que devolvió Mercado Libre. Si el catálogo tiene más publicaciones que <code>limit</code>, pedí más (hasta 100) o paginá con <code>offset</code> para encontrar el precio más bajo de verdad.</p>
+</blockquote>
+<h2>Requisitos</h2>
+<ul>
+<li>Node.js 18 o superior (<code>node -v</code> para chequear).</li>
+<li>Una aplicación en el DevCenter de Mercado Libre. <strong>Aunque los datos del catálogo son públicos, la API responde <code>401</code>/<code>403</code> si no mandás un token de acceso</strong>, así que sin esto no anda.</li>
+</ul>
+<h2>1. Instalación</h2>
+<pre><code class="language-bash">cd mcp-ml
+npm install
+</code></pre>
+<h2>2. Conseguir las credenciales de Mercado Libre</h2>
+<ol>
+<li>Entrá a <a href="https://developers.mercadolibre.com.ar/devcenter">https://developers.mercadolibre.com.ar/devcenter</a> con tu cuenta de ML y creá una aplicación.</li>
+<li>En <strong>URI de redirect</strong> poné una URL https (por ejemplo <code>https://www.google.com</code>; alcanza con que puedas ver la URL a la que te redirige).</li>
+<li>En permisos, con lectura alcanza.</li>
+<li>Anotá el <strong>App ID</strong> (<code>client_id</code>) y la <strong>Clave secreta</strong> (<code>client_secret</code>).</li>
+<li>Autorizá la app abriendo esta URL en el navegador (reemplazá los valores):</li>
+</ol>
+<p><code>https://auth.mercadolibre.com.ar/authorization?response_type=code&amp;client_id=TU_APP_ID&amp;redirect_uri=TU_REDIRECT_URI</code></p>
+<p>Después de aceptar, ML te manda a tu redirect URI con <code>?code=TG-...</code> en la barra de direcciones. Copiá ese código (vence en pocos minutos).</p>
+<ol>
+<li>Cambiá el código por un token:</li>
+</ol>
+<p><code>bash
+   curl -X POST https://api.mercadolibre.com/oauth/token \
+     -H "Content-Type: application/x-www-form-urlencoded" \
+     -d "grant_type=authorization_code" \
+     -d "client_id=TU_APP_ID" \
+     -d "client_secret=TU_CLAVE_SECRETA" \
+     -d "code=TG-XXXXXXXX" \
+     -d "redirect_uri=TU_REDIRECT_URI"</code></p>
+<p>La respuesta trae <code>access_token</code> y <code>refresh_token</code>. El que te interesa es el <strong><code>refresh_token</code></strong> (<code>TG-...</code>).</p>
+<h3>Variables de entorno</h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ML_CLIENT_ID</code></td>
+<td>App ID de tu aplicación.</td>
+</tr>
+<tr>
+<td><code>ML_CLIENT_SECRET</code></td>
+<td>Clave secreta de tu aplicación.</td>
+</tr>
+<tr>
+<td><code>ML_REFRESH_TOKEN</code></td>
+<td>El <code>refresh_token</code> del paso 4.</td>
+</tr>
+<tr>
+<td><code>ML_ACCESS_TOKEN</code></td>
+<td><em>(Opcional)</em> Un token de acceso ya generado. Si lo usás solo, sin las otras tres, vence a las 6 horas y lo tenés que cambiar a mano.</td>
+</tr>
+<tr>
+<td><code>ML_TOKEN_FILE</code></td>
+<td><em>(Opcional)</em> Dónde guardar el token renovado. Por defecto <code>~/.mcp-ml-token.json</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Recomendado:</strong> configurá <code>ML_CLIENT_ID</code>, <code>ML_CLIENT_SECRET</code> y <code>ML_REFRESH_TOKEN</code>. El servidor renueva el token solo cuando vence. Mercado Libre entrega un <code>refresh_token</code> nuevo cada vez que se renueva (y el anterior deja de servir), así que el servidor guarda el último en <code>ML_TOKEN_FILE</code> y lo usa en los siguientes arranques, por encima del que pusiste en <code>ML_REFRESH_TOKEN</code>. Mientras funcione, no borres ese archivo.</p>
+<p>Si no configurás <code>ML_REFRESH_TOKEN</code>, el servidor intenta pedir un token con <code>client_credentials</code>. Puede que tu app no tenga habilitado ese flujo; en ese caso vas a ver el error de ML y tenés que usar el refresh token.</p>
+<h2>3. Conectarlo a Claude</h2>
+<p>En los ejemplos, reemplazá <code>/ruta/absoluta/a/mcp-ml</code> por la ruta real de la carpeta (la sacás con <code>pwd</code> parado adentro de <code>mcp-ml</code>).</p>
+<h3>Claude Code</h3>
+<pre><code class="language-bash">claude mcp add mercadolibre \
+  -e ML_CLIENT_ID=TU_APP_ID \
+  -e ML_CLIENT_SECRET=TU_CLAVE_SECRETA \
+  -e ML_REFRESH_TOKEN=TG-XXXXXXXX \
+  -- node /ruta/absoluta/a/mcp-ml/src/index.js
+</code></pre>
+<p>Para chequear que quedó andando: <code>claude mcp list</code>, o <code>/mcp</code> adentro de una sesión.</p>
+<h3>Claude Desktop</h3>
+<p>Abrí el archivo de configuración (desde la app: <em>Configuración → Desarrollador → Editar configuración</em>):</p>
+<ul>
+<li>macOS: <code>~/Library/Application Support/Claude/claude_desktop_config.json</code></li>
+<li>Windows: <code>%APPDATA%\Claude\claude_desktop_config.json</code></li>
+</ul>
+<p>y sumá esto:</p>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;mercadolibre&quot;: {
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [&quot;/ruta/absoluta/a/mcp-ml/src/index.js&quot;],
+      &quot;env&quot;: {
+        &quot;ML_CLIENT_ID&quot;: &quot;TU_APP_ID&quot;,
+        &quot;ML_CLIENT_SECRET&quot;: &quot;TU_CLAVE_SECRETA&quot;,
+        &quot;ML_REFRESH_TOKEN&quot;: &quot;TG-XXXXXXXX&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<p>En Windows, escribí la ruta con barras dobles: <code>"C:\\Users\\vos\\mcp-ml\\src\\index.js"</code>. Cerrá Claude Desktop del todo y volvé a abrirlo. Las herramientas aparecen en el menú de herramientas del chat.</p>
+<h2>4. Probalo</h2>
+<p>Preguntale a Claude, por ejemplo:</p>
+<ul>
+<li><em>"¿Qué es el producto MLA14086325 de Mercado Libre?"</em></li>
+<li><em>"Listame las 50 publicaciones más baratas que compiten en https://www.mercadolibre.com.ar/.../p/MLA14086325 y decime cuáles tienen envío gratis."</em></li>
+</ul>
+<p>Si querés probar el servidor sin Claude, usá el MCP Inspector:</p>
+<pre><code class="language-bash">ML_CLIENT_ID=... ML_CLIENT_SECRET=... ML_REFRESH_TOKEN=... \
+  npx @modelcontextprotocol/inspector node src/index.js
+</code></pre>
+<h2>Problemas comunes</h2>
+<table>
+<thead>
+<tr>
+<th>Síntoma</th>
+<th>Qué hacer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Mercado Libre rechazó la consulta (401/403 ...)</code></td>
+<td>Faltan las credenciales o no son válidas. Revisá las variables de entorno.</td>
+</tr>
+<tr>
+<td><code>No se pudo obtener un token ... invalid_grant</code></td>
+<td>El refresh token ya se usó o venció. Repetí los pasos 3 y 4, actualizá <code>ML_REFRESH_TOKEN</code> y borrá <code>~/.mcp-ml-token.json</code> para que tome el nuevo.</td>
+</tr>
+<tr>
+<td><code>429</code></td>
+<td>Hiciste demasiadas consultas seguidas. Esperá unos segundos.</td>
+</tr>
+<tr>
+<td>La lista de publicaciones sale vacía</td>
+<td>El catálogo no tiene publicaciones activas en este momento, o el ID es de una publicación (item) y no de un producto de catálogo. Los IDs de catálogo aparecen en URLs con <code>/p/MLA...</code>.</td>
+</tr>
+<tr>
+<td>Claude no ve las herramientas</td>
+<td>Revisá que la ruta sea absoluta y que <code>node -v</code> dé 18 o más. En Claude Desktop, mirá los logs en <em>Configuración → Desarrollador</em>.</td>
+</tr>
+</tbody>
+</table>

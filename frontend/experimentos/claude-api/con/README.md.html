@@ -1,0 +1,90 @@
+<h1>Clasificador de preguntas de Mercado Libre</h1>
+<p><code>clasificar.py</code> lee un CSV con preguntas de compradores y le agrega una columna <code>categoria</code> con una de estas etiquetas: <code>stock</code>, <code>envío</code>, <code>medidas</code>, <code>compatibilidad</code>, <code>precio</code> u <code>otra</code>. La clasificación la hace Claude a través de la API de Anthropic.</p>
+<h2>Instalación</h2>
+<p>Necesitás Python 3.10 o más nuevo y una API key de Anthropic.</p>
+<pre><code class="language-bash">pip install anthropic
+export ANTHROPIC_API_KEY=&quot;sk-ant-...&quot;
+</code></pre>
+<h2>Uso</h2>
+<pre><code class="language-bash">python clasificar.py preguntas.csv
+</code></pre>
+<p>El resultado queda en <code>preguntas_clasificado.csv</code>, con las mismas columnas que el original más <code>categoria</code>. El separador (coma, punto y coma o tabulación) se detecta solo.</p>
+<table>
+<thead>
+<tr>
+<th>Opción</th>
+<th>Para qué sirve</th>
+<th>Por defecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-c</code>, <code>--columna</code></td>
+<td>Columna que tiene el texto de la pregunta</td>
+<td><code>pregunta</code></td>
+</tr>
+<tr>
+<td><code>-o</code>, <code>--salida</code></td>
+<td>Archivo de salida</td>
+<td><code>&lt;entrada&gt;_clasificado.csv</code></td>
+</tr>
+<tr>
+<td><code>--modelo</code></td>
+<td>Modelo de Claude</td>
+<td><code>claude-opus-5-5</code></td>
+</tr>
+<tr>
+<td><code>--cache</code></td>
+<td>Archivo con lo ya clasificado</td>
+<td><code>cache_clasificaciones.json</code></td>
+</tr>
+</tbody>
+</table>
+<p>El script no responde al instante: manda las preguntas como un lote y espera a que termine. Suele tardar unos minutos y casi siempre menos de una hora, aunque la API se puede tomar hasta 24. Está pensado para correrlo una vez por día, por ejemplo con <code>cron</code>.</p>
+<h2>Cómo cuida el gasto</h2>
+<ul>
+<li><strong>Lotes a mitad de precio.</strong> Usa la Batches API, que cobra el 50 % a cambio de no contestar en el momento.</li>
+<li><strong>Varias preguntas por pedido.</strong> Manda hasta 50 preguntas juntas, así las instrucciones se pagan una vez cada 50 y no una vez por pregunta.</li>
+<li><strong>No paga dos veces la misma pregunta.</strong> Las preguntas repetidas se clasifican una sola vez, sin distinguir mayúsculas ni espacios. Lo clasificado queda en el caché y sirve para los días siguientes.</li>
+<li><strong>Razonamiento al mínimo.</strong> Le pide al modelo el nivel de esfuerzo más bajo, que alcanza para clasificar.</li>
+<li><strong>Si se corta, no se vuelve a cobrar.</strong> El lote en curso queda anotado en <code>&lt;salida&gt;.lote.json</code>. Al correr de nuevo el mismo comando, el script retoma ese lote en vez de mandar otro.</li>
+</ul>
+<p>Al terminar muestra los tokens usados y el costo estimado del lote.</p>
+<h3>Elegir el modelo</h3>
+<p>El modelo es lo que más pesa en el costo. Precios de lista por millón de tokens (el lote cobra la mitad):</p>
+<table>
+<thead>
+<tr>
+<th>Modelo</th>
+<th>Entrada</th>
+<th>Salida</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>claude-opus-5-5</code></td>
+<td>USD 4</td>
+<td>USD 20</td>
+</tr>
+<tr>
+<td><code>claude-sonnet-5-5</code></td>
+<td>USD 2</td>
+<td>USD 10</td>
+</tr>
+<tr>
+<td><code>claude-haiku-4-5</code></td>
+<td>USD 1</td>
+<td>USD 5</td>
+</tr>
+</tbody>
+</table>
+<p>Para probar uno más barato:</p>
+<pre><code class="language-bash">python clasificar.py preguntas.csv --modelo claude-haiku-4-5 --cache cache_haiku.json
+</code></pre>
+<p>Usá un caché aparte para la prueba, así el modelo clasifica todo de nuevo. Después compará los dos CSV de salida sobre un día real de preguntas antes de cambiar.</p>
+<h2>A tener en cuenta</h2>
+<ul>
+<li>Las filas con la pregunta vacía quedan con la categoría vacía.</li>
+<li>Si algunas preguntas quedan sin categoría, el script avisa y termina con código 1. Corriéndolo de nuevo solo manda las que faltan.</li>
+<li>Si cambiás las categorías o las instrucciones en <code>clasificar.py</code>, borrá el caché para que no se mezclen clasificaciones viejas con nuevas.</li>
+</ul>

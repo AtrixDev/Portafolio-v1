@@ -159,6 +159,85 @@ export function Carrito() {
     &lt;/&gt;
   )
 }`, 'Declarás cómo se ve según el estado (n) y React redibuja cuando cambia. Conviene cuando la pantalla tiene muchas partes que dependen de los mismos datos.'),
+    'stacks/nextjs': () => stackDemo('Next.js', `'use client'
+import { useState } from 'react'
+
+// app/carrito/boton.tsx — componente de cliente dentro de una página
+// que Next.js puede generar en el servidor (rápida y buena para Google)
+export function BotonCarrito() {
+  const [n, setN] = useState(0)
+  return (
+    &lt;button onClick={() =&gt; setN(n + 1)}&gt;
+      Agregar al carrito ({n})
+    &lt;/button&gt;
+  )
+}`, 'Es React con el servidor incluido: las páginas llegan armadas (mejor para Google) y solo las partes interactivas, como este botón, se marcan con "use client".'),
+    'stacks/astro': () => stackDemo('Astro', `---
+// src/pages/producto.astro: todo esto se arma al publicar, sin JavaScript
+import BotonCarrito from '../components/BotonCarrito.jsx'
+---
+&lt;h1&gt;Mandolina V5&lt;/h1&gt;
+&lt;p&gt;$38.900 · envío gratis&lt;/p&gt;
+
+&lt;!-- solo esta "isla" manda JavaScript al navegador --&gt;
+&lt;BotonCarrito client:visible /&gt;`, 'La página sale como HTML puro y solo el botón trae JavaScript (una "isla"). Ideal para webs de contenido y tiendas chicas que tienen que cargar rapidísimo.'),
+    'stacks/vue': () => stackDemo('Vue', `&lt;script setup&gt;
+import { ref } from 'vue'
+const n = ref(0)
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;button @click="n++"&gt;Agregar al carrito&lt;/button&gt;
+  &lt;span&gt;{{ n }}&lt;/span&gt;
+&lt;/template&gt;`, 'Misma idea que React (el estado manda y la pantalla se actualiza sola), con una sintaxis más cercana al HTML. Muchos la encuentran más fácil para empezar.'),
+    'stacks/sveltekit': () => stackDemo('SvelteKit', `&lt;script&gt;
+  let n = $state(0)
+&lt;/script&gt;
+
+&lt;button onclick={() =&gt; n++}&gt;Agregar al carrito&lt;/button&gt;
+&lt;span&gt;{n}&lt;/span&gt;`, 'El código más corto de todos: Svelte compila el componente y manda muy poco JavaScript. SvelteKit le suma rutas y servidor, como Next.js.'),
+    'stacks/node-express': () => stackDemo('Node + Express', `// server.js — el carrito vive en el servidor
+import express from 'express'
+const app = express()
+const carritos = new Map()
+
+app.post('/api/carrito/:id/agregar', (req, res) =&gt; {
+  const n = (carritos.get(req.params.id) || 0) + 1
+  carritos.set(req.params.id, n)
+  res.json({ cantidad: n })   // el botón del navegador muestra este número
+})
+
+app.listen(3000)`, 'Del lado del servidor: el botón del navegador le avisa a esta API y el carrito queda guardado aunque cierres la pestaña. Express ordena las rutas de la API.'),
+    'stacks/mern': () => stackDemo('MERN (MongoDB + Express + React + Node)', `// React (navegador)
+const agregar = async () =&gt; {
+  const r = await fetch('/api/carrito/agregar', { method: 'POST' })
+  setN((await r.json()).cantidad)
+}
+
+// Express + MongoDB (servidor)
+app.post('/api/carrito/agregar', async (req, res) =&gt; {
+  const c = await db.collection('carritos').findOneAndUpdate(
+    { usuario: req.user.id }, { $inc: { cantidad: 1 } },
+    { upsert: true, returnDocument: 'after' })
+  res.json({ cantidad: c.cantidad })
+})`, 'Las cuatro piezas juntas: React muestra, Express recibe, MongoDB guarda y todo corre en Node. El carrito queda en la base de datos, en cualquier dispositivo.'),
+    'stacks/tailwind': () => stackDemo('Tailwind CSS', `&lt;!-- El estilo se escribe con clases, directo en el HTML --&gt;
+&lt;button class="rounded-lg bg-yellow-400 px-4 py-2
+               font-bold text-zinc-900
+               hover:bg-yellow-300 active:scale-95"&gt;
+  Agregar al carrito
+&lt;/button&gt;`, 'No es un framework de JavaScript: es una forma de escribir el CSS. Funciona con cualquiera de los otros stacks y acelera mucho el diseño cuando ya sabés lo que querés.'),
+    'stacks/shadcn': () => stackDemo('shadcn/ui', `// npx shadcn@latest add button
+import { Button } from '@/components/ui/button'
+import { ShoppingCart } from 'lucide-react'
+
+export function BotonCarrito({ onAgregar }) {
+  return (
+    &lt;Button size="lg" onClick={onAgregar}&gt;
+      &lt;ShoppingCart /&gt; Agregar al carrito
+    &lt;/Button&gt;
+  )
+}`, 'Componentes listos (botones, menús, formularios) que se copian a tu proyecto y quedan tuyos para modificar. Accesibles de entrada. Ojo: si no los personalizás, todas las webs se parecen.'),
   };
 
   // ═══════════════ Experimentos reales publicados (tools/experimentos/publicar.py → experimentos/<id>/meta.json) ═══════════════
@@ -234,6 +313,18 @@ export function Carrito() {
       ['', 'Un bug más, y muy argentino', 'Solo con la skill encontró que si escribís "38.900" (con punto de miles, como se escribe acá) la app lo toma como 38,9 pesos.'],
       ['', 'Más casos', 'Probó 13 casos, además de Enter, el recálculo y el escritorio.'],
     ], pie: 'Partieron de la misma calculadora con errores a propósito (en la ficha del experimento).' },
+    'skills/mcp-builder': { exp: 'mcp-builder', con: 'Con MCP Builder', notas: [
+      ['', 'Las dos funcionan', 'Probaron la API, descubrieron que Mercado Libre ya pide token incluso para el catálogo y explican cómo conseguirlo.'],
+      ['', 'Con la skill, hecho para mantener', 'TypeScript con el SDK oficial, validación de datos de entrada, código separado en herramientas, servicios y tipos, y nombres con prefijo ("mercadolibre_…") para que Claude no los confunda con otros servidores.'],
+      ['', 'Pensado para cuando falla', 'Cómo probarlo con MCP Inspector y una sección de errores frecuentes con su solución.'],
+      ['', 'Sin la skill, más simple', 'Cuatro archivos en JavaScript y una buena idea: guarda el token renovado para no perderlo entre reinicios.'],
+    ], pie: 'Ninguna de las dos se probó contra datos reales (no tenían credenciales); las dos lo aclaran.' },
+    'skills/claude-api': { exp: 'claude-api', con: 'Con la skill Claude API', notas: [
+      ['', 'Las dos cuidan el gasto', 'Usan lotes a mitad de precio (Batches API) y mandan muchas preguntas por pedido para no pagar las instrucciones cada vez.'],
+      ['', 'Con la skill, la API al día', 'Salidas estructuradas con esquema JSON, razonamiento al mínimo, no paga dos veces la misma pregunta, retoma un lote si se corta y estima el costo al terminar.'],
+      ['', 'Pero eligió el modelo más caro', 'Por defecto usa Opus, cuando para clasificar alcanza Haiku (que es lo que eligió la versión sin la skill). Explica cómo cambiarlo, pero el criterio de costo lo tuvo mejor la otra.'],
+      ['', 'Conclusión', 'La skill aporta conocimiento actualizado de la API; la decisión de qué modelo usar sigue siendo tuya.'],
+    ], pie: 'Precios del README tal como los escribió Claude; verificalos en la documentación de Anthropic antes de decidir.' },
     'skills/ui-ux-pro-max': { exp: 'ui-ux-pro-max', con: 'Con UI UX Pro Max', notas: [
       ['', 'Diferencia moderada', 'Sin la skill sale una landing prolija de consultorio: servicios, obras sociales, cómo sacar turno y ubicación.'],
       ['', 'Elige estilo y paleta con criterio', 'Tomó de su base el estilo "Accesible y ético" para salud y ajustó los colores para que el texto de los botones cumpla contraste 4,5:1.'],

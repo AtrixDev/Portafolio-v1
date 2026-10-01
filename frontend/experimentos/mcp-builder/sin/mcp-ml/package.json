@@ -1,0 +1,21 @@
+{
+  "name": "mcp-ml",
+  "version": "1.0.0",
+  "description": "Servidor MCP para consultar productos de catálogo de Mercado Libre Argentina",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.31.0",
+    "zod": "^4.6.5"
+  },
+  "type": "module",
+  "bin": {
+    "mcp-ml": "src/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

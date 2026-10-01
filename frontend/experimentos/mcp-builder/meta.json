@@ -1,0 +1,127 @@
+{
+ "id": "mcp-builder",
+ "fecha": "30/09/2026",
+ "prompt": "Armá un servidor MCP en Node para que Claude pueda consultar la API pública de Mercado Libre Argentina: buscar un producto de catálogo por su ID y ver sus datos, y listar las publicaciones que compiten en ese catálogo con su precio. Dejalo en la carpeta mcp-ml/ de esta carpeta, con un README en español argentino que explique cómo instalarlo y conectarlo a Claude.",
+ "entrada": [],
+ "sin": {
+  "skills": [],
+  "segundos": 154,
+  "pasos": 10,
+  "costo": 0.65,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Armé el servidor en `mcp-ml/`. Lo probé con un cliente MCP, pero **no pude probarlo contra Mercado Libre con un token válido**, porque no tengo credenciales tuyas. Tampoco confirmé que la API respete `limit` y `offset` en el listado de publicaciones.\n\n**Algo que cambia lo que pediste:** la API ya no es de acceso libre. Probé `/products/MLA14086325` sin token y respondió `401`. El listado de publicaciones respondió `403`. Por eso el servidor necesita credenciales de una app del DevCenter de Mercado Libre, y el README explica paso a paso cómo conseguirlas.\n\n**Herramientas:**\n- `ml_obtener_producto`: acepta el ID (`MLA14086325`) o la URL del catálogo (`.../p/MLA...`). Devuelve nombre, estado, atributos, características, fotos y la publicación que gana la buy box, con su precio.\n- `ml_listar_publicaciones`: lista las publicaciones que compiten en el catálogo, con precio, vendedor, condición, envío gratis y link. Agrega un resumen con el precio mínimo, máximo y promedio. Se puede paginar y ordenar por precio, pero el orden se aplica solo a la página que devuelve Mercado Libre, y el README lo avisa.\n\n**Autenticación** (`src/ml-client.js`): lo que conviene configurar es `ML_CLIENT_ID`, `ML_CLIENT_SECRET` y `ML_REFRESH_TOKEN`. Cuando el token vence, el servidor pide uno nuevo solo. Como Mercado Libre cambia el refresh token cada vez que se usa, el servidor guarda el último en `~/.mcp-ml-token.json`. También se puede usar solo `ML_ACCESS_TOKEN`, pero vence a las 6 horas. Si no hay refresh token, intenta con `client_credentials`, aunque no sé si Mercado Libre sigue permitiendo ese método.\n\n**Pruebas:**\n- **Contra la API real, sin token:** las dos herramientas aparecen bien y los errores salen claros y en español (falta de credenciales, ID inválido).\n- **Con respuestas simuladas:** funcionan las dos herramientas, se reconoce el ID desde una URL, el orden por precio y el resumen dan bien, y un catálogo sin publicaciones devuelve una lista vacía. También probé el caso de token vencido: renueva el token, reintenta la consulta y guarda el refresh token nuevo.\n\nEl README está en español argentino y explica cómo instalarlo, cómo sacar las credenciales y cómo conectarlo a Claude Code (`claude mcp add`) y a Claude Desktop. También incluye problemas comunes.\n\nTe quedó una carpeta de pruebas en `/tmp/mltest`, fuera del proyecto. La iba a borrar, pero se rechazó el comando; si querés, eliminala a mano.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "mcp-ml/README.md",
+    "ruta": "sin/mcp-ml/README.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "sin/mcp-ml/README.md.html"
+   },
+   {
+    "nombre": "mcp-ml/package.json",
+    "ruta": "sin/mcp-ml/package.json",
+    "aux": false,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "mcp-ml/src/index.js",
+    "ruta": "sin/mcp-ml/src/index.js",
+    "aux": false,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "mcp-ml/src/ml-client.js",
+    "ruta": "sin/mcp-ml/src/ml-client.js",
+    "aux": false,
+    "tipo": "codigo"
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "mcp-builder"
+  ],
+  "segundos": 251,
+  "pasos": 20,
+  "costo": 1.22,
+  "modelos": [
+   "claude-opus-5-5",
+   "claude-haiku-4-5-20251001"
+  ],
+  "resumen": "El servidor está armado en `mcp-ml/` (TypeScript, SDK oficial de MCP, conexión por stdio) y compila sin errores. Nunca lo probé contra un producto real de Mercado Libre, porque no tengo credenciales.\n\n**Hay que crear una app en Mercado Libre.** La API ya no responde sin autenticación: probé los endpoints de catálogo y devuelven `401`/`403`. Por eso para usarlo necesitás crear una app gratis en el DevCenter de Mercado Libre y pasarle al servidor el `ML_CLIENT_ID` y el `ML_CLIENT_SECRET`. Con eso el servidor pide solo el token y lo renueva cuando vence, que es cada 6 horas. También podés pasarle un token fijo en `ML_ACCESS_TOKEN`, pero ese lo tenés que reemplazar a mano cuando vence.\n\n**Herramientas:**\n- `mercadolibre_get_catalog_product`: los datos del producto (nombre, ficha técnica, características, fotos) y quién gana la buy box y a qué precio.\n- `mercadolibre_list_catalog_listings`: las publicaciones que compiten, con precio, vendedor, condición, envío gratis, garantía, ubicación y link. Trae de a 50 como máximo y se puede pedir la página siguiente.\n\nLas dos aceptan el ID (`MLA19615208`) o la URL de catálogo con `/p/`. Si le pasás la URL de una publicación suelta (`MLA-123…`), la rechaza y explica la diferencia.\n\n**Qué probé:**\n- **Contra la API real:** sin credenciales el servidor no arranca y avisa qué falta. Con un token falso o credenciales inválidas, las herramientas devuelven un mensaje que dice cómo arreglarlo.\n- **Con respuestas simuladas de Mercado Libre:** producto por URL, publicaciones con paginado, producto inexistente y renovación del token después de un `401`. Todo anduvo bien.\n\n**Lo que puede fallar con credenciales reales:**\n- Los nombres de los campos de las respuestas los tomé de cómo se documenta la API, porque no pude ver una respuesta real. Si alguno no coincide, ese dato aparece vacío en lugar de dar error.\n- Mercado Libre acepta el tipo de token que pide el servidor (token de aplicación). Lo que no pude comprobar es que ese token alcance para leer el catálogo. Si da `403`, el README explica cómo usar un token de usuario.\n\n**Lo que quedó afuera:**\n- La skill incluye un paso final de escribir 10 preguntas de evaluación verificadas. No lo hice porque necesita consultar datos reales con credenciales.\n- No agregué búsqueda de productos por texto: no la pediste y ese endpoint también está bloqueado sin token. Para encontrar el ID, el README explica cómo sacarlo de la URL.\n\nEl README está en castellano rioplatense. Cubre cómo crear la app en el DevCenter, instalar (`npm install && npm run build`), conectarlo a Claude Desktop y a Claude Code (`claude mcp add …`), las variables de entorno, ejemplos de preguntas y problemas frecuentes.\n\nFuente consultada: [documentación de publicaciones de catálogo de Mercado Libre](https://developers.mercadolibre.com.ar/publicacion-en-catalogo)",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "mcp-ml/README.md",
+    "ruta": "con/mcp-ml/README.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "con/mcp-ml/README.md.html"
+   },
+   {
+    "nombre": "mcp-ml/package.json",
+    "ruta": "con/mcp-ml/package.json",
+    "aux": false,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "mcp-ml/src/constants.ts",
+    "ruta": "con/mcp-ml/src/constants.ts",
+    "aux": false,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "mcp-ml/src/index.ts",
+    "ruta": "con/mcp-ml/src/index.ts",
+    "aux": false,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "mcp-ml/src/schemas/products.ts",
+    "ruta": "con/mcp-ml/src/schemas/products.ts",
+    "aux": false,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "mcp-ml/src/services/api.ts",
+    "ruta": "con/mcp-ml/src/services/api.ts",
+    "aux": false,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "mcp-ml/src/services/auth.ts",
+    "ruta": "con/mcp-ml/src/services/auth.ts",
+    "aux": false,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "mcp-ml/src/services/format.ts",
+    "ruta": "con/mcp-ml/src/services/format.ts",
+    "aux": false,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "mcp-ml/src/tools/products.ts",
+    "ruta": "con/mcp-ml/src/tools/products.ts",
+    "aux": false,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "mcp-ml/src/types.ts",
+    "ruta": "con/mcp-ml/src/types.ts",
+    "aux": false,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "mcp-ml/tsconfig.json",
+    "ruta": "con/mcp-ml/tsconfig.json",
+    "aux": false,
+    "tipo": "codigo"
+   }
+  ]
+ }
+}

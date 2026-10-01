@@ -270,5 +270,138 @@
     },
   };
 
+
+  // ═══════════════ Reglas Pro: animación y rendimiento ═══════════════
+  const tl = (filas, total) => `<div class="ux-tl">${filas.map(([t, ini, dur, c]) => `<div class="ux-tl-f"><span>${t}</span><span class="ux-tl-p"><i class="${c || ''}" style="--a:${ini / total};--d:${dur / total}"></i></span></div>`).join('')}<div class="ux-tl-esc"><span>0 s</span><span>${(total / 2).toLocaleString('es-AR')} s</span><span>${total.toLocaleString('es-AR')} s</span></div></div>`;
+  Object.assign(D, {
+    'ux/8-duration-timing': demo('Probalo', par('cajon', 'abrí y cerrá el carrito en los dos, varias veces.',
+      `<div class="ux-caj" style="--dur:1000ms"><button type="button" class="ux-btn" data-abrir>Ver carrito</button><div class="ux-caj-p"><b>Tu carrito</b><p>Mandolina V5 · $38.900</p></div></div>`,
+      `<div class="ux-caj" style="--dur:220ms"><button type="button" class="ux-btn" data-abrir>Ver carrito</button><div class="ux-caj-p"><b>Tu carrito</b><p>Mandolina V5 · $38.900</p></div></div>`),
+      'Un segundo de animación en algo que se abre muchas veces se siente lento y hace esperar. Entre 150 y 250 ms se ve el movimiento sin frenar a nadie.'),
+    'ux/14-easing-functions': demo('Probalo', par('cajon', 'abrí el carrito en los dos y mirá cómo arranca.',
+      `<div class="ux-caj" style="--dur:420ms;--ease:linear"><button type="button" class="ux-btn" data-abrir>Ver carrito</button><div class="ux-caj-p"><b>Tu carrito</b><p>Mandolina V5 · $38.900</p></div></div>`,
+      `<div class="ux-caj" style="--dur:420ms;--ease:cubic-bezier(.23,1,.32,1)"><button type="button" class="ux-btn" data-abrir>Ver carrito</button><div class="ux-caj-p"><b>Tu carrito</b><p>Mandolina V5 · $38.900</p></div></div>`),
+      'Con velocidad constante (linear) se ve mecánico. Arrancando rápido y frenando suave (ease-out) responde al instante y se siente natural.'),
+    'ux/12-continuous-animation': demo('Probalo', par('', 'tratá de leer la ficha en cada panel.',
+      `<div class="ux-mov is-mucho"><b>Mandolina V5</b><span class="ux-chip">★ 4,8</span><span class="ux-chip">Envío gratis</span><p class="ux-mini" style="flex-basis:100%">Cortes parejos en segundos, con protector de mano.</p></div>`,
+      `<div class="ux-mov"><b>Mandolina V5</b><span class="ux-chip">★ 4,8</span><span class="ux-chip">Envío gratis</span><p class="ux-mini" style="flex-basis:100%">Cortes parejos en segundos, con protector de mano.</p></div>`),
+      'Lo que se mueve sin parar se roba la atención de lo que la persona quiere leer. Movimiento infinito solo para indicar que algo está cargando, y mientras carga.'),
+    'ux/13-transform-performance': demo('Probalo', par('pista', 'activá "página ocupada" (como cuando cargan scripts pesados) y mirá cuál se traba.',
+      `<div class="ux-pista"><i class="ux-bola" data-top></i><p class="ux-mini">Animando <code>left</code></p></div>`,
+      `<div class="ux-pista"><i class="ux-bola is-tr"></i><p class="ux-mini">Animando <code>transform</code></p></div>`,
+      `<button type="button" class="dm-play" data-ocupar aria-pressed="false">Simular página ocupada</button>`),
+      'Animar left, top, width o height obliga al navegador a recalcular la página en cada cuadro, y si está ocupado se traba. transform y opacity los resuelve la placa de video aparte: siguen suaves.'),
+    'ux/47-lazy-loading': demo('Probalo', par('lazy', 'bajá por la lista de productos en los dos y mirá el contador.',
+      `<div class="ux-lazy"><p class="ux-mini">Imágenes descargadas: <b data-n>0</b> de 24</p><div class="ux-lazy-l" data-modo="todo"></div></div>`,
+      `<div class="ux-lazy"><p class="ux-mini">Imágenes descargadas: <b data-n>0</b> de 24</p><div class="ux-lazy-l" data-modo="lazy"></div></div>`),
+      'Si la página baja las 24 fotos al abrir, la de arriba tarda más y gastás datos en fotos que quizás nadie ve. Con loading="lazy" se bajan cuando se van a ver.'),
+    'ux/48-code-splitting': demo('Lo que pasa al cargar', `<div class="ux-par">
+      <section class="ux-lado" data-lado="mal"><h4>Así no: todo en un archivo</h4><div class="ux-in">${tl([['app.js · 900 KB', 0, 2.6, 'is-mal'], ['Primera pantalla', 2.6, .3, 'is-ok']], 3.2)}</div></section>
+      <section class="ux-lado" data-lado="bien"><h4>Así sí: dividido</h4><div class="ux-in">${tl([['inicio.js · 120 KB', 0, .45], ['Primera pantalla', .45, .3, 'is-ok'], ['checkout.js (después)', .8, .7, 'is-luego']], 3.2)}</div></section></div>`,
+      'Tiempos ilustrativos con 4G. Con import() dinámico, el código del checkout o del panel se baja recién cuando se usa: la primera pantalla aparece en una fracción del tiempo.'),
+    'ux/52-bundle-size': () => D['ux/48-code-splitting'](),
+    'ux/53-render-blocking': demo('Lo que pasa al cargar', `<div class="ux-par">
+      <section class="ux-lado" data-lado="mal"><h4>Así no: todo bloquea</h4><div class="ux-in">${tl([['estilos.css · 180 KB', 0, 1.1, 'is-mal'], ['chat-widget.js', 0, 1.6, 'is-mal'], ['Primera pantalla', 1.6, .3, 'is-ok']], 2.4)}</div></section>
+      <section class="ux-lado" data-lado="bien"><h4>Así sí: lo crítico primero</h4><div class="ux-in">${tl([['CSS crítico (adentro)', 0, .1], ['Primera pantalla', .15, .3, 'is-ok'], ['resto del CSS y el chat (defer)', .3, 1.3, 'is-luego']], 2.4)}</div></section></div>`,
+      'Tiempos ilustrativos. El navegador no pinta nada hasta terminar el CSS y los scripts del head. Poner adentro el CSS de la primera pantalla y diferir el resto adelanta lo que ve la persona.'),
+    'ux/51-third-party-scripts': demo('Probalo', par('terceros', 'tocá "Recargar" y mirá cuándo aparece la página.',
+      `<div class="ux-terc" data-bloquea><p class="ux-mini" data-estado>Cargando chat de terceros…</p><div class="ux-terc-c" hidden><b>Mandolina V5</b><p>$38.900 · envío gratis</p><span class="ux-btn">Comprar</span></div></div>`,
+      `<div class="ux-terc"><div class="ux-terc-c"><b>Mandolina V5</b><p>$38.900 · envío gratis</p><span class="ux-btn">Comprar</span></div><p class="ux-mini" data-estado>Chat: cargando en segundo plano…</p></div>`,
+      `<button type="button" class="dm-play" data-recargar>Recargar</button>`),
+      'Un script de chat, de píxeles o de reseñas puesto en el head sin async ni defer frena toda la página hasta que responde otro servidor. Con defer, la página sale primero.'),
+    'ux/49-caching': demo('Probalo', par('cache', 'hacé la primera visita y después la segunda en los dos.',
+      `<button type="button" class="ux-btn" data-visita>Visitar</button><p class="ux-mini" data-log></p>`,
+      `<button type="button" class="ux-btn" data-visita data-cache>Visitar</button><p class="ux-mini" data-log></p>`),
+      'Con encabezados de caché (Cache-Control) el navegador guarda logos, estilos y scripts: la segunda visita carga casi al instante. Tiempos ilustrativos.'),
+    'ux/50-font-loading': demo('Probalo', par('fuente', 'tocá "Recargar" y mirá el título mientras llega la fuente.',
+      `<div class="ux-fuente" data-foit><h5>Fuego lento, cortes de barrio</h5><p class="ux-mini" data-estado></p></div>`,
+      `<div class="ux-fuente" data-swap><h5>Fuego lento, cortes de barrio</h5><p class="ux-mini" data-estado></p></div>`,
+      `<button type="button" class="dm-play" data-recargar>Recargar</button>`),
+      'Sin font-display: swap, el navegador esconde el texto hasta que baja la fuente (con mala señal, varios segundos sin poder leer nada). Con swap se lee al instante y la fuente cambia cuando llega.'),
+    'ux/75-font-loading': () => D['ux/50-font-loading'](),
+    'ux/91-bulk-actions': demo('Probalo', par('masivo', 'pausá las 5 publicaciones en cada panel. Fijate cuántos clics hiciste.',
+      `<ul class="ux-items" data-fila>${['Mandolina V5', 'Set de cuchillos', 'Olla 24 cm', 'Sartén 28 cm', 'Rallador'].map(p => `<li>${p}<button type="button" class="ux-x is-gris">Pausar</button></li>`).join('')}</ul><p class="ux-mini" data-clics>Clics: 0</p>`,
+      `<div class="ux-masivo"><label class="ux-mini"><input type="checkbox" data-todas> Seleccionar todas</label><ul class="ux-items">${['Mandolina V5', 'Set de cuchillos', 'Olla 24 cm', 'Sartén 28 cm', 'Rallador'].map(p => `<li><label><input type="checkbox"> ${p}</label></li>`).join('')}</ul><button type="button" class="ux-btn" data-pausar-sel>Pausar seleccionadas</button><p class="ux-mini" data-clics>Clics: 0</p></div>`),
+      'Cuando alguien maneja muchas publicaciones, ir una por una es lento y propenso a errores. Selección múltiple con una barra de acciones lo resuelve en dos clics.'),
+    'ux/93-streaming': demo('Probalo', par('stream', 'preguntale al asistente en los dos.',
+      `<button type="button" class="ux-btn is-sec" data-preg>¿Sirve para papas fritas?</button><div class="ux-msg" data-resp hidden></div>`,
+      `<button type="button" class="ux-btn is-sec" data-preg data-stream>¿Sirve para papas fritas?</button><div class="ux-msg" data-resp hidden></div>`),
+      'Esperar la respuesta completa con una ruedita hace sentir que tarda el doble. Mostrar el texto a medida que se genera da respuesta inmediata y deja leer mientras tanto.'),
+    'ux/96-auto-play-video': demo('Probalo', par('video', 'dejá los dos paneles a la vista unos segundos.',
+      `<div class="ux-video is-auto"><span>▶ reproduciendo</span><p class="ux-mini">Datos gastados: <b data-mb>0</b> MB</p></div>`,
+      `<div class="ux-video"><button type="button" class="ux-play" aria-label="Reproducir video">▶</button><p class="ux-mini">Datos gastados: <b data-mb>0</b> MB hasta que lo toques</p></div>`),
+      'Un video que arranca solo gasta datos y batería aunque nadie lo mire (y en muchos planes de celular, plata). Mostrá una imagen y que lo reproduzca quien quiera. Valores ilustrativos de un video HD.'),
+    'ux/97-asset-weight': () => D['ux/46-image-optimization'](),
+    'ux/98-feedback-loop': demo('Probalo', par('feedback', 'calificá la respuesta del asistente en cada panel.',
+      `<div class="ux-msg">La Mandolina V5 trae 5 insertos: rodajas de 3,5 y 7 mm, bastones, juliana y rallado.</div>`,
+      `<div class="ux-msg">La Mandolina V5 trae 5 insertos: rodajas de 3,5 y 7 mm, bastones, juliana y rallado.</div><div class="ux-fb"><span class="ux-mini">¿Te sirvió?</span><button type="button" class="ux-btn is-sec" data-fb="Gracias: lo usamos para mejorar.">👍</button><button type="button" class="ux-btn is-sec" data-fb="Gracias. ¿Qué te faltó? Te paso con una persona.">👎</button></div><p class="ux-mini" data-fb-out></p>`),
+      'Sin forma de decir "esto no me sirvió", el error se repite y la persona se va. Un 👍/👎 junto a cada respuesta mide la calidad y abre la puerta a una persona.'),
+  });
+
+  Object.assign(M, {
+    cajon: el => el.querySelectorAll('[data-abrir]').forEach(b => b.addEventListener('click', () => b.parentElement.classList.toggle('is-open'))),
+    pista: el => {
+      let t = null;
+      el.querySelector('[data-ocupar]').addEventListener('click', e => {
+        const on = e.currentTarget.getAttribute('aria-pressed') !== 'true'; e.currentTarget.setAttribute('aria-pressed', on);
+        clearInterval(t); if (on) t = setInterval(() => { const f = performance.now() + 70; while (performance.now() < f) {} }, 100);
+      });
+      const top = el.querySelector('[data-top]'); let x = 0, d = 1;
+      const paso = () => { if (!document.contains(top)) { clearInterval(t); return; } x += d * 2.4; if (x > 100 || x < 0) d *= -1; top.style.left = `calc(${Math.max(0, Math.min(100, x))}% - ${Math.max(0, Math.min(100, x)) * .2}px)`; requestAnimationFrame(paso); };
+      requestAnimationFrame(paso);
+    },
+    lazy: el => el.querySelectorAll('.ux-lazy-l').forEach(l => {
+      l.innerHTML = Array.from({ length: 24 }, (_, i) => `<div class="ux-lz" data-i="${i}"><i></i><span>Producto ${i + 1}</span></div>`).join('');
+      const out = l.parentElement.querySelector('[data-n]'); let n = 0;
+      const cargar = d => { if (d.classList.contains('is-ok')) return; d.classList.add('is-ok'); out.textContent = ++n; };
+      if (l.dataset.modo === 'todo') l.querySelectorAll('.ux-lz').forEach((d, i) => setTimeout(() => cargar(d), 40 * i));
+      else { const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { cargar(e.target); io.unobserve(e.target); } }), { root: l, rootMargin: '40px' }); l.querySelectorAll('.ux-lz').forEach(d => io.observe(d)); }
+    }),
+    terceros: el => {
+      const correr = () => {
+        const a = el.querySelector('[data-bloquea]'), ac = a.querySelector('.ux-terc-c'), ae = a.querySelector('[data-estado]');
+        ac.hidden = true; ae.hidden = false; ae.textContent = 'Esperando al script del chat (otro servidor)…';
+        setTimeout(() => { ac.hidden = false; ae.textContent = 'Recién ahora se ve la página (2,5 s).'; }, 2500);
+        const b = el.querySelector('[data-lado="bien"] [data-estado]'); b.textContent = 'Chat: cargando en segundo plano…'; setTimeout(() => { b.textContent = 'Chat listo (2,5 s), sin frenar la página.'; }, 2500);
+      };
+      el.querySelector('[data-recargar]').addEventListener('click', correr); correr();
+    },
+    cache: el => el.querySelectorAll('[data-visita]').forEach(b => {
+      let v = 0; const log = b.nextElementSibling;
+      b.addEventListener('click', () => {
+        v++; const t = v === 1 || !b.hasAttribute('data-cache') ? 2.4 : 0.2;
+        b.disabled = true; log.textContent = `Visita ${v}: cargando…`;
+        setTimeout(() => { b.disabled = false; b.textContent = 'Visitar de nuevo'; log.innerHTML = `Visita ${v}: <b>${t.toLocaleString('es-AR')} s</b>${v > 1 && b.hasAttribute('data-cache') ? ' (desde la caché)' : ''}`; log.className = 'ux-mini' + (v > 1 ? (t < 1 ? ' is-bien' : ' is-mal') : ''); }, t * 1000);
+      });
+    }),
+    fuente: el => {
+      const correr = () => el.querySelectorAll('.ux-fuente').forEach(f => {
+        const st = f.querySelector('[data-estado]'); f.classList.remove('is-lista');
+        f.classList.add('is-cargando'); st.textContent = f.hasAttribute('data-foit') ? 'Bajando la fuente… (el texto está escondido)' : 'Bajando la fuente… (se ve con la del sistema)';
+        setTimeout(() => { f.classList.remove('is-cargando'); f.classList.add('is-lista'); st.textContent = 'Fuente lista.'; }, 2600);
+      });
+      el.querySelector('[data-recargar]').addEventListener('click', correr); correr();
+    },
+    masivo: el => {
+      el.querySelectorAll('[data-lado]').forEach(l => { let c = 0; const out = l.querySelector('[data-clics]'); l.addEventListener('click', e => { if (e.target.closest('button, input')) { c++; out.textContent = `Clics: ${c}`; } }); });
+      el.querySelectorAll('[data-fila] .ux-x').forEach(b => b.addEventListener('click', () => { b.textContent = 'Pausada'; b.disabled = true; }));
+      const m = el.querySelector('.ux-masivo');
+      m.querySelector('[data-todas]').addEventListener('change', e => m.querySelectorAll('.ux-items input').forEach(i => i.checked = e.target.checked));
+      m.querySelector('[data-pausar-sel]').addEventListener('click', () => m.querySelectorAll('.ux-items input:checked').forEach(i => { i.closest('li').classList.add('is-pausada'); i.disabled = true; }));
+    },
+    stream: el => el.querySelectorAll('[data-preg]').forEach(b => b.addEventListener('click', () => {
+      const r = b.nextElementSibling, txt = 'Sí: trae un inserto de bastones que corta papas parejas para freír. Usá el protector de mano y cortá con la papa bien seca.';
+      r.hidden = false;
+      if (!b.hasAttribute('data-stream')) { r.innerHTML = '<span class="ux-spin is-osc"></span> Pensando…'; setTimeout(() => { r.textContent = txt; }, 3000); return; }
+      r.textContent = ''; const ps = txt.split(' '); let i = 0; setTimeout(function tic() { r.textContent += (i ? ' ' : '') + ps[i++]; if (i < ps.length) setTimeout(tic, 90); }, 300);
+    })),
+    video: el => {
+      const mb = el.querySelector('.is-auto [data-mb]'); let n = 0;
+      const t = setInterval(() => { if (!document.contains(mb)) return clearInterval(t); n += .6; mb.textContent = n.toLocaleString('es-AR', { maximumFractionDigits: 1 }); }, 1000);
+      el.querySelector('.ux-play').addEventListener('click', e => { e.currentTarget.textContent = '▶ reproduciendo'; e.currentTarget.parentElement.classList.add('is-auto'); });
+    },
+    feedback: el => el.querySelectorAll('[data-fb]').forEach(b => b.addEventListener('click', () => { el.querySelector('[data-fb-out]').textContent = b.dataset.fb; })),
+  });
+
   WLDemos.agregar(D, M);
 })();

@@ -41,24 +41,46 @@ window.WLExamples = (function () {
     for (const [re, f] of FAMILIAS) if (re.test(id)) return f;
     return 'flat';
   }
+  // Contenido del ejemplo según para qué sirve el estilo ("Ideal para"): un rubro representativo de esa familia
+  const USOS = [
+    [/dashboard|analítica|analytics|datos|fintech|financ|saas|b2b|empresarial|panel/i, 'saas-general'],
+    [/e-?commerce|tienda|retail|producto|moda|lujo|marca/i, 'e-commerce'],
+    [/salud|bienestar|médic|clínica|spa|meditación|fitness/i, 'veterinary-clinic'],
+    [/restaurante|comida|gastronom|café|food/i, 'restaurant-food-service'],
+    [/educa|curso|aprendizaje|chicos|niños/i, 'online-course-e-learning'],
+    [/gaming|juego|entretenimiento/i, 'gaming'],
+    [/música|video|streaming|podcast|medios/i, 'music-streaming'],
+    [/portfolio|agencia|creativ|diseño|arte|fotograf/i, 'legal-services'],
+    [/noticia|editorial|revista|blog|documentación|contenido/i, 'api-developer-portal'],
+    [/evento|boda|casamiento|festival/i, 'wedding-event-planning'],
+    [/gobierno|público|inclusiv|ong|social/i, 'non-profit-charity'],
+    [/viaje|hotel|turismo/i, 'hotel-hospitality'],
+    [/inmobili|propiedad/i, 'real-estate-property'],
+    [/herramienta|productividad|developer|programación/i, 'productivity-tool'],
+  ];
+  function contenidoEstilo(e) {
+    const ideal = (e.fields || []).find(([k]) => k === 'Ideal para')?.[1] || e.summary || '';
+    const id = (USOS.find(([re]) => re.test(ideal)) || [null, 'e-commerce'])[1];
+    return window.WLRubros ? WLRubros.datos(id) : { marca: 'Tu marca', h: 'Mandolina V5', p: 'Cortes perfectos en segundos, apta lavavajillas.', b: 'Comprar', g: 'Envío gratis', familia: 'Tiendas' };
+  }
   function estilo(e) {
     const fam = familia(e.id);
     const sw = vivid(e.swatches || []);
     const c1 = sw[0] || '#4f46e5', c2 = sw[1] || c1, c3 = sw[2] || c2;
+    const d = contenidoEstilo(e);
     const mock = `
       <div class="ex-stage"><div class="ex ex--${fam}" style="--c1:${c1};--c2:${c2};--c3:${c3};--ink1:${inkOn(c1)}">
-        <div class="ex-nav"><span class="ex-logo"></span><span class="ex-links"><i></i><i></i><i></i></span></div>
+        <div class="ex-nav"><span class="ex-logo"></span><span class="ex-marca">${esc(d.marca)}</span><span class="ex-links"><i></i><i></i><i></i></span></div>
         <div class="ex-body">
           <div class="ex-card">
-            <p class="ex-kicker">Nuevo</p>
-            <p class="ex-h">Mandolina V5</p>
-            <p class="ex-p">Cortes perfectos en segundos, apta lavavajillas.</p>
-            <div class="ex-row"><span class="ex-btn">Comprar</span><span class="ex-chip">Envío gratis</span></div>
+            <p class="ex-h">${esc(d.h)}</p>
+            <p class="ex-p">${esc(d.p)}</p>
+            <div class="ex-row"><span class="ex-btn">${esc(d.b)}</span><span class="ex-chip">${esc(d.g)}</span></div>
           </div>
           <div class="ex-side"><span></span><span></span></div>
         </div>
       </div></div>`;
-    return block('Así se ve', mock, 'Recreación aproximada del estilo con sus colores y efectos, para darte una idea. No es una captura de un sitio real.');
+    return block('Así se ve', mock, `Recreación aproximada del estilo con sus colores y efectos, aplicada a un ejemplo inventado de ${esc((d.familia || 'sitio').toLowerCase())}, uno de los usos para los que se recomienda. No es una captura de un sitio real.`);
   }
 
   // ── Landing: wireframe con el orden de secciones ──

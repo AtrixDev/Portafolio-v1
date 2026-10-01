@@ -227,7 +227,8 @@
 .ex { --r:12px; display:grid; gap:12px; padding:14px; border-radius:12px; overflow:hidden; min-height:210px;
   font-family:system-ui, -apple-system, 'Segoe UI', sans-serif; color:#15151a; background:#f2f4f7; }
 .ex-nav { display:flex; justify-content:space-between; align-items:center; }
-.ex-logo { width:22px; height:22px; border-radius:6px; background:var(--c1); }
+.ex-logo { width:22px; height:22px; border-radius:6px; background:var(--c1); flex:none; }
+.ex-marca { margin:0 auto 0 .45rem; font-size:11px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
 .ex-links { display:flex; gap:6px; }
 .ex-links i { width:26px; height:6px; border-radius:3px; background:currentColor; opacity:.22; }
 .ex-body { display:grid; grid-template-columns:1.6fr 1fr; gap:12px; }

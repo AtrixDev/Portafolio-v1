@@ -18,14 +18,14 @@ import markdown
 
 AQUI = Path(__file__).resolve().parent
 OUT_BASE = AQUI.parent.parent / "frontend" / "experimentos"
-IGNORAR = {".claude", "node_modules", ".impeccable", ".git"}
+IGNORAR = {".claude", "node_modules", ".impeccable", ".git", "dist", "build", "__pycache__", "venv", ".venv"}
 AUX = {"PRODUCT.md", "DESIGN.md", "DESIGN.json"}   # archivos de trabajo de algunas skills: se publican aparte
 
 
 def archivos(carpeta: Path, entrada: set):
     for p in sorted(carpeta.rglob("*")):
         rel = p.relative_to(carpeta)
-        if p.is_dir() or rel.parts[0] in IGNORAR or any(x.startswith(".") for x in rel.parts):
+        if p.is_dir() or any(x in IGNORAR or x.startswith(".") for x in rel.parts) or rel.name in ("package-lock.json", "yarn.lock", "pnpm-lock.yaml"):
             continue
         if str(rel) in entrada and p.read_bytes() == (AQUI / ID / "entrada" / rel).read_bytes():
             continue   # archivo de entrada sin cambios

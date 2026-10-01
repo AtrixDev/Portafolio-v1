@@ -1,0 +1,60 @@
+{
+ "id": "claude-api",
+ "fecha": "30/09/2026",
+ "prompt": "Escribí un script en Python, clasificar.py en esta carpeta, que use la API de Claude para clasificar preguntas de compradores de Mercado Libre en: stock, envío, medidas, compatibilidad, precio u otra. Tiene que procesar un CSV con cientos de preguntas por día sin gastar de más. Agregá un README.md corto en español argentino.",
+ "entrada": [],
+ "sin": {
+  "skills": [],
+  "segundos": 109,
+  "pasos": 5,
+  "costo": 0.44,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Listo: `clasificar.py` y `README.md` están en la carpeta. No lo pude correr contra la API real porque en esta máquina no hay `ANTHROPIC_API_KEY`. Lo probé de punta a punta con un cliente simulado (modo lote y `--ya`) y eso anduvo bien, pero la calidad de la clasificación está sin verificar.\n\nPara usarlo:\n\n```bash\npip install anthropic\nexport ANTHROPIC_API_KEY=\"sk-ant-...\"\npython clasificar.py preguntas.csv\n```\n\nLee la columna `pregunta` (o la que le pases con `--columna`) y escribe `preguntas_clasificado.csv` con una columna `categoria` agregada.\n\nPara no gastar de más hace cuatro cosas:\n\n- **Modelo Haiku 4.5**: es el más barato y para esta tarea debería alcanzar.\n- **Batch API por defecto**: cuesta la mitad, pero el resultado no es inmediato (suele tardar minutos, puede llegar a 24 horas). Con `--ya` clasifica al momento a precio normal.\n- **25 preguntas por request**: las instrucciones se pagan una vez por grupo y no por pregunta.\n- **Repetidas una sola vez**: las preguntas iguales (ignorando mayúsculas y espacios) se clasifican una vez.\n\nOtros comportamientos que conviene conocer:\n\n- Si cortás el script mientras espera el lote, lo retomás con `--retomar ID` y el mismo CSV.\n- Las filas vacías o de un grupo que falló quedan como `sin_clasificar`, no como `otra`.\n- Cuando una pregunta toca varios temas, elige el principal. Los criterios de cada categoría los definí yo en la constante `SISTEMA`; revisalos contra tu rubro (por ejemplo, puse cuotas y medios de pago en `precio`, y garantía y factura en `otra`).\n\nAntes de usarlo a diario, corré una tanda chica con `--ya` y revisá las categorías a mano.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "README.md",
+    "ruta": "sin/README.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "sin/README.md.html"
+   },
+   {
+    "nombre": "clasificar.py",
+    "ruta": "sin/clasificar.py",
+    "aux": false,
+    "tipo": "codigo"
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "claude-api"
+  ],
+  "segundos": 200,
+  "pasos": 14,
+  "costo": 1.27,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Listo: `clasificar.py` y `README.md` están en la carpeta. Todavía no corrió contra la API real porque en este entorno no hay credenciales; lo probé con un cliente simulado y el flujo completo funciona (lectura del CSV, armado del lote, resultados, caché y CSV de salida).\n\nSe usa con `python clasificar.py preguntas.csv` y genera `preguntas_clasificado.csv` con una columna `categoria` agregada.\n\nPara no gastar de más, el script hace esto:\n\n- **Lotes a mitad de precio:** usa la Batches API, que cobra el 50 % a cambio de no responder al instante. Suele tardar minutos, así que sirve para una corrida diaria pero no para contestar en vivo.\n- **50 preguntas por pedido:** las instrucciones se pagan una vez cada 50 preguntas en lugar de una vez por pregunta.\n- **Caché local:** las preguntas repetidas (mismo texto, sin distinguir mayúsculas ni espacios) se clasifican una sola vez y quedan guardadas para los días siguientes.\n- **Esfuerzo bajo:** le pide al modelo el nivel mínimo de razonamiento.\n- **Reanudación:** si el script se corta mientras espera, al correrlo de nuevo retoma el lote en curso en vez de mandar y pagar otro.\n\nAl terminar muestra los tokens usados y el costo estimado del lote.\n\nCosas a tener en cuenta:\n\n- **Modelo:** dejé `claude-opus-5-5` por defecto. `claude-haiku-4-5` cuesta la cuarta parte y probablemente alcance para esta tarea, pero no lo medí. Se cambia con `--modelo`, y el README explica cómo comparar los dos sobre un día real antes de decidir.\n- **Prompt caching:** no lo activé. Las instrucciones probablemente no llegan al mínimo de 512 tokens que exige ese modelo para cachear, así que no cambiaría nada.\n- **Fallback ante rechazos:** tampoco está, porque la Batches API no lo acepta. Si el modelo rechaza un pedido, esas preguntas quedan sin categoría, el script avisa y termina con código 1.\n- **Columna de la pregunta:** asumí que se llama `pregunta`. Si tu CSV usa otro nombre, pasalo con `-c`.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "README.md",
+    "ruta": "con/README.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "con/README.md.html"
+   },
+   {
+    "nombre": "clasificar.py",
+    "ruta": "con/clasificar.py",
+    "aux": false,
+    "tipo": "codigo"
+   }
+  ]
+ }
+}

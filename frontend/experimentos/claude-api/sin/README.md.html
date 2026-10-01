@@ -1,0 +1,50 @@
+<h1>Clasificador de preguntas de Mercado Libre</h1>
+<p>Lee un CSV con preguntas de compradores y le agrega una columna <code>categoria</code> con una de estas: <code>stock</code>, <code>envío</code>, <code>medidas</code>, <code>compatibilidad</code>, <code>precio</code> u <code>otra</code>.</p>
+<h2>Instalación</h2>
+<pre><code class="language-bash">pip install anthropic
+export ANTHROPIC_API_KEY=&quot;sk-ant-...&quot;
+</code></pre>
+<h2>Uso</h2>
+<pre><code class="language-bash">python clasificar.py preguntas.csv
+</code></pre>
+<p>El CSV tiene que tener una columna <code>pregunta</code> (si se llama distinto, pasala con <code>--columna</code>). Puede venir separado por coma o por punto y coma. El resultado queda en <code>preguntas_clasificado.csv</code>, con las mismas columnas más <code>categoria</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Opción</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-c</code>, <code>--columna</code></td>
+<td>Nombre de la columna con la pregunta (por defecto <code>pregunta</code>)</td>
+</tr>
+<tr>
+<td><code>-o</code>, <code>--salida</code></td>
+<td>Ruta del CSV de salida</td>
+</tr>
+<tr>
+<td><code>--ya</code></td>
+<td>Clasifica al momento en vez de mandar un lote</td>
+</tr>
+<tr>
+<td><code>--retomar ID</code></td>
+<td>Retoma un lote ya enviado, usando el mismo CSV</td>
+</tr>
+</tbody>
+</table>
+<h2>Cómo cuida el gasto</h2>
+<ul>
+<li><strong>Modelo Haiku 4.5</strong>, el más barato de Claude. Se puede cambiar con la variable <code>CLAUDE_MODELO</code>.</li>
+<li><strong>Procesamiento por lotes</strong>: por defecto usa la Batch API, que cuesta la mitad. A cambio, el resultado no es inmediato: suele tardar unos minutos y puede llegar a tardar hasta 24 horas. Si lo necesitás ya, usá <code>--ya</code> y pagás el precio normal.</li>
+<li><strong>25 preguntas por request</strong>, así las instrucciones se pagan una vez por grupo y no una vez por pregunta.</li>
+<li><strong>Preguntas repetidas</strong> (ignorando mayúsculas y espacios) se clasifican una sola vez.</li>
+</ul>
+<p>Al terminar, el script muestra cuántos tokens consumió.</p>
+<h2>A tener en cuenta</h2>
+<ul>
+<li>Si cortás el script mientras espera el lote, no se pierde nada: copiá el ID que muestra y corré <code>python clasificar.py preguntas.csv --retomar ID</code> con el mismo CSV sin modificar.</li>
+<li>Las filas vacías, o las de un grupo que falló, quedan como <code>sin_clasificar</code>.</li>
+<li>Las definiciones de cada categoría están en la constante <code>SISTEMA</code> de <code>clasificar.py</code>. Si ves que clasifica mal algún caso típico de tu rubro, sumalo ahí como ejemplo.</li>
+</ul>

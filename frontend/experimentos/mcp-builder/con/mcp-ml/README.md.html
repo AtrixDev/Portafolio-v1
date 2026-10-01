@@ -1,0 +1,152 @@
+<h1>mercadolibre-mcp-server</h1>
+<p>Servidor MCP que le da a Claude acceso al catálogo de <strong>Mercado Libre Argentina</strong>. Con esto Claude puede:</p>
+<ul>
+<li><strong>Ver un producto de catálogo</strong> por su ID: nombre, ficha técnica, características, fotos y quién gana la compra (buy box) y a qué precio.</li>
+<li><strong>Listar las publicaciones que compiten</strong> en ese catálogo: precio, vendedor, condición, envío gratis, garantía y ubicación, con paginado.</li>
+</ul>
+<p>Es de sólo lectura: no publica, no compra ni modifica nada.</p>
+<hr />
+<h2>Antes de empezar: vas a necesitar credenciales</h2>
+<p>Aunque los datos del catálogo son públicos, <strong>la API de Mercado Libre ya no responde pedidos anónimos</strong>: sin token devuelve <code>401</code>/<code>403</code>. Así que necesitás crear una aplicación gratuita en Mercado Libre (tarda cinco minutos):</p>
+<ol>
+<li>Entrá a <a href="https://developers.mercadolibre.com.ar/devcenter">https://developers.mercadolibre.com.ar/devcenter</a> con tu cuenta de Mercado Libre.</li>
+<li>Tocá <strong>Crear aplicación</strong> y completá los datos. Como URL de redirección podés poner cualquier URL <code>https</code> tuya (ej. <code>https://localhost.com</code>), porque este servidor no la usa.</li>
+<li>Cuando la guardes, copiá el <strong>Client ID</strong> (App ID) y el <strong>Client Secret</strong>.</li>
+</ol>
+<p>Con eso el servidor pide solo un token de aplicación y lo renueva automáticamente cada vez que vence (duran 6 horas). No tenés que hacer nada más.</p>
+<blockquote>
+<p><strong>Alternativa:</strong> si ya tenés un access token (empieza con <code>APP_USR-...</code>), podés pasarlo en <code>ML_ACCESS_TOKEN</code>. Ojo que vence a las 6 horas y ahí vas a tener que reemplazarlo a mano. Por eso conviene usar Client ID + Secret.</p>
+</blockquote>
+<h2>Requisitos</h2>
+<ul>
+<li><strong>Node.js 18 o superior</strong> (<code>node -v</code> para verificarlo).</li>
+<li>npm (viene con Node).</li>
+</ul>
+<h2>Instalación</h2>
+<p>Desde la carpeta <code>mcp-ml/</code>:</p>
+<pre><code class="language-bash">npm install
+npm run build
+</code></pre>
+<p>Esto genera <code>dist/index.js</code>, que es lo que va a ejecutar Claude. Anotate la <strong>ruta absoluta</strong> a ese archivo, porque la vas a necesitar para conectarlo. La sacás así:</p>
+<pre><code class="language-bash">echo &quot;$(pwd)/dist/index.js&quot;
+</code></pre>
+<h2>Cómo conectarlo a Claude</h2>
+<h3>Claude Desktop</h3>
+<ol>
+<li>Abrí el archivo de configuración (si no existe, crealo):</li>
+<li><strong>macOS:</strong> <code>~/Library/Application Support/Claude/claude_desktop_config.json</code></li>
+<li><strong>Windows:</strong> <code>%APPDATA%\Claude\claude_desktop_config.json</code></li>
+</ol>
+<p>También llegás desde Claude Desktop en <strong>Configuración → Desarrollador → Editar configuración</strong>.</p>
+<ol>
+<li>Agregá el servidor dentro de <code>mcpServers</code> y reemplazá la ruta y las credenciales:</li>
+</ol>
+<p><code>json
+   {
+     "mcpServers": {
+       "mercadolibre": {
+         "command": "node",
+         "args": ["/ruta/absoluta/a/mcp-ml/dist/index.js"],
+         "env": {
+           "ML_CLIENT_ID": "tu-client-id",
+           "ML_CLIENT_SECRET": "tu-client-secret"
+         }
+       }
+     }
+   }</code></p>
+<p>En Windows, las barras de la ruta van dobles: <code>"C:\\Users\\vos\\mcp-ml\\dist\\index.js"</code>.</p>
+<ol>
+<li><strong>Cerrá Claude Desktop del todo</strong> (no alcanza con cerrar la ventana) y volvé a abrirlo. Las herramientas de Mercado Libre aparecen en el menú de conectores/herramientas del chat.</li>
+</ol>
+<h3>Claude Code</h3>
+<p>Un solo comando:</p>
+<pre><code class="language-bash">claude mcp add mercadolibre \
+  -e ML_CLIENT_ID=tu-client-id \
+  -e ML_CLIENT_SECRET=tu-client-secret \
+  -- node /ruta/absoluta/a/mcp-ml/dist/index.js
+</code></pre>
+<p>Por defecto queda disponible sólo en el proyecto actual. Si lo querés en todos tus proyectos, agregá <code>--scope user</code>. Para ver si conectó, corré <code>claude mcp list</code> o escribí <code>/mcp</code> dentro de Claude Code.</p>
+<h2>Variables de entorno</h2>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>¿Obligatoria?</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ML_CLIENT_ID</code></td>
+<td>Sí (o usá <code>ML_ACCESS_TOKEN</code>)</td>
+<td>Client ID de tu app de Mercado Libre.</td>
+</tr>
+<tr>
+<td><code>ML_CLIENT_SECRET</code></td>
+<td>Sí (o usá <code>ML_ACCESS_TOKEN</code>)</td>
+<td>Client Secret de tu app.</td>
+</tr>
+<tr>
+<td><code>ML_ACCESS_TOKEN</code></td>
+<td>Opcional</td>
+<td>Token fijo. Sólo se usa si no definiste Client ID y Secret. Vence a las 6 horas.</td>
+</tr>
+</tbody>
+</table>
+<p>Si no hay ninguna credencial configurada, el servidor no arranca y te avisa qué falta.</p>
+<h2>Herramientas disponibles</h2>
+<h3><code>mercadolibre_get_catalog_product</code></h3>
+<p>Trae los datos de un producto de catálogo.</p>
+<ul>
+<li><code>product_id</code>: el ID (<code>MLA19615208</code>) o directamente la URL del catálogo.</li>
+<li><code>response_format</code>: <code>markdown</code> (por defecto) o <code>json</code>.</li>
+</ul>
+<h3><code>mercadolibre_list_catalog_listings</code></h3>
+<p>Lista las publicaciones de distintos vendedores que compiten en ese catálogo.</p>
+<ul>
+<li><code>product_id</code>: el ID o la URL del catálogo.</li>
+<li><code>limit</code>: cuántas publicaciones traer, de 1 a 50 (por defecto 20).</li>
+<li><code>offset</code>: desde qué posición seguir, para paginar.</li>
+<li><code>response_format</code>: <code>markdown</code> o <code>json</code>.</li>
+</ul>
+<p>Además de la lista, devuelve el total, si hay más páginas y el precio mínimo y máximo <strong>de la página actual</strong>. El orden es el que da Mercado Libre, que no siempre es por precio. Si le pedís a Claude "el más barato", va a recorrer las páginas que haga falta.</p>
+<h2>¿De dónde saco el ID del producto?</h2>
+<p>Buscá el producto en mercadolibre.com.ar y fijate la URL. Las páginas de catálogo tienen <code>/p/</code> seguido del ID:</p>
+<pre><code>https://www.mercadolibre.com.ar/samsung-galaxy-s23-256-gb/p/MLA19615208
+                                                           ^^^^^^^^^^^
+</code></pre>
+<p>Le podés pasar a Claude esa URL entera, que el servidor extrae el ID solo.</p>
+<p><strong>No confundir</strong> con las URLs de publicaciones individuales (<code>articulo.mercadolibre.com.ar/MLA-123456789-...</code>). Esas son de un vendedor puntual y no son un producto de catálogo, así que el servidor las rechaza con un mensaje claro.</p>
+<h2>Ejemplos para pedirle a Claude</h2>
+<ul>
+<li>"¿Qué es el producto MLA19615208 de Mercado Libre y cuál es su ficha técnica?"</li>
+<li>"¿Quién gana la buy box de https://www.mercadolibre.com.ar/.../p/MLA19615208 y a qué precio?"</li>
+<li>"Listame todas las publicaciones que compiten en MLA19615208 y decime cuál es la más barata con envío gratis."</li>
+<li>"¿Cuántos vendedores venden este producto y cuál es la diferencia entre el precio más alto y el más bajo?"</li>
+</ul>
+<h2>Probarlo sin Claude</h2>
+<p>Con el MCP Inspector podés llamar a las herramientas desde el navegador:</p>
+<pre><code class="language-bash">ML_CLIENT_ID=tu-client-id ML_CLIENT_SECRET=tu-client-secret npm run inspector
+</code></pre>
+<h2>Problemas frecuentes</h2>
+<ul>
+<li><strong>"Faltan credenciales"</strong>: no llegaron las variables de entorno. En Claude Desktop, revisá que estén dentro de <code>env</code> en el JSON y reiniciá la app.</li>
+<li><strong>"No se pudo obtener el token… invalid client_id or client_secret"</strong>: el Client ID o el Secret están mal copiados, o regeneraste el Secret en el DevCenter.</li>
+<li><strong>"el access token es inválido o venció"</strong>: estás usando <code>ML_ACCESS_TOKEN</code> y pasaron más de 6 horas. Pasate a Client ID + Secret.</li>
+<li><strong>Error 403 "la aplicación no tiene permiso"</strong>: Mercado Libre bloqueó el pedido por política. Revisá en el DevCenter que la app esté activa y que la hayas creado con una cuenta de Argentina. Si persiste, probá con un token de usuario en <code>ML_ACCESS_TOKEN</code>.</li>
+<li><strong>"no existe el producto de catálogo"</strong>: el ID no es de catálogo (fijate que venga de una URL con <code>/p/</code>) o el producto fue dado de baja.</li>
+<li><strong>Claude no ve las herramientas</strong>: la ruta en <code>args</code> tiene que ser absoluta y apuntar a <code>dist/index.js</code>. Acordate de correr <code>npm run build</code> antes.</li>
+</ul>
+<h2>Estructura del proyecto</h2>
+<pre><code>mcp-ml/
+├── src/
+│   ├── index.ts              # Arranque del servidor (stdio)
+│   ├── constants.ts          # URL de la API, timeouts, límites
+│   ├── types.ts              # Tipos de las respuestas de Mercado Libre
+│   ├── schemas/products.ts   # Esquemas Zod de entrada y salida
+│   ├── services/auth.ts      # Obtención y renovación del token
+│   ├── services/api.ts       # Cliente HTTP y manejo de errores
+│   ├── services/format.ts    # Formato de precios, IDs y truncado
+│   └── tools/products.ts     # Las dos herramientas MCP
+└── dist/                     # JavaScript compilado (npm run build)
+</code></pre>

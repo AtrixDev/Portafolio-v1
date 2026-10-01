@@ -126,5 +126,50 @@
 .ux-ia { padding: .1rem .35rem; border-radius: 5px; background: #e8f0fe; color: #1967d2; font-size: .68rem; font-weight: 700; }
 .ux-msg { padding: .5rem .7rem; border-radius: 10px 10px 10px 3px; background: #f1f3f4; font-size: .84rem; max-width: 95%; }
 
+
+/* ── Reglas Pro ── */
+/* Cajón del carrito (duración y easing) */
+.ux-caj { position: relative; height: 150px; overflow: hidden; border-radius: 8px; background: #f8f9fa; padding: .6rem; }
+.ux-caj-p { position: absolute; top: 0; right: 0; bottom: 0; width: 62%; padding: .7rem; background: #fff; box-shadow: -8px 0 24px rgba(0,0,0,.14); transform: translateX(105%); transition: transform var(--dur, 220ms) var(--ease, cubic-bezier(.23,1,.32,1)); }
+.ux-caj.is-open .ux-caj-p { transform: none; }
+.ux-caj-p p { font-size: .8rem; color: var(--u-mut); margin-top: .3rem; }
+/* Pista: left contra transform */
+.ux-pista { position: relative; height: 70px; border-radius: 8px; background: #f1f3f4; overflow: hidden; }
+.ux-bola { position: absolute; top: 12px; left: 0; width: 20px; height: 20px; border-radius: 50%; background: var(--u-acc); }
+.ux-bola.is-tr { left: 0; animation: ux-va 1.6s ease-in-out infinite alternate; }
+@keyframes ux-va { to { transform: translateX(calc(var(--w, 240px) - 20px)); } }
+.ux-pista .ux-mini { position: absolute; bottom: .35rem; left: .6rem; margin: 0; }
+.ux-lado[data-lado="bien"] .ux-pista { --w: 100cqw; container-type: inline-size; }
+/* Lazy loading */
+.ux-lazy-l { height: 150px; overflow: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: .4rem; padding-right: .2rem; }
+.ux-lz { display: grid; gap: .2rem; font-size: .66rem; color: var(--u-mut); }
+.ux-lz i { height: 46px; border-radius: 6px; background: #f1f3f4; }
+.ux-lz.is-ok i { background: linear-gradient(135deg, #c9d6df, #e2e8ec); }
+/* Línea de tiempo de carga */
+.ux-tl { display: grid; gap: .45rem; font-size: .76rem; }
+.ux-tl-f { display: grid; grid-template-columns: 8.5rem 1fr; align-items: center; gap: .5rem; }
+.ux-tl-p { position: relative; height: 12px; border-radius: 4px; background: #f1f3f4; }
+.ux-tl-p i { position: absolute; top: 0; bottom: 0; left: calc(var(--a) * 100%); width: calc(var(--d) * 100%); border-radius: 4px; background: #9aa0a6; }
+.ux-tl-p i.is-mal { background: #ea8600; } .ux-tl-p i.is-ok { background: #1e8e3e; } .ux-tl-p i.is-luego { background: #c6dafc; }
+.ux-tl-esc { display: flex; justify-content: space-between; margin-left: 9rem; font: 500 .66rem/1 ui-monospace, monospace; color: var(--u-mut); }
+/* Terceros, fuentes, video */
+.ux-terc, .ux-fuente { display: grid; gap: .4rem; min-height: 110px; }
+.ux-terc-c p { font-size: .82rem; color: var(--u-mut); margin: .2rem 0 .5rem; }
+.ux-fuente h5 { font: 700 1.25rem/1.15 Georgia, "Times New Roman", serif; letter-spacing: -.01em; transition: color .2s; }
+.ux-fuente.is-cargando[data-foit] h5 { color: transparent; }
+.ux-fuente.is-cargando[data-swap] h5 { font-family: system-ui, sans-serif; }
+.ux-video { display: grid; place-items: center; gap: .5rem; height: 140px; border-radius: 10px; background: #202124; color: #fff; }
+.ux-video .ux-mini { color: #dadce0; } .ux-video b { color: #fff; }
+.ux-video.is-auto span, .ux-video.is-auto .ux-play { animation: ux-pulso .8s ease-in-out infinite alternate; }
+.ux-play { width: 54px; height: 54px; border-radius: 50%; border: 0; background: #fff; color: #202124; font-size: 1.1rem; cursor: pointer; }
+.ux-video.is-auto .ux-play { width: auto; height: auto; border-radius: 6px; padding: .3rem .6rem; font-size: .8rem; }
+/* Masivas, feedback, spinner oscuro */
+.ux-x.is-gris { background: #f1f3f4; color: #3c4043; } .ux-x:disabled { opacity: .6; }
+.ux-masivo { display: grid; gap: .45rem; } .ux-masivo .ux-btn { justify-self: start; }
+.ux-items li.is-pausada { opacity: .55; text-decoration: line-through; }
+.ux-fb { display: flex; align-items: center; gap: .35rem; margin-top: .5rem; } .ux-fb .ux-btn { min-height: 32px; padding: .3rem .55rem; }
+.ux-spin.is-osc { display: inline-block; vertical-align: -2px; border-color: #dadce0; border-top-color: #5f6368; }
+@media (prefers-reduced-motion: reduce) { .ux-bola.is-tr, .ux-video.is-auto span { animation: none; } }
+
 @media (max-width: 720px) { .ux-par { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .is-mucho > * { animation: none; } }
