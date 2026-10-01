@@ -112,7 +112,6 @@
 
     'ux/44-error-messages': () => D['ux/33-error-feedback'](),
     'ux/54-input-labels': () => WLDemos.render({ id: '43-form-labels' }, 'ux'),
-    'ux/55-error-placement': () => D['ux/33-error-feedback'](),
 
     'ux/46-image-optimization': demo('Probalo', par('peso', 'mirá cuánto tarda en llegar la misma foto con 4G.',
       `<div class="ux-peso"><b>foto.jpg · 4000 × 3000 px</b><span>2,8 MB</span><div class="ux-barra"><i data-seg="5.6"></i></div><p class="ux-mini">≈ 5,6 s con 4G (4 Mbps)</p></div>`,
@@ -331,7 +330,6 @@
       `<div class="ux-video is-auto"><span>▶ reproduciendo</span><p class="ux-mini">Datos gastados: <b data-mb>0</b> MB</p></div>`,
       `<div class="ux-video"><button type="button" class="ux-play" aria-label="Reproducir video">▶</button><p class="ux-mini">Datos gastados: <b data-mb>0</b> MB hasta que lo toques</p></div>`),
       'Un video que arranca solo gasta datos y batería aunque nadie lo mire (y en muchos planes de celular, plata). Mostrá una imagen y que lo reproduzca quien quiera. Valores ilustrativos de un video HD.'),
-    'ux/97-asset-weight': () => D['ux/46-image-optimization'](),
     'ux/98-feedback-loop': demo('Probalo', par('feedback', 'calificá la respuesta del asistente en cada panel.',
       `<div class="ux-msg">La Mandolina V5 trae 5 insertos: rodajas de 3,5 y 7 mm, bastones, juliana y rallado.</div>`,
       `<div class="ux-msg">La Mandolina V5 trae 5 insertos: rodajas de 3,5 y 7 mm, bastones, juliana y rallado.</div><div class="ux-fb"><span class="ux-mini">¿Te sirvió?</span><button type="button" class="ux-btn is-sec" data-fb="Gracias: lo usamos para mejorar.">👍</button><button type="button" class="ux-btn is-sec" data-fb="Gracias. ¿Qué te faltó? Te paso con una persona.">👎</button></div><p class="ux-mini" data-fb-out></p>`),
@@ -403,5 +401,52 @@
     feedback: el => el.querySelectorAll('[data-fb]').forEach(b => b.addEventListener('click', () => { el.querySelector('[data-fb-out]').textContent = b.dataset.fb; })),
   });
 
+
+  // Qué pasa en cada panel, a la vista antes de tocar nada: así la diferencia se entiende aunque no se juegue con la demo
+  const RES = {
+    '1-smooth-scroll': ['Salta de golpe a la sección', 'Se desliza hasta la sección'],
+    '4-back-button': ['«Atrás» te saca de la tienda', '«Atrás» vuelve al listado'],
+    '7-excessive-motion': ['Todo se mueve: nada destaca', 'Una sola animación guía al botón'],
+    '8-duration-timing': ['Tarda tanto que cansa', 'Abre rápido, sin hacerte esperar'],
+    '9-reduced-motion': ['Sigue girando aunque lo pidas', 'Se detiene si lo pediste'],
+    '10-loading-states': ['Espacio en blanco mientras carga', 'Esqueleto con la forma del contenido'],
+    '11-hover-vs-tap': ['El menú solo abre con el mouse', 'El menú abre también al tocar'],
+    '12-continuous-animation': ['Algo se mueve sin parar mientras leés', 'Todo quieto'],
+    '13-transform-performance': ['Se traba si la página está ocupada', 'Sigue fluido aunque esté ocupada'],
+    '14-easing-functions': ['Velocidad constante: se siente mecánico', 'Arranca rápido y frena suave'],
+    '15-z-index-management': ['Números al azar: algo tapa el menú', 'Escala corta: el menú queda arriba'],
+    '19-content-jumping': ['La foto llega y empuja el botón', 'El lugar de la foto está reservado'],
+    '28-focus-states': ['Sin contorno: no sabés dónde estás', 'Contorno visible al navegar con Tab'],
+    '32-loading-buttons': ['Cada toque crea otro pedido', 'Se desactiva y muestra que trabaja'],
+    '33-error-feedback': ['Solo un borde rojo', 'Un mensaje claro junto al campo'],
+    '35-confirmation-dialogs': ['Borra al primer toque', 'Borra y deja deshacer'],
+    '37-color-only': ['El estado está solo en el color', 'Color, texto e ícono'],
+    '38-alt-text': ['El lector dice «imagen»', 'El lector describe la foto'],
+    '40-aria-labels': ['El lector dice solo «botón»', 'El lector dice qué hace'],
+    '41-keyboard-navigation': ['No se llega con el teclado', 'Se llega con Tab y se abre con Enter'],
+    '46-image-optimization': ['Foto enorme: tarda en llegar', 'Tamaño justo: llega rápido'],
+    '47-lazy-loading': ['Baja las 24 fotos de entrada', 'Baja solo las que vas viendo'],
+    '49-caching': ['La segunda visita baja todo de nuevo', 'La segunda visita casi no tarda'],
+    '50-font-loading': ['Texto invisible hasta que llega la fuente', 'Se lee desde el principio'],
+    '51-third-party-scripts': ['La página espera al script externo', 'La página aparece sin esperar'],
+    '61-submit-feedback': ['El botón no responde', 'Muestra que envía y confirma'],
+    '67-readable-font-size': ['Letra chica: cuesta leerla', 'Letra legible sin hacer zoom'],
+    '68-viewport-meta': ['Se ve la web de escritorio, diminuta', 'Se adapta al ancho del celular'],
+    '69-horizontal-scroll': ['La tabla se corta y se corre de costado', 'La tabla se reorganiza en filas'],
+    '91-bulk-actions': ['Un clic por publicación', 'Un solo clic para todas'],
+    '92-disclaimer': ['Parece una persona', 'Aclara que es una IA'],
+    '93-streaming': ['Esperás a que termine todo', 'El texto aparece a medida que se escribe'],
+    '96-auto-play-video': ['Arranca solo y gasta datos', 'Espera a que lo pidas'],
+    '98-feedback-loop': ['Sin forma de decir si sirvió', 'Pulgar para calificar'],
+  };
+  const conRes = (id, html) => {
+    const r = RES[id]; if (!r) return html;
+    let i = 0;
+    return html.replace(/<h4>(Así no|Así sí)<\/h4>/g, (m) => `${m}<p class="ux-res">${r[i++] ?? ''}</p>`);
+  };
+  Object.keys(D).forEach(k => {
+    const id = k.replace(/^ux\//, ''), f = D[k];
+    D[k] = (...a) => conRes(id, f(...a));
+  });
   WLDemos.agregar(D, M);
 })();
