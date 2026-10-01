@@ -29,12 +29,12 @@ B, I, P = "base", "imprescindible", "pro"
 # ── Curados a mano: id → (nivel, valor) ──
 CURADO = {
   "skills": {
-    "frontend-design": (1, I), "skill-creator": (2, P), "xlsx": (1, I), "docx": (1, B), "pptx": (1, B),
+    "frontend-design": (1, I), "skill-creator": (2, P), "xlsx": (1, B), "docx": (1, B), "pptx": (1, B),
     "pdf": (1, B), "webapp-testing": (2, P), "mcp-builder": (3, P), "claude-api": (3, P),
     "web-artifacts-builder": (2, B), "canvas-design": (1, B), "algorithmic-art": (2, B),
     "theme-factory": (1, B), "brand-guidelines": (1, B), "internal-comms": (1, B), "doc-coauthoring": (1, B),
-    "slack-gif-creator": (1, B), "superpowers": (2, P), "impeccable": (2, P), "ui-ux-pro-max": (1, I),
-    "web-design-guidelines": (1, I), "react-best-practices": (3, P), "trailofbits": (3, P),
+    "slack-gif-creator": (1, B), "superpowers": (2, P), "impeccable": (2, I), "ui-ux-pro-max": (1, P),
+    "web-design-guidelines": (1, B), "react-best-practices": (3, P), "trailofbits": (3, P),
     "remotion": (3, P), "grill-me": (1, I), "claude-ads": (2, P), "ad-creative": (1, P),
     "copywriting": (1, I), "marketing-psychology": (1, B), "image": (1, I), "video": (2, P),
   },
@@ -146,7 +146,6 @@ def clasificar(cat, e, fam):
     if cat == "estilos": return estilos(e)
     if cat == "tipografias": return tipografias(e)
     if cat == "rubros": return rubro(e, fam)
-    if cat == "paletas": return paleta(e, fam)
     return None
 
 

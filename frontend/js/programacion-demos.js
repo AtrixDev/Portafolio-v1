@@ -329,11 +329,69 @@ export function BotonCarrito({ onAgregar }) {
       ['', 'Empate en lo que se ve', 'Los dos paneles tienen filtro por mes, resumen arriba, gráficos de ventas y ACOS, y tabla de detalle con variaciones.'],
       ['', 'Con la skill, un proyecto React completo', 'Lo armó con React, Tailwind y componentes shadcn, y lo empaquetó en un solo archivo. Suma que tocando un mes en el gráfico se filtra.'],
       ['', 'El precio: el peso', 'El panel con la skill pesa 256 KB; el de sin la skill, 17 KB. Para algo así de simple no hace falta; la skill rinde en paneles grandes con muchos componentes.'],
-    ], pie: 'El proyecto fuente que armó con la skill (panel-ventas/) también está publicado, como referencia.' },
+    ], pie: 'Con la skill armó un proyecto de React con más de cuarenta componentes de plantilla; acá se publica solo el panel ya empaquetado.' },
     'skills/ui-ux-pro-max': { exp: 'ui-ux-pro-max', con: 'Con UI UX Pro Max', notas: [
       ['', 'Diferencia moderada', 'Sin la skill sale una landing prolija de consultorio: servicios, obras sociales, cómo sacar turno y ubicación.'],
       ['', 'Elige estilo y paleta con criterio', 'Tomó de su base el estilo "Accesible y ético" para salud y ajustó los colores para que el texto de los botones cumpla contraste 4,5:1.'],
       ['', 'Más útil para el paciente', 'Muestra si está abierto ahora, los horarios con el día de hoy marcado, las obras sociales arriba y preguntas frecuentes.'],
+    ] },
+    'skills/canvas-design': { exp: 'canvas-design', con: 'Con Canvas Design', notas: [
+      ['', 'Las dos cumplen el pedido', 'Ambas respetan el tamaño 1080 × 1350 y traen el 25 %, las fechas, el envío gratis y la marca.'],
+      ['', 'Con la skill, una pieza más de autor', 'Primero escribió una filosofía de diseño (el archivo .md) y de ahí salió una sartén vista desde arriba con el 25 % adentro y el mango partiendo el título. Es más recordable como afiche.'],
+      ['', 'Sin la skill, más directa', 'El 25 gigante se lee desde lejos y la oferta queda más clara de un vistazo. Para una pieza de venta, esa claridad pesa.'],
+      ['', 'Conclusión', 'La skill sube la ambición visual; no garantiza que venda más. Elegí según el objetivo: marca o conversión.'],
+    ], pie: 'Con la skill también se publica el script en Python que armó la pieza.' },
+    'skills/algorithmic-art': { exp: 'algorithmic-art', con: 'Con Algorithmic Art', notas: [
+      ['', 'Las dos cambian en cada recarga', 'Ambas generan un fuego distinto con una semilla que se puede repetir.'],
+      ['', 'Con la skill, una obra con panel', 'Usa p5.js, muestra la semilla, trae controles (llama, viento, brasas, humo) y descarga en PNG. Dejó la filosofía de la obra como comentario dentro del archivo.'],
+      ['', 'Sin la skill, más trabajo de escena', 'Armó una parrilla con combustibles (quebracho, algarrobo, carbón), viento y hasta un avivar con clic. Tardó más y gastó más.'],
+      ['', 'Cuidado con la dependencia', 'La versión con la skill carga p5.js desde internet: sin conexión no se ve. La otra funciona sola.'],
+    ], pie: 'Abrilas varias veces: cada recarga es otra pieza.' },
+    'skills/theme-factory': { exp: 'theme-factory', con: 'Con Theme Factory', notas: [
+      ['', 'Resultado parecido', 'Los dos le dan al informe aspecto de hoja prolija, con tabla alineada y títulos jerarquizados. Mismo contenido, sin agregados.'],
+      ['', 'Con la skill, un tema nombrado', 'Eligió "Golden Hour" (mostaza, terracota, marrón) de un catálogo de 10. Sirve para repetir el mismo estilo en varios documentos.'],
+      ['', 'Una limitación honesta', 'La skill pide mostrarte el catálogo y esperar tu elección; en este experimento no hubo a quién preguntarle y eligió solo.'],
+      ['', 'Revisión desigual', 'La versión sin la skill se abrió en el navegador, en escritorio y celular. La de la skill no se llegó a mirar en pantalla, así que puede tener detalles sin revisar.'],
+      ['', 'Conclusión', 'Para un documento suelto casi no cambia. Rinde cuando necesitás consistencia entre muchos.'],
+    ] },
+    'skills/brand-guidelines': { exp: 'brand-guidelines', con: 'Con Brand Guidelines', notas: [
+      ['', 'Los dos usaron la paleta de la marca', 'Fondo crema, naranja de acento, Poppins y Lora. La versión sin la skill ya conocía los colores.'],
+      ['', 'Con la skill, más completo', 'Sumó un chat de ejemplo, tabla de modelos y precios, y una sección de "bueno saberlo". Para eso cargó además la skill de la API de Claude.'],
+      ['', 'Pero con más para verificar', 'Los precios (los fechó a septiembre de 2026) y las condiciones de alta los escribió sin cotejar, y lo avisó. La otra evitó los números, aunque también puso de memoria los nombres de los modelos.'],
+      ['', 'Revisión desigual', 'La versión sin la skill se abrió en Chrome y entra en una hoja A4. La de la skill no se miró en pantalla.'],
+      ['', 'Conclusión', 'Aporta fidelidad de marca; el contenido factual hay que revisarlo igual.'],
+    ] },
+    'skills/internal-comms': { exp: 'internal-comms', con: 'Con Internal Comms', notas: [
+      ['', 'Mismo contenido, otra estructura', 'La versión sin la skill abrió con lo urgente (el stock de las ollas). La de la skill usa el formato 3P: Progreso, Planes, Problemas.'],
+      ['', 'Con la skill, más corto y estándar', 'Todo entra en un mensaje breve que el equipo reconoce cada semana. Es útil si querés un formato fijo.'],
+      ['', 'Con la skill, lo urgente queda al final', 'Lo que tiene fecha límite pasa a "Problemas". Para este equipo, abrir con eso era mejor.'],
+      ['', 'Un dato que puso solo', 'Con la skill escribió "semana al 30/9" tomando la fecha de hoy. No estaba en las notas; lo avisó, pero hay que revisarlo.'],
+      ['', 'Conclusión', 'Gana la skill si tu equipo ya usa un formato fijo; si no, alcanza con un buen prompt.'],
+    ] },
+    'skills/doc-coauthoring': { exp: 'doc-coauthoring', con: 'Con Doc Co-authoring', notas: [
+      ['', 'Dos formas de empezar', 'Sin la skill: un borrador completo, con supuestos y huecos [COMPLETAR]. Con la skill: solo el esqueleto de once secciones y una lista de preguntas.'],
+      ['', 'Con la skill no inventa nada', 'No puso servicios, precios ni resultados que no conoce. Te pide contexto y arma el documento sección por sección.'],
+      ['', 'Es un proceso de varias vueltas', 'La skill sigue tres etapas: contexto, redacción por secciones y una prueba final con un lector sin contexto. En este experimento solo se vio la primera, porque no había nadie que respondiera.'],
+      ['', 'Conclusión', 'Si querés algo rápido para completar, mejor sin la skill. Si va a clientes, vale el proceso.'],
+    ] },
+    'skills/slack-gif-creator': { exp: 'slack-gif-creator', con: 'Con Slack GIF Creator', notas: [
+      ['', 'Los dos cumplen', 'GIF animado, en bucle, con un contador que sube hasta 1.000 y el texto final legible.'],
+      ['', 'Con la skill, formato de Slack', 'Cuadrado de 480 × 480, 20 cuadros por segundo, y pasó el validador de la skill. Cierra con flash, confeti y rayos.'],
+      ['', 'Sin la skill, más liviano', 'Pesó 1,7 MB contra 4,1 MB (en el original, antes de comprimirlos para la web). Tiene un contador con barra de progreso que frena en 997, 998, 999 antes de llegar a 1.000, para generar suspenso.'],
+      ['', 'Conclusión', 'La skill sube el acabado y garantiza que Slack lo acepte; el peso hay que cuidarlo.'],
+    ], pie: 'Los GIF están comprimidos para la web; se ven con menos calidad que los originales.' },
+    'skills/superpowers': { exp: 'superpowers', con: 'Con Superpowers', notas: [
+      ['', 'Sin la skill, código ya', 'Escribió la función y la probó con 200.000 combinaciones al azar. Quedó lista para usar, con sus supuestos escritos (IVA, IIBB, ACOS).'],
+      ['', 'Con la skill, no escribió código', 'Cargó brainstorming, propuso el diseño con la fórmula y pidió que confirmes los supuestos antes de implementar. Terminó la corrida sin la función.'],
+      ['', 'Es un método, no un atajo', 'Superpowers frena para que revises el plan, escribe tests primero y verifica. Tarda más en llegar al código; evita implementar algo equivocado.'],
+      ['', 'Qué se probó', 'De todo Superpowers se cargó la parte de brainstorming. Los pasos de plan, tests y revisión no llegaron a correr porque la corrida se detuvo esperando tu OK.'],
+      ['', 'Conclusión', 'Con tareas chicas y claras estorba. Con cálculos de plata o cambios grandes, el freno vale la pena.'],
+    ] },
+    'skills/trailofbits': { exp: 'trailofbits', con: 'Con Trail of Bits', notas: [
+      ['', 'Empate en lo que encontraron', 'Las dos detectaron lo grave: ejecución de comandos, admin falso con un header, login salteable con NoSQL, contraseñas en texto plano y credenciales de la base escritas en el código. Las dos dan la línea de cada problema y cómo arreglarlo.'],
+      ['', 'La skill clasifica más severo', 'Con la skill hay 5 hallazgos críticos contra 3. No es que vea más: marca como críticos la falta de autenticación y las contraseñas en texto plano, que la otra puso en "altos". Y separa en dos algunos puntos que la otra juntaba (12 hallazgos contra 11).'],
+      ['', 'Costó parecido', 'USD 0,45 contra USD 0,34 y un minuto y medio cada una.'],
+      ['', 'Una aclaración sobre lo que se probó', 'De todo lo que trae Trail of Bits, en esta corrida se cargó una sola skill (sharp-edges). Y ninguna ejecutó el código: fue lectura. Un informe así no reemplaza una auditoría.'],
     ] },
   };
   function experimento(id) {
@@ -354,7 +412,7 @@ export function BotonCarrito({ onAgregar }) {
       prompt: m.prompt + (m.entrada.length ? ` (Archivos de partida: ${m.entrada.join(', ')})` : '') + ` (Con la skill se agregó: "Usá la skill…")`,
       filas: [['Tiempo', seg2(m.sin.segundos), seg2(m.con.segundos)], ['Pasos', String(m.sin.pasos ?? '—'), String(m.con.pasos ?? '—')], ['Costo de la corrida', usd(m.sin.costo), usd(m.con.costo)],
         ...(m.con.skills ? [['Skills que cargó', m.sin.skills?.length ? m.sin.skills.join(', ') : 'Ninguna', m.con.skills.join(', ') || 'Ninguna']] : [])],
-      como: 'Cada versión se generó en una carpeta vacía con el mismo prompt. La de "sin la skill" corrió con todas las skills desactivadas. Las salidas se muestran tal cual: sin retoques.' });
+      como: 'Cada versión se generó en una carpeta vacía con el mismo prompt. La de "sin la skill" corrió con todas las skills desactivadas. Las salidas se muestran tal cual: sin retoques. Es una sola corrida por lado: otra corrida podría dar algo distinto, y las skills que piden conversar (preguntarte antes de seguir) quedan en desventaja porque acá no había nadie que respondiera.' });
     let cuerpo = '';
     if (tipo === 'pagina') {
       const src = l => base + principal(l).find(a => a.tipo === 'pagina')?.ruta;

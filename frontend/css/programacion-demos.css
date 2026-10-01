@@ -208,3 +208,54 @@
   .dm--race.is-run .dm-track i { animation-duration: .01s; animation-delay: 0s; }
   .dm-pane { animation: none; }
 }
+
+/* ── Landing armada con el orden de secciones (Yerbal del Monte) ── */
+.lp { display:grid; gap:0; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--surface); font-family:var(--font-sans); max-width:560px; }
+.lp-sec { position:relative; padding:26px 14px 14px 36px; border-top:1px dashed var(--line); }
+.lp-sec:first-child { border-top:0; }
+.lp-n { position:absolute; left:8px; top:6px; display:grid; width:20px; height:20px; place-items:center; border-radius:50%; background:var(--surface-2); color:var(--text-2); font:600 .7rem var(--font-mono); }
+.lp-n small { position:absolute; left:28px; top:-1px; width:max-content; max-width:min(70vw,460px); font:500 .68rem var(--font-sans); color:var(--muted); }
+.lp-hero { display:grid; grid-template-columns:1fr 84px; gap:12px; align-items:center; }
+.lp-hero.is-video { grid-template-columns:1fr 1fr; }
+.lp-h1 { margin:0; font:700 1.05rem/1.2 var(--font-display); color:var(--text); text-wrap:balance; }
+.lp-p { margin:4px 0 0; font-size:.78rem; color:var(--text-2); }
+.lp-row { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 0; }
+.lp-in { flex:1 1 120px; padding:7px 10px; border:1px solid var(--line-strong); border-radius:8px; font-size:.74rem; color:var(--muted); background:var(--surface-2); }
+.lp-b, .lp-b2 { padding:7px 12px; border-radius:8px; font-size:.74rem; font-weight:600; background:var(--text); color:var(--surface); }
+.lp-b2 { background:none; color:var(--text); border:1px solid var(--line-strong); }
+.lp-reloj { font:600 .8rem var(--font-mono); color:var(--text); }
+.lp-reloj b { padding:3px 5px; border-radius:5px; background:var(--surface-2); }
+.lp-sw { display:flex; gap:4px; } .lp-sw i { width:22px; height:22px; border-radius:50%; background:var(--line-strong); }
+.lp-img, .lp-cel, .lp-play, .lp-media { display:grid; place-items:center; min-height:84px; border-radius:10px; background:linear-gradient(135deg,var(--surface-2),var(--line)); color:var(--text-2); }
+.lp-cel { width:52px; min-height:92px; margin:auto; border:3px solid var(--line-strong); border-radius:12px; }
+.lp-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.lp-card, .lp-q, .lp-persona { display:grid; gap:4px; align-content:start; padding:10px; border:1px solid var(--line); border-radius:10px; font-size:.74rem; color:var(--text); }
+.lp-card i, .lp-persona i { width:18px; height:18px; border-radius:6px; background:var(--line-strong); }
+.lp-persona i { width:28px; height:28px; border-radius:50%; }
+.lp-card span:not(.lp-b) { height:5px; border-radius:3px; background:var(--line); }
+.lp-card.is-dest { border-color:var(--text); box-shadow:0 0 0 1px var(--text); }
+.lp-precio { font:700 .95rem var(--font-display); }
+.lp-q small, .lp-persona small, .lp-stars small { display:block; color:var(--muted); font-size:.66rem; }
+.lp-bento { display:grid; grid-template-columns:2fr 1fr; grid-auto-rows:44px; gap:6px; }
+.lp-bento div { padding:8px; border-radius:10px; background:var(--surface-2); font-size:.74rem; }
+.lp-bento .is-big { grid-row:span 2; background:var(--line); }
+.lp-stars { display:flex; align-items:center; gap:12px; } .lp-stars > b { font:700 1.6rem var(--font-display); } .lp-stars > span { font-size:.8rem; }
+.lp-bars { display:grid; gap:3px; flex:1; } .lp-bars i { display:block; height:5px; border-radius:3px; background:linear-gradient(90deg,var(--text) calc(var(--v)*100%),var(--line) 0); }
+.lp-logos { display:flex; gap:10px; justify-content:space-between; } .lp-logos i { flex:1; height:16px; border-radius:4px; background:var(--line); }
+.lp-cifra { margin:0; font-size:.82rem; color:var(--text-2); } .lp-cifra b { font:700 1.3rem var(--font-display); color:var(--text); }
+.lp-tab { width:100%; border-collapse:collapse; font-size:.74rem; } .lp-tab th, .lp-tab td { padding:5px 8px; border-bottom:1px solid var(--line); text-align:left; }
+.lp-faq p { display:flex; justify-content:space-between; margin:0; padding:7px 0; border-bottom:1px solid var(--line); font-size:.76rem; }
+.lp-cta { display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; padding:12px; border-radius:10px; background:var(--surface-2); font-size:.82rem; }
+.lp-cta.is-urg { border:1px solid var(--bad); }
+.lp-form { display:grid; gap:6px; }
+.lp-pasos { display:flex; gap:8px; flex-wrap:wrap; font-size:.74rem; } .lp-pasos span { display:flex; gap:6px; align-items:center; } .lp-pasos i { display:grid; width:18px; height:18px; place-items:center; border-radius:50%; background:var(--text); color:var(--surface); font:600 .66rem var(--font-mono); font-style:normal; }
+.lp-prob { margin:0; font:600 .95rem/1.25 var(--font-display); text-wrap:balance; }
+.lp-media { min-height:70px; }
+.lp-carr { display:flex; gap:6px; } .lp-carr i { flex:1; height:56px; border-radius:8px; background:var(--line); } .lp-carr .is-on { flex:2; background:var(--line-strong); }
+.lp-agenda p { display:flex; gap:10px; margin:0; padding:5px 0; font-size:.76rem; } .lp-agenda b { font-family:var(--font-mono); color:var(--text-2); }
+.lp-chips { display:flex; flex-wrap:wrap; gap:6px; } .lp-chips span { padding:4px 9px; border:1px solid var(--line-strong); border-radius:99px; font-size:.7rem; }
+.lp-grilla { display:grid; grid-template-columns:repeat(3,1fr); grid-auto-rows:34px; gap:6px; } .lp-grilla i { border-radius:8px; background:var(--line); } .lp-grilla .is-alta { grid-row:span 2; background:var(--line-strong); }
+.lp-specs p { display:flex; justify-content:space-between; margin:0; padding:5px 0; border-bottom:1px solid var(--line); font-size:.76rem; } .lp-specs span { color:var(--muted); }
+.lp-pie { display:flex; flex-wrap:wrap; justify-content:space-between; gap:6px; font-size:.74rem; color:var(--muted); } .lp-pie b { color:var(--text); }
+.lp-txt { display:grid; gap:5px; font-size:.78rem; } .lp-txt span { height:5px; border-radius:3px; background:var(--line); } .lp-txt span + span { width:70%; }
+@media (max-width:520px) { .lp-3 { grid-template-columns:1fr; } .lp-hero { grid-template-columns:1fr; } .lp-img { display:none; } }

@@ -24,6 +24,7 @@ import weblab_skills as SK
 import weblab_negocios as NG
 import weblab_correcciones as CR
 import weblab_niveles as NV
+import weblab_recorte as RC
 
 def slug(s):
     s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
@@ -48,11 +49,10 @@ CATS = [
   ("arquitecturas","Arquitecturas",       "Construir", "layers",  "Cómo se organiza una web por dentro: estático, SPA, SSR, serverless, BaaS…", "curado"),
   ("stacks",       "Stacks y frameworks", "Construir", "code",    "Lenguajes, frameworks y librerías: qué son y para qué sirven.", "curado"),
   ("servicios",    "Servicios",           "Construir", "cloud",   "Hosting, bases de datos, auth, email, pagos, analítica, IA.", "curado"),
-  ("rubros",       "Rubros",              "Diseñar",   "target",  "Qué estilo, paleta y patrón de landing conviene según el tipo de producto.", "ui-ux-pro-max"),
+  ("rubros",       "Rubros",              "Diseñar",   "target",  "Qué estilo, paleta de colores y patrón de landing conviene según el tipo de negocio o producto.", "ui-ux-pro-max"),
   ("estilos",      "Estilos de diseño",   "Diseñar",   "sparkles","Minimalismo, glassmorphism, brutalismo, bento… con colores, efectos y checklist.", "ui-ux-pro-max"),
   ("landing",      "Patrones de landing", "Diseñar",   "layout",  "Estructuras de página probadas: orden de secciones, CTA y conversión.", "ui-ux-pro-max"),
   ("tipografias",  "Tipografías",         "Diseñar",   "type",    "Combinaciones de fuentes de Google Fonts con vista previa en vivo.", "ui-ux-pro-max"),
-  ("paletas",      "Paletas de color",    "Diseñar",   "palette", "Paletas completas (primario, acento, fondo, texto) por tipo de producto.", "ui-ux-pro-max"),
   ("ux",           "Buenas prácticas UX", "Revisar",   "check",   "Qué hacer y qué evitar, con ejemplos de código y severidad.", "ui-ux-pro-max"),
   ("skills",       "Skills de Claude",    "Con IA",    "flask",   "Las skills más usadas para potenciar a Claude. Las marcadas con experimento se probaron de verdad: el mismo prompt sin la skill y con la skill. Lo que muestran: rinden mucho en diseño, en reglas de una plataforma (Mercado Libre, Meta) y en método; poco en lo que Claude ya hace bien solo.", "curado"),
 ]
@@ -192,6 +192,8 @@ def build():
 
     traducir(data)
     CR.aplicar(data)   # correcciones de contenido (ver tools/weblab_correcciones.py)
+    RC.aplicar(data)   # recorte de lo importado, paletas dentro de rubros, ejemplos UX en castellano (ver tools/weblab_recorte.py)
+    RC.limpiar_estilos(data)
     NV.aplicar(data)   # dificultad y valor de cada ficha (ver tools/weblab_niveles.py)
 
     # Unicidad de ids por categoría

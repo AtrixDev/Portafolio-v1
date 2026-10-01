@@ -6,8 +6,8 @@
 const DATA_URL   = 'data/weblab/';
 const RECIPE_KEY = 'dc-weblab-receta';
 const PAGE_SIZE  = 48;
-const SINGLE     = ['soluciones', 'arquitecturas', 'rubros', 'estilos', 'landing', 'tipografias', 'paletas']; // una ficha por casillero
-const RECIPE_ORDER = ['soluciones', 'rubros', 'arquitecturas', 'stacks', 'servicios', 'estilos', 'landing', 'tipografias', 'paletas', 'ux', 'skills', 'negocios'];
+const SINGLE     = ['soluciones', 'arquitecturas', 'rubros', 'estilos', 'landing', 'tipografias']; // una ficha por casillero
+const RECIPE_ORDER = ['soluciones', 'rubros', 'arquitecturas', 'stacks', 'servicios', 'estilos', 'landing', 'tipografias', 'ux', 'skills', 'negocios'];
 
 const $ = id => document.getElementById(id);
 const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
@@ -66,7 +66,8 @@ async function findEntry(cat, id) {
 
 // ── Receta (se guarda en este navegador) ──
 const recipe = {
-  load() { try { return JSON.parse(localStorage.getItem(RECIPE_KEY)) || {}; } catch (e) { return {}; } },
+  // Las paletas ahora viven dentro de cada rubro: una receta vieja puede traer la categoría 'paletas'
+  load() { try { const r = JSON.parse(localStorage.getItem(RECIPE_KEY)) || {}; delete r.paletas; return r; } catch (e) { return {}; } },
   save(r) { try { localStorage.setItem(RECIPE_KEY, JSON.stringify(r)); } catch (e) {} },
   has(cat, id) { return (this.load()[cat] || []).includes(id); },
   toggle(cat, id) {
@@ -234,14 +235,14 @@ async function renderEntry(cat, id) {
   }
   if (e.code && (e.code.good || e.code.bad)) {
     visual += `<div class="wl-d-block"><h3>Ejemplo</h3><div class="wl-code">
-      ${e.code.good ? `<div><small>Bien</small><pre class="good">${esc(e.code.good)}</pre></div>` : ''}
-      ${e.code.bad ? `<div><small>Mal</small><pre class="bad">${esc(e.code.bad)}</pre></div>` : ''}</div></div>`;
+      ${e.code.good ? `<div><small>Bien</small><pre class="good${(e.code.tx || '').includes('g') ? ' tx' : ''}">${esc(e.code.good)}</pre></div>` : ''}
+      ${e.code.bad ? `<div><small>Mal</small><pre class="bad${(e.code.tx || '').includes('b') ? ' tx' : ''}">${esc(e.code.bad)}</pre></div>` : ''}</div></div>`;
   }
 
   // Ejemplos visuales (programacion-ejemplos.js): paletas y estilos muestran primero el ejemplo
   const ejemplo = window.WLExamples ? await WLExamples.render(e, cat) : '';
   const despues = cat === 'skills' ? ejemplo : '';   // en skills, primero qué hace y después prompt e instalación
-  if (!despues) visual = (cat === 'paletas' || cat === 'estilos') ? ejemplo + visual : visual + ejemplo;
+  if (!despues) visual = (cat === 'rubros' || cat === 'estilos') ? ejemplo + visual : visual + ejemplo;
 
   const related = [];
   for (const ref of e.related || []) {
@@ -257,6 +258,8 @@ async function renderEntry(cat, id) {
   panel.classList.toggle('is-wide', !!demo);
 
   const inRecipe = recipe.has(cat, id);
+  // Si un campo repite palabra por palabra el resumen que ya está arriba, no se muestra dos veces
+  const campos = (e.fields || []).filter(([, v]) => !e.summary || String(v).trim() !== e.summary.trim());
   const monoLabels = /Variables CSS|CSS técnico|Import CSS|Config Tailwind|Prompt para IA/;
   $('wl-d-body').innerHTML = `
     <h2 class="wl-d-title" id="wl-d-title">${esc(e.name)}</h2>
@@ -267,7 +270,7 @@ async function renderEntry(cat, id) {
     </div>
     ${demo}
     ${visual}
-    ${e.fields?.length ? `<dl class="wl-dl">${e.fields.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd class="${monoLabels.test(k) ? 'mono' : ''}">${fieldValue(v)}</dd></div>`).join('')}</dl>` : ''}
+    ${campos.length ? `<dl class="wl-dl">${campos.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd class="${monoLabels.test(k) ? 'mono' : ''}">${fieldValue(v)}</dd></div>`).join('')}</dl>` : ''}
     ${despues}
     ${related.length ? `<div class="wl-d-block"><h3>Relacionado</h3><div class="wl-related">${related.join('')}</div></div>` : ''}
   `;
@@ -320,7 +323,10 @@ async function copyText(text, btn) {
 
 // ── Ruteo ──
 async function route() {
-  const [, cat, id] = (location.hash.match(/^#\/([^/]+)(?:\/(.+))?$/) || []);
+  const [, cat0, id] = (location.hash.match(/^#\/([^/]+)(?:\/(.+))?$/) || []);
+  // Las paletas se fundieron con los rubros: los links viejos siguen funcionando
+  const cat = cat0 === 'paletas' ? 'rubros' : cat0;
+  if (cat0 === 'paletas') { history.replaceState(null, '', `#/rubros${id ? '/' + id : ''}`); }
   const validCat = state.catById[cat] ? cat : state.cat || 'soluciones';
   if (validCat !== state.cat) { state.cat = validCat; state.tags.clear(); state.valor = ''; state.nivel = 0; state.limit = PAGE_SIZE; }
   if (id || !state.query) await renderList();
