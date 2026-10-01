@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+
+    /* shadcn/ui */
+    --background: 60 14% 97%;
+    --foreground: 0 0% 4%;
+    --card: 60 14% 99%;
+    --card-foreground: 0 0% 4%;
+    --popover: 60 14% 99%;
+    --popover-foreground: 0 0% 4%;
+    --primary: 0 0% 4%;
+    --primary-foreground: 60 14% 97%;
+    --secondary: 53 12% 92%;
+    --secondary-foreground: 0 0% 4%;
+    --muted: 53 12% 92%;
+    --muted-foreground: 45 3% 31%;
+    --accent: 53 12% 92%;
+    --accent-foreground: 0 0% 4%;
+    --destructive: 0 61% 52%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 53 12% 87%;
+    --input: 53 12% 87%;
+    --ring: 0 0% 4%;
+    --radius: 0.1875rem;
+
+    /* panel y gráficos */
+    --page: #f9f9f7;
+    --surface-1: #fcfcfb;
+    --ink: #0b0b0b;
+    --ink-2: #52514e;
+    --muted-ink: #898781;
+    --grid: #e1e0d9;
+    --axis: #c3c2b7;
+    --hairline: rgba(11, 11, 11, 0.1);
+    --wash: rgba(11, 11, 11, 0.05);
+    --series-1: #2a78d6; /* ventas */
+    --series-2: #eb6834; /* ACOS */
+    --deemph: #c3c2b7;
+    --good: #006300;
+    --bad: #d03b3b;
+    --marca: #ffe600;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+
+      --background: 0 0% 5%;
+      --foreground: 0 0% 100%;
+      --card: 60 2% 10%;
+      --card-foreground: 0 0% 100%;
+      --popover: 60 2% 10%;
+      --popover-foreground: 0 0% 100%;
+      --primary: 0 0% 100%;
+      --primary-foreground: 0 0% 5%;
+      --secondary: 60 2% 17%;
+      --secondary-foreground: 0 0% 100%;
+      --muted: 60 2% 17%;
+      --muted-foreground: 55 9% 74%;
+      --accent: 60 2% 17%;
+      --accent-foreground: 0 0% 100%;
+      --border: 60 2% 17%;
+      --input: 60 2% 17%;
+      --ring: 0 0% 100%;
+
+      --page: #0d0d0d;
+      --surface-1: #1a1a19;
+      --ink: #ffffff;
+      --ink-2: #c3c2b7;
+      --muted-ink: #898781;
+      --grid: #2c2c2a;
+      --axis: #383835;
+      --hairline: rgba(255, 255, 255, 0.1);
+      --wash: rgba(255, 255, 255, 0.06);
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --deemph: #55554f;
+      --good: #0ca30c;
+      --bad: #e66767;
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Zona de interacción de cada mes en los gráficos */
+.zona-mes {
+  cursor: pointer;
+  outline: none;
+}
+.zona-mes:focus-visible {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}

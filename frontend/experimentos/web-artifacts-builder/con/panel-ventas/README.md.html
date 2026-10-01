@@ -1,0 +1,45 @@
+<h1>React + TypeScript + Vite</h1>
+<p>This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.</p>
+<p>Currently, two official plugins are available:</p>
+<ul>
+<li><a href="https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md">@vitejs/plugin-react</a> uses <a href="https://babeljs.io/">Babel</a> for Fast Refresh</li>
+<li><a href="https://github.com/vitejs/vite-plugin-react-swc">@vitejs/plugin-react-swc</a> uses <a href="https://swc.rs/">SWC</a> for Fast Refresh</li>
+</ul>
+<h2>Expanding the ESLint configuration</h2>
+<p>If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:</p>
+<ul>
+<li>Configure the top-level <code>parserOptions</code> property like this:</li>
+</ul>
+<pre><code class="language-js">export default tseslint.config({
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+</code></pre>
+<ul>
+<li>Replace <code>tseslint.configs.recommended</code> to <code>tseslint.configs.recommendedTypeChecked</code> or <code>tseslint.configs.strictTypeChecked</code></li>
+<li>Optionally add <code>...tseslint.configs.stylisticTypeChecked</code></li>
+<li>Install <a href="https://github.com/jsx-eslint/eslint-plugin-react">eslint-plugin-react</a> and update the config:</li>
+</ul>
+<pre><code class="language-js">// eslint.config.js
+import react from 'eslint-plugin-react'
+
+export default tseslint.config({
+  // Set the react version
+  settings: { react: { version: '18.3' } },
+  plugins: {
+    // Add the react plugin
+    react,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended rules
+    ...react.configs.recommended.rules,
+    ...react.configs['jsx-runtime'].rules,
+  },
+})
+</code></pre>

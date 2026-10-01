@@ -87,6 +87,11 @@ def publicar_lado(lado: str, base: Path, dest: Path, entrada: set):
             shutil.copy2(p, destino)
             item["tipo"] = "descarga"
         salida.append(item)
+    # Si hay una página o documento en la raíz (lo que pidió el prompt), lo de las subcarpetas (el proyecto
+    # fuente que armó para generarlo) queda como auxiliar
+    if any("/" not in i["nombre"] and i["tipo"] in ("pagina", "documento", "imagen") for i in salida):
+        for i in salida:
+            if "/" in i["nombre"]: i["aux"] = True
     # Si generó un documento, los scripts que usó para armarlo son auxiliares (se publican pero no se muestran primero)
     if any(i["tipo"] in ("documento", "pagina", "imagen") for i in salida):
         for i in salida:

@@ -1,0 +1,252 @@
+<h1>Revisión de seguridad de <code>server.js</code></h1>
+<p><strong>Veredicto: así como está, no se puede publicar.</strong> Cualquier persona en internet, sin usuario ni contraseña, puede ejecutar comandos en el servidor, bajarse la base de usuarios completa con sus contraseñas y entrar como cualquier cliente. Los cinco hallazgos críticos hay que arreglarlos sí o sí antes de salir.</p>
+<p>Alcance: revisión estática de <code>server.js</code> (31 líneas), sin ejecutar nada. En la carpeta no hay <code>package.json</code>, así que no sé qué versión de Express usás; donde cambia el resultado, lo aclaro.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Gravedad</th>
+<th>Hallazgo</th>
+<th>Línea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Crítica</td>
+<td>Ejecución de comandos en el servidor desde <code>/api/etiqueta</code></td>
+<td>22</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Crítica</td>
+<td>El "control de admin" es un header que manda cualquiera</td>
+<td>26</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Crítica</td>
+<td>Login salteable con inyección NoSQL</td>
+<td>15</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Crítica</td>
+<td>Ningún endpoint verifica quién sos; la cookie de sesión es falsificable</td>
+<td>9, 17, 21</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Crítica</td>
+<td>Contraseñas guardadas en texto plano</td>
+<td>15</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Alta</td>
+<td>Credenciales de la base escritas en el código (<code>admin:admin123</code>)</td>
+<td>7</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Alta</td>
+<td><code>/api/pedidos</code> devuelve pedidos de cualquier cliente</td>
+<td>10</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Alta</td>
+<td>El login devuelve el documento entero del usuario</td>
+<td>18</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Media</td>
+<td>El error del login devuelve la contraseña enviada, como HTML</td>
+<td>16</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Media</td>
+<td>Sin límite de intentos en el login</td>
+<td>14</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Media</td>
+<td>Errores sin manejar: un pedido mal formado puede tirar el servidor</td>
+<td>9–28</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Baja</td>
+<td>Sin HTTPS, sin headers de seguridad, sin límites de tamaño</td>
+<td>6, 30</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Críticos</h2>
+<h3>1. Ejecución de comandos en el servidor (<code>/api/etiqueta</code>, línea 22)</h3>
+<pre><code class="language-js">exec('generar-etiqueta ' + req.query.pedido, ...)
+</code></pre>
+<p><code>exec</code> le pasa el texto a un shell, y el texto incluye lo que manda el usuario. Con esto alcanza:</p>
+<pre><code>GET /api/etiqueta?pedido=1;cat /etc/passwd
+</code></pre>
+<p>El servidor ejecuta el segundo comando y encima devuelve la salida en la respuesta. No pide login. Quien lo encuentre controla el servidor: puede leer archivos, sacar las credenciales de la base e instalar lo que quiera.</p>
+<p><strong>Cómo arreglarlo</strong></p>
+<ul>
+<li>Usar <code>execFile</code> en vez de <code>exec</code>, con los argumentos en un array. No hay shell de por medio, así que <code>;</code>, <code>|</code>, <code>$()</code> dejan de significar algo.</li>
+<li>Validar el formato antes de llamar. Si el id de pedido es un ObjectId de Mongo, aceptar solo eso. La validación también evita que alguien mande un valor que empiece con <code>-</code> y se interprete como opción del programa.</li>
+<li>Exigir sesión y verificar que el pedido sea del usuario (ver hallazgo 4).</li>
+</ul>
+<pre><code class="language-js">import { execFile } from 'child_process'
+
+app.get('/api/etiqueta', requiereSesion, (req, res) =&gt; {
+  const pedido = req.query.pedido
+  if (typeof pedido !== 'string' || !/^[a-f0-9]{24}$/.test(pedido)) return res.status(400).end()
+  execFile('generar-etiqueta', ['--', pedido], (err, out) =&gt; {
+    if (err) return res.status(500).end()
+    res.send(out)
+  })
+})
+</code></pre>
+<p>(El <code>--</code> sirve solo si <code>generar-etiqueta</code> lo respeta; con la validación de arriba no hace falta, pero no molesta.)</p>
+<h3>2. El control de admin es un header que manda cualquiera (<code>/api/admin/exportar</code>, línea 26)</h3>
+<pre><code class="language-js">if (req.headers['x-admin'] === 'true') res.json(await db.collection('usuarios').find().toArray())
+</code></pre>
+<p>Los headers los elige el que hace el pedido. Esto no es un control de acceso:</p>
+<pre><code>curl -H 'x-admin: true' https://tienda.com/api/admin/exportar
+</code></pre>
+<p>Devuelve todos los usuarios con todos sus campos, contraseñas incluidas (ver hallazgo 5).</p>
+<p><strong>Cómo arreglarlo</strong></p>
+<ul>
+<li>El rol de admin tiene que salir de la sesión del servidor, nunca de algo que mande el cliente: buscar el usuario de la sesión y chequear un campo <code>rol</code> guardado en la base.</li>
+<li>Devolver solo los campos necesarios con una proyección (<code>{ projection: { password: 0 } }</code> como mínimo) y paginar.</li>
+<li>Si la exportación es de uso interno, lo más seguro es sacarla de la API pública y dejarla como script o detrás de una VPN.</li>
+</ul>
+<h3>3. Login salteable con inyección NoSQL (línea 15)</h3>
+<pre><code class="language-js">findOne({ email: req.body.email, password: req.body.password })
+</code></pre>
+<p><code>express.json()</code> acepta objetos, no solo textos. Si en vez de una contraseña mando un operador de Mongo, la consulta deja de comparar:</p>
+<pre><code class="language-json">{ &quot;email&quot;: &quot;victima@mail.com&quot;, &quot;password&quot;: { &quot;$ne&quot;: null } }
+</code></pre>
+<p>Eso significa "contraseña distinta de null", o sea, cualquiera. Entro como esa persona sin saber la clave. Con <code>"email": { "$ne": null }</code> entro como el primer usuario de la colección, que suele ser el admin.</p>
+<p><strong>Cómo arreglarlo</strong></p>
+<ul>
+<li>Verificar que <code>email</code> y <code>password</code> sean strings antes de tocar la base, y rechazar con 400 si no.</li>
+<li>Buscar solo por email y comparar la contraseña en el código con una librería de hashing (va de la mano con el hallazgo 5). Así la contraseña nunca entra en la consulta.</li>
+</ul>
+<pre><code class="language-js">const { email, password } = req.body ?? {}
+if (typeof email !== 'string' || typeof password !== 'string') return res.status(400).end()
+const user = await db.collection('usuarios').findOne({ email })
+if (!user || !(await argon2.verify(user.passwordHash, password))) return res.status(401).json({ ok: false })
+</code></pre>
+<p>Como red de contención general, conviene validar todos los cuerpos y query strings con un esquema (por ejemplo <code>zod</code>) en lugar de chequear campo por campo.</p>
+<h3>4. Ningún endpoint verifica quién sos; la cookie de sesión es falsificable (líneas 9, 17, 21)</h3>
+<p>Hay dos problemas juntos:</p>
+<ul>
+<li>El login setea una cookie, pero <strong>ningún endpoint la lee</strong>. <code>/api/pedidos</code> y <code>/api/etiqueta</code> atienden a cualquiera. Hoy el login es decorativo.</li>
+<li>La cookie es el <code>_id</code> del usuario, sin firma. El día que se empiece a usar, alcanza con conocer el <code>_id</code> de otro para ser esa persona. Los <code>_id</code> no son secretos: salen en la respuesta del login, en la exportación y en cualquier listado, y los ObjectId además son parcialmente predecibles (incluyen la fecha de creación y un contador).</li>
+<li>La cookie tampoco tiene <code>httpOnly</code>, <code>secure</code> ni <code>sameSite</code>, así que la puede leer JavaScript de la página, viaja por HTTP sin cifrar y se manda en pedidos originados desde otros sitios (CSRF).</li>
+</ul>
+<p><strong>Cómo arreglarlo</strong></p>
+<ul>
+<li>Usar sesiones de servidor con un identificador aleatorio (por ejemplo <code>express-session</code> con un store en Mongo o Redis), no el id del usuario.</li>
+<li>Configurar la cookie con <code>httpOnly: true, secure: true, sameSite: 'lax'</code> y un vencimiento.</li>
+<li>Escribir un middleware <code>requiereSesion</code> y aplicarlo a todas las rutas salvo el login. Lo más seguro es ponerlo global (<code>app.use</code>) y exceptuar el login, así una ruta nueva queda protegida por defecto en vez de quedar abierta por olvido.</li>
+<li>Agregar un endpoint de logout que destruya la sesión.</li>
+</ul>
+<h3>5. Contraseñas en texto plano (línea 15)</h3>
+<p>La consulta compara <code>password</code> directamente contra lo guardado, lo que implica que la base tiene las contraseñas tal cual las escribió el usuario. Sumado al hallazgo 2, hoy cualquiera puede bajarse la lista de emails con sus contraseñas. Como la gente repite claves, el daño se extiende a sus cuentas de mail, banco, etc.</p>
+<p><strong>Cómo arreglarlo</strong></p>
+<ul>
+<li>Guardar solo un hash con <code>argon2</code> (o <code>bcrypt</code>), nunca la contraseña.</li>
+<li>Migrar las cuentas existentes: hashear todas las contraseñas actuales en una pasada y borrar el campo viejo.</li>
+<li>Si la base ya estuvo accesible desde internet con este código, asumir que las contraseñas se filtraron y forzar el cambio de clave a todos los usuarios.</li>
+</ul>
+<hr />
+<h2>Altos</h2>
+<h3>6. Credenciales de la base en el código (línea 7)</h3>
+<pre><code class="language-js">MongoClient.connect('mongodb://admin:admin123@db.tienda.com:27017')
+</code></pre>
+<ul>
+<li>La contraseña queda en el repositorio y en su historial para siempre, visible para cualquiera con acceso al código.</li>
+<li><code>admin123</code> es de las primeras que prueba cualquier ataque automatizado.</li>
+<li>Se conecta con el usuario <code>admin</code>, que puede hacer todo en la base. Combinado con el hallazgo 1 o el 3, el atacante se lleva o borra la base entera.</li>
+<li>La conexión no usa TLS, así que usuario, clave y datos viajan sin cifrar.</li>
+</ul>
+<p><strong>Cómo arreglarlo</strong></p>
+<ul>
+<li>Cambiar la contraseña ya: la actual hay que darla por comprometida.</li>
+<li>Leer la cadena de conexión de una variable de entorno (<code>process.env.MONGO_URL</code>) o de un gestor de secretos, y hacer que el servidor no arranque si falta.</li>
+<li>Crear un usuario de Mongo solo para la aplicación, con permisos de lectura y escritura sobre la base <code>tienda</code> y nada más.</li>
+<li>Activar TLS (<code>?tls=true</code>) y verificar que el puerto 27017 no esté abierto a internet, solo al servidor de la API.</li>
+</ul>
+<h3>7. <code>/api/pedidos</code> devuelve pedidos de cualquier cliente (línea 10)</h3>
+<pre><code class="language-js">find({ cliente: req.query.cliente })
+</code></pre>
+<p>El cliente lo elige quien hace el pedido, así que <code>?cliente=&lt;otro&gt;</code> muestra los pedidos de otra persona (nombre, dirección, lo que compró).</p>
+<p>Además, con Express 4 el query string acepta objetos: <code>?cliente[$ne]=x</code> se convierte en <code>{ $ne: 'x' }</code> y devuelve <strong>todos</strong> los pedidos de la tienda de una. En Express 5 esa sintaxis viene desactivada por defecto, pero el primer problema sigue igual.</p>
+<p><strong>Cómo arreglarlo</strong></p>
+<ul>
+<li>No aceptar el cliente por parámetro: tomarlo de la sesión (<code>find({ cliente: req.session.userId })</code>).</li>
+<li>Si un admin necesita consultar por cliente, que sea una ruta aparte con chequeo de rol, validando que el parámetro sea un string.</li>
+<li>Paginar los resultados con <code>limit</code>.</li>
+</ul>
+<h3>8. El login devuelve el documento entero del usuario (línea 18)</h3>
+<pre><code class="language-js">res.json({ ok: true, user })
+</code></pre>
+<p>Manda al navegador todo lo que haya en el documento: la contraseña (o su hash, una vez arreglado el hallazgo 5), roles internos y cualquier campo que se agregue más adelante. Es un problema que empeora solo: cada campo nuevo en <code>usuarios</code> queda expuesto sin que nadie lo decida.</p>
+<p><strong>Cómo arreglarlo</strong></p>
+<ul>
+<li>Armar la respuesta a mano con los campos que el frontend necesita: <code>res.json({ ok: true, user: { id: user._id, nombre: user.nombre, email: user.email } })</code>.</li>
+</ul>
+<hr />
+<h2>Medios</h2>
+<h3>9. El error del login devuelve lo que mandaste, como HTML (línea 16)</h3>
+<pre><code class="language-js">res.status(401).send('Error: ' + JSON.stringify(req.body))
+</code></pre>
+<ul>
+<li>Devuelve la contraseña recién tipeada en la respuesta, que puede terminar en logs de proxies o herramientas de monitoreo.</li>
+<li><code>res.send</code> con un string responde como <code>text/html</code>, y el contenido lo controla el que hace el pedido. Explotarlo como XSS desde otro sitio es difícil (el navegador pide permiso CORS antes de mandar JSON), pero es una puerta que no hay por qué dejar entreabierta.</li>
+</ul>
+<p><strong>Cómo arreglarlo</strong></p>
+<ul>
+<li>Responder un mensaje fijo: <code>res.status(401).json({ ok: false, error: 'Email o contraseña incorrectos' })</code>.</li>
+</ul>
+<h3>10. Sin límite de intentos en el login (línea 14)</h3>
+<p>Se pueden probar contraseñas sin tope. Con listas de claves filtradas de otros sitios, es cuestión de tiempo hasta que entren en algunas cuentas.</p>
+<p><strong>Cómo arreglarlo</strong></p>
+<ul>
+<li>Agregar <code>express-rate-limit</code> en <code>/api/login</code>, limitando por IP y por email (por ejemplo, 5 intentos cada 15 minutos).</li>
+<li>Conviene también un límite general más laxo para toda la API.</li>
+</ul>
+<h3>11. Errores sin manejar (líneas 9–28)</h3>
+<ul>
+<li>Ningún handler tiene <code>try/catch</code>. Con Express 4, si Mongo falla dentro de un handler <code>async</code>, el error queda sin atrapar y Node termina el proceso: la tienda se cae hasta que alguien la reinicie, y se puede provocar a propósito. Con Express 5 el error llega al manejador por defecto, que devuelve el stack trace salvo que <code>NODE_ENV=production</code> esté seteado.</li>
+<li>En <code>/api/etiqueta</code> se ignora <code>err</code>: si el comando falla, responde 200 vacío y nadie se entera.</li>
+<li>Si el body del login no es JSON, <code>req.body.email</code> puede romper (en Express 5 <code>req.body</code> queda <code>undefined</code>).</li>
+</ul>
+<p><strong>Cómo arreglarlo</strong></p>
+<ul>
+<li>Usar Express 5 o envolver los handlers para que los errores lleguen a un middleware de errores propio, que loguee el detalle del lado del servidor y responda un 500 genérico.</li>
+<li>Correr con <code>NODE_ENV=production</code> y un gestor de procesos que reinicie el servicio (systemd, PM2, o el orquestador que uses).</li>
+</ul>
+<hr />
+<h2>Bajos</h2>
+<h3>12. Endurecimiento general (líneas 6, 30)</h3>
+<ul>
+<li><strong>HTTPS:</strong> el servidor escucha HTTP plano en el puerto 3000. Tiene que quedar detrás de un proxy con TLS (nginx, Caddy, o el balanceador del hosting); si no, contraseñas y cookies viajan en claro. Con proxy adelante, agregar <code>app.set('trust proxy', 1)</code> para que las cookies <code>secure</code> y el rate limit por IP funcionen bien.</li>
+<li><strong>Headers de seguridad:</strong> agregar <code>helmet()</code>, que además saca el header <code>X-Powered-By: Express</code>.</li>
+<li><strong>Tamaño de los pedidos:</strong> fijar el límite explícitamente (<code>express.json({ limit: '100kb' })</code>) en vez de depender del valor por defecto.</li>
+<li><strong>CORS:</strong> hoy no hay configuración. Cuando se agregue, listar los orígenes permitidos uno por uno; nunca <code>*</code> junto con cookies.</li>
+</ul>
+<hr />
+<h2>Orden sugerido</h2>
+<ol>
+<li><strong>Hoy, aunque no se publique:</strong> cambiar la contraseña de Mongo y cerrar el puerto 27017 a internet (6). Si este código ya estuvo corriendo en un servidor accesible, tratar el servidor y la base como comprometidos.</li>
+<li><strong>Antes de publicar:</strong> hallazgos 1 a 8. El 3, 4 y 5 se resuelven juntos al rehacer el login con sesiones y hashing; el 2 y el 7 salen casi gratis una vez que existe el middleware de sesión.</li>
+<li><strong>Misma tanda si se puede, o la semana siguiente:</strong> 9 a 12.</li>
+</ol>
+<p>Después de los arreglos conviene una segunda revisión: varios cambian la estructura del código (sesiones, validación), y ahí es donde aparecen los problemas nuevos.</p>

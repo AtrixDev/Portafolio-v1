@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<!--
+    PACIENCIA DE BRASA
+    Filosofía algorítmica
+
+    El fuego de una parrilla no es un incendio: es un fuego administrado. La leña
+    arde a un costado, en el brasero, y lo que cocina no es la llama sino lo que la
+    llama deja. Este movimiento trata al fuego como dos sistemas acoplados con
+    tiempos distintos: uno rápido, vertical y ruidoso (la llama) y otro lento,
+    horizontal y casi quieto (la brasa). La obra existe en la diferencia de ritmo
+    entre ambos, y cada semilla decide de qué lado se enciende, cuánta leña hay,
+    hacia dónde sopla el aire y cuánto rescoldo se arrimó bajo los fierros.
+
+    La llama es un sistema de miles de partículas con empuje térmico, arrastradas
+    por un campo de ruido que se desplaza hacia arriba junto con ellas. Ninguna
+    lengua de fuego está dibujada: emergen de la convergencia de partículas que
+    nacen calientes, se enfrían a lo largo de una rampa de cuerpo negro y se suman
+    por mezcla aditiva, de modo que el blanco amarillento del núcleo no es un color
+    elegido sino una densidad alcanzada. Cada emisor respira con su propia fase, y
+    por eso las lenguas crecen, se cortan y vuelven sin repetirse jamás.
+
+    La brasa es lo contrario: geometría fija, temperatura variable. Cada carbón es
+    un polígono quebrado con su ceniza y sus grietas, y un campo de ruido lentísimo
+    recorre el lecho como una respiración, encendiendo unos y apagando otros. El
+    color no se anima: se revela por capas, del rojo sordo al amarillo de la grieta,
+    según un umbral de calor. De vez en cuando un carbón revienta y suelta chispas
+    que el mismo campo de aire se lleva. La calibración de esos umbrales es fruto de
+    un ajuste minucioso, el tipo de afinación paciente que distingue a un algoritmo
+    trabajado durante incontables horas de uno simplemente aleatorio.
+
+    El hierro no brilla: recorta. La parrilla y el canasto son siluetas que sólo
+    existen porque hay luz detrás, y la pared de ladrillo refractario aparece o
+    desaparece según el pulso de la llama, multiplicada por dos mapas de luz
+    independientes. Nada en la escena tiene color propio; todo es prestado por el
+    fuego. Es una decisión de oficio, tomada con el rigor de quien domina la
+    estética computacional: la iluminación se calcula, no se pinta.
+
+    La parrilla está vacía. La obra es el momento anterior, la espera: el fuego ya
+    está hecho, la brasa ya fue arrimada, y lo único que ocurre es el tiempo. Cada
+    recarga es otro fuego, otra noche, otro viento, y ninguna se repite salvo que
+    se la llame por su número.
+-->
+<html lang="es">
+<head>
+<meta name="robots" content="noindex"><!-- Experimento del Lab de Programación: salida de Claude sin cambios de diseño -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paciencia de Brasa</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Anthropic Brand Colors */
+        :root {
+            --anthropic-dark: #141413;
+            --anthropic-light: #faf9f5;
+            --anthropic-mid-gray: #b0aea5;
+            --anthropic-light-gray: #e8e6dc;
+            --anthropic-orange: #d97757;
+            --anthropic-blue: #6a9bcc;
+            --anthropic-green: #788c5d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--anthropic-light) 0%, #f5f3ee 100%);
+            min-height: 100vh;
+            color: var(--anthropic-dark);
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(20, 20, 19, 0.1);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .sidebar h1 {
+            font-family: 'Lora', serif;
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--anthropic-dark);
+            margin-bottom: 8px;
+        }
+
+        .sidebar .subtitle {
+            color: var(--anthropic-mid-gray);
+            font-size: 14px;
+            margin-bottom: 32px;
+            line-height: 1.4;
+        }
+
+        /* Control Sections */
+        .control-section {
+            margin-bottom: 32px;
+        }
+
+        .control-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--anthropic-dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-section h3::before {
+            content: '•';
+            color: var(--anthropic-orange);
+            font-weight: bold;
+        }
+
+        /* Seed Controls */
+        .seed-input {
+            width: 100%;
+            background: var(--anthropic-light);
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin-bottom: 12px;
+            border: 1px solid var(--anthropic-light-gray);
+            text-align: center;
+        }
+
+        .seed-input:focus {
+            outline: none;
+            border-color: var(--anthropic-orange);
+            box-shadow: 0 0 0 2px rgba(217, 119, 87, 0.1);
+            background: white;
+        }
+
+        .seed-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .regen-button {
+            margin-bottom: 0;
+        }
+
+        /* Parameter Controls */
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--anthropic-dark);
+            margin-bottom: 8px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slider-container input[type="range"] {
+            flex: 1;
+            height: 4px;
+            background: var(--anthropic-light-gray);
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--anthropic-orange);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .slider-container input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            background: #c86641;
+        }
+
+        .slider-container input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: var(--anthropic-orange);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .value-display {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: var(--anthropic-mid-gray);
+            min-width: 60px;
+            text-align: right;
+        }
+
+        /* Buttons */
+        .button {
+            background: var(--anthropic-orange);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .button:hover {
+            background: #c86641;
+            transform: translateY(-1px);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button.secondary {
+            background: var(--anthropic-blue);
+        }
+
+        .button.secondary:hover {
+            background: #5a8bb8;
+        }
+
+        .button.tertiary {
+            background: var(--anthropic-green);
+        }
+
+        .button.tertiary:hover {
+            background: #6b7b52;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .button-row .button {
+            flex: 1;
+        }
+
+        /* Canvas Area */
+        .canvas-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        #canvas-container {
+            width: 100%;
+            max-width: min(1000px, calc(100vh - 40px));
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(20, 20, 19, 0.1);
+            background: #0a0706;
+        }
+
+        #canvas-container canvas {
+            display: block;
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--anthropic-mid-gray);
+            padding: 40px;
+        }
+
+        /* Responsive - Stack on mobile */
+        @media (max-width: 600px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .canvas-area {
+                padding: 20px;
+            }
+
+            #canvas-container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Control Sidebar -->
+        <div class="sidebar">
+            <h1>Paciencia de Brasa</h1>
+            <div class="subtitle">El fuego se hace al costado. Se cocina con lo que queda.</div>
+
+            <!-- Seed Section -->
+            <div class="control-section">
+                <h3>Semilla</h3>
+                <input type="number" id="seed-input" class="seed-input" value="12345" onchange="updateSeed()">
+                <div class="seed-controls">
+                    <button class="button secondary" onclick="previousSeed()">← Anterior</button>
+                    <button class="button secondary" onclick="nextSeed()">Siguiente →</button>
+                </div>
+                <button class="button tertiary regen-button" onclick="randomSeedAndUpdate()">↻ Al azar</button>
+            </div>
+
+            <!-- Parameters Section -->
+            <div class="control-section">
+                <h3>Parámetros</h3>
+
+                <div class="control-group">
+                    <label>Llama</label>
+                    <div class="slider-container">
+                        <input type="range" id="flame" min="0.3" max="1.6" step="0.05" value="1" oninput="updateParam('flame', this.value)">
+                        <span class="value-display" id="flame-value">1</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Turbulencia</label>
+                    <div class="slider-container">
+                        <input type="range" id="turbulence" min="0.2" max="2" step="0.05" value="1" oninput="updateParam('turbulence', this.value)">
+                        <span class="value-display" id="turbulence-value">1</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Viento</label>
+                    <div class="slider-container">
+                        <input type="range" id="wind" min="-1" max="1" step="0.05" value="0" oninput="updateParam('wind', this.value)">
+                        <span class="value-display" id="wind-value">0</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Brasas</label>
+                    <div class="slider-container">
+                        <input type="range" id="emberCount" min="80" max="500" step="10" value="320" oninput="updateParam('emberCount', this.value)">
+                        <span class="value-display" id="emberCount-value">320</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Chispas</label>
+                    <div class="slider-container">
+                        <input type="range" id="sparks" min="0" max="3" step="0.1" value="1" oninput="updateParam('sparks', this.value)">
+                        <span class="value-display" id="sparks-value">1</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Humo</label>
+                    <div class="slider-container">
+                        <input type="range" id="smoke" min="0" max="2" step="0.1" value="1" oninput="updateParam('smoke', this.value)">
+                        <span class="value-display" id="smoke-value">1</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions Section -->
+            <div class="control-section">
+                <h3>Acciones</h3>
+                <div class="button-row">
+                    <button class="button" onclick="resetParameters()">Reiniciar</button>
+                    <button class="button" onclick="downloadPNG()">Descargar PNG</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Canvas Area -->
+        <div class="canvas-area">
+            <div id="canvas-container">
+                <div class="loading">Encendiendo el fuego…</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════════════
+        // PARAMETERS
+        // ═══════════════════════════════════════════════════════════════════════
+
+        let params = {
+            // Each page load lights a different fire
+            seed: Math.floor(Math.random() * 999999) + 1,
+            flame: 1,
+            turbulence: 1,
+            wind: 0,
+            emberCount: 320,
+            sparks: 1,
+            smoke: 1
+        };
+
+        let defaultParams = {...params}; // Store defaults for reset
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // SCENE STATE
+        // ═══════════════════════════════════════════════════════════════════════
+
+        const W = 1200, H = 1200;
+        const NR = 24;            // steps in the blackbody ramp
+        const IRON = '#090605';
+
+        let ctx;
+        let S = {};               // seed-derived composition
+        let t = 0;                // simulation frame
+        let flick = 0.5;          // brasero flame pulse
+        let breath = 0.5;         // ember bed pulse
+
+        let flameSprites = [], haloSprite, emberGlow, smokeSprite;
+        let litA, litB, logCold, logHot;
+        let coals = [], emitters = [], flames = [], sparks = [], smokes = [];
+
+        function setup() {
+            pixelDensity(1);
+            let canvas = createCanvas(W, H);
+            canvas.parent('canvas-container');
+            ctx = drawingContext;
+
+            initializeSystem();
+
+            // Remove loading message
+            document.querySelector('.loading').style.display = 'none';
+        }
+
+        function draw() {
+            step();
+            render();
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // HELPERS
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function makeCanvas(w, h) {
+            const c = document.createElement('canvas');
+            c.width = w; c.height = h;
+            return c;
+        }
+
+        // Two-octave noise tops out at 0.75; normalise it
+        function n01(x, y, z) { return noise(x + 1000, y + 1000, z || 0) / 0.75; }
+        function n2(x, y, z) { return n01(x, y, z) * 2 - 1; }
+
+        function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
+
+        // The whole composition is built brasero-left and mirrored by the seed
+        function mx(x) { return S.side < 0 ? x : W - x; }
+
+        function radialSprite(size, r, g, b, stops) {
+            const c = makeCanvas(size, size), k = c.getContext('2d'), h = size / 2;
+            const gr = k.createRadialGradient(h, h, 0, h, h, h);
+            for (const [p, a] of stops) gr.addColorStop(p, `rgba(${r|0},${g|0},${b|0},${a})`);
+            k.fillStyle = gr;
+            k.fillRect(0, 0, size, size);
+            return c;
+        }
+
+        // Blackbody-ish ramp: 0 = just born, 1 = spent
+        function ramp(k) {
+            const stops = [
+                [0.00, 255, 198, 98],
+                [0.22, 255, 142, 38],
+                [0.48, 232, 76, 12],
+                [0.74, 142, 28, 6],
+                [1.00, 40, 8, 4]
+            ];
+            for (let i = 1; i < stops.length; i++) {
+                if (k <= stops[i][0]) {
+                    const a = stops[i - 1], b = stops[i], u = (k - a[0]) / (b[0] - a[0]);
+                    return [a[1] + (b[1] - a[1]) * u, (a[2] + (b[2] - a[2]) * u) * S.wood, a[3] + (b[3] - a[3]) * u];
+                }
+            }
+            return [40, 8, 4];
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // SYSTEM INITIALISATION
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function initializeSystem() {
+            randomSeed(params.seed);
+            noiseSeed(params.seed);
+            noiseDetail(2, 0.5);
+
+            t = 0;
+            flames = []; sparks = []; smokes = []; emitters = []; coals = [];
+
+            S = {};
+            S.side = random() < 0.5 ? -1 : 1;          // which side the brasero sits on
+            S.wood = random(0.88, 1.1);                // redder hardwood … yellower softwood
+            S.wind = random(-0.45, 0.45);              // the night's own draught
+            S.wallBase = H * 0.70;
+            S.bx = W * random(0.17, 0.22);             // brasero centre (left layout)
+            S.bw = W * random(0.19, 0.23);
+            S.bt = H * random(0.455, 0.49);            // basket top
+            S.bb = H * 0.685;                          // basket bottom
+            S.bxM = mx(S.bx);
+
+            buildSprites();
+            buildGrate();
+            buildBasket();
+            buildWall();
+            buildLogs();
+            buildCoals();
+
+            // Warm start: the fire is already burning when you arrive
+            for (let i = 0; i < 110; i++) step();
+        }
+
+        function buildSprites() {
+            flameSprites = [];
+            const soft = [[0, 1], [0.3, 0.6], [0.65, 0.16], [1, 0]];
+            for (let i = 0; i < NR; i++) {
+                const c = ramp(i / (NR - 1));
+                flameSprites.push(radialSprite(64, c[0], c[1], c[2], soft));
+            }
+            haloSprite = radialSprite(256, 255, 120 * S.wood, 40, [[0, 1], [0.25, 0.5], [0.6, 0.12], [1, 0]]);
+            emberGlow = radialSprite(96, 255, 66 * S.wood, 14, [[0, 1], [0.35, 0.45], [0.7, 0.1], [1, 0]]);
+            smokeSprite = radialSprite(128, 96, 80, 70, [[0, 1], [0.4, 0.5], [0.75, 0.12], [1, 0]]);
+        }
+
+        // --- The grate: bars run front to back, seen from slightly above -------
+        function buildGrate() {
+            const g = {};
+            g.x0 = S.bx + S.bw * 0.5 + W * random(0.07, 0.11);
+            g.x1 = W * 1.06;
+            g.yF = H * random(0.78, 0.805);
+            g.yB = g.yF - H * random(0.105, 0.125);
+            g.kb = 0.8;
+            const n = floor(random(15, 25));
+            const P = (xl, d) => ({
+                x: mx(W / 2 + (xl - W / 2) * (1 + (g.kb - 1) * d)),
+                y: g.yF + (g.yB - g.yF) * d
+            });
+            g.bars = [];
+            for (let i = 0; i <= n; i++) {
+                const xl = g.x0 + (g.x1 - g.x0) * i / n;
+                g.bars.push({a: P(xl, 0), b: P(xl, 1), lit: Math.exp(-(xl - g.x0) / (W * 0.4))});
+            }
+            g.front = [P(g.x0, 0), P(g.x1, 0)];
+            g.back = [P(g.x0, 1), P(g.x1, 1)];
+            // chains that raise and lower it
+            g.chains = [];
+            for (const xl of [g.x0 + W * 0.03, g.x0 + (g.x1 - g.x0) * random(0.7, 0.82)]) {
+                g.chains.push(P(xl, 0), P(xl, 1));
+            }
+            S.grate = g;
+        }
+
+        // --- The brasero: an iron basket where the wood burns down -------------
+        function buildBasket() {
+            const b = {front: [], back: []};
+            const n = floor(random(6, 9));
+            for (let j = 0; j <= n; j++) {
+                const u = j / n - 0.5;
+                b.front.push({x0: mx(S.bx + u * S.bw), y0: S.bt, x1: mx(S.bx + u * S.bw * 0.84), y1: S.bb});
+                b.back.push({x0: mx(S.bx + u * S.bw * 0.9), y0: S.bt - 16, x1: mx(S.bx + u * S.bw * 0.78), y1: S.bb - 12});
+            }
+            b.legs = [-1, 1].map(s => ({
+                x0: mx(S.bx + s * S.bw * 0.42), y0: S.bb,
+                x1: mx(S.bx + s * S.bw * 0.45), y1: H * 0.775
+            }));
+            S.basket = b;
+        }
+
+        // --- Firebrick wall and ash floor, pre-multiplied by two light maps ----
+        function buildWall() {
+            const alb = makeCanvas(W, H), g = alb.getContext('2d');
+            g.fillStyle = 'rgb(60,49,43)';
+            g.fillRect(0, 0, W, H);
+
+            const bh = random(40, 52), bw = bh * random(2.3, 2.7);
+            let row = 0;
+            for (let y = S.wallBase - bh; y > -bh; y -= bh, row++) {
+                const off = (row % 2) * bw / 2 + random(-5, 5);
+                for (let x = off - bw; x < W; x += bw) {
+                    const xc = x + bw / 2, yc = y + bh / 2;
+                    const up = clamp((S.wallBase - yc) / (S.wallBase * 0.8), 0, 1);
+                    const dx = (xc - S.bxM) / (W * 0.17);
+                    const soot = 1 - 0.62 * Math.exp(-dx * dx) * (0.35 + 0.65 * up);
+                    const sh = random(0.72, 1.08) * soot;
+                    g.fillStyle = `rgb(${150 * sh | 0},${92 * sh | 0},${66 * sh | 0})`;
+                    g.fillRect(x + 2, y + 2, bw - 4, bh - 4);
+                }
+            }
+            for (let i = 0; i < 7000; i++) {
+                g.fillStyle = random() < 0.7 ? 'rgba(0,0,0,0.14)' : 'rgba(255,235,215,0.06)';
+                g.fillRect(random(W), random(S.wallBase), random(1, 3), random(1, 3));
+            }
+
+            // floor
+            const fg = g.createLinearGradient(0, S.wallBase, 0, H);
+            fg.addColorStop(0, 'rgb(70,63,58)');
+            fg.addColorStop(0.12, 'rgb(98,90,84)');
+            fg.addColorStop(1, 'rgb(58,52,48)');
+            g.fillStyle = fg;
+            g.fillRect(0, S.wallBase, W, H - S.wallBase);
+            for (let i = 0; i < 2600; i++) {
+                const y = random(S.wallBase, H), d = (y - S.wallBase) / (H - S.wallBase);
+                g.fillStyle = random() < 0.6 ? 'rgba(10,8,7,0.35)' : 'rgba(190,182,174,0.18)';
+                const s = random(1, 2 + 4 * d);
+                g.fillRect(random(W), y, s * random(1, 2.2), s);
+            }
+
+            // light A: the brasero flame, strong and nervous
+            litA = makeCanvas(W, H);
+            let k = litA.getContext('2d');
+            k.fillStyle = '#000';
+            k.fillRect(0, 0, W, H);
+            let gr = k.createRadialGradient(S.bxM, H * 0.52, 0, S.bxM, H * 0.52, W * 0.88);
+            gr.addColorStop(0, `rgb(255,${172 * S.wood | 0},92)`);
+            gr.addColorStop(0.18, `rgb(212,${102 * S.wood | 0},42)`);
+            gr.addColorStop(0.45, 'rgb(92,33,11)');
+            gr.addColorStop(0.75, 'rgb(22,7,3)');
+            gr.addColorStop(1, 'rgb(0,0,0)');
+            k.fillStyle = gr;
+            k.fillRect(0, 0, W, H);
+            k.globalCompositeOperation = 'multiply';
+            k.drawImage(alb, 0, 0);
+
+            // light B: the ember bed, low and steady
+            litB = makeCanvas(W, H);
+            k = litB.getContext('2d');
+            k.fillStyle = '#000';
+            k.fillRect(0, 0, W, H);
+            k.globalCompositeOperation = 'lighter';
+            const lights = [[S.bx, H * 0.83, 1]];
+            for (let i = 0; i < 5; i++) lights.push([S.grate.x0 + W * (0.03 + 0.14 * i), H * 0.85, 0.95 - 0.15 * i]);
+            for (const [xl, y, s] of lights) {
+                const x = mx(xl);
+                gr = k.createRadialGradient(x, y, 0, x, y, W * 0.31);
+                gr.addColorStop(0, `rgb(${172 * s | 0},${54 * s | 0},${14 * s | 0})`);
+                gr.addColorStop(0.5, `rgb(${60 * s | 0},${14 * s | 0},${4 * s | 0})`);
+                gr.addColorStop(1, 'rgb(0,0,0)');
+                k.fillStyle = gr;
+                k.fillRect(0, 0, W, H);
+            }
+            k.globalCompositeOperation = 'multiply';
+            k.drawImage(alb, 0, 0);
+        }
+
+        // --- Logs stacked in the basket, each one a line of flame emitters -----
+        function buildLogs() {
+            logCold = makeCanvas(W, H);
+            logHot = makeCanvas(W, H);
+            const c = logCold.getContext('2d'), h = logHot.getContext('2d');
+
+            const n = floor(random(3, 7));
+            const logs = [];
+            for (let i = 0; i < n; i++) {
+                const leaning = random() < 0.4;
+                logs.push({
+                    x: mx(S.bx + clamp(randomGaussian() * S.bw * 0.1, -S.bw * 0.2, S.bw * 0.2)),
+                    y: random(S.bb - H * 0.105, S.bb - H * 0.03),
+                    len: S.bw * random(0.6, 0.92),
+                    th: random(34, 54),
+                    ang: leaning ? random(0.7, 1.15) * (random() < 0.5 ? -1 : 1) : random(-0.35, 0.35)
+                });
+            }
+            logs.sort((a, b) => a.y - b.y);
+
+            const path = (g, L) => {
+                const r = L.th * 0.32, x = -L.len / 2, y = -L.th / 2, w = L.len, hh = L.th;
+                g.beginPath();
+                g.moveTo(x + r, y);
+                g.arcTo(x + w, y, x + w, y + hh, r);
+                g.arcTo(x + w, y + hh, x, y + hh, r);
+                g.arcTo(x, y + hh, x, y, r);
+                g.arcTo(x, y, x + w, y, r);
+                g.closePath();
+            };
+
+            for (const L of logs) {
+                // charred body
+                c.save();
+                c.translate(L.x, L.y); c.rotate(L.ang);
+                path(c, L);
+                const gr = c.createLinearGradient(0, -L.th / 2, 0, L.th / 2);
+                gr.addColorStop(0, 'rgb(40,27,19)');
+                gr.addColorStop(1, 'rgb(7,5,4)');
+                c.fillStyle = gr;
+                c.fill();
+                c.clip();
+                for (let i = 0; i < 16; i++) {
+                    const y = random(-L.th / 2, L.th / 2), x = random(-L.len / 2, L.len / 4);
+                    c.strokeStyle = random() < 0.6 ? 'rgba(0,0,0,0.4)' : 'rgba(110,72,46,0.14)';
+                    c.lineWidth = random(1, 2.5);
+                    c.beginPath();
+                    c.moveTo(x, y);
+                    c.lineTo(x + random(L.len * 0.2, L.len * 0.6), y + random(-2, 2));
+                    c.stroke();
+                }
+                c.restore();
+
+                // what glows: the underside and the alligator cracks of the char
+                h.save();
+                h.translate(L.x, L.y); h.rotate(L.ang);
+                path(h, L);
+                h.clip();
+                const hg = h.createLinearGradient(0, L.th * 0.05, 0, L.th / 2);
+                hg.addColorStop(0, 'rgba(255,90,20,0)');
+                hg.addColorStop(1, `rgba(255,${100 * S.wood | 0},24,0.8)`);
+                h.fillStyle = hg;
+                h.fillRect(-L.len / 2, 0, L.len, L.th / 2);
+                h.globalCompositeOperation = 'lighter';
+                for (let i = 0; i < 4; i++) {
+                    const s = L.th * random(1.4, 2.6);
+                    h.globalAlpha = random(0.25, 0.6);
+                    h.drawImage(emberGlow, random(-L.len / 2, L.len / 2) - s / 2, random(-L.th / 4, L.th / 2) - s / 2, s, s);
+                }
+                h.globalAlpha = 1;
+                h.lineCap = 'round';
+                const segs = floor(L.len / 5);
+                for (let i = 0; i < segs; i++) {
+                    const x = random(-L.len / 2, L.len / 2), y = random(-L.th / 2, L.th / 2);
+                    const along = random() < 0.5, l = random(5, 15);
+                    h.strokeStyle = `rgba(255,${random(120, 190) * S.wood | 0},${random(30, 80) | 0},${random(0.35, 0.95)})`;
+                    h.lineWidth = random(0.8, 2.2);
+                    h.beginPath();
+                    h.moveTo(x, y);
+                    h.lineTo(x + (along ? l : random(-2, 2)), y + (along ? random(-2, 2) : l));
+                    h.stroke();
+                }
+                h.restore();
+
+                // emitters along the log's upper side
+                const ca = Math.cos(L.ang), sa = Math.sin(L.ang);
+                for (let i = 0; i < 2; i++) {
+                    const u = random(-0.36, 0.36) * L.len, v = -L.th * 0.3;
+                    const ex = L.x + u * ca - v * sa, ey = L.y + u * sa + v * ca;
+                    emitters.push({
+                        x: ex, y: ey, w: L.th * 0.5, cx: ex + (S.bxM - ex) * 0.15,
+                        power: random(1.8, 3.6), scale: 1, life: 1, lift: 1,
+                        phase: random(1000), main: true
+                    });
+                }
+            }
+            // the heart of the fire
+            emitters.push({
+                x: S.bxM, y: S.bb - H * 0.06, w: S.bw * 0.2, cx: S.bxM,
+                power: random(2.6, 3.6), scale: 1.2, life: 1.3, lift: 1.1,
+                phase: random(1000), main: true
+            });
+        }
+
+        // --- The ember bed: fixed geometry, living temperature -----------------
+        function buildCoals() {
+            const y0 = H * 0.745, y1 = H * 0.935;
+            const n = params.emberCount;
+            for (let i = 0; i < n; i++) {
+                let xl, y, heat;
+                if (random() < 0.3) {
+                    // freshly fallen, piled under the basket
+                    xl = S.bx + randomGaussian() * W * 0.07;
+                    y = H * 0.715 + Math.pow(random(), 0.8) * (y1 - H * 0.715);
+                    heat = random(0.6, 1.1);
+                } else {
+                    // raked out under the grate, cooling with distance
+                    const u = Math.pow(random(), 1.25);
+                    xl = S.grate.x0 - W * 0.05 + u * W * 0.72;
+                    y = random(y0 + H * 0.01, y1);
+                    heat = random(0.45, 1) * (1 - 0.35 * u);
+                }
+                if (random() < 0.08) heat *= 0.2;
+                const d = clamp((y - y0) / (y1 - y0), 0, 1);
+                const c = {
+                    x: mx(xl), y: y, r: (15 + 16 * d) * random(0.65, 1.25),
+                    heat: heat, phase: random(TWO_PI), pop: 0
+                };
+                buildCoalSprites(c);
+                coals.push(c);
+            }
+            coals.sort((a, b) => a.y - b.y);
+
+            // the hottest coals under the grate keep small flames alive
+            const hot = coals.filter(c => Math.abs(c.x - S.bxM) > S.bw * 0.7)
+                             .sort((a, b) => b.heat - a.heat).slice(0, 12);
+            for (const c of hot) {
+                emitters.push({
+                    x: c.x, y: c.y - c.r * 0.25, w: c.r * 0.35, cx: c.x,
+                    power: 0.9, scale: 0.4, life: 0.42, lift: 0.55,
+                    phase: random(1000), main: false
+                });
+            }
+        }
+
+        function buildCoalSprites(c) {
+            const r = c.r, w = Math.ceil(r * 2.4), h = Math.ceil(r * 2);
+            const n = floor(random(7, 11)), verts = [];
+            for (let i = 0; i < n; i++) {
+                const a = i / n * TWO_PI + random(-0.25, 0.25), rad = r * random(0.72, 1.05);
+                verts.push([w / 2 + Math.cos(a) * rad, h / 2 + Math.sin(a) * rad * 0.72]);
+            }
+            const trace = g => {
+                g.beginPath();
+                verts.forEach((v, i) => i ? g.lineTo(v[0], v[1]) : g.moveTo(v[0], v[1]));
+                g.closePath();
+            };
+            c.w = w; c.h = h;
+
+            // cold: charcoal with a dusting of ash
+            c.cold = makeCanvas(w, h);
+            let g = c.cold.getContext('2d');
+            trace(g);
+            let gr = g.createLinearGradient(0, h * 0.15, 0, h * 0.9);
+            gr.addColorStop(0, 'rgb(56,50,46)');
+            gr.addColorStop(1, 'rgb(13,10,9)');
+            g.fillStyle = gr;
+            g.fill();
+            g.clip();
+            const va = verts[floor(random(n))];
+            g.strokeStyle = 'rgba(0,0,0,0.45)';
+            g.lineWidth = 1.5;
+            g.beginPath();
+            g.moveTo(va[0], va[1]);
+            g.lineTo(w / 2 + random(-r, r) * 0.3, h / 2 + random(-r, r) * 0.2);
+            g.lineTo(w / 2 + random(-r, r), h);
+            g.stroke();
+            for (let i = 0; i < 12; i++) {
+                g.fillStyle = 'rgba(165,156,148,0.22)';
+                g.fillRect(random(w), random(h * 0.55), random(1, 3), random(1, 2));
+            }
+
+            // red heat: the whole body glows, except where ash blankets it
+            c.hotR = makeCanvas(w, h);
+            g = c.hotR.getContext('2d');
+            trace(g);
+            gr = g.createRadialGradient(w / 2, h * 0.62, 0, w / 2, h * 0.62, r * 1.05);
+            gr.addColorStop(0, `rgba(255,${96 * S.wood | 0},20,1)`);
+            gr.addColorStop(0.6, `rgba(216,${48 * S.wood | 0},8,0.95)`);
+            gr.addColorStop(1, 'rgba(120,14,2,0.85)');
+            g.fillStyle = gr;
+            g.fill();
+            g.globalCompositeOperation = 'destination-out';
+            const ash = floor(1 + (1.15 - c.heat) * 4);
+            for (let i = 0; i < ash; i++) {
+                const ax = w / 2 + random(-r, r) * 0.8, ay = h * random(0.12, 0.5), ar = r * random(0.3, 0.62);
+                gr = g.createRadialGradient(ax, ay, 0, ax, ay, ar);
+                gr.addColorStop(0, `rgba(0,0,0,${random(0.5, 0.9)})`);
+                gr.addColorStop(1, 'rgba(0,0,0,0)');
+                g.fillStyle = gr;
+                g.fillRect(0, 0, w, h);
+            }
+
+            // yellow heat: the core and the cracks
+            c.hotY = makeCanvas(w, h);
+            g = c.hotY.getContext('2d');
+            trace(g);
+            g.clip();
+            const cx = w / 2 + random(-r, r) * 0.25, cy = h * random(0.52, 0.68);
+            gr = g.createRadialGradient(cx, cy, 0, cx, cy, r * 0.78);
+            gr.addColorStop(0, `rgba(255,${214 * S.wood | 0},120,0.95)`);
+            gr.addColorStop(0.5, `rgba(255,${150 * S.wood | 0},40,0.4)`);
+            gr.addColorStop(1, 'rgba(255,120,30,0)');
+            g.fillStyle = gr;
+            g.fillRect(0, 0, w, h);
+            g.strokeStyle = 'rgba(255,230,165,0.9)';
+            g.lineWidth = 1.2;
+            g.lineJoin = 'round';
+            const cracks = floor(random(2, 4));
+            for (let i = 0; i < cracks; i++) {
+                let px = cx + random(-r, r) * 0.2, py = cy + random(-r, r) * 0.15;
+                const a = random(TWO_PI);
+                g.beginPath();
+                g.moveTo(px, py);
+                for (let j = 0; j < 3; j++) {
+                    px += Math.cos(a + random(-0.7, 0.7)) * r * 0.3;
+                    py += Math.sin(a + random(-0.7, 0.7)) * r * 0.22;
+                    g.lineTo(px, py);
+                }
+                g.stroke();
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // SIMULATION
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function spawnFlame(e, f) {
+            flames.push({
+                x: e.x + randomGaussian() * e.w, y: e.y + random(-5, 5),
+                vx: randomGaussian() * 0.5, vy: -random(1.5, 3.5) * e.lift,
+                age: 0, life: random(50, 112) * e.life * (0.7 + 0.6 * f) * Math.sqrt(params.flame),
+                s: random(52, 92) * e.scale, ex: e.cx, lift: e.lift, main: e.main
+            });
+        }
+
+        function spawnSpark(x, y, heavy) {
+            sparks.push({
+                x: x, y: y, px: x, py: y,
+                vx: randomGaussian() * (heavy ? 2.2 : 1.3), vy: -random(4, 9) * (heavy ? 0.7 : 1),
+                age: 0, life: random(50, 170), g: heavy ? 0.13 : -0.05,
+                ground: random(H * 0.76, H * 0.92), phase: random(TWO_PI)
+            });
+        }
+
+        function step() {
+            t++;
+            const wind = S.wind + params.wind;
+            const turb = params.turbulence;
+
+            flick = clamp(0.55 + 0.45 * n2(t * 0.045, 3.3) + 0.15 * n2(t * 0.21, 9.1), 0, 1.2);
+            breath = n01(t * 0.012, 17.7);
+
+            // emission: every emitter breathes on its own phase
+            for (const e of emitters) {
+                const f = n01(e.phase, t * 0.035);
+                const rate = e.main ? e.power * params.flame * (0.25 + 1.5 * f * f)
+                                    : e.power * Math.max(0, f - 0.45) * 4;
+                let k = floor(rate + random());
+                while (k-- > 0) spawnFlame(e, f);
+            }
+
+            // flames: buoyancy + a noise field that travels upward with them
+            for (let i = flames.length - 1; i >= 0; i--) {
+                const p = flames[i];
+                p.age++;
+                if (p.age >= p.life) {
+                    if (p.main && random() < 0.03 * params.smoke) {
+                        smokes.push({x: p.x, y: p.y, vx: p.vx * 0.5, vy: -2.4, age: 0, life: random(170, 280), s: random(70, 110)});
+                    }
+                    flames[i] = flames[flames.length - 1];
+                    flames.pop();
+                    continue;
+                }
+                const k = p.age / p.life;
+                p.vx += n2(p.x * 0.0046, p.y * 0.0046 + t * 0.021, t * 0.011) * turb * 0.62 * p.lift
+                      + wind * 0.05 * (1 + 2 * k)
+                      + (p.ex - p.x) * 0.0014;
+                p.vy -= 0.21 * p.lift;
+                p.vx *= 0.93; p.vy *= 0.97;
+                p.x += p.vx; p.y += p.vy;
+            }
+
+            // smoke
+            for (let i = smokes.length - 1; i >= 0; i--) {
+                const p = smokes[i];
+                p.age++;
+                if (p.age >= p.life || p.y < -150) { smokes[i] = smokes[smokes.length - 1]; smokes.pop(); continue; }
+                p.vx += n2(p.x * 0.002, p.y * 0.002 + t * 0.008, t * 0.004 + 40) * turb * 0.12 + wind * 0.03;
+                p.vx *= 0.97;
+                p.vy += (-1.9 - p.vy) * 0.03;
+                p.x += p.vx; p.y += p.vy;
+            }
+
+            // sparks off the brasero
+            if (random() < 0.5 * params.sparks * (0.4 + flick)) {
+                const e = emitters[floor(random(emitters.length))];
+                if (e.main) spawnSpark(e.x + random(-10, 10), e.y - random(20, 90), random() < 0.18);
+            }
+            // a coal bursts
+            if (coals.length && random() < 0.014 * params.sparks) {
+                const c = coals[floor(random(coals.length))];
+                if (c.heat > 0.4) {
+                    c.pop = 1;
+                    const n = floor(random(5, 15));
+                    for (let i = 0; i < n; i++) spawnSpark(c.x + random(-4, 4), c.y - c.r * 0.3, random() < 0.5);
+                }
+            }
+            for (let i = sparks.length - 1; i >= 0; i--) {
+                const p = sparks[i];
+                p.age++;
+                if (p.age >= p.life || (p.g > 0 && p.vy > 0 && p.y > p.ground)) {
+                    sparks[i] = sparks[sparks.length - 1]; sparks.pop(); continue;
+                }
+                p.vx += n2(p.x * 0.006, p.y * 0.006 + t * 0.02, t * 0.01 + 7) * turb * 0.5 + wind * 0.045;
+                p.vy += p.g;
+                p.vx *= 0.97; p.vy *= 0.985;
+                p.px += (p.x - p.px) * 0.35; p.py += (p.y - p.py) * 0.35;
+                p.x += p.vx; p.y += p.vy;
+            }
+
+            for (const c of coals) c.pop *= 0.94;
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // RENDER
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function line(a, b) { ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+        function rod(r, dx, dy) { ctx.beginPath(); ctx.moveTo(r.x0 + (dx || 0), r.y0 + (dy || 0)); ctx.lineTo(r.x1 + (dx || 0), r.y1 + (dy || 0)); ctx.stroke(); }
+
+        function render() {
+            const fl = flick * (0.6 + 0.4 * params.flame);
+
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, W, H);
+
+            // wall and floor exist only as far as the fire lights them
+            ctx.globalCompositeOperation = 'lighter';
+            ctx.globalAlpha = clamp(0.42 + 0.5 * fl, 0, 1);
+            ctx.drawImage(litA, 0, 0);
+            ctx.globalAlpha = 0.72 + 0.28 * breath;
+            ctx.drawImage(litB, 0, 0);
+
+            // back of the basket, chains
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.globalAlpha = 1;
+            ctx.strokeStyle = IRON;
+            ctx.lineCap = 'round';
+            ctx.lineWidth = 4;
+            const B = S.basket, G = S.grate;
+            for (const r of B.back) rod(r);
+            ctx.beginPath();
+            ctx.moveTo(B.back[0].x0, B.back[0].y0);
+            ctx.lineTo(B.back[B.back.length - 1].x0, B.back[0].y0);
+            ctx.stroke();
+            ctx.lineWidth = 3;
+            ctx.setLineDash([8, 5]);
+            for (const c of G.chains) { ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(c.x, -10); ctx.stroke(); }
+            ctx.setLineDash([]);
+
+            // ember bed: temperature travels through it like slow breathing
+            ctx.globalCompositeOperation = 'lighter';
+            for (const c of coals) {
+                const T = clamp(c.heat * (0.42 + 0.8 * n01(c.x * 0.0042, c.y * 0.0042 + 10, t * 0.006))
+                              + 0.04 * Math.sin(t * 0.17 + c.phase) + c.pop * 0.5, 0, 1.25);
+                c.T = T;
+                ctx.globalAlpha = Math.min(1, 0.17 * T);
+                const gw = c.r * 4.4, gh = c.r * 3.1;
+                ctx.drawImage(emberGlow, c.x - gw / 2, c.y - gh / 2 + c.r * 0.2, gw, gh);
+            }
+            for (const c of coals) {
+                const x = c.x - c.w / 2, y = c.y - c.h / 2, T = c.T;
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.globalAlpha = 1;
+                ctx.drawImage(c.cold, x, y);
+                ctx.globalCompositeOperation = 'lighter';
+                ctx.globalAlpha = Math.min(1, T * 1.5);
+                ctx.drawImage(c.hotR, x, y);
+                const ay = clamp((T - 0.45) * 1.9, 0, 1);
+                if (ay > 0.01) { ctx.globalAlpha = ay; ctx.drawImage(c.hotY, x, y); }
+            }
+
+            // logs
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.globalAlpha = 1;
+            ctx.drawImage(logCold, 0, 0);
+            ctx.globalCompositeOperation = 'lighter';
+            ctx.globalAlpha = 0.55 + 0.45 * n01(t * 0.02, 5.5);
+            ctx.drawImage(logHot, 0, 0);
+
+            // bloom around the flame body
+            ctx.globalAlpha = clamp(0.2 * fl, 0, 1);
+            ctx.drawImage(haloSprite, S.bxM - 480, S.bb - H * 0.2 - 480, 960, 960);
+
+            // flames: colour is age, brightness is density
+            for (const p of flames) {
+                const k = p.age / p.life;
+                const idx = Math.min(NR - 1, (Math.pow(k, 0.7) * NR) | 0);
+                const s = p.s * Math.min(1, 0.35 + p.age / 7) * (1 - 0.55 * k);
+                ctx.globalAlpha = 0.058 * Math.min(1, p.age / 4) * Math.pow(1 - k, 0.8);
+                ctx.drawImage(flameSprites[idx], p.x - s / 2, p.y - s * 0.85, s, s * 1.7);
+            }
+
+            // iron in front: only a silhouette, with a rim of borrowed light
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.globalAlpha = 1;
+            ctx.strokeStyle = IRON;
+            ctx.lineWidth = 6;
+            for (const r of B.front) rod(r);
+            for (const r of B.legs) rod(r);
+            ctx.lineWidth = 7;
+            ctx.beginPath();
+            ctx.moveTo(B.front[0].x0, S.bt); ctx.lineTo(B.front[B.front.length - 1].x0, S.bt);
+            ctx.moveTo(B.front[0].x1, S.bb); ctx.lineTo(B.front[B.front.length - 1].x1, S.bb);
+            ctx.stroke();
+
+            ctx.lineWidth = 4;
+            line(G.back[0], G.back[1]);
+            ctx.fillStyle = IRON;
+            for (const b of G.bars) {
+                ctx.beginPath();
+                ctx.moveTo(b.a.x - 4, b.a.y); ctx.lineTo(b.a.x + 4, b.a.y);
+                ctx.lineTo(b.b.x + 2.4, b.b.y); ctx.lineTo(b.b.x - 2.4, b.b.y);
+                ctx.fill();
+            }
+            ctx.strokeStyle = 'rgba(58,36,26,0.75)';
+            ctx.lineWidth = 1.4;
+            for (const b of G.bars) line(b.a, b.b);     // the channel of each bar
+            ctx.strokeStyle = IRON;
+            ctx.lineWidth = 12;
+            line(G.front[0], G.front[1]);
+
+            ctx.globalCompositeOperation = 'lighter';
+            ctx.lineWidth = 1.6;
+            const off = S.side * 3.2;
+            for (const b of G.bars) {
+                ctx.strokeStyle = `rgba(255,${128 * S.wood | 0},48,${clamp(b.lit * (0.25 + 0.5 * fl), 0, 1)})`;
+                ctx.beginPath();
+                ctx.moveTo(b.a.x + off, b.a.y); ctx.lineTo(b.b.x + off, b.b.y);
+                ctx.stroke();
+            }
+            ctx.strokeStyle = `rgba(255,96,30,${0.4 + 0.3 * breath})`;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(G.front[0].x, G.front[0].y + 5.5); ctx.lineTo(G.front[1].x, G.front[1].y + 5.5);
+            ctx.stroke();
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = `rgba(255,${136 * S.wood | 0},54,${clamp(0.2 + 0.45 * fl, 0, 1)})`;
+            for (const r of B.front) {
+                const d = S.bxM - (r.x0 + r.x1) / 2;
+                if (Math.abs(d) > 8) rod(r, Math.sign(d) * 2.4);
+            }
+
+            // heat haze over the bed
+            ctx.globalAlpha = 0.05 + 0.04 * breath;
+            for (let i = 0; i < 5; i++) {
+                const x = mx(S.grate.x0 + W * (0.02 + 0.15 * i));
+                ctx.drawImage(emberGlow, x - 260, H * 0.84 - 150, 520, 300);
+            }
+
+            // sparks
+            ctx.lineCap = 'round';
+            for (const p of sparks) {
+                const k = p.age / p.life;
+                const a = Math.min(1, (1 - k) * 1.6) * (0.7 + 0.3 * Math.sin(p.age * 0.9 + p.phase));
+                ctx.globalAlpha = 1;
+                ctx.strokeStyle = `rgba(${255 - 60 * k | 0},${(225 - 185 * k) * S.wood | 0},${150 * (1 - k) * (1 - k) | 0},${a})`;
+                ctx.lineWidth = 1.9 - k;
+                ctx.beginPath(); ctx.moveTo(p.px, p.py); ctx.lineTo(p.x, p.y); ctx.stroke();
+                ctx.globalAlpha = a * 0.5;
+                ctx.drawImage(flameSprites[4], p.x - 7, p.y - 7, 14, 14);
+            }
+
+            // smoke, last and almost nothing
+            ctx.globalCompositeOperation = 'source-over';
+            for (const p of smokes) {
+                const k = p.age / p.life;
+                const s = p.s * (1 + 2.4 * k);
+                ctx.globalAlpha = 0.075 * params.smoke * Math.min(1, p.age / 25) * (1 - k);
+                ctx.drawImage(smokeSprite, p.x - s / 2, p.y - s / 2, s, s);
+            }
+            ctx.globalAlpha = 1;
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // UI CONTROL HANDLERS
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function updateParam(paramName, value) {
+            params[paramName] = parseFloat(value);
+            document.getElementById(paramName + '-value').textContent = value;
+            // the bed is geometry: it has to be laid again
+            if (paramName === 'emberCount') initializeSystem();
+        }
+
+        function downloadPNG() {
+            saveCanvas('paciencia-de-brasa-' + params.seed, 'png');
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // SEED CONTROL FUNCTIONS
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function updateSeedDisplay() {
+            document.getElementById('seed-input').value = params.seed;
+        }
+
+        function updateSeed() {
+            let input = document.getElementById('seed-input');
+            let newSeed = parseInt(input.value);
+            if (newSeed && newSeed > 0) {
+                params.seed = newSeed;
+                initializeSystem();
+            } else {
+                // Reset to current seed if invalid
+                updateSeedDisplay();
+            }
+        }
+
+        function previousSeed() {
+            params.seed = Math.max(1, params.seed - 1);
+            updateSeedDisplay();
+            initializeSystem();
+        }
+
+        function nextSeed() {
+            params.seed = params.seed + 1;
+            updateSeedDisplay();
+            initializeSystem();
+        }
+
+        function randomSeedAndUpdate() {
+            params.seed = Math.floor(Math.random() * 999999) + 1;
+            updateSeedDisplay();
+            initializeSystem();
+        }
+
+        function resetParameters() {
+            // the fire stays; only the dials go back
+            params = {...defaultParams, seed: params.seed};
+
+            for (const name of ['flame', 'turbulence', 'wind', 'emberCount', 'sparks', 'smoke']) {
+                document.getElementById(name).value = params[name];
+                document.getElementById(name + '-value').textContent = params[name];
+            }
+
+            updateSeedDisplay();
+            initializeSystem();
+        }
+
+        // Initialize UI on load
+        window.addEventListener('load', function() {
+            updateSeedDisplay();
+        });
+    </script>
+</body>
+</html>

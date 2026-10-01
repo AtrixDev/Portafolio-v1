@@ -16,7 +16,7 @@ if [ -n "$SRC" ]; then
   else find "$SRC" -name SKILL.md -printf '%h\n' | while read -r d; do cp -r "$d" "$BASE/con/.claude/skills/"; done; fi
 fi
 PROMPT="$(cat "$AQUI/$ID/prompt.txt")"
-( cd "$BASE/sin" && claude -p "$PROMPT" --model "${MODELO:-claude-opus-5-5}" --disable-slash-commands --permission-mode bypassPermissions --output-format json > "$BASE/sin.json" 2> "$BASE/sin.err" ) &
-( cd "$BASE/con" && claude -p "$PROMPT ${SUFIJO:-Usá la skill $SKILL.}" --model "${MODELO:-claude-opus-5-5}" --permission-mode bypassPermissions --output-format json > "$BASE/con.json" 2> "$BASE/con.err" ) &
+( cd "$BASE/sin" && claude -p "$PROMPT" --model "${MODELO:-claude-sonnet-5-5}" --disable-slash-commands --permission-mode bypassPermissions --output-format json > "$BASE/sin.json" 2> "$BASE/sin.err" ) &
+( cd "$BASE/con" && claude -p "$PROMPT ${SUFIJO:-Usá la skill $SKILL.}" --model "${MODELO:-claude-sonnet-5-5}" --permission-mode bypassPermissions --output-format json > "$BASE/con.json" 2> "$BASE/con.err" ) &
 wait
 echo "listo: $BASE"

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta name="robots" content="noindex"><!-- Experimento del Lab de Programación: salida de Claude sin cambios de diseño -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fuego — arte generativo de parrilla</title>
+<meta name="theme-color" content="#060403">
+<style>
+  html, body { margin: 0; height: 100%; background: #060403; overflow: hidden; }
+  canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+  #fuego { cursor: crosshair; touch-action: manipulation; }
+  #chispas { pointer-events: none; }
+  #cartel {
+    position: fixed;
+    left: max(clamp(16px, 3vw, 40px), env(safe-area-inset-left));
+    top: max(clamp(16px, 3vw, 36px), env(safe-area-inset-top));
+    max-width: min(34em, calc(100vw - 32px));
+    color: #ecd2b0;
+    pointer-events: none;
+    user-select: none;
+    text-shadow: 0 1px 14px rgba(0, 0, 0, .9);
+  }
+  #cartel h1 {
+    margin: 0 0 .5em;
+    font: 400 clamp(17px, 1.7vw, 23px)/1.15 "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    letter-spacing: .02em;
+  }
+  #cartel h1 span { font-style: italic; opacity: .75; margin-left: .35em; }
+  #cartel p {
+    margin: 0;
+    font: 500 clamp(9.5px, .78vw, 11.5px)/1.75 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    letter-spacing: .17em;
+    text-transform: uppercase;
+    opacity: .72;
+  }
+  #cartel p + p { opacity: .42; }
+  #aviso {
+    position: fixed; inset: 0; display: none; place-items: center; padding: 2rem;
+    color: #ecd2b0; text-align: center;
+    font: 400 18px/1.5 Georgia, serif;
+  }
+</style>
+</head>
+<body>
+<canvas id="fuego" role="img" aria-label="Fuego de parrilla generado por algoritmo: llamas, brasas y chispas detrás de los fierros."></canvas>
+<canvas id="chispas" aria-hidden="true"></canvas>
+<div id="cartel">
+  <h1>Fuego<span id="numero"></span></h1>
+  <p id="ficha"></p>
+  <p>Tocá para avivar · recargá para encender otro</p>
+</div>
+<div id="aviso">Este fuego necesita WebGL para encenderse.<br>Probá con otro navegador o activá la aceleración gráfica.</div>
+
+<script id="frag" type="x-shader/x-fragment">
+precision highp float;
+
+uniform vec2  uRes;
+uniform float uTime;
+uniform vec4  uSeed;
+uniform vec4  uSrc[4];   // hogueras: x, altura, ancho, fase (la 4ª es la llamarada pasajera)
+uniform vec4  uLog[4];   // leños: x, y, ángulo, medio largo (0 = no hay)
+uniform vec4  uGrill;    // y del marco, profundidad, separación, medio ancho del fierro
+uniform vec4  uPal;      // exponente verde, exponente azul, base azul, escala de brasas
+uniform vec4  uEnv;      // viento, altura del lecho, etapa, humo
+uniform vec3  uTint;
+uniform vec2  uWall;     // escala del ladrillo, punto de fuga
+
+#define T uTime
+
+float hash11(float p) { p = fract(p * .1031); p *= p + 33.33; p *= p + p; return fract(p); }
+float hash21(vec2 p) {
+  vec3 p3 = fract(vec3(p.xyx) * .1031);
+  p3 += dot(p3, p3.yzx + 33.33);
+  return fract((p3.x + p3.y) * p3.z);
+}
+vec2 hash22(vec2 p) {
+  vec3 p3 = fract(vec3(p.xyx) * vec3(.1031, .1030, .0973));
+  p3 += dot(p3, p3.yzx + 33.33);
+  return fract((p3.xx + p3.yz) * p3.zy);
+}
+float vnoise(vec2 p) {
+  vec2 i = floor(p), f = fract(p);
+  vec2 u = f * f * (3. - 2. * f);
+  return mix(mix(hash21(i), hash21(i + vec2(1., 0.)), u.x),
+             mix(hash21(i + vec2(0., 1.)), hash21(i + vec2(1., 1.)), u.x), u.y);
+}
+float fbm(vec2 p) {
+  float a = .5, s = 0.;
+  for (int i = 0; i < 5; i++) { s += a * vnoise(p); p = mat2(1.6, 1.2, -1.2, 1.6) * p; a *= .5; }
+  return s;
+}
+float fbm3(vec2 p) {
+  float a = .5, s = 0.;
+  for (int i = 0; i < 3; i++) { s += a * vnoise(p); p = mat2(1.6, 1.2, -1.2, 1.6) * p; a *= .5; }
+  return s;
+}
+// x: distancia a la celda más cercana, y: a la segunda, z: azar de la celda
+vec3 voro(vec2 x) {
+  vec2 n = floor(x), f = fract(x);
+  float d1 = 8., d2 = 8.;
+  vec2 id = n;
+  for (int j = -1; j <= 1; j++) for (int i = -1; i <= 1; i++) {
+    vec2 g = vec2(float(i), float(j));
+    vec2 r = g + hash22(n + g) - f;
+    float d = dot(r, r);
+    if (d < d1) { d2 = d1; d1 = d; id = n + g; } else if (d < d2) { d2 = d; }
+  }
+  return vec3(sqrt(d1), sqrt(d2), hash21(id + 3.7));
+}
+
+float flick(vec4 s) { return .72 + .5 * vnoise(vec2(T * 1.3 + s.w * 31., s.w * 7.)); }
+
+// silueta del lecho de brasas
+float bedTop(float x) {
+  float h = uEnv.y + .075 * (vnoise(vec2(x * 1.7 + uSeed.x, 3.1)) - .5);
+  for (int i = 0; i < 3; i++) {
+    vec4 s = uSrc[i];
+    float d = (x - s.x) / (s.z * 2.2);
+    h += .05 * s.y * exp(-d * d);
+  }
+  h += .03 * vnoise(vec2(x * 13. + uSeed.y, 7.7)) + .011 * vnoise(vec2(x * 41., 1.3));
+  return h;
+}
+
+float flameH(float x) {
+  float H = (.02 + .13 * smoothstep(.35, .8, vnoise(vec2(x * 2.6 + uSeed.z, T * .3)))) * (1. - .3 * uEnv.z);
+  for (int i = 0; i < 4; i++) {
+    vec4 s = uSrc[i];
+    float d = (x - s.x) / s.z;
+    H += s.y * flick(s) * exp(-d * d);
+  }
+  return H;
+}
+
+float flames(vec2 p, float wind, out float hr) {
+  float h = p.y - (bedTop(p.x) - .055);
+  hr = 9.;
+  if (h <= 0.) return 0.;
+  vec2 q = vec2(p.x - wind * h * (.45 + .9 * h), h);
+  vec2 w = vec2(fbm3(q * vec2(3.4, 2.3) + vec2(uSeed.x, -T * .85)),
+                fbm3(q * vec2(3.4, 2.3) + vec2(uSeed.y + 4.7, -T * 1.05))) - .44;
+  q.x += w.x * (.05 + .55 * h);
+  float H = flameH(q.x);
+  float n = fbm(vec2(q.x * 7.5, h * 3.4 - T * 2.1) + w * 1.3 + uSeed.zw);
+  n += .22 * (vnoise(vec2(q.x * 24., h * 10. - T * 5.2)) - .5);
+  hr = h / H;
+  float I = n * 1.95 - .12 - hr * .92;
+  I *= smoothstep(0., .035, h);
+  return clamp(I, 0., 1.25);
+}
+
+vec3 fireCol(float I) {
+  float c = min(I, 1.);
+  return vec3(I, pow(c, uPal.x), pow(c, uPal.y)) * uTint * 1.5;
+}
+vec3 emberCol(float I) {
+  I = max(I, 0.);
+  float c = min(I, 1.);
+  return vec3(I * 1.7, pow(c, 2.5) * 1.15, pow(c, 6.5) * .7);
+}
+
+vec3 lightAt(vec2 p, float gust) {
+  vec3 L = vec3(0.);
+  for (int i = 0; i < 4; i++) {
+    vec4 s = uSrc[i];
+    vec2 d = p - vec2(s.x, uEnv.y + s.y * .4);
+    float r = .10 + s.y * .5;
+    L += s.y * flick(s) * 1.5 / pow(1. + dot(d, d) / (r * r), 1.7) * uTint * vec3(1., .55, .22);
+  }
+  float e = exp(-max(p.y - uEnv.y, 0.) * 4.5);
+  L += vec3(1., .28, .07) * e * (.10 + .14 * uEnv.z) * (.8 + .4 * gust);
+  return L;
+}
+
+vec3 wall(vec2 p, vec3 L) {
+  vec2 bs = vec2(.172, .056) * uWall.x;
+  vec2 q = p / bs;
+  float row = floor(q.y);
+  q.x += .5 * mod(row, 2.) + .13 * hash11(row + 40. + uSeed.x);
+  vec2 id = vec2(floor(q.x), row), f = fract(q);
+  vec2 e = min(f, 1. - f) * bs;
+  float m = smoothstep(.0025, .0055, min(e.x, e.y));
+  float r = hash21(id + floor(uSeed.xy));
+  float tex = (.55 + .9 * fbm3(p * 55. + r * 30.)) * (.7 + .6 * fbm3(p * 9. + uSeed.zw));
+  vec3 alb = mix(vec3(.20, .082, .05), vec3(.34, .17, .10), r * r) * tex;
+  alb = mix(vec3(.07, .06, .055) * (.6 + .8 * fbm3(p * 90.)), alb, m);
+  // la luz viene de abajo: el canto inferior de cada ladrillo la recibe, el superior queda en sombra
+  alb *= 1. + .9 * smoothstep(.012, .004, f.y * bs.y) * m;
+  alb *= .55 + .45 * smoothstep(0., .012, (1. - f.y) * bs.y);
+  float soot = 0.;
+  for (int i = 0; i < 3; i++) {
+    vec4 s = uSrc[i];
+    float up = max(p.y - uEnv.y, 0.);
+    float d = (p.x - s.x - uEnv.x * up * .5) / (s.z * 1.6 + .25 * up);
+    soot += s.y * 1.6 * exp(-d * d);
+  }
+  soot *= .6 + .8 * fbm3(p * vec2(5., 2.5) + uSeed.xy);
+  alb *= mix(1., .22, clamp(soot, 0., 1.));
+  return alb * (L + vec3(.010, .012, .018));
+}
+
+vec3 embers(vec2 p, float top, float gust, vec3 L) {
+  float d = top - p.y;
+  float s = .32 + d;   // distancia a un horizonte virtual: las brasas del fondo se achican
+  vec2 g = vec2(p.x / s, .75 / s) * uPal.w + uSeed.xy;
+  g += .45 * (vec2(vnoise(g * 1.3), vnoise(g * 1.3 + 9.)) - .5);
+  vec3 v = voro(g);
+  float rnd = v.z;
+  float prox = 0.;
+  for (int i = 0; i < 4; i++) {
+    vec4 sc = uSrc[i];
+    float dx = (p.x - sc.x) / (sc.z * 2.2 + .08);
+    prox += sc.y * exp(-dx * dx);
+  }
+  float heat = -.34 + 1.25 * fbm3(g * .2 + vec2(0., T * .03) + uSeed.zw) + .5 * prox + .28 * uEnv.z - .3 * rnd;
+  heat += .10 * sin(T * (.4 + rnd * 1.3) + rnd * 50.);   // cada brasa respira a su ritmo
+  heat = clamp(heat * (.8 + .5 * gust), 0., 1.15);
+  float edge = v.y - v.x;
+  float seam = exp(-edge * (5. + 6. * rnd));              // entre brasa y brasa se ve el corazón
+  float mott = fbm3(g * 3.1 + rnd * 9.);
+  float dome = 1. - .45 * smoothstep(.1, .55, v.x);
+  float I = heat * mix((.12 + .30 * heat + .5 * (mott - .5)) * dome, 1.12, seam * (.5 + .5 * heat));
+  vec3 c = emberCol(I);
+  // ceniza sobre las que se van apagando
+  float ash = smoothstep(.34, .62, mott + .25 * rnd) * (1. - seam) * (1. - .6 * heat);
+  vec3 lit = vec3(1., .5, .25) * (.10 + .5 * heat) + L * .5 + .02;
+  c = mix(c, vec3(.46, .42, .39) * lit * dome, ash * .85);
+  c += vec3(.03, .026, .024) * lit * dome * (1. - seam);
+  c *= .25 + .75 * smoothstep(0., .035, d);
+  return c;
+}
+
+vec3 aces(vec3 x) { return clamp((x * (2.51 * x + .03)) / (x * (2.43 * x + .59) + .14), 0., 1.); }
+
+void main() {
+  vec2 p = (gl_FragCoord.xy - .5 * uRes) / uRes.y;
+  float px = 1.5 / uRes.y;
+  float gust = vnoise(vec2(T * .21, uSeed.x));
+  float wind = uEnv.x * (.55 + .9 * gust);
+  float top = bedTop(p.x);
+  float up = max(p.y - uEnv.y, 0.);
+
+  float hr;
+  float I = flames(p, wind, hr);
+  vec3 L = lightAt(p, gust);
+
+  // el aire caliente deforma lo que queda detrás
+  float heatMask = 0.;
+  for (int i = 0; i < 4; i++) {
+    vec4 s = uSrc[i];
+    float d = (p.x - s.x - wind * up * .6) / (s.z * 1.8 + .2 * up);
+    heatMask += s.y * exp(-d * d);
+  }
+  heatMask = clamp(heatMask * 2., 0., 1.) * smoothstep(0., .1, up);
+  vec2 ps = p + (vec2(vnoise(vec2(p.x * 16., p.y * 11. - T * 3.) + 11.),
+                      vnoise(vec2(p.x * 16., p.y * 11. - T * 3.) + 37.)) - .5) * .0045 * heatMask;
+
+  vec3 col = vec3(0.);
+  float above = smoothstep(top - px, top + px, p.y);
+  if (above > 0.) col = wall(ps, L) * above;
+  if (above < 1.) col += embers(p, top, gust, L) * (1. - above);
+
+  // leños carbonizados, con la corteza cuarteada al rojo
+  float logMask = 0.;
+  for (int i = 0; i < 4; i++) {
+    vec4 lg = uLog[i];
+    if (lg.w <= 0.) continue;
+    vec2 q = p - lg.xy;
+    float ca = cos(lg.z), sa = sin(lg.z);
+    q = vec2(ca * q.x + sa * q.y, -sa * q.x + ca * q.y);
+    float fi = float(i);
+    q.y += .012 * sin(q.x * 9. + fi * 2.);   // ningún leño es recto
+    float r = (.046 + .02 * hash11(fi + 1. + uSeed.x)) * (.84 + .32 * vnoise(vec2(q.x * 7. + fi * 13., 2.)));
+    vec2 bx = abs(q) - vec2(lg.w, r);
+    float sd = length(max(bx, 0.)) + min(max(bx.x, bx.y), 0.) - .014;
+    float m = smoothstep(px, -px, sd);
+    m *= smoothstep(-.085, -.06, p.y - top + .03 * vnoise(vec2(p.x * 30., fi)));   // las brasas lo tapan por delante
+    if (m > 0.) {
+      float v = clamp(q.y / (r + .014), -1., 1.);
+      float nz = sqrt(1. - v * v);
+      vec3 vv = voro(vec2(q.x * 30., asin(v) * 3.) + fi * 17.3 + uSeed.zw);
+      float heat = clamp(.02 - .7 * v + 1.5 * (fbm3(q * 6. + fi * 3.) - .44) + .2 * uEnv.z, 0., 1.1);
+      float cr = exp(-(vv.y - vv.x) * 14.);
+      float Il = heat * (.03 + .12 * heat + cr) * (.45 + .55 * nz) * (.85 + .3 * gust);
+      vec3 lc = vec3(.05, .042, .038) * (.3 + vv.z) * nz * (L * .5 + .04);
+      lc += vec3(.16, .15, .14) * smoothstep(.2, .9, v) * fbm3(q * 30.) * (L * .14 + .03);   // ceniza arriba
+      lc += emberCol(Il);
+      col = mix(col, lc, m);
+      logMask = max(logMask, m * (.62 + .34 * smoothstep(-.8, .3, v)));   // abajo la llama lo envuelve
+    }
+  }
+
+  // humo
+  float smk = fbm(vec2((p.x - wind * up * 1.3) * 1.6 + uSeed.w, p.y * 1.15 - T * .13)
+                  + .5 * vnoise(p * 3. + vec2(0., -T * .2)));
+  smk = smoothstep(.42, .85, smk) * smoothstep(.05, .5, up) * uEnv.w;
+  col = mix(col, vec3(.42, .39, .37) * (L * .55 + vec3(.012, .014, .02)), smk * .45);
+
+  // llamas
+  vec3 fc = fireCol(I);
+  fc = mix(fc, vec3(.10, .22, .75) * I, uPal.z * exp(-hr * 9.) * .8);
+  col += fc * (1. - logMask);   // el leño se recorta oscuro dentro de la llama
+
+  // la parrilla: fierros en perspectiva, entre el marco de adelante y el de atrás
+  float yf = uGrill.x, dep = uGrill.y;
+  float tb = (ps.y - yf) / dep;
+  float gap = max(yf - uEnv.y, .05);
+  float Havg = 0.;
+  for (int i = 0; i < 3; i++) {
+    vec4 s = uSrc[i];
+    float d = (p.x - s.x - wind * gap * .5) / s.z;
+    Havg += s.y * exp(-d * d);
+  }
+  float hk = smoothstep(.45, 1.7, Havg / gap);
+  vec3 hot = vec3(.55, .05, .006) * hk * hk;   // el fierro al rojo
+  if (tb > -.2 && tb < 1.2) {
+    float sc = mix(1., .85, clamp(tb, 0., 1.));
+    float u = (ps.x - uWall.y) / sc / uGrill.z + uSeed.w;
+    float fu = abs(fract(u) - .5) * uGrill.z * sc;
+    float hw = uGrill.w * sc;
+    float bar = (1. - smoothstep(hw - px, hw + px, fu)) * step(0., tb) * step(tb, 1.);
+    float prof = clamp(fu / hw, 0., 1.);
+    vec3 bc = vec3(.008, .009, .012) + L * (.006 + .10 * prof * prof * prof) + hot * (.5 + .5 * prof);
+    float back = 1. - smoothstep(.005 - px, .005 + px, abs(ps.y - yf - dep));
+    float mk = max(bar, back);
+    col = mix(col, bc, mk * (1. - .55 * clamp(I, 0., 1.)));
+  }
+  float rw = .013;
+  float dy = p.y - yf;
+  float rail = 1. - smoothstep(rw - px, rw + px, abs(dy));
+  if (rail > 0.) {
+    float k = dy / rw;
+    vec3 rc = vec3(.012, .013, .016) + L * (.008 + .16 * smoothstep(-.2, -1., k)) + hot * .25
+            + vec3(.03, .034, .04) * smoothstep(.6, 1., k);
+    col = mix(col, rc, rail);
+  }
+
+  // resplandor en el aire
+  col += L * vec3(1., .8, .6) * .035;
+
+  col = aces(col * 1.05);
+  col = pow(col, vec3(1. / 2.2));
+  vec2 vq = gl_FragCoord.xy / uRes - .5;
+  col *= 1. - .55 * dot(vq, vq) * 1.6;
+  col += (hash21(gl_FragCoord.xy + fract(T) * 91.7) - .5) * .022;
+  gl_FragColor = vec4(col, 1.);
+}
+</script>
+
+<script>
+(() => {
+  'use strict';
+
+  // ───────────────────────── semilla ─────────────────────────
+  const query = new URLSearchParams(location.search);
+  const seed = query.has('seed')
+    ? (parseInt(query.get('seed'), 10) || 0) % 1000000
+    : crypto.getRandomValues(new Uint32Array(1))[0] % 1000000;
+  const mulberry = a => () => {
+    a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+  const R = mulberry(seed * 2654435761 >>> 0);
+  const rr = (a, b) => a + (b - a) * R();
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ───────────────────────── la pieza ─────────────────────────
+  const fuels = [
+    { name: 'leña de quebracho colorado', eG: 2.5,  eB: 6.5, tint: [1, .80, .50], blue: 0,  sparks: .6,  flame: 1,    logs: true },
+    { name: 'leña de espinillo',          eG: 1.95, eB: 4.6, tint: [1, .88, .60], blue: 0,  sparks: 1.5, flame: 1.05, logs: true },
+    { name: 'leña de algarrobo',          eG: 2.2,  eB: 5.5, tint: [1, .84, .55], blue: 0,  sparks: 1,   flame: 1,    logs: true },
+    { name: 'leña de ñandubay',           eG: 2.35, eB: 6,   tint: [1, .82, .52], blue: 0,  sparks: 1.9, flame: .95,  logs: true },
+    { name: 'carbón de leña',             eG: 2.7,  eB: 7,   tint: [1, .78, .50], blue: .35, sparks: .45, flame: .78,  logs: false },
+  ];
+  const fuel = fuels[Math.floor(R() * fuels.length)];
+  const stage = R();                                   // 0 = llama viva, 1 = brasa hecha
+  const wind = (R() < .5 ? -1 : 1) * Math.pow(R(), 1.4) * .42;
+  const bed = rr(-.30, -.21);
+  const smoke = rr(.3, 1);
+  const sparkRate = fuel.sparks * rr(.6, 1.4) * (1 - .4 * stage);
+
+  // hogueras: posición en fracción del ancho, para que la composición se adapte a la pantalla
+  const nSrc = 1 + Math.floor(R() * 3);
+  const anchors = [[0], [-.24, .24], [-.31, 0, .31]][nSrc - 1];
+  const lead = Math.floor(R() * nSrc);
+  const sources = anchors.map((a, i) => ({
+    fx: a + rr(-.1, .1) * (nSrc === 1 ? 2.2 : 1),
+    h: rr(.3, .5) * (i === lead ? 1.3 : rr(.55, 1)) * (1 - .45 * stage) * fuel.flame,
+    w: rr(.07, .13),
+    ph: R(),
+  }));
+
+  const logs = [];
+  if (fuel.logs) {
+    sources.forEach((s, i) => {
+      const n = Math.min(4 - logs.length, (stage < .6 && R() < .7) || nSrc === 1 ? 2 : 1);
+      for (let j = 0; j < n; j++) {
+        logs.push({
+          src: i, dx: rr(-.05, .05), y: bed + rr(-.015, .03) + j * .02,
+          a: rr(.04, .34) * (j % 2 ? -1 : 1) * (R() < .85 ? 1 : -1), len: rr(.14, .23),
+        });
+      }
+    });
+  }
+
+  const spacing = rr(.05, .085);
+  const grill = { y: bed + rr(.27, .4), depth: rr(.045, .085), spacing, half: spacing * rr(.11, .17) };
+  const wallScale = rr(.8, 1.25);
+  const vanish = rr(-.15, .15);
+  const emberScale = rr(7, 11.5);
+  const seedVec = [rr(0, 60), rr(0, 60), rr(0, 60), rr(0, 60)];
+
+  // ───────────────────────── cartel ─────────────────────────
+  const tallest = Math.max(...sources.map(s => s.h));
+  const stageName = tallest > .42 ? 'llama viva' : tallest > .3 ? 'fuego hecho' : 'brasa hecha';
+  const mag = Math.abs(wind);
+  const windName = mag < .06 ? 'noche calma'
+    : (mag < .2 ? 'brisa del ' : mag < .33 ? 'viento del ' : 'ventarrón del ') + (wind > 0 ? 'oeste' : 'este');
+  const ficha = document.getElementById('ficha');
+  document.getElementById('numero').textContent = 'Nº ' + String(seed).padStart(6, '0');
+  document.title = 'Fuego Nº ' + String(seed).padStart(6, '0');
+
+  // ───────────────────────── WebGL ─────────────────────────
+  const glCanvas = document.getElementById('fuego');
+  const fx = document.getElementById('chispas');
+  const ctx = fx.getContext('2d');
+  const gl = glCanvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'high-performance' });
+
+  function fail(msg) {
+    if (msg) console.error(msg);
+    document.getElementById('aviso').style.display = 'grid';
+    document.getElementById('cartel').style.display = 'none';
+  }
+  if (!gl) return fail();
+
+  function shader(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+    return s;
+  }
+  let prog;
+  try {
+    prog = gl.createProgram();
+    gl.attachShader(prog, shader(gl.VERTEX_SHADER, 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}'));
+    gl.attachShader(prog, shader(gl.FRAGMENT_SHADER, document.getElementById('frag').textContent));
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+  } catch (e) { return fail(e); }
+  gl.useProgram(prog);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(0);
+  gl.bindAttribLocation(prog, 0, 'a');
+  gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+  const U = n => gl.getUniformLocation(prog, n);
+  const loc = {
+    res: U('uRes'), time: U('uTime'), seed: U('uSeed'), src: U('uSrc[0]'), log: U('uLog[0]'),
+    grill: U('uGrill'), pal: U('uPal'), env: U('uEnv'), tint: U('uTint'), wall: U('uWall'),
+  };
+  gl.uniform4fv(loc.seed, seedVec);
+  gl.uniform4f(loc.grill, grill.y, grill.depth, grill.spacing, grill.half);
+  gl.uniform4f(loc.pal, fuel.eG, fuel.eB, fuel.blue, emberScale);
+  gl.uniform4f(loc.env, wind, bed, stage, smoke);
+  gl.uniform3fv(loc.tint, fuel.tint);
+
+  // ───────────────────────── tamaño ─────────────────────────
+  let quality = 1, aspect = 1, W = 1, H = 1;
+  const srcData = new Float32Array(16), logData = new Float32Array(16);
+  const flare = { x: 0, s: 0, t0: -99, ph: 0 };
+
+  function resize() {
+    const cw = innerWidth, ch = innerHeight;
+    aspect = cw / ch;
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const s = Math.min(dpr, Math.sqrt(2.2e6 / (cw * ch))) * quality;
+    glCanvas.width = Math.max(2, Math.round(cw * s));
+    glCanvas.height = Math.max(2, Math.round(ch * s));
+    gl.viewport(0, 0, glCanvas.width, glCanvas.height);
+    gl.uniform2f(loc.res, glCanvas.width, glCanvas.height);
+    W = fx.width = Math.round(cw * dpr);
+    H = fx.height = Math.round(ch * dpr);
+
+    const widen = .8 + .22 * Math.min(aspect, 2.4);
+    sources.forEach((s, i) => {
+      s.x = s.fx * aspect;
+      s.ww = s.w * widen;
+      srcData.set([s.x, s.h, s.ww, s.ph], i * 4);
+    });
+    logs.forEach((l, i) => logData.set([sources[l.src].x + l.dx, l.y, l.a, l.len], i * 4));
+    gl.uniform4fv(loc.log, logData);
+    gl.uniform2f(loc.wall, wallScale, vanish * aspect);
+    ficha.textContent = [stageName, fuel.name, windName, Math.round(aspect / grill.spacing) + ' fierros'].join(' · ');
+  }
+  addEventListener('resize', resize);
+  resize();
+
+  // ───────────────────────── chispas ─────────────────────────
+  const sparks = [];
+  const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) * 1.15;
+  function spawn(x, y, vx, vy, life, size) {
+    if (sparks.length < 900) sparks.push({ x, y, vx, vy, life, age: 0, size, ph: Math.random() * 6.283 });
+  }
+  function burst(x, y, n, power) {
+    for (let i = 0; i < n; i++) {
+      const a = (Math.random() - .5) * 1.9, v = (.35 + Math.random() * .95) * power;
+      spawn(x + gauss() * .015, y, Math.sin(a) * v, Math.cos(a) * v, .5 + Math.random() * 1.6, .7 + Math.random() * 1.4);
+    }
+  }
+  function emit(dt) {
+    const k = sparkRate * (calm ? .4 : 1);
+    for (const s of sources) {
+      let n = k * s.h * 34 * dt;
+      n = Math.floor(n) + (Math.random() < n % 1 ? 1 : 0);
+      for (let i = 0; i < n; i++) {
+        const y = bed + .02 + Math.random() * s.h * .6;
+        spawn(s.x + gauss() * s.ww * .45 + wind * (y - bed) * .5, y,
+              gauss() * .12, .25 + Math.random() * .6, 1 + Math.random() * 2.6, .7 + Math.random() * 1.5);
+      }
+      if (Math.random() < k * dt * .5) burst(s.x + gauss() * s.ww * .5, bed + .03, 5 + Math.random() * 16, 1);   // chisporroteo
+    }
+    // alguna pavesa suelta que sube del lecho
+    if (Math.random() < k * dt * 5 * aspect) {
+      spawn((Math.random() - .5) * aspect, bed - Math.random() * .04, gauss() * .05, .12 + Math.random() * .25,
+            1.5 + Math.random() * 2.5, .6 + Math.random());
+    }
+  }
+  function stepSparks(dt, t) {
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      const s = sparks[i];
+      const k = s.age / s.life;
+      if (k >= 1 || s.y > .62) { sparks[i] = sparks[sparks.length - 1]; sparks.pop(); continue; }
+      const turb = Math.sin(s.y * 13 + t * 1.9 + s.ph) * .9 + Math.sin(s.y * 29 - t * 3.1 + s.ph * 2.3) * .5;
+      s.vx += (turb * .35 + wind * .9 - s.vx * 1.2) * dt;
+      s.vy += (.55 * (1 - k) - .12 - s.vy * .9) * dt;
+      s.x += s.vx * dt; s.y += s.vy * dt; s.age += dt;
+    }
+  }
+  function drawSparks(t) {
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.lineCap = 'round';
+    const unit = H / 900;
+    for (const s of sparks) {
+      const k = s.age / s.life;
+      const a = Math.pow(1 - k, 1.3) * (.65 + .35 * Math.sin(t * 23 + s.ph * 7)) * Math.min(1, s.age * 12);
+      const m = k < .25 ? 0 : (k - .25) / .75;
+      const r = 255 - 45 * m * m, g = 236 - 180 * Math.pow(m, .7), b = 190 - 175 * Math.pow(m, .45);
+      const x1 = s.x * H + W / 2, y1 = (.5 - s.y) * H;
+      const x0 = x1 - s.vx * .035 * H, y0 = y1 + s.vy * .035 * H;
+      ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1);
+      ctx.strokeStyle = `rgba(${r | 0},${g * .6 | 0},${b * .3 | 0},${a * .13})`;
+      ctx.lineWidth = s.size * unit * 5.5;
+      ctx.stroke();
+      ctx.strokeStyle = `rgba(${r | 0},${g | 0},${b | 0},${a})`;
+      ctx.lineWidth = s.size * unit;
+      ctx.stroke();
+    }
+  }
+
+  // ───────────────────────── avivar ─────────────────────────
+  function stoke(x, strength, t) {
+    flare.x = x; flare.s = strength; flare.t0 = t; flare.ph = Math.random();
+    burst(x, bed + .02, 14 + strength * 70, .8 + strength);
+  }
+  let now = (parseFloat(query.get('t')) || 0) + rr(0, 40);
+  glCanvas.addEventListener('pointerdown', e => {
+    stoke((e.clientX - innerWidth / 2) / innerHeight, .5, now);
+  });
+  let nextDrip = now + 2 + Math.random() * 6;
+
+  // ───────────────────────── bucle ─────────────────────────
+  for (let i = 0; i < 150; i++) { emit(1 / 30); stepSparks(1 / 30, now - (150 - i) / 30); }   // que ya haya chispas en el aire
+
+  let last = performance.now(), slow = 0;
+  function frame(ms) {
+    const raw = (ms - last) / 1000;
+    last = ms;
+    const dt = Math.min(raw, .05) * (calm ? .4 : 1);
+    now += dt;
+
+    // si la máquina no llega, se baja la resolución antes que el ritmo
+    if (raw > .03 && raw < .5) { if (++slow > 45 && quality > .45) { quality *= .8; slow = 0; resize(); } }
+    else slow = Math.max(0, slow - 2);
+
+    if (now > nextDrip) {   // cada tanto gotea grasa y el fuego se levanta
+      stoke((Math.random() - .5) * aspect * .85, .12 + Math.random() * .22, now);
+      nextDrip = now + 4 + Math.random() * 9;
+    }
+    const ft = now - flare.t0;
+    srcData.set([flare.x, flare.s * Math.exp(-ft * 1.6) * Math.min(1, ft * 8), .06, flare.ph], 12);
+    gl.uniform4fv(loc.src, srcData);
+    gl.uniform1f(loc.time, now);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+    emit(dt);
+    stepSparks(dt, now);
+    drawSparks(now);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

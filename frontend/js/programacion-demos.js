@@ -325,6 +325,11 @@ export function BotonCarrito({ onAgregar }) {
       ['', 'Pero eligió el modelo más caro', 'Por defecto usa Opus, cuando para clasificar alcanza Haiku (que es lo que eligió la versión sin la skill). Explica cómo cambiarlo, pero el criterio de costo lo tuvo mejor la otra.'],
       ['', 'Conclusión', 'La skill aporta conocimiento actualizado de la API; la decisión de qué modelo usar sigue siendo tuya.'],
     ], pie: 'Precios del README tal como los escribió Claude; verificalos en la documentación de Anthropic antes de decidir.' },
+    'skills/web-artifacts-builder': { exp: 'web-artifacts-builder', con: 'Con Web Artifacts Builder', notas: [
+      ['', 'Empate en lo que se ve', 'Los dos paneles tienen filtro por mes, resumen arriba, gráficos de ventas y ACOS, y tabla de detalle con variaciones.'],
+      ['', 'Con la skill, un proyecto React completo', 'Lo armó con React, Tailwind y componentes shadcn, y lo empaquetó en un solo archivo. Suma que tocando un mes en el gráfico se filtra.'],
+      ['', 'El precio: el peso', 'El panel con la skill pesa 256 KB; el de sin la skill, 17 KB. Para algo así de simple no hace falta; la skill rinde en paneles grandes con muchos componentes.'],
+    ], pie: 'El proyecto fuente que armó con la skill (panel-ventas/) también está publicado, como referencia.' },
     'skills/ui-ux-pro-max': { exp: 'ui-ux-pro-max', con: 'Con UI UX Pro Max', notas: [
       ['', 'Diferencia moderada', 'Sin la skill sale una landing prolija de consultorio: servicios, obras sociales, cómo sacar turno y ubicación.'],
       ['', 'Elige estilo y paleta con criterio', 'Tomó de su base el estilo "Accesible y ético" para salud y ajustó los colores para que el texto de los botones cumpla contraste 4,5:1.'],
@@ -344,7 +349,7 @@ export function BotonCarrito({ onAgregar }) {
     try { m = await (await fetch(base + 'meta.json')).json(); } catch (e) { el.innerHTML = '<p class="ex-note">No se pudo cargar el experimento.</p>'; return; }
     const lados = [['sin', 'Sin la skill'], ['con', con]];
     const principal = l => m[l].archivos.filter(a => !a.aux);
-    const tipo = (principal('con')[0] || principal('sin')[0] || {}).tipo;
+    const tipo = ['con', 'sin'].some(l => principal(l).some(a => a.tipo === 'pagina')) ? 'pagina' : (principal('con')[0] || principal('sin')[0] || {}).tipo;
     const fichaHtml = ficha({ modelo: 'Claude ' + (m.con.modelos?.[0] || m.sin.modelos?.[0] || '').replace('claude-', '').replace(/-(\d)-(\d)/, ' $1.$2').replace(/^./, c => c.toUpperCase()) + ' (Claude Code)', fecha: m.fecha, con,
       prompt: m.prompt + (m.entrada.length ? ` (Archivos de partida: ${m.entrada.join(', ')})` : '') + ` (Con la skill se agregó: "Usá la skill…")`,
       filas: [['Tiempo', seg2(m.sin.segundos), seg2(m.con.segundos)], ['Pasos', String(m.sin.pasos ?? '—'), String(m.con.pasos ?? '—')], ['Costo de la corrida', usd(m.sin.costo), usd(m.con.costo)],

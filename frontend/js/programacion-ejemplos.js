@@ -83,72 +83,65 @@ window.WLExamples = (function () {
     return block('Así se ve', mock, `Recreación aproximada del estilo con sus colores y efectos, aplicada a un ejemplo inventado de ${esc((d.familia || 'sitio').toLowerCase())}, uno de los usos para los que se recomienda. No es una captura de un sitio real.`);
   }
 
-  // ── Landing: wireframe con el orden de secciones ──
+  // ── Landing: la página armada con el orden de secciones del patrón ──
+  // Mismo negocio inventado en todos los patrones (Yerbal del Monte) para comparar la estructura, no el contenido.
+  const LP = {
+    hero: x => {
+      const v = /video/.test(x) ? 'video' : /buscador|búsqueda/.test(x) ? 'busca' : /cuenta regresiva|temporizador/.test(x) ? 'reloj' : /formulario/.test(x) ? 'form' : /mockup|dispositivo/.test(x) ? 'cel' : /configurador/.test(x) ? 'conf' : /prompt|personaliz|dinámico/.test(x) ? 'prompt' : '';
+      const extra = v === 'busca' ? '<span class="lp-in">Buscá tu yerba: suave, con palo, orgánica…</span>'
+        : v === 'reloj' ? '<span class="lp-reloj"><b>02</b>d <b>14</b>h <b>09</b>m</span>'
+        : v === 'form' ? '<span class="lp-in">Tu email</span><span class="lp-b">Quiero el descuento</span>'
+        : v === 'prompt' ? '<span class="lp-in">Contanos cómo tomás mate y te recomendamos…</span>'
+        : v === 'conf' ? '<span class="lp-sw"><i></i><i></i><i></i></span><span class="lp-b">Armar mi pack</span>'
+        : '<span class="lp-b">Comprar ahora</span><span class="lp-b2">Ver packs</span>';
+      return `<div class="lp-hero${v === 'video' ? ' is-video' : ''}"><div><p class="lp-h1">Yerba orgánica, de la chacra a tu mate</p><p class="lp-p">Sin agroquímicos, estacionada 12 meses. Envío gratis desde 2 kg.</p><p class="lp-row">${extra}</p></div>${v === 'cel' ? '<span class="lp-cel"></span>' : v === 'video' ? '<span class="lp-play">▶</span>' : '<span class="lp-img"></span>'}</div>`;
+    },
+    cards: () => `<div class="lp-3">${['Orgánica certificada', 'Estacionada 12 meses', 'Envío en 48 h'].map(t => `<div class="lp-card"><i></i><b>${t}</b><span></span></div>`).join('')}</div>`,
+    bento: () => `<div class="lp-bento"><div class="is-big"><b>Orgánica certificada</b></div><div><b>12 meses</b></div><div><b>48 h</b></div><div><b>Sin palo</b></div></div>`,
+    quotes: () => `<div class="lp-3">${['"La más rica que probé."', '"Llega rapidísimo."', '"Suave y rinde."'].map(q => `<div class="lp-q">${q}<small>★★★★★ · cliente</small></div>`).join('')}</div>`,
+    stars: () => `<div class="lp-stars"><b>4,8</b><span>★★★★★<small>1.240 reseñas</small></span><span class="lp-bars"><i style="--v:.82"></i><i style="--v:.12"></i><i style="--v:.04"></i></span></div>`,
+    logos: () => `<div class="lp-logos">${'<i></i>'.repeat(5)}</div>`,
+    cifra: () => `<p class="lp-cifra"><b>+3.400</b> mateadores ya se sumaron</p>`,
+    precios: () => `<div class="lp-3">${[['1 kg', '$9.500'], ['3 kg', '$26.000'], ['6 kg', '$48.000']].map(([t, p], k) => `<div class="lp-card${k === 1 ? ' is-dest' : ''}"><b>${t}</b><b class="lp-precio">${p}</b><span class="lp-b">Elegir</span></div>`).join('')}</div>`,
+    tabla: () => `<table class="lp-tab"><tr><th></th><th>Yerbal</th><th>Otras</th></tr><tr><td>Orgánica</td><td>✓</td><td>✗</td></tr><tr><td>12 meses</td><td>✓</td><td>✗</td></tr><tr><td>Envío gratis</td><td>✓</td><td>—</td></tr></table>`,
+    faq: () => `<div class="lp-faq">${['¿Tiene palo?', '¿Cuánto tarda el envío?', '¿Es apta celíacos?'].map(q => `<p>${q}<span>+</span></p>`).join('')}</div>`,
+    cta: () => `<div class="lp-cta"><b>Probá tu primer kilo con envío gratis</b><span class="lp-b">Comprar</span></div>`,
+    form: () => `<div class="lp-form"><span class="lp-in">Nombre</span><span class="lp-in">Email</span><span class="lp-b">Enviar</span></div>`,
+    pasos: () => `<div class="lp-pasos">${['Elegís el pack', 'Lo despachamos', 'Matear'].map((t, k) => `<span><i>${k + 1}</i>${t}</span>`).join('')}</div>`,
+    problema: () => `<p class="lp-prob">¿Tu yerba te cae pesada y se lava en dos cebadas?</p>`,
+    media: () => `<div class="lp-media"><span>▶</span></div>`,
+    carrusel: () => `<div class="lp-carr"><i></i><i class="is-on"></i><i></i></div>`,
+    gente: () => `<div class="lp-3">${['Ana', 'Martín', 'Lucía'].map(n => `<div class="lp-persona"><i></i><b>${n}</b><small>Productora</small></div>`).join('')}</div>`,
+    agenda: () => `<div class="lp-agenda">${[['10:00', 'Cómo se cultiva'], ['11:30', 'Cata guiada'], ['13:00', 'Feria de productores']].map(([h, t]) => `<p><b>${h}</b>${t}</p>`).join('')}</div>`,
+    chips: () => `<div class="lp-chips">${['Suave', 'Con palo', 'Barbacuá', 'Compuesta', 'Orgánica', 'Packs'].map(c => `<span>${c}</span>`).join('')}</div>`,
+    grilla: () => `<div class="lp-grilla"><i></i><i class="is-alta"></i><i></i><i></i><i class="is-alta"></i><i></i></div>`,
+    specs: () => `<div class="lp-specs">${[['Origen', 'Misiones'], ['Estacionamiento', '12 meses'], ['Corte', 'Despalada']].map(([a, b]) => `<p><span>${a}</span><b>${b}</b></p>`).join('')}</div>`,
+    urgencia: () => `<div class="lp-cta is-urg"><b>Bono: termo de regalo · quedan 6 h</b><span class="lp-reloj"><b>05</b>h <b>59</b>m</span></div>`,
+    confianza: () => `<div class="lp-chips">${['Compra protegida', 'Pago seguro', 'Devolución gratis'].map(c => `<span>✓ ${c}</span>`).join('')}</div>`,
+    pie: () => `<div class="lp-pie"><b>Yerbal del Monte</b><span>Instagram · WhatsApp · Contacto</span></div>`,
+    texto: x => `<div class="lp-txt"><b>${esc(x.replace(/\s*\(.*?\)/g, '').replace(/^./, c => c.toUpperCase()))}</b><span></span><span></span></div>`,
+  };
+  const tipoLP = x =>
+    /^hero|titular del hero/.test(x) ? 'hero' : /pie$|^pie |footer/.test(x) ? 'pie' : /bento/.test(x) ? 'bento' :
+    /preguntas/.test(x) ? 'faq' : /precio y espec|especificaciones/.test(x) ? 'specs' : /precios|planes|tarjetas de precios/.test(x) ? 'precios' :
+    /tabla|matriz|comparaci/.test(x) ? 'tabla' : /testimonio|reseñas individuales|sobre el autor|bio del/.test(x) ? (/autor|bio/.test(x) ? 'gente' : 'quotes') :
+    /calificaci|reseñas y/.test(x) ? 'stars' : /logos|sponsors/.test(x) ? 'logos' : /cantidad de|prueba social|miembros/.test(x) ? (/miembros/.test(x) ? 'gente' : 'cifra') :
+    /oradores|equipo/.test(x) ? 'gente' : /agenda/.test(x) ? 'agenda' : /urgencia|bonos|cuenta regresiva/.test(x) ? 'urgencia' :
+    /confianza/.test(x) ? 'confianza' : /formulario|email|lead magnet|contacto$/.test(x) ? 'form' :
+    /cómo funciona|paso \d|capítulo|recorrido|progresión/.test(x) ? 'pasos' : /problema/.test(x) ? 'problema' :
+    /carrusel|capturas|slider/.test(x) ? 'carrusel' : /video|mockup|vista previa|adelanto|interactivo|demo/.test(x) ? 'media' :
+    /categor|temas|industria|por rol|ediciones/.test(x) ? 'chips' : /proyectos|publicaciones destacadas|grilla/.test(x) ? 'grilla' :
+    /funcionalidad|beneficio|propuesta de valor|características|tarjetas de detalle|resumen de la solución|qué vas a aprender/.test(x) ? 'cards' :
+    /cta|comprar|compra$|contactar|sumarse|inscripci|descarga/.test(x) ? 'cta' : 'texto';
   function landing(e) {
     const orden = (e.fields || []).find(([k]) => k === 'Orden de secciones')?.[1] || e.summary || '';
     const partes = orden.split(/\s*\d+\.\s*/).map(s => s.replace(/[,.]\s*$/, '').trim()).filter(Boolean);
     if (!partes.length) return '';
     const secc = partes.map((p, i) => {
-      const cls = i === 0 ? 'is-hero' : /cta|llamado|inscrip|registro|compr|descarg|contact|suscrib/i.test(p) ? 'is-cta' : /testimon|rese|prueba social|logos/i.test(p) ? 'is-proof' : /precio|plan|tabla|compar/i.test(p) ? 'is-grid' : /pie|footer/i.test(p) ? 'is-foot' : '';
-      return `<div class="wf-sec ${cls}"><span class="wf-n">${i + 1}</span><span class="wf-label">${esc(p)}</span>${
-        cls === 'is-hero' ? '<span class="wf-bars"><i></i><i></i></span><span class="wf-pill">CTA</span>' :
-        cls === 'is-cta' ? '<span class="wf-pill">CTA</span>' :
-        cls === 'is-grid' || cls === 'is-proof' ? '<span class="wf-cols"><i></i><i></i><i></i></span>' : '<span class="wf-bars"><i></i></span>'}</div>`;
+      const x = p.toLowerCase(), t = tipoLP(x);
+      return `<section class="lp-sec"><span class="lp-n">${i + 1}<small>${esc(p)}</small></span>${(LP[t] || LP.texto)(x)}</section>`;
     }).join('');
-    return block('Así se arma', `<div class="wf">${secc}</div>`, 'Wireframe generado con el orden de secciones del patrón.');
-  }
-
-  // ── Paletas y rubros: la paleta aplicada a un ejemplo de la web de ESE rubro ──
-  // El contenido sale de programacion-rubros.js (familia + texto propio de cada rubro).
-  // Una paleta sin rubro usa un "sitio de negocio" neutro.
-  function pieza(d) {
-    const w = d.w || [];
-    const prog = pct => `<div class="pm-prog"><i style="width:${Math.max(0, Math.min(100, +pct || 0))}%"></i></div>`;
-    switch (d.t) {
-      case 'prog':   return `${prog(w[0])}<p class="pm-meta"><b>${esc(w[1])}</b><span>${esc(w[2])}</span></p>`;
-      case 'slots':  return `<p class="pm-meta"><span>${esc(w[0])}</span></p><div class="pm-slots">${w.slice(1).map((x, i) => `<span class="pm-slot${i ? '' : ' is-on'}">${esc(x)}</span>`).join('')}</div>`;
-      case 'kpis':   return `<div class="pm-kpis">${w.map(([a, b]) => `<div><small>${esc(a)}</small><b>${esc(b)}</b></div>`).join('')}</div>`;
-      case 'precio': return `<p class="pm-price">${esc(w[0])}</p><p class="pm-meta"><span>${esc(w[1])}</span></p>`;
-      case 'campos': return `<div class="pm-fields">${w.map(([a, b]) => `<span><small>${esc(a)}</small>${esc(b)}</span>`).join('')}</div>`;
-      case 'player': return `<div class="pm-player"><span class="pm-play" aria-hidden="true"></span><span><b>${esc(w[0])}</b><small>${esc(w[1])}</small></span></div>${prog(w[2])}`;
-      case 'fecha':  return `<div class="pm-date"><span class="pm-cal"><b>${esc(w[0])}</b><small>${esc(w[1])}</small></span><small>${esc(w[2])}</small></div>`;
-      case 'chat':   return `<div class="pm-chat">${w.map(([a, b], i) => `<p class="${i % 2 ? 'is-me' : ''}"><small>${esc(a)}</small>${esc(b)}</p>`).join('')}</div>`;
-      case 'big':    return `<div class="pm-big"><b>${esc(w[0])}</b><small>${esc(w[1])}</small></div>${w[2] != null ? prog(w[2]) : ''}`;
-      default:       return `<ul class="pm-rows">${w.map(([a, b]) => `<li><span>${esc(a)}</span><b>${esc(b)}</b></li>`).join('')}</ul>`;
-    }
-  }
-  function paletaMock(pal, id) {
-    const p = Object.fromEntries(pal);
-    const bg = p.Fondo || '#ffffff', fg = p.Texto || '#111111', pri = p.Primario || '#2563eb';
-    const acc = p.Acento || pri, card = p.Tarjeta || bg, muted = p.Apagado || bg, border = p.Borde || 'rgba(0,0,0,.1)', bad = p.Destructivo || '#dc2626';
-    const d = window.WLRubros ? WLRubros.datos(id) : { t: 'rows', marca: 'Tu Empresa', h: 'Soluciones para tu negocio', p: 'Atención personalizada.', w: [], b: 'Pedir presupuesto', g: 'Conocé más' };
-    return `<div class="ex-stage"><div class="pm pm--${d.t}" style="--bg:${bg};--fg:${fg};--pri:${pri};--pri-ink:${inkOn(pri)};--acc:${acc};--acc-ink:${inkOn(acc)};--card:${card};--muted:${muted};--line:${border};--bad:${bad}">
-      <div class="pm-bar"><span class="pm-brand"><span class="pm-logo"></span>${esc(d.marca)}</span><span class="pm-nav"><i></i><i></i></span></div>
-      <div class="pm-body">
-        <div class="pm-card">
-          <p class="pm-h">${esc(d.h)}</p>
-          <p class="pm-p">${esc(d.p)}</p>
-          ${pieza(d)}
-          <div class="pm-row"><span class="pm-btn">${esc(d.b)}</span><span class="pm-ghost">${esc(d.g)}</span></div>
-        </div>
-        <div class="pm-muted"><i></i><i></i><i></i></div>
-      </div>
-    </div></div>`;
-  }
-  const notaEjemplo = id => {
-    const d = window.WLRubros?.datos(id);
-    return d && !d.neutro ? ` Ejemplo inventado de una web de este rubro (familia: ${esc(d.familia.toLowerCase())}).` : ' Ejemplo neutro de un sitio de negocio.';
-  };
-  function paleta(e) {
-    return e.palette?.length ? block('Así se ve', paletaMock(e.palette, e.id), `La paleta aplicada a una interfaz de ejemplo: fondo, tarjeta, texto, botón principal y botón secundario.${notaEjemplo(e.id)}`) : '';
-  }
-  async function rubro(e) {
-    try {
-      const pals = await loadCat('paletas');
-      const pal = pals.find(p => p.id === e.id);
-      if (pal) return block('Así se ve (paleta del rubro)', paletaMock(pal.palette, e.id), `Paleta recomendada para ${esc(e.name)}.${notaEjemplo(e.id)} Tocá "Paletas de color" para copiar los códigos.`);
-    } catch (err) {}
-    return '';
+    return block('Así se arma', `<div class="lp">${secc}</div>`, 'La página armada con el orden de secciones del patrón, con un negocio inventado (Yerbal del Monte). El mismo negocio en todos los patrones, para comparar cómo cambia la estructura.');
   }
 
   // ── Arquitecturas: diagrama del flujo ──

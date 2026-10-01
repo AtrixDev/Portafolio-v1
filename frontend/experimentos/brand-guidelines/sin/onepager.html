@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta name="robots" content="noindex"><!-- Experimento del Lab de Programación: salida de Claude sin cambios de diseño -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La API de Claude para tiendas online</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark: #141413;
+    --light: #faf9f5;
+    --mid-gray: #b0aea5;
+    --light-gray: #e8e6dc;
+    --orange: #d97757;
+    --blue: #6a9bcc;
+    --green: #788c5d;
+    --heading: "Poppins", Arial, sans-serif;
+    --body: "Lora", Georgia, serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  body {
+    background: var(--light-gray);
+    color: var(--dark);
+    font-family: var(--body);
+    font-size: 10.5pt;
+    line-height: 1.5;
+    padding: 24px 16px;
+  }
+
+  .page {
+    background: var(--light);
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 11mm 14mm 10mm;
+    display: flex;
+    flex-direction: column;
+    gap: 6mm;
+  }
+
+  h1, h2, h3, .eyebrow, .step-n, .cta, .tag {
+    font-family: var(--heading);
+  }
+
+  /* Encabezado */
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--light-gray);
+    padding-bottom: 3mm;
+  }
+  .brand { font-family: var(--heading); font-weight: 600; font-size: 11pt; letter-spacing: 0.01em; }
+  .brand span { color: var(--orange); }
+  .eyebrow {
+    font-size: 7.5pt;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mid-gray);
+  }
+
+  .hero { display: grid; grid-template-columns: 1.55fr 1fr; gap: 9mm; align-items: end; }
+  h1 {
+    font-size: 26pt;
+    font-weight: 600;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  h1 em { font-style: normal; color: var(--orange); }
+  .lede { font-size: 10.5pt; line-height: 1.5; }
+
+  /* Usos */
+  h2 {
+    font-size: 8pt;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 3.5mm;
+  }
+  .uses { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3.5mm; }
+  .use {
+    background: #fff;
+    border: 1px solid var(--light-gray);
+    border-top: 3px solid var(--accent);
+    border-radius: 3px;
+    padding: 3.5mm 4mm 4mm;
+  }
+  .use h3 { font-size: 10.5pt; font-weight: 600; line-height: 1.25; margin-bottom: 1.5mm; }
+  .use p { font-size: 9.5pt; line-height: 1.45; }
+  .use:nth-child(3n + 1) { --accent: var(--orange); }
+  .use:nth-child(3n + 2) { --accent: var(--blue); }
+  .use:nth-child(3n)     { --accent: var(--green); }
+
+  /* Cómo se empieza */
+  .how {
+    background: var(--dark);
+    color: var(--light);
+    border-radius: 4px;
+    padding: 5.5mm 6mm;
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: 7mm;
+  }
+  .how h2 { color: var(--mid-gray); }
+  .steps { list-style: none; display: flex; flex-direction: column; gap: 3mm; }
+  .steps li { display: grid; grid-template-columns: 7mm 1fr; gap: 2.5mm; font-size: 9.5pt; line-height: 1.45; }
+  .step-n {
+    width: 7mm; height: 7mm;
+    border-radius: 50%;
+    background: var(--orange);
+    color: var(--dark);
+    font-size: 9pt;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .steps strong { font-family: var(--heading); font-weight: 500; font-size: 9.5pt; }
+
+  pre {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 7.4pt;
+    line-height: 1.55;
+    color: var(--light-gray);
+    border-left: 2px solid var(--orange);
+    padding-left: 4mm;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  pre .c { color: var(--mid-gray); }
+  pre .s { color: #a9c4e0; }
+  .how .note { font-size: 8.5pt; color: var(--mid-gray); margin-top: 3mm; font-style: italic; }
+
+  /* Datos clave */
+  .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5mm; }
+  .fact { border-top: 1px solid var(--dark); padding-top: 2.5mm; }
+  .fact h3 { font-size: 9.5pt; font-weight: 600; margin-bottom: 1mm; }
+  .fact p { font-size: 9pt; line-height: 1.45; }
+
+  /* Cierre */
+  .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8mm;
+    border-top: 1px solid var(--light-gray);
+    padding-top: 4.5mm;
+  }
+  .bottom p { font-size: 10.5pt; }
+  .cta {
+    flex-shrink: 0;
+    background: var(--orange);
+    color: var(--dark);
+    font-size: 10pt;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 3mm 6mm;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .cta:hover { background: var(--dark); color: var(--light); }
+
+  @media (max-width: 720px) {
+    .page { padding: 8mm 6mm; }
+    .hero, .how { grid-template-columns: 1fr; }
+    .uses { grid-template-columns: 1fr; }
+    .facts { grid-template-columns: 1fr 1fr; }
+    .bottom { flex-direction: column; align-items: flex-start; }
+    h1 { font-size: 22pt; }
+  }
+
+  @page { size: A4; margin: 0; }
+  @media print {
+    body { background: var(--light); padding: 0; }
+    .page { max-width: none; width: 210mm; height: 297mm; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <div class="top">
+    <div class="brand">Claude <span>API</span></div>
+    <div class="eyebrow">Para tiendas online</div>
+  </div>
+
+  <header class="hero">
+    <h1>Sumá a Claude al equipo de <em>tu tienda</em>.</h1>
+    <p class="lede">La API de Claude conecta los modelos de Anthropic con tu tienda, sea cual sea la plataforma que uses, para que las tareas de texto que hoy te comen las horas se hagan solas y vos solo las revises.</p>
+  </header>
+
+  <section>
+    <h2>Qué podés hacer</h2>
+    <div class="uses">
+      <article class="use">
+        <h3>Fichas de producto</h3>
+        <p>De una foto y cuatro datos sueltos saca título, descripción y atributos listos para publicar.</p>
+      </article>
+      <article class="use">
+        <h3>Atención al cliente</h3>
+        <p>Responde sobre envíos, cambios y talles según tus políticas, a cualquier hora.</p>
+      </article>
+      <article class="use">
+        <h3>Catálogo ordenado</h3>
+        <p>Categoriza, etiqueta y unifica cientos de productos que se cargaron cada uno a su manera.</p>
+      </article>
+      <article class="use">
+        <h3>Reseñas y consultas</h3>
+        <p>Lee lo que te escriben los clientes y te resume qué gusta, qué falla y qué preguntan.</p>
+      </article>
+      <article class="use">
+        <h3>Venta en otros idiomas</h3>
+        <p>Traduce el catálogo al portugués o al inglés cuidando el tono, no palabra por palabra.</p>
+      </article>
+      <article class="use">
+        <h3>Mails y campañas</h3>
+        <p>Arma borradores de newsletters y carritos abandonados con la voz de tu marca.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="how">
+    <div>
+      <h2>Cómo se empieza</h2>
+      <ol class="steps">
+        <li><span class="step-n">1</span><span><strong>Creá tu cuenta</strong> en Claude Console y generá una clave de API.</span></li>
+        <li><span class="step-n">2</span><span><strong>Conectala a tu tienda.</strong> Quien te lleva el desarrollo la integra con los SDK oficiales (Python, TypeScript y otros).</span></li>
+        <li><span class="step-n">3</span><span><strong>Arrancá por una sola tarea,</strong> mirá cómo rinde y después sumá las demás.</span></li>
+      </ol>
+    </div>
+    <div>
+      <h2>Así se ve un pedido</h2>
+<pre><span class="c"># Una ficha de producto en una llamada</span>
+client.messages.create(
+  model=<span class="s">"claude-sonnet-5-5"</span>,
+  max_tokens=<span class="s">600</span>,
+  system=<span class="s">"Escribís fichas para una tienda de
+    indumentaria. Tono cercano, sin exagerar."</span>,
+  messages=[{
+    <span class="s">"role"</span>: <span class="s">"user"</span>,
+    <span class="s">"content"</span>: <span class="s">"Campera de jean, forrada en
+      corderito, talles S a XL, azul y negro."</span>
+  }]
+)</pre>
+      <p class="note">Mostrale este recuadro a tu desarrollador: es todo lo que hace falta para la primera prueba.</p>
+    </div>
+  </section>
+
+  <section class="facts">
+    <div class="fact">
+      <h3>Pagás por uso</h3>
+      <p>Se cobra según el texto que entra y sale. No hay abono mensual fijo.</p>
+    </div>
+    <div class="fact">
+      <h3>Un modelo por tarea</h3>
+      <p>Haiku 4.5 para volumen y velocidad, Sonnet 5.5 para el día a día, Opus 5.5 para lo más complejo.</p>
+    </div>
+    <div class="fact">
+      <h3>Catálogos grandes</h3>
+      <p>El procesamiento por lotes resuelve miles de productos de una vez, a menor costo.</p>
+    </div>
+    <div class="fact">
+      <h3>Tus datos y tu criterio</h3>
+      <p>Por defecto, lo que mandás por la API no se usa para entrenar modelos. Claude puede equivocarse: revisá antes de publicar.</p>
+    </div>
+  </section>
+
+  <footer class="bottom">
+    <p>Creá la cuenta, generá la clave y probá con diez productos de tu catálogo.</p>
+    <a class="cta" href="https://platform.claude.com">platform.claude.com</a>
+  </footer>
+
+</main>
+</body>
+</html>

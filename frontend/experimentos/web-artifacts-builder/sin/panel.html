@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta name="robots" content="noindex"><!-- Experimento del Lab de Programación: salida de Claude sin cambios de diseño -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel de ventas · Mercado Libre</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fondo: #f3f4f6;
+    --tarjeta: #ffffff;
+    --tinta: #131a26;
+    --tenue: #586170;
+    --borde: #e1e4ea;
+    --grilla: #eceef2;
+    --resalte: #ffe600;
+    --sobre-resalte: #1d1a00;
+    --ventas: #2a5fd0;
+    --acos: #c2540a;
+    --bien: #14784a;
+    --mal: #b93226;
+    --hover: rgba(19, 26, 38, .05);
+    --sombra: 0 1px 2px rgba(19, 26, 38, .06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fondo: #111418;
+      --tarjeta: #1a1e25;
+      --tinta: #e9ebee;
+      --tenue: #9ea7b3;
+      --borde: #2b313b;
+      --grilla: #262b34;
+      --ventas: #74a3ff;
+      --acos: #f2954f;
+      --bien: #5fd09a;
+      --mal: #ff8a7d;
+      --hover: rgba(255, 255, 255, .06);
+      --sombra: none;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--tinta);
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  main {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 20px 48px;
+  }
+
+  header { margin-bottom: 24px; }
+  .marca {
+    display: inline-block;
+    background: var(--resalte);
+    color: var(--sobre-resalte);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 4px;
+  }
+  h1 {
+    margin: 10px 0 2px;
+    font-size: clamp(26px, 4.4vw, 36px);
+    line-height: 1.15;
+    letter-spacing: -.02em;
+    text-wrap: balance;
+  }
+  header p { margin: 0; color: var(--tenue); }
+
+  /* Filtro */
+  .filtro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .filtro-rotulo {
+    flex-basis: 100%;
+    font-size: 14px;
+    color: var(--tenue);
+  }
+  .chip {
+    font: inherit;
+    font-size: 15px;
+    min-height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--borde);
+    border-radius: 999px;
+    background: var(--tarjeta);
+    color: var(--tinta);
+    cursor: pointer;
+    transition: background-color .15s, border-color .15s;
+  }
+  .chip:hover { border-color: var(--tenue); }
+  .chip[aria-pressed="true"] {
+    background: var(--resalte);
+    border-color: var(--resalte);
+    color: var(--sobre-resalte);
+    font-weight: 600;
+  }
+  .chip:focus-visible {
+    outline: 2px solid var(--ventas);
+    outline-offset: 2px;
+  }
+
+  /* Resumen */
+  .resumen {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .tarjeta {
+    background: var(--tarjeta);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    box-shadow: var(--sombra);
+    padding: 18px 20px;
+    min-width: 0;
+  }
+  .kpi-rotulo {
+    margin: 0;
+    font-size: 14px;
+    color: var(--tenue);
+  }
+  .kpi-valor {
+    margin: 2px 0;
+    font-size: clamp(28px, 3.6vw, 36px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .kpi-detalle {
+    margin: 0;
+    font-size: 14px;
+    color: var(--tenue);
+  }
+  .bien { color: var(--bien); font-weight: 600; }
+  .mal { color: var(--mal); font-weight: 600; }
+
+  /* Gráficos */
+  .graficos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  h2 {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.3;
+  }
+  .sub {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: var(--tenue);
+  }
+  .lienzo { position: relative; }
+  .lienzo svg {
+    display: block;
+    width: 100%;
+    height: 260px;
+    overflow: visible;
+  }
+  svg text {
+    font-family: inherit;
+    font-size: 12px;
+    fill: var(--tenue);
+    font-variant-numeric: tabular-nums;
+  }
+  svg .valor {
+    fill: var(--tinta);
+    font-size: 13px;
+    font-weight: 600;
+    paint-order: stroke;
+    stroke: var(--tarjeta);
+    stroke-width: 4px;
+    stroke-linejoin: round;
+  }
+  svg .grilla { stroke: var(--grilla); stroke-width: 1; }
+  svg .base { stroke: var(--borde); stroke-width: 1; }
+  svg .col { cursor: pointer; }
+  svg .zona { fill: transparent; }
+  svg .col:hover .zona { fill: var(--hover); }
+  svg .barra { fill: var(--ventas); }
+  svg .linea { fill: none; stroke: var(--acos); stroke-width: 2; stroke-linejoin: round; }
+  svg .punto { fill: var(--acos); stroke: var(--tarjeta); stroke-width: 2; }
+  svg .col .barra, svg .col .punto, svg .col text { transition: opacity .15s; }
+  svg .col.apagado .barra { opacity: .25; }
+  svg .col.apagado .punto { opacity: .35; }
+  svg .col.apagado text { opacity: .45; }
+
+  .globo {
+    position: absolute;
+    z-index: 2;
+    transform: translate(-50%, calc(-100% - 12px));
+    background: var(--tinta);
+    color: var(--tarjeta);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 13px;
+    line-height: 1.4;
+    white-space: nowrap;
+    pointer-events: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .globo strong { display: block; }
+  .globo[hidden] { display: none; }
+
+  /* Tabla */
+  .tabla-scroll { overflow-x: auto; margin: 0 -4px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+    font-size: 15px;
+  }
+  th, td {
+    padding: 10px 4px;
+    text-align: right;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--grilla);
+  }
+  th:first-child, td:first-child { text-align: left; }
+  thead th {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--tenue);
+    border-bottom-color: var(--borde);
+  }
+  tbody th { font-weight: 500; }
+  tfoot th, tfoot td {
+    font-weight: 700;
+    border-bottom: 0;
+    border-top: 1px solid var(--borde);
+  }
+  .corto { display: none; }
+  .nota {
+    margin: 16px 0 0;
+    font-size: 13px;
+    color: var(--tenue);
+  }
+
+  @media (max-width: 760px) {
+    main { padding: 20px 14px 36px; }
+    .resumen, .graficos { grid-template-columns: 1fr; gap: 12px; }
+    .resumen, .graficos { margin-bottom: 12px; }
+    .tarjeta { padding: 16px; }
+    .chip { padding: 0 13px; }
+    table { font-size: 14px; }
+    thead th { font-size: 12px; }
+    .largo { display: none; }
+    .corto { display: inline; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="marca">Mercado Libre</span>
+    <h1>Ventas de la tienda</h1>
+    <p>Junio a noviembre de 2025</p>
+  </header>
+
+  <div class="filtro" role="group" aria-labelledby="filtro-rotulo">
+    <span class="filtro-rotulo" id="filtro-rotulo">Elegí uno o más meses</span>
+    <button class="chip" type="button" data-mes="todos" aria-pressed="true">Todos</button>
+  </div>
+
+  <section class="resumen" aria-label="Resumen" aria-live="polite">
+    <div class="tarjeta">
+      <p class="kpi-rotulo">Ventas</p>
+      <p class="kpi-valor" id="kpi-ventas"></p>
+      <p class="kpi-detalle" id="kpi-ventas-detalle"></p>
+    </div>
+    <div class="tarjeta">
+      <p class="kpi-rotulo">Crecimiento de ventas</p>
+      <p class="kpi-valor" id="kpi-crec"></p>
+      <p class="kpi-detalle" id="kpi-crec-detalle"></p>
+    </div>
+    <div class="tarjeta">
+      <p class="kpi-rotulo">ACOS</p>
+      <p class="kpi-valor" id="kpi-acos"></p>
+      <p class="kpi-detalle" id="kpi-acos-detalle"></p>
+    </div>
+  </section>
+
+  <section class="graficos">
+    <div class="tarjeta">
+      <h2>Ventas por mes</h2>
+      <p class="sub">En millones de pesos</p>
+      <div class="lienzo">
+        <svg id="g-ventas" role="img" aria-label="Gráfico de barras de ventas por mes. Los valores están en la tabla de abajo."></svg>
+        <div class="globo" hidden></div>
+      </div>
+    </div>
+    <div class="tarjeta">
+      <h2>ACOS por mes</h2>
+      <p class="sub">Porcentaje · cuanto más bajo, mejor</p>
+      <div class="lienzo">
+        <svg id="g-acos" role="img" aria-label="Gráfico de línea de ACOS por mes. Los valores están en la tabla de abajo."></svg>
+        <div class="globo" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tarjeta">
+    <h2>Detalle</h2>
+    <p class="sub" id="tabla-sub"></p>
+    <div class="tabla-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Mes</th>
+            <th scope="col">Ventas</th>
+            <th scope="col">Var. ventas</th>
+            <th scope="col">ACOS</th>
+            <th scope="col">Var. ACOS</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-cuerpo"></tbody>
+        <tfoot id="tabla-pie"></tfoot>
+      </table>
+    </div>
+    <p class="nota">ACOS: lo que invertís en publicidad sobre las ventas que esa publicidad genera. Las variaciones son frente al mes anterior; las de ACOS, en puntos porcentuales (pp).</p>
+  </section>
+</main>
+
+<script>
+  const DATOS = [
+    { mes: 'Junio',      corto: 'jun', ventas: 18.4, acos: 30 },
+    { mes: 'Julio',      corto: 'jul', ventas: 19.9, acos: 24 },
+    { mes: 'Agosto',     corto: 'ago', ventas: 21.1, acos: 17 },
+    { mes: 'Septiembre', corto: 'sep', ventas: 23.0, acos: 14 },
+    { mes: 'Octubre',    corto: 'oct', ventas: 24.3, acos: 13 },
+    { mes: 'Noviembre',  corto: 'nov', ventas: 25.6, acos: 12 },
+  ];
+
+  // Conjunto vacío = todos los meses
+  const elegidos = new Set();
+
+  const NBSP = ' ';
+  const f1 = new Intl.NumberFormat('es-AR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const f0 = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 0 });
+  const pesos = v => `$${NBSP}${f1.format(v)}${NBSP}M`;
+  const signo = v => (v > 0 ? '+' : v < 0 ? '−' : '');
+  const varPct = v => `${signo(v)}${f1.format(Math.abs(v))}%`;
+  const varPp = v => `${signo(v)}${f0.format(Math.abs(v))}${NBSP}pp`;
+  const min = s => s.toLowerCase();
+
+  const activos = () => elegidos.size ? [...elegidos].sort((a, b) => a - b) : DATOS.map((_, i) => i);
+  const crecVentas = (desde, hasta) => (DATOS[hasta].ventas / DATOS[desde].ventas - 1) * 100;
+  const difAcos = (desde, hasta) => DATOS[hasta].acos - DATOS[desde].acos;
+
+  // Suba de ventas es buena; suba de ACOS es mala
+  const claseVentas = v => (v > 0 ? 'bien' : v < 0 ? 'mal' : '');
+  const claseAcos = v => (v < 0 ? 'bien' : v > 0 ? 'mal' : '');
+
+  /* ---------- Filtro ---------- */
+  const filtro = document.querySelector('.filtro');
+  DATOS.forEach((d, i) => {
+    const b = document.createElement('button');
+    b.className = 'chip';
+    b.type = 'button';
+    b.dataset.mes = i;
+    b.textContent = d.mes;
+    b.setAttribute('aria-pressed', 'false');
+    filtro.append(b);
+  });
+
+  function alternar(i) {
+    if (elegidos.has(i)) elegidos.delete(i); else elegidos.add(i);
+    if (elegidos.size === DATOS.length) elegidos.clear();
+    pintar();
+  }
+
+  filtro.addEventListener('click', e => {
+    const b = e.target.closest('.chip');
+    if (!b) return;
+    if (b.dataset.mes === 'todos') { elegidos.clear(); pintar(); }
+    else alternar(Number(b.dataset.mes));
+  });
+
+  /* ---------- Resumen ---------- */
+  const $ = id => document.getElementById(id);
+
+  function pintarResumen(idx) {
+    const primero = idx[0], ultimo = idx[idx.length - 1];
+    const total = idx.reduce((s, i) => s + DATOS[i].ventas, 0);
+    const uno = idx.length === 1;
+
+    $('kpi-ventas').textContent = pesos(total);
+    $('kpi-ventas-detalle').textContent = uno
+      ? `${DATOS[ultimo].mes} de 2025`
+      : `${idx.length} meses · promedio ${pesos(total / idx.length)} por mes`;
+
+    const desde = uno ? ultimo - 1 : primero;
+    if (desde < 0) {
+      $('kpi-crec').textContent = '—';
+      $('kpi-crec-detalle').textContent = 'Sin mes anterior para comparar';
+      $('kpi-acos').textContent = `${DATOS[ultimo].acos}%`;
+      $('kpi-acos-detalle').textContent = `En ${min(DATOS[ultimo].mes)}`;
+      return;
+    }
+
+    const c = crecVentas(desde, ultimo);
+    $('kpi-crec').textContent = varPct(c);
+    $('kpi-crec-detalle').textContent = uno
+      ? `Frente a ${min(DATOS[desde].mes)}`
+      : `De ${min(DATOS[desde].mes)} a ${min(DATOS[ultimo].mes)}`;
+
+    const a = difAcos(desde, ultimo);
+    $('kpi-acos').textContent = `${DATOS[ultimo].acos}%`;
+    $('kpi-acos-detalle').innerHTML =
+      `En ${min(DATOS[ultimo].mes)} · <span class="${claseAcos(a)}">${varPp(a)}</span> ` +
+      (uno ? `frente a ${min(DATOS[desde].mes)}` : `desde ${min(DATOS[desde].mes)}`);
+  }
+
+  /* ---------- Gráficos ---------- */
+  const GRAFICOS = [
+    { svg: $('g-ventas'), tipo: 'barras', campo: 'ventas', tope: 30, marcas: [0, 10, 20, 30], rotulo: v => f1.format(v) },
+    { svg: $('g-acos'),   tipo: 'linea',  campo: 'acos',   tope: 35, marcas: [0, 10, 20, 30], rotulo: v => `${v}%` },
+  ];
+  const M = { arriba: 22, der: 6, abajo: 26, izq: 30 };
+
+  function dibujar(g, idx) {
+    const ancho = g.svg.clientWidth, alto = g.svg.clientHeight;
+    if (!ancho) return;
+    const w = ancho - M.izq - M.der, h = alto - M.arriba - M.abajo;
+    const banda = w / DATOS.length;
+    const x = i => M.izq + banda * (i + .5);
+    const y = v => M.arriba + h * (1 - v / g.tope);
+    const piso = y(0);
+    g.geo = { x, y };
+
+    let s = '';
+    for (const m of g.marcas) {
+      s += `<line class="${m ? 'grilla' : 'base'}" x1="${M.izq}" x2="${ancho - M.der}" y1="${y(m)}" y2="${y(m)}"/>` +
+           `<text x="${M.izq - 8}" y="${y(m)}" dy=".32em" text-anchor="end">${m}</text>`;
+    }
+
+    if (g.tipo === 'linea') {
+      const pts = DATOS.map((d, i) => `${x(i)},${y(d.acos)}`).join(' ');
+      s += `<polyline class="linea" points="${pts}"/>`;
+    }
+
+    DATOS.forEach((d, i) => {
+      const v = d[g.campo], cx = x(i), cy = y(v);
+      const apagado = idx.includes(i) ? '' : ' apagado';
+      s += `<g class="col${apagado}" data-i="${i}">` +
+           `<rect class="zona" x="${cx - banda / 2}" y="${M.arriba - 18}" width="${banda}" height="${h + 18 + M.abajo}" rx="6"/>`;
+      if (g.tipo === 'barras') {
+        const bw = Math.min(banda * .62, 56), bx = cx - bw / 2, r = 4;
+        s += `<path class="barra" d="M${bx},${piso}V${cy + r}Q${bx},${cy} ${bx + r},${cy}H${bx + bw - r}Q${bx + bw},${cy} ${bx + bw},${cy + r}V${piso}Z"/>`;
+        s += `<text class="valor" x="${cx}" y="${cy - 7}" text-anchor="middle">${g.rotulo(v)}</text>`;
+      } else {
+        s += `<circle class="punto" cx="${cx}" cy="${cy}" r="5"/>`;
+        s += `<text class="valor" x="${cx}" y="${cy - 13}" text-anchor="middle">${g.rotulo(v)}</text>`;
+      }
+      s += `<text x="${cx}" y="${alto - 6}" text-anchor="middle">${d.corto}</text></g>`;
+    });
+
+    g.svg.setAttribute('viewBox', `0 0 ${ancho} ${alto}`);
+    g.svg.innerHTML = s;
+  }
+
+  for (const g of GRAFICOS) {
+    const globo = g.svg.nextElementSibling;
+
+    g.svg.addEventListener('pointerover', e => {
+      const col = e.target.closest('.col');
+      if (!col) return;
+      const i = Number(col.dataset.i), d = DATOS[i];
+      globo.innerHTML = `<strong>${d.mes} 2025</strong>Ventas: ${pesos(d.ventas)}<br>ACOS: ${d.acos}%`;
+      globo.hidden = false;
+      const mitad = globo.offsetWidth / 2;
+      const izq = Math.max(mitad, Math.min(g.svg.clientWidth - mitad, g.geo.x(i)));
+      globo.style.left = `${izq}px`;
+      globo.style.top = `${g.geo.y(d[g.campo])}px`;
+    });
+    g.svg.addEventListener('pointerleave', () => { globo.hidden = true; });
+    g.svg.addEventListener('click', e => {
+      const col = e.target.closest('.col');
+      if (col) alternar(Number(col.dataset.i));
+    });
+  }
+
+  /* ---------- Tabla ---------- */
+  function pintarTabla(idx) {
+    $('tabla-sub').textContent = elegidos.size
+      ? `Mostrando ${idx.map(i => min(DATOS[i].mes)).join(', ')}`
+      : 'Mostrando todos los meses';
+
+    $('tabla-cuerpo').innerHTML = idx.map(i => {
+      const d = DATOS[i];
+      let cv = '<td>—</td>', ca = '<td>—</td>';
+      if (i > 0) {
+        const v = crecVentas(i - 1, i), a = difAcos(i - 1, i);
+        cv = `<td class="${claseVentas(v)}">${varPct(v)}</td>`;
+        ca = `<td class="${claseAcos(a)}">${varPp(a)}</td>`;
+      }
+      return `<tr><th scope="row"><span class="largo">${d.mes}</span><span class="corto">${d.mes.slice(0, 3)}</span></th><td>${pesos(d.ventas)}</td>${cv}<td>${d.acos}%</td>${ca}</tr>`;
+    }).join('');
+
+    const total = idx.reduce((s, i) => s + DATOS[i].ventas, 0);
+    $('tabla-pie').innerHTML = idx.length > 1
+      ? `<tr><th scope="row">Total</th><td>${pesos(total)}</td><td></td><td></td><td></td></tr>`
+      : '';
+  }
+
+  /* ---------- Todo junto ---------- */
+  function pintar() {
+    const idx = activos();
+    for (const b of filtro.querySelectorAll('.chip')) {
+      const on = b.dataset.mes === 'todos' ? !elegidos.size : elegidos.has(Number(b.dataset.mes));
+      b.setAttribute('aria-pressed', on);
+    }
+    pintarResumen(idx);
+    for (const g of GRAFICOS) dibujar(g, idx);
+    pintarTabla(idx);
+  }
+
+  new ResizeObserver(() => { const idx = activos(); for (const g of GRAFICOS) dibujar(g, idx); })
+    .observe(document.querySelector('.graficos'));
+  pintar();
+</script>
+</body>
+</html>

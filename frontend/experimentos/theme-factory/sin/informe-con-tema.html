@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta name="robots" content="noindex"><!-- Experimento del Lab de Programación: salida de Claude sin cambios de diseño -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Informe de octubre</title>
+<style>
+  :root {
+    color-scheme: light;
+    --papel: #f5f0e8;
+    --hoja: #fffdf9;
+    --tinta: #2b2622;
+    --tinta-suave: #6d645b;
+    --cobre: #a94f29;
+    --cobre-claro: #f6e9df;
+    --linea: #e5dbcd;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 48px 20px 64px;
+    background: var(--papel);
+    color: var(--tinta);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .hoja {
+    max-width: 760px;
+    margin: 0 auto;
+    background: var(--hoja);
+    border: 1px solid var(--linea);
+    border-top: 6px solid var(--cobre);
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(43, 38, 34, .04), 0 12px 32px rgba(43, 38, 34, .07);
+  }
+
+  /* Encabezado */
+  header {
+    padding: 44px 56px 36px;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  h1 {
+    margin: 0;
+    font-weight: 400;
+  }
+
+  h1 span { display: block; }
+  h1 .sep { display: none; }
+
+  h1 .tipo,
+  h1 .periodo {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  h1 .tipo { color: var(--cobre); }
+  h1 .periodo { color: var(--tinta-suave); }
+
+  h1 .marca {
+    margin: 10px 0 12px;
+    font-family: var(--serif);
+    font-size: 46px;
+    line-height: 1.1;
+    letter-spacing: -.01em;
+  }
+
+  /* Secciones */
+  section {
+    padding: 36px 56px;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  section:last-child { border-bottom: 0; padding-bottom: 48px; }
+
+  h2 {
+    margin: 0 0 20px;
+    font-family: var(--serif);
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 1.25;
+  }
+
+  p { margin: 0; }
+
+  /* Tabla de resultados */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  th, td {
+    padding: 14px 0 14px 24px;
+    text-align: right;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  th:first-child, td:first-child {
+    padding-left: 0;
+    text-align: left;
+  }
+
+  thead th {
+    padding-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--tinta);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+  }
+
+  tbody tr:last-child td { border-bottom: 0; padding-bottom: 0; }
+
+  tbody td:nth-child(2) {
+    font-size: 20px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  tbody td:nth-child(3) {
+    color: var(--tinta-suave);
+    white-space: nowrap;
+  }
+
+  /* Destacado */
+  .destacado {
+    padding: 20px 24px;
+    background: var(--cobre-claro);
+    border-left: 3px solid var(--cobre);
+    border-radius: 0 4px 4px 0;
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.5;
+  }
+
+  /* Lista de próximos pasos */
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    position: relative;
+    padding: 12px 0 12px 26px;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  li:first-child { padding-top: 0; }
+  li:last-child { border-bottom: 0; padding-bottom: 0; }
+
+  li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: calc(12px + .8em - 4px);
+    width: 8px;
+    height: 8px;
+    background: var(--cobre);
+    border-radius: 50%;
+  }
+
+  li:first-child::before { top: calc(.8em - 4px); }
+
+  /* Celular */
+  @media (max-width: 600px) {
+    body { padding: 0; font-size: 16px; }
+    .hoja { border-left: 0; border-right: 0; border-bottom: 0; border-radius: 0; box-shadow: none; }
+    header { padding: 32px 22px 26px; }
+    section { padding: 28px 22px; }
+    h1 .marca { font-size: 36px; }
+    h2 { font-size: 22px; }
+    th, td { padding-left: 12px; }
+    thead th { font-size: 11px; letter-spacing: .06em; }
+    tbody td:nth-child(2) { font-size: 17px; }
+    .destacado { padding: 16px 18px; font-size: 18px; }
+  }
+
+  /* Impresión / PDF */
+  @media print {
+    @page { margin: 18mm; }
+    body { padding: 0; background: #fff; font-size: 11.5pt; }
+    .hoja { max-width: none; border: 0; border-top: 4pt solid var(--cobre); border-radius: 0; box-shadow: none; }
+    header, section { padding-left: 0; padding-right: 0; }
+    section { break-inside: avoid; }
+    .destacado { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    li::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<main class="hoja">
+  <header>
+    <h1>
+      <span class="tipo">Informe mensual</span>
+      <span class="sep"> – </span>
+      <span class="marca">Cocina Norte</span>
+      <span class="sep"> – </span>
+      <span class="periodo">Octubre 2025</span>
+    </h1>
+  </header>
+
+  <section>
+    <h2>Resultados</h2>
+    <table>
+      <thead>
+        <tr><th scope="col">Indicador</th><th scope="col">Octubre</th><th scope="col">vs. septiembre</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Ventas</td><td>$24.310.900</td><td>+5,9%</td></tr>
+        <tr><td>Unidades</td><td>1.788</td><td>+5,1%</td></tr>
+        <tr><td>Conversión</td><td>3,10%</td><td>+0,01 pp</td></tr>
+        <tr><td>ACOS</td><td>13%</td><td>-1 pp</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Lo que funcionó</h2>
+    <p class="destacado">Las 12 publicaciones rehechas en septiembre subieron la conversión de 2,6% a 3,4%.</p>
+  </section>
+
+  <section>
+    <h2>Próximo mes</h2>
+    <ul>
+      <li>Rehacer 10 publicaciones más.</li>
+      <li>Bajar el ACOS de la campaña "Ollas" (21%).</li>
+      <li>Preparar el Black Friday.</li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>

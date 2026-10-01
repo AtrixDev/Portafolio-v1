@@ -1,0 +1,46 @@
+{
+ "id": "algorithmic-art",
+ "fecha": "01/10/2026",
+ "prompt": "Creá una obra de arte generativo sobre el fuego de una parrilla, que se vea en el navegador y cambie cada vez que se recarga. Un solo archivo index.html en esta carpeta.",
+ "entrada": [],
+ "sin": {
+  "skills": [],
+  "segundos": 808,
+  "pasos": 27,
+  "costo": 2.14,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Listo: la obra está en `index.html` de esta carpeta y se abre con doble clic, sin dependencias ni servidor.\n\nEs un primer plano de una parrilla de ladrillo, de noche: lecho de brasas, leños carbonizados, llamas que pasan entre los fierros, chispas y humo. Cada recarga sortea una semilla nueva y con ella cambian:\n\n- **Combustible:** quebracho, espinillo, algarrobo, ñandubay o carbón, cada uno con su color de llama y su cantidad de chispas. El carbón no lleva leños y tiene la base de la llama azulada.\n- **Fuego:** entre una y tres hogueras, con distinta altura y posición, y el punto en que está (llama viva, fuego hecho o brasa hecha).\n- **Viento:** inclina las llamas y arrastra las chispas, desde noche calma hasta ventarrón.\n- **Escena:** separación y grosor de los fierros, altura de la parrilla, tamaño de los ladrillos y de las brasas.\n\nArriba a la izquierda aparece una ficha con el número de pieza y esos datos. Dos agregados que no pediste:\n\n- **Avivar:** tocar o hacer clic levanta una llamarada con chispas en ese punto. Cada tanto también sale una sola, como si goteara grasa.\n- **Repetir una pieza:** agregando `?seed=90210` a la dirección vuelve a salir la misma; sin eso, siempre es distinta.\n\nLo probé en Chrome sin pantalla, con varias semillas, en horizontal y vertical, y sin errores en consola. Usa WebGL (si no está disponible, muestra un aviso) y, si la máquina no alcanza el ritmo, baja la resolución sola. No pude medir la fluidez en una placa de video real ni probé el clic en esas capturas.\n\nLo más flojo son los leños: son la parte menos lograda de la imagen.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "index.html",
+    "ruta": "sin/index.html",
+    "aux": false,
+    "tipo": "pagina"
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "algorithmic-art"
+  ],
+  "segundos": 529,
+  "pasos": 14,
+  "costo": 1.83,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "La obra está en `index.html`: **Paciencia de Brasa**, una parrilla de noche con la leña ardiendo en el brasero a un costado y las brasas arrimadas bajo los fierros. La abrí tres veces en Chrome headless y salieron tres fuegos distintos, sin errores de consola; los controles del panel no llegué a probarlos uno por uno.\n\n- **Qué cambia en cada recarga:** el lado del brasero, la cantidad de leños, el viento, el número de barrotes, el tono de la llama y la disposición de las brasas.\n- **Qué se mueve:** la llama, las chispas, el humo y el calor de las brasas, que sube y baja lentamente; cada tanto un carbón revienta.\n- **Panel lateral:** muestra la semilla, que se puede escribir para volver a un fuego concreto, y tiene controles de llama, turbulencia, viento, brasas, chispas y humo, además de la descarga en PNG.\n\n- **Necesita internet:** carga p5.js y las tipografías desde un CDN, así que sin conexión no se ve nada.\n- **Sin archivo `.md`:** la skill pide la filosofía algorítmica en un archivo aparte; como pediste un solo archivo, la dejé como comentario al principio del HTML.\n- **Rendimiento:** no pude medir la fluidez real porque la prueba fue sin GPU; si va lento, bajá \"Llama\" o \"Humo\".",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "index.html",
+    "ruta": "con/index.html",
+    "aux": false,
+    "tipo": "pagina"
+   }
+  ]
+ }
+}

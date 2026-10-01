@@ -1,0 +1,11 @@
+# Brasa Cardinal
+
+**Brasa Cardinal** entiende el calor como una geometría. Toda composición nace de un único centro incandescente y se ordena hacia afuera en círculos perfectos, como la onda que deja una gota o el anillo de una hornalla. No hay ilustración ni anécdota: hay una forma rotunda, vista desde arriba, y un campo de color que arde alrededor. El resultado debe sentirse como un objeto trabajado durante incontables horas por alguien en la cima de su oficio.
+
+El espacio se organiza con la disciplina de un instrumento de medición. Un eje vertical marca el rumbo; un limbo de marcas regulares rodea la masa central y convierte la cantidad en ángulo, de modo que el dato se lee como se lee una brújula o un dial, antes de leerse como cifra. La información vive en la proporción y en la posición, no en la explicación. Cada marca está colocada con atención minuciosa, y la repetición paciente de trazos idénticos es la que construye la riqueza de la superficie.
+
+El color es escaso y absoluto: un rojo de brasa que ocupa el plano entero, un negro de hierro fundido que concentra todo el peso, y un marfil reservado exclusivamente para lo que debe verse primero. El negro nunca es plano; guarda anillos torneados apenas perceptibles, como el fondo de una pieza de metal mecanizada, que recompensan a quien se acerca. El rojo tampoco es uniforme: se enciende hacia el centro y se enfría hacia los bordes, calibrado con la paciencia de un maestro colorista.
+
+La escala trabaja por contraste extremo. Una silueta monumental y una cifra enorme conviven con rótulos mínimos de carácter técnico; no existe el tamaño intermedio que no se justifique. La tipografía es condensada, industrial, de fundición, y se integra a la arquitectura de la pieza: las palabras se apoyan en el eje, se dejan partir por él y forman con la masa central un solo cuerpo negro. El texto es breve, esencial, nunca un párrafo.
+
+El equilibrio es simétrico y sereno, pero tenso: márgenes generosos, alineaciones exactas, nada que toque el borde, nada que se superponga. Cada distancia fue medida y vuelta a medir. La pieza terminada debe transmitir una ejecución de nivel maestro, la de un cartel impreso a tres tintas por un taller que no tolera un milímetro fuera de lugar.

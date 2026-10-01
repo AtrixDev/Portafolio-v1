@@ -1,0 +1,48 @@
+{
+ "id": "theme-factory",
+ "fecha": "01/10/2026",
+ "prompt": "Aplicale un tema visual profesional al informe.html de esta carpeta, que va para el dueño de una marca de artículos de cocina. Dejá el resultado en informe-con-tema.html, en esta carpeta.",
+ "entrada": [
+  "informe.html"
+ ],
+ "sin": {
+  "skills": [],
+  "segundos": 51,
+  "pasos": 7,
+  "costo": 0.23,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "El informe con tema quedó en `informe-con-tema.html`, en la misma carpeta; el `informe.html` original no se tocó. Lo rendericé en Chrome a ancho de escritorio y de celular y se ve bien en los dos; la versión de impresión no la probé.\n\n- **Estilo:** fondo color papel, acento cobre, títulos en serif y datos en sans, con aspecto de hoja de informe.\n- **Encabezado:** el título se separa en tres niveles: \"Informe mensual\", \"Cocina Norte\" en grande y \"Octubre 2025\".\n- **Resultados:** la tabla ya no tiene bordes de grilla, los números van alineados a la derecha y el valor de octubre está resaltado.\n- **Lo que funcionó:** la frase aparece como bloque destacado.\n- **Contenido:** los textos y las cifras son los mismos del original, sin agregados.\n- **Formatos:** se adapta al celular y trae estilos para imprimir o guardar como PDF. No depende de internet (sin fuentes ni archivos externos), así que se puede mandar como adjunto.\n\nNo coloreé las variaciones en verde o rojo: en el ACOS una baja es buena y en ventas no, y preferí no sumar una lectura que el original no hace. Si las querés con color, es un cambio chico.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "informe-con-tema.html",
+    "ruta": "sin/informe-con-tema.html",
+    "aux": false,
+    "tipo": "pagina"
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "theme-factory"
+  ],
+  "segundos": 29,
+  "pasos": 6,
+  "costo": 0.26,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "El informe con tema quedó en `informe-con-tema.html`, en la misma carpeta; `informe.html` no se tocó. No lo abrí en un navegador, así que falta la revisión visual.\n\nElegí el tema **Golden Hour** sin consultarte: la skill pide mostrarte el catálogo (`theme-showcase.pdf`) y esperar tu elección, pero esta sesión no es interactiva. Es una paleta cálida de mostaza, terracota, beige y marrón chocolate, pensada para marcas gastronómicas y productos artesanales, que es lo más cercano a artículos de cocina entre los 10 temas.\n\n- **Contenido:** los textos y las cifras son los mismos del original; solo cambió la presentación.\n- **Diseño:** hoja blanca sobre fondo beige claro, tabla con encabezado marrón y números alineados a la derecha, títulos de sección con filete terracota.\n- **Tipografía:** FreeSans, como indica el tema; si el dueño no la tiene instalada, se ve en Helvetica o Arial.\n- **Formatos:** se adapta a celular y a impresión o PDF.\n\nSi preferís otro tema, decime cuál y lo cambio: los colores están definidos en un solo bloque al inicio del archivo. Las alternativas más cercanas son Desert Rose (más sobrio) y Forest Canopy (verde con títulos en serif).",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "informe-con-tema.html",
+    "ruta": "con/informe-con-tema.html",
+    "aux": false,
+    "tipo": "pagina"
+   }
+  ]
+ }
+}

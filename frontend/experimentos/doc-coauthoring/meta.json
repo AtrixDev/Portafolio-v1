@@ -1,0 +1,48 @@
+{
+ "id": "doc-coauthoring",
+ "fecha": "01/10/2026",
+ "prompt": "Ayudame a escribir el documento que explica el servicio de mi consultora de Mercado Libre para mandárselo a clientes potenciales. Dejá lo que armes en servicio.md, en esta carpeta, en español argentino.",
+ "entrada": [],
+ "sin": {
+  "skills": [],
+  "segundos": 44,
+  "pasos": 3,
+  "costo": 0.2,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Dejé un primer borrador en `servicio.md`, pero todavía no está listo para mandar: la carpeta estaba vacía y no tenía datos de tu consultora, así que armé el servicio con supuestos y dejé huecos marcados con `[COMPLETAR: ...]`.\n\nEl documento recorre: para quién es, qué se revisa, cómo es el proceso, qué se lleva el cliente, qué necesitás de él, qué no hacés, quiénes son, precio y próximo paso.\n\n**Lo que supuse y tenés que confirmar o corregir:**\n- **Modelo de servicio:** diagnóstico inicial más acompañamiento mensual, con la opción de contratar solo el diagnóstico.\n- **Primera charla:** gratis y de 30 minutos.\n- **Áreas que cubrís:** publicaciones, precios y rentabilidad, Mercado Ads, logística, reputación y posventa, métricas.\n- **Entregables:** informe escrito, cambios aplicados en la cuenta y reporte mensual.\n- **Compromisos de \"Qué no hacemos\":** no prometer ventas, no usar prácticas penalizadas, no tocar Mercado Pago, y que el cliente aprueba los cambios de precio, publicidad y envíos.\n- **Acceso como colaborador:** el documento dice que Mercado Libre permite sumar colaboradores con permisos limitados, sin compartir la contraseña. Lo escribí de memoria; verificalo antes de mandarlo.\n\n**Lo que falta completar:**\n- Nombre de la consultora.\n- Si tomás cuentas nuevas o solo cuentas en marcha.\n- Plazo del diagnóstico.\n- Canal de consultas y tiempo de respuesta.\n- Quiénes son: experiencia, rubros y, si tenés, un caso con números reales.\n- Precios y condiciones de pago.\n- Datos de contacto.\n\nPasame esos datos y las correcciones y lo cierro. La sección \"Quiénes somos\" es la que más pesa para un cliente que no te conoce, así que un caso real con números ahí vale la pena.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "servicio.md",
+    "ruta": "sin/servicio.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "sin/servicio.md.html"
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "doc-coauthoring"
+  ],
+  "segundos": 33,
+  "pasos": 5,
+  "costo": 0.3,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Dejé en `servicio.md` solo el esqueleto del documento: once secciones con una nota de qué va en cada una, sin texto redactado todavía. No sé nada de tu consultora y la carpeta estaba vacía, así que preferí no inventar servicios, precios ni resultados en algo que va a clientes.\n\nLa skill trabaja en tres etapas: primero me pasás contexto, después armamos sección por sección y al final pruebo el documento con un lector sin contexto para detectar lo que no se entiende.\n\nPara empezar a redactar necesito que me contestes esto, en el formato que te quede cómodo (frases sueltas, audio transcripto, pegar un mensaje que ya le mandes a clientes):\n\n1. **Consultora:** ¿cómo se llama y quiénes la integran? ¿Cuánta experiencia tienen en Mercado Libre y tienen alguna certificación?\n2. **Cliente ideal:** ¿a qué tipo de vendedor apuntás (rubro, tamaño, si ya vende o recién arranca)? ¿Hay alguno que no tomes?\n3. **Problema:** ¿por qué te contactan normalmente? Por ejemplo ventas estancadas, reputación caída, publicidad que no rinde o una cuenta nueva.\n4. **Servicio:** ¿qué hacés concretamente (publicaciones, publicidad, precios, reputación, logística, atención de preguntas, reportes)? ¿Lo ejecutás vos o asesorás y el cliente ejecuta?\n5. **Modalidad:** ¿es un servicio único, hay planes, o una auditoría inicial seguida de un abono mensual? ¿Cuánto dura cada etapa?\n6. **Precio:** ¿lo querés en el documento? Si sí, ¿cuánto, cómo se cobra (fijo, porcentaje de ventas o mixto) y hay un plazo mínimo?\n7. **Resultados:** ¿tenés casos con números que puedas mostrar, con o sin el nombre del cliente?\n8. **Uso del documento:** ¿se manda en frío o después de una primera charla? ¿Qué querés que haga el lector al terminar (agendar una llamada, escribir por WhatsApp, pedir una auditoría)?\n9. **Tono y largo:** ¿cercano o más formal? ¿Una página o algo más completo?\n\nSi ya tenés una propuesta vieja, una presentación o mensajes que les mandás a prospectos, pegalos tal cual y saco de ahí la mayor parte.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "servicio.md",
+    "ruta": "con/servicio.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "con/servicio.md.html"
+   }
+  ]
+ }
+}

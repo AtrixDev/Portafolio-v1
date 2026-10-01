@@ -1,0 +1,50 @@
+{
+ "id": "trailofbits",
+ "fecha": "01/10/2026",
+ "prompt": "Revisá la seguridad de server.js (la API de una tienda online) antes de publicarla. Escribí los hallazgos en seguridad.md, en esta carpeta, ordenados por gravedad y con cómo arreglar cada uno, en español argentino. No modifiques el código.",
+ "entrada": [
+  "server.js"
+ ],
+ "sin": {
+  "skills": [],
+  "segundos": 101,
+  "pasos": 4,
+  "costo": 0.34,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Revisé `server.js` y dejé el informe en `seguridad.md`: así como está, la API no se puede publicar. La revisión fue solo leyendo el código; no ejecuté nada ni probé contra la base real, y no toqué `server.js`.\n\nHay 11 hallazgos, ordenados por gravedad y cada uno con su arreglo. Tres son críticos y se explotan con un solo request, sin estar logueado:\n\n- **Ejecución de comandos en `/api/etiqueta` (línea 22):** el parámetro `pedido` va directo a un shell, así que cualquiera corre lo que quiera en el servidor y ve la salida.\n- **Admin falso en `/api/admin/exportar` (línea 26):** el único control es el header `x-admin: true`, que lo manda el cliente. Con eso se baja toda la tabla de usuarios, contraseñas incluidas.\n- **Login sin contraseña (línea 15):** mandando objetos en vez de strings (`{\"$ne\": null}`) se entra como cualquier usuario.\n\nLos cuatro de gravedad alta:\n\n- **Credenciales de Mongo (línea 7):** `admin:admin123` está escrito en el código, con usuario admin y sin TLS.\n- **Sin autenticación:** ningún endpoint lee la cookie de sesión, así que cualquiera ve pedidos ajenos.\n- **Contraseñas en texto plano:** además el login las devuelve en la respuesta.\n- **Cookie de sesión:** es el `_id` del usuario, sin firma, vencimiento ni flags.\n\nEl resto son dos medios y dos bajos: caída del proceso con un request mal formado, falta de límite de intentos, el body reflejado como HTML en el login y endurecimiento general.\n\nCambiá la contraseña de Mongo ahora, sin esperar al resto. No probé si el puerto 27017 de `db.tienda.com` está abierto a internet; si lo está, se entra a la base directamente y ese hallazgo pasa a crítico.\n\nNo hay `package.json` en la carpeta, así que no revisé dependencias y no sé qué versión de Express usás. Eso cambia el alcance de dos hallazgos (está aclarado en cada uno), y conviene correr `npm audit` antes de publicar.\n\nEl conector de Vercel no está autorizado en esta sesión; no hizo falta para esto, pero si lo querés usar hay que autorizarlo con `/mcp` en una sesión interactiva.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "seguridad.md",
+    "ruta": "sin/seguridad.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "sin/seguridad.md.html"
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "sharp-edges"
+  ],
+  "segundos": 82,
+  "pasos": 7,
+  "costo": 0.45,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Listo: el informe está en `seguridad.md`, y la conclusión es que `server.js` no se puede publicar así como está. Cualquiera en internet, sin usuario ni contraseña, puede ejecutar comandos en el servidor, bajarse todos los usuarios con sus contraseñas y entrar como cualquier cliente.\n\nSon 12 hallazgos ordenados por gravedad, cada uno con su arreglo. No toqué el código y la revisión fue solo de lectura: no ejecuté nada ni probé los ataques contra un servidor real.\n\n**Críticos (5)**\n- **Ejecución de comandos** (`server.js:22`): `/api/etiqueta` arma un comando de shell con lo que manda el usuario.\n- **Admin falso** (`server.js:26`): `/api/admin/exportar` se abre con solo mandar el header `x-admin: true`.\n- **Login salteable** (`server.js:15`): mandando un operador de Mongo en lugar de la contraseña se entra como cualquier usuario.\n- **Sin autenticación real** (`server.js:17`): ningún endpoint lee la cookie de sesión, que además es el `_id` del usuario sin firmar.\n- **Contraseñas en texto plano** (`server.js:15`): la base guarda las claves tal cual.\n\n**Altos (3)**\n- **Credenciales en el código** (`server.js:7`): la conexión a Mongo usa `admin:admin123`, escrito en el archivo.\n- **Pedidos ajenos** (`server.js:10`): `/api/pedidos` devuelve los pedidos de cualquier cliente que se le pida.\n- **Respuesta del login** (`server.js:18`): devuelve el documento entero del usuario, contraseña incluida.\n\nLos medios y bajos son: el error del login que devuelve la contraseña enviada, la falta de límite de intentos, los errores sin manejar que pueden tirar el servidor, y el endurecimiento general (HTTPS, headers, límites de tamaño).\n\n- **Urgente:** cambiá la contraseña de Mongo hoy, aunque no publiques. Si este código ya corrió en un servidor accesible desde internet, tratá el servidor y la base como comprometidos y forzá el cambio de clave de los usuarios.\n- **Versión de Express:** no hay `package.json` en la carpeta, así que no sé cuál usás. Afecta dos hallazgos (el volcado de todos los pedidos con `?cliente[$ne]=x` y si un error tira el proceso); en el informe aclaro qué pasa en cada versión.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "seguridad.md",
+    "ruta": "con/seguridad.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "con/seguridad.md.html"
+   }
+  ]
+ }
+}

@@ -1,0 +1,444 @@
+{
+ "id": "web-artifacts-builder",
+ "fecha": "30/09/2026",
+ "prompt": "Armá un panel interactivo en un solo archivo panel.html (en esta carpeta) para seguir las ventas de una tienda en Mercado Libre: ventas y ACOS por mes (junio a noviembre de 2025: ventas 18,4 / 19,9 / 21,1 / 23,0 / 24,3 / 25,6 millones de pesos; ACOS 30 / 24 / 17 / 14 / 13 / 12 %), con filtro por mes y un resumen arriba. En español argentino.",
+ "entrada": [],
+ "sin": {
+  "skills": [],
+  "segundos": 230,
+  "pasos": 13,
+  "costo": 0.82,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "El panel está listo en `panel.html`, en esta carpeta: un solo archivo, sin dependencias externas, que se abre con doble clic. Lo probé en Chromium sin interfaz, en escritorio y celular, en modo claro y oscuro, y no dio errores.\n\n- **Filtro por mes:** podés elegir uno o varios meses con los botones de arriba o haciendo clic en las barras o los puntos de los gráficos. \"Todos\" vuelve al período completo.\n- **Resumen:** muestra ventas del período, crecimiento de ventas y ACOS, y se recalcula con el filtro. Con todos los meses da $ 132,3 M de ventas, +39,1% de junio a noviembre y ACOS de 12% en noviembre (−18 pp desde junio).\n- **Gráficos:** ventas en barras y ACOS en línea, cada uno con su propia escala. Los meses no elegidos quedan atenuados en lugar de desaparecer.\n- **Detalle:** una tabla con los meses elegidos, la variación de cada uno frente al mes anterior y el total de ventas.\n\nA tener en cuenta:\n\n- **ACOS con varios meses:** el resumen muestra el ACOS del último mes elegido y cuánto cambió desde el primero, no un promedio. Un ACOS del período necesitaría la inversión publicitaria de cada mes, que no está en los datos.\n- **Pantallas de 320 px:** la tabla necesita un pequeño desplazamiento horizontal; desde 360 px entra completa.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "panel.html",
+    "ruta": "sin/panel.html",
+    "aux": false,
+    "tipo": "pagina"
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "dataviz",
+   "web-artifacts-builder"
+  ],
+  "segundos": 438,
+  "pasos": 32,
+  "costo": 1.81,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "El panel quedó en `panel.html`, en esta carpeta: un solo archivo de 256 KB que se abre con doble clic y no necesita conexión. Lo probé en Chromium sin interfaz (escritorio y celular, modo claro y oscuro): los totales cierran, el filtro responde y no hay errores en consola.\n\n- **Filtro por mes:** una fila de botones con \"Todos\" y los seis meses. Podés elegir uno o varios, y también tocar un mes directamente en cualquiera de los gráficos.\n- **Resumen arriba:** ventas del período ($ 132,3 M con todos los meses), ACOS promedio (18,3%) y promedio mensual ($ 22,1 M), con la variación entre el primer y el último mes elegido (+39,1% en ventas, −18 pp en ACOS). Con un solo mes, compara contra el mes anterior y muestra cuánto pesa ese mes en el semestre.\n- **Gráficos:** ventas en columnas y ACOS en línea, en dos gráficos separados porque las escalas son distintas. Los meses no elegidos quedan en gris para mantener el contexto, y al pasar el cursor aparece el valor en los dos gráficos a la vez.\n- **Tabla de detalle:** los mismos números en pesos completos, con la variación mes a mes.\n\nDos cosas a tener en cuenta:\n\n- **ACOS promedio:** es un promedio simple de los meses elegidos. Para ponderarlo haría falta la inversión publicitaria de cada mes, que no está entre los datos.\n- **Rótulo del ACOS:** en los subtítulos lo describí como \"costo publicitario sobre ventas\"; si en tu tienda lo definen distinto, hay que cambiar ese texto.\n\nEl script de inicialización de la skill fallaba con Node 18, así que lo corrí con `create-vite` fijado en una versión compatible, y ajusté la configuración de Parcel para que empaquetara. El código fuente quedó en `panel-ventas/`; los datos están en `panel-ventas/src/lib/datos.ts` y, si los cambiás, hay que volver a empaquetar.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "panel-ventas/README.md",
+    "ruta": "con/panel-ventas/README.md",
+    "aux": true,
+    "tipo": "texto",
+    "vista": "con/panel-ventas/README.md.html"
+   },
+   {
+    "nombre": "panel-ventas/bundle.html",
+    "ruta": "con/panel-ventas/bundle.html",
+    "aux": true,
+    "tipo": "pagina"
+   },
+   {
+    "nombre": "panel-ventas/components.json",
+    "ruta": "con/panel-ventas/components.json",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/eslint.config.js",
+    "ruta": "con/panel-ventas/eslint.config.js",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/index.html",
+    "ruta": "con/panel-ventas/index.html",
+    "aux": true,
+    "tipo": "pagina"
+   },
+   {
+    "nombre": "panel-ventas/package.json",
+    "ruta": "con/panel-ventas/package.json",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/postcss.config.js",
+    "ruta": "con/panel-ventas/postcss.config.js",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/public/vite.svg",
+    "ruta": "con/panel-ventas/public/vite.svg",
+    "aux": true,
+    "tipo": "imagen",
+    "paginas": [
+     "con/panel-ventas/public/vite.svg"
+    ]
+   },
+   {
+    "nombre": "panel-ventas/src/App.tsx",
+    "ruta": "con/panel-ventas/src/App.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/assets/react.svg",
+    "ruta": "con/panel-ventas/src/assets/react.svg",
+    "aux": true,
+    "tipo": "imagen",
+    "paginas": [
+     "con/panel-ventas/src/assets/react.svg"
+    ]
+   },
+   {
+    "nombre": "panel-ventas/src/components/Grafico.tsx",
+    "ruta": "con/panel-ventas/src/components/Grafico.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/accordion.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/accordion.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/alert.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/alert.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/aspect-ratio.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/aspect-ratio.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/avatar.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/avatar.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/badge.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/badge.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/breadcrumb.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/breadcrumb.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/button.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/button.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/calendar.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/calendar.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/card.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/card.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/carousel.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/carousel.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/checkbox.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/checkbox.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/collapsible.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/collapsible.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/command.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/command.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/context-menu.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/context-menu.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/dialog.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/dialog.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/drawer.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/drawer.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/dropdown-menu.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/dropdown-menu.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/form.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/form.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/hover-card.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/hover-card.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/input.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/input.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/label.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/label.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/menubar.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/menubar.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/navigation-menu.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/navigation-menu.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/popover.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/popover.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/progress.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/progress.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/radio-group.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/radio-group.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/resizable.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/resizable.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/scroll-area.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/scroll-area.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/select.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/select.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/separator.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/separator.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/sheet.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/sheet.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/skeleton.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/skeleton.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/slider.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/slider.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/sonner.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/sonner.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/switch.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/switch.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/table.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/table.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/tabs.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/tabs.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/textarea.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/textarea.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/toast.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/toast.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/toaster.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/toaster.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/toggle-group.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/toggle-group.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/toggle.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/toggle.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/components/ui/tooltip.tsx",
+    "ruta": "con/panel-ventas/src/components/ui/tooltip.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/hooks/use-toast.ts",
+    "ruta": "con/panel-ventas/src/hooks/use-toast.ts",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/index.css",
+    "ruta": "con/panel-ventas/src/index.css",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/lib/datos.ts",
+    "ruta": "con/panel-ventas/src/lib/datos.ts",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/lib/utils.ts",
+    "ruta": "con/panel-ventas/src/lib/utils.ts",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/main.tsx",
+    "ruta": "con/panel-ventas/src/main.tsx",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/src/vite-env.d.ts",
+    "ruta": "con/panel-ventas/src/vite-env.d.ts",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/tailwind.config.js",
+    "ruta": "con/panel-ventas/tailwind.config.js",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/tsconfig.app.json",
+    "ruta": "con/panel-ventas/tsconfig.app.json",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/tsconfig.json",
+    "ruta": "con/panel-ventas/tsconfig.json",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/tsconfig.node.json",
+    "ruta": "con/panel-ventas/tsconfig.node.json",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel-ventas/vite.config.ts",
+    "ruta": "con/panel-ventas/vite.config.ts",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "panel.html",
+    "ruta": "con/panel.html",
+    "aux": false,
+    "tipo": "pagina"
+   }
+  ]
+ }
+}

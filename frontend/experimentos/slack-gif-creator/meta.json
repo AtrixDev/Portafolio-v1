@@ -1,0 +1,52 @@
+{
+ "id": "slack-gif-creator",
+ "fecha": "01/10/2026",
+ "prompt": "Hacé un GIF animado para mandar por Slack al equipo cuando lleguemos a 1.000 ventas en el mes, que diga \"¡1.000 ventas!\". Guardalo como mil-ventas.gif en esta carpeta.",
+ "entrada": [],
+ "sin": {
+  "skills": [],
+  "segundos": 162,
+  "pasos": 7,
+  "costo": 0.51,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Listo: `mil-ventas.gif` está guardado en esta carpeta (480×360, 4,3 s, loop infinito, 1,7 MB). Revisé los cuadros del GIF final y el texto se lee limpio.\n\nLa animación tiene dos momentos:\n\n1. **Conteo:** un contador sube de 0 a 999 con una barra de progreso, y frena en 997, 998, 999 para generar suspenso.\n2. **Festejo:** un flash, y \"¡1.000\" entra en amarillo con rebote, \"ventas!\" aparece debajo y dispara confeti desde las esquinas sobre un fondo de rayos que giran. El mensaje queda en pantalla unos 2,5 s antes de reiniciar.\n\nEl texto queda en dos líneas (\"¡1.000\" arriba, \"ventas!\" abajo) para que el número sea bien grande.\n\nEl script que lo genera quedó fuera de la carpeta, en `/tmp/claude-1000/milventas-build/make.py`, por si querés cambiar colores, texto o duración; al ser una ruta temporal, copialo si lo querés conservar.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "mil-ventas.gif",
+    "ruta": "sin/mil-ventas.gif",
+    "aux": false,
+    "tipo": "imagen",
+    "paginas": [
+     "sin/mil-ventas.gif"
+    ]
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "slack-gif-creator"
+  ],
+  "segundos": 102,
+  "pasos": 7,
+  "costo": 0.49,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Listo: el GIF está en `mil-ventas.gif` en esta carpeta, en formato de mensaje de Slack (480x480, 3,5 s, 20 fps, loop infinito). Pasó el validador de la skill y revisé los cuadros a ojo.\n\nUn contador dorado sube rápido hasta 999 y al llegar a 1.000 hay un flash blanco con explosión de confeti. Ahí aparece \"ventas!\" desde abajo y queda \"¡1.000 ventas!\" fijo durante unos 2 segundos, con rayos girando y destellos de fondo.\n\nPesa 4,1 MB; Slack lo reproduce igual, pero si lo querés más liviano puedo bajarlo a menos de la mitad reduciendo cuadros y colores.\n\nEl script que lo genera quedó fuera de la carpeta, en `/tmp/claude-1000/gifwork/make.py`, por si querés cambiar texto o colores.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "mil-ventas.gif",
+    "ruta": "con/mil-ventas.gif",
+    "aux": false,
+    "tipo": "imagen",
+    "paginas": [
+     "con/mil-ventas.gif"
+    ]
+   }
+  ]
+ }
+}

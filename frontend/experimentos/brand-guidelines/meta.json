@@ -1,0 +1,47 @@
+{
+ "id": "brand-guidelines",
+ "fecha": "01/10/2026",
+ "prompt": "Hacé un one-pager en HTML (onepager.html, en esta carpeta) que presente la API de Claude a dueños de tiendas online, con los colores y la tipografía de la marca Anthropic. En español argentino.",
+ "entrada": [],
+ "sin": {
+  "skills": [],
+  "segundos": 89,
+  "pasos": 7,
+  "costo": 0.4,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Listo: `onepager.html` está en la carpeta y entra en una sola hoja A4 al imprimirlo o exportarlo a PDF (lo verifiqué renderizándolo en Chrome).\n\n- **Marca:** usé la paleta de Anthropic (fondo crema `#faf9f5`, texto `#141413`, naranja `#d97757` como acento principal, azul `#6a9bcc` y verde `#788c5d` como secundarios), con Poppins para títulos y Lora para el texto. Las fuentes se cargan desde Google Fonts, así que sin conexión cae a Arial y Georgia.\n- **Contenido:** título y bajada, seis usos concretos para una tienda, tres pasos para empezar con un ejemplo de código para mostrarle al desarrollador, cuatro datos clave y el cierre con link a `platform.claude.com`.\n- **Sin logo:** el encabezado dice \"Claude API\" en texto, porque no tenía el archivo oficial del logo y no quise imitarlo.\n- **Sin precios ni cifras:** dice que se paga por uso y que el procesamiento por lotes sale más barato, pero no puse números. Si querés precios concretos, conviene copiarlos de la página oficial al momento de publicarlo.\n\nLos nombres de los modelos (Haiku 4.5, Sonnet 5.5, Opus 5.5) y la frase sobre que los datos de la API no se usan para entrenar por defecto los escribí de memoria, sin cotejarlos contra la documentación actual; revisalos antes de distribuirlo.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "onepager.html",
+    "ruta": "sin/onepager.html",
+    "aux": false,
+    "tipo": "pagina"
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "brand-guidelines",
+   "claude-api"
+  ],
+  "segundos": 81,
+  "pasos": 6,
+  "costo": 0.76,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Listo: el one-pager está en `onepager.html`, en esta carpeta. No lo abrí en un navegador, así que conviene que lo mires antes de compartirlo.\n\n- **Marca:** usa la paleta de Anthropic (oscuro `#141413`, claro `#faf9f5`, los dos grises y los acentos naranja, azul y verde), con Poppins en títulos y Lora en el cuerpo.\n- **Contenido:** en español rioplatense con voseo. Tiene un hero con un chat de ejemplo, seis casos de uso para tiendas, tres pasos para sumarla, tabla de modelos y precios, una sección de \"bueno saberlo\" y el cierre con llamado a la acción.\n- **Formato:** es un solo archivo, se adapta a celular y tiene estilos de impresión.\n\nCosas a revisar:\n\n- **Tipografías:** se cargan desde Google Fonts; sin conexión caen a Arial y Georgia.\n- **Precios:** son los de referencia a septiembre de 2026 (Haiku 4.5 US$ 1/5, Sonnet 5.5 US$ 2/10, Opus 5.5 US$ 4/20 por millón de tokens) y la página lo aclara.\n- **Enlaces:** los botones apuntan a `platform.claude.com`; no verifiqué esa URL, confirmala antes de publicar.\n- **Datos de alta:** \"cargás saldo\" y \"sin contrato ni mínimo mensual\" los escribí sin verificar las condiciones actuales de la cuenta.\n- **Chat de ejemplo:** es inventado (zapatillas, envío a Rosario) y el pie de página lo marca como ilustrativo.\n- **Sin logo:** el encabezado dice \"Anthropic / API de Claude\" en texto, porque la skill no incluye el logo.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "onepager.html",
+    "ruta": "con/onepager.html",
+    "aux": false,
+    "tipo": "pagina"
+   }
+  ]
+ }
+}

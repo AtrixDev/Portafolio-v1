@@ -1,0 +1,48 @@
+{
+ "id": "internal-comms",
+ "fecha": "01/10/2026",
+ "prompt": "Con estas notas sueltas, escribí la actualización semanal para el equipo de e-commerce de Cocina Norte, en update.md en esta carpeta, en español argentino: \"ventas semana +8%, se cayó el catálogo del set de cuchillos 2 días (precio), ya recuperado. Ana terminó 6 publicaciones nuevas. Falta que depósito cargue stock de ollas 24 cm, se agotan el jueves. Martes reunión con la agencia por Black Friday. ACOS promedio 13%.\"",
+ "entrada": [],
+ "sin": {
+  "skills": [],
+  "segundos": 17,
+  "pasos": 2,
+  "costo": 0.12,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "La actualización está en `update.md`. Abre con el stock de las ollas de 24 cm porque es lo único con fecha límite; después van los pendientes y, al final, los resultados de la semana.\n\nNo agregué nada que no estuviera en tus notas, así que quedaron tres cosas sin precisar que quizás quieras completar antes de mandarla:\n\n- **Ventas +8%:** no dice contra qué se compara (semana anterior, misma semana del año pasado).\n- **Reunión del martes:** no tiene hora ni quiénes participan.\n- **Stock de ollas:** no nombra a nadie de depósito como responsable de la carga.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "update.md",
+    "ruta": "sin/update.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "sin/update.md.html"
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "internal-comms"
+  ],
+  "segundos": 23,
+  "pasos": 6,
+  "costo": 0.26,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "La actualización quedó en `update.md`, con el formato 3P de la skill (Progreso / Planes / Problemas):\n\n```\n🍳 E-commerce Cocina Norte (semana al 30/9)\n\nProgreso: Las ventas de la semana subieron 8% y el ACOS promedio quedó en 13%. Ana terminó 6 publicaciones nuevas.\n\nPlanes: El martes nos reunimos con la agencia por Black Friday.\n\nProblemas: Falta que depósito cargue el stock de las ollas de 24 cm; si no se carga antes, se agotan el jueves. El set de cuchillos estuvo 2 días caído del catálogo por un problema de precio y ya está recuperado.\n```\n\nTres cosas que tus notas no decían y que conviene que revises antes de mandarla:\n\n- **Fechas del encabezado:** puse \"semana al 30/9\" tomando la fecha de hoy; cambialo si el período es otro.\n- **Base del +8%:** las notas no aclaran contra qué se compara (semana anterior, misma semana del año pasado), así que lo dejé sin referencia.\n- **Ollas de 24 cm:** interpreté que se agotan el jueves si depósito no carga el stock antes.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "update.md",
+    "ruta": "con/update.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "con/update.md.html"
+   }
+  ]
+ }
+}

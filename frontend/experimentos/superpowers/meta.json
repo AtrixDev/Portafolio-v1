@@ -1,0 +1,41 @@
+{
+ "id": "superpowers",
+ "fecha": "01/10/2026",
+ "prompt": "En precios.js de esta carpeta agregá una función que calcule el precio de venta mínimo para no perder plata en Mercado Libre, teniendo en cuenta costo, comisión, envío a cargo del vendedor, IIBB y el ACOS de la publicidad. Hacelo bien, porque lo vamos a usar para fijar precios reales.",
+ "entrada": [
+  "precios.js"
+ ],
+ "sin": {
+  "skills": [],
+  "segundos": 51,
+  "pasos": 4,
+  "costo": 0.21,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Agregué `precioMinimo` en `precios.js`, debajo de `precioConComision`, que quedó igual. La probé con casos calculados a mano y con 200.000 combinaciones al azar: el precio devuelto nunca da margen negativo y un centavo menos ya pierde. No dejé un archivo de tests en la carpeta.\n\n```js\nprecioMinimo({ costo: 10000, comisionPct: 15, envio: 3000, iibbPct: 3, acosPct: 7 })\n// 17333.34\n```\n\nLa fórmula es `(costo + envio + cargoFijo) / (1 - (comisionPct + iibbPct + acosPct) / 100)`, redondeada para arriba al centavo.\n\n- **Parámetros obligatorios:** los cinco van por nombre y ninguno tiene valor por defecto. Si falta uno o está mal escrito (por ejemplo `acos` en vez de `acosPct`), la función tira error en lugar de asumir 0 y devolver un precio más bajo.\n- **Validaciones:** también tira error con negativos, `NaN`, strings, o si comisión + IIBB + ACOS suman 100% o más.\n- **`cargoFijo`:** es opcional (por defecto 0) y sirve para el cargo fijo por unidad que cobra Mercado Libre en productos baratos.\n\nAntes de usarla para fijar precios, revisá estos supuestos:\n\n- **IVA:** la función no lo calcula. Todos los montos tienen que estar en la misma base (todos con IVA o todos sin IVA).\n- **IIBB:** lo aplico sobre el precio de venta publicado. Si a ustedes se lo retienen sobre el neto sin IVA, hay que pasar la alícuota efectiva sobre el precio final, o el resultado queda algo más alto de lo necesario.\n- **ACOS:** lo cargo a todas las ventas, como si todas vinieran de publicidad. Es el supuesto conservador; si querés repartir el gasto sobre el total de ventas, pasá en `acosPct` el gasto publicitario dividido por las ventas totales.\n- **Envío y cargo fijo:** dependen del precio final (envío gratis obligatorio desde cierto monto, cargo fijo por debajo de otro), y la función no conoce esos umbrales. Si el precio resultante cruza uno, hay que recalcular con los valores que correspondan.\n- **Módulos:** el archivo usa `export` y en la carpeta no hay `package.json`. Con Node 18, que es el que está instalado acá, no se puede importar directo sin `\"type\": \"module\"` o un bundler. Ya era así antes de mi cambio.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "precios.js",
+    "ruta": "sin/precios.js",
+    "aux": false,
+    "tipo": "codigo"
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "brainstorming"
+  ],
+  "segundos": 52,
+  "pasos": 4,
+  "costo": 0.29,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "Leí `precios.js` (una sola función, `precioConComision`) y cargué brainstorming. Todavía no escribí código: la skill exige que apruebes el diseño antes de implementar, y como estos números fijan precios reales, prefiero que confirmes los supuestos.\n\n**Clasificación:** es un cambio acotado (una función en un archivo existente), así que presento el diseño acá en lugar de un spec aparte. Como pediste writing-plans, después de tu OK escribo igual el plan y lo implemento con TDD.\n\n## Diseño propuesto\n\n```js\nprecioMinimoVenta({ costo, comisionPct, envio, iibbPct, acosPct, costoFijo = 0 })\n```\n\n**Fórmula:** `precio = (costo + envio + costoFijo) / (1 − (comisionPct + iibbPct + acosPct) / 100)`\n\nLos tres porcentajes se calculan sobre el precio de venta, por eso van en el divisor y no sumados al costo. Ejemplo: costo 10.000, envío 3.000, comisión 15 %, IIBB 3,5 %, ACOS 8 % → 13.000 / 0,735 = **$17.687,08**.\n\n**Supuestos que cambian el resultado:**\n\n1. **IVA:** no lo modelo. Costo y precio van en la misma base y la función no calcula crédito ni débito fiscal. Si son Responsable Inscripto y quieren el precio con IVA a partir de costos netos, la fórmula cambia.\n2. **IIBB:** `iibbPct` es la alícuota efectiva sobre el precio publicado. Si la tributan sobre el neto de IVA, hay que pasar la alícuota ya ajustada o lo modelo aparte.\n3. **ACOS:** se aplica al 100 % de las ventas, como si todas vinieran de publicidad. Es el supuesto conservador; si prefieren repartir el gasto sobre ventas totales, pasan el TACOS en ese parámetro.\n4. **Costo fijo por unidad de ML:** lo agrego como parámetro opcional (`costoFijo`, por defecto 0). La función no conoce las tablas de ML, que cambian; el monto lo pasan ustedes, igual que el envío.\n\n**Comportamiento:**\n\n- **Redondeo:** hacia arriba al centavo, para que el resultado nunca quede por debajo del punto de equilibrio.\n- **Validación:** lanza error si falta un valor, si alguno es negativo o no numérico, o si los porcentajes suman 100 % o más (ahí no existe precio que cubra los costos).\n- **Parámetros:** van en un objeto y no posicionales como en `precioConComision`, porque con cinco números es fácil invertir dos y no notarlo.\n\n**Archivos:**\n\n- `precios.js`: la función nueva; `precioConComision` no se toca.\n- `precios.test.js`: tests con `node:test`, sin dependencias.\n- `package.json`: mínimo, con `\"type\": \"module\"`. Hace falta porque con Node 18 el `export` de `precios.js` no se puede importar sin eso.\n\n**Tests previstos:** el ejemplo de arriba, que la ganancia al precio devuelto sea ≥ 0 y a un centavo menos sea < 0, cada componente en cero, `costoFijo`, y todos los casos de error.\n\n## Para avanzar\n\n¿Apruebás el diseño así, o corrijo alguno de los cuatro supuestos? El que más puede mover el número es el de IVA e IIBB: decime si son Responsable Inscripto o Monotributo.",
+  "error": null,
+  "archivos": []
+ }
+}

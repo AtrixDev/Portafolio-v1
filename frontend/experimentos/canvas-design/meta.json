@@ -1,0 +1,65 @@
+{
+ "id": "canvas-design",
+ "fecha": "01/10/2026",
+ "prompt": "Diseñá una pieza para Instagram (1080 x 1350 px) anunciando el Hot Sale en la tienda oficial de Cocina Norte: 25% off en ollas y sartenes, del 12 al 14 de mayo, con envío gratis. Guardala como hotsale.png en esta carpeta.",
+ "entrada": [],
+ "sin": {
+  "skills": [],
+  "segundos": 180,
+  "pasos": 10,
+  "costo": 0.58,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "La pieza quedó guardada como `hotsale.png` en esta carpeta, en 1080 × 1350 px.\n\nEl \"25\" es el protagonista, en crema sobre rojo intenso. El signo % está armado con los productos vistos desde arriba: una olla con tapa, una cuchara de madera como barra y una sartén con un huevo frito.\n\n- **Arriba:** \"Cocina Norte\" a la izquierda y \"Tienda oficial\" a la derecha, con \"HOT SALE\" debajo en negro.\n- **Centro:** \"25%\" y, debajo, \"OFF en ollas y sartenes\".\n- **Franja inferior:** \"12 al 14 de mayo\" y \"Envío gratis\" sobre fondo crema.\n\n\"Cocina Norte\" va como texto simple porque no tenía el logo; tampoco puse año ni dirección web. Si me pasás el logo o la URL de la tienda, los incorporo.\n\nEl HTML fuente quedó en `/tmp/cn-work/index.html`, que es una carpeta temporal.",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "hotsale.png",
+    "ruta": "sin/hotsale.png",
+    "aux": false,
+    "tipo": "imagen",
+    "paginas": [
+     "sin/hotsale.png"
+    ]
+   }
+  ]
+ },
+ "con": {
+  "skills": [
+   "canvas-design"
+  ],
+  "segundos": 191,
+  "pasos": 13,
+  "costo": 0.77,
+  "modelos": [
+   "claude-opus-5-5"
+  ],
+  "resumen": "La pieza está lista: `hotsale.png`, 1080 × 1350 px, guardada en esta carpeta.\n\nEs una sartén de hierro vista desde arriba sobre un fondo rojo brasa, con el **25% OFF** en marfil adentro. El mango apunta hacia arriba y parte el titular en **HOT | SALE**; lleva una \"N\" chica, como aguja de brújula, por el nombre de la marca. Alrededor de la sartén hay un dial de 100 marcas con las primeras 25 encendidas. Al pie van los tres datos (ollas y sartenes, 12 al 14 de mayo, envío gratis) y la firma \"Cocina Norte / Tienda oficial\".\n\nTres cosas a tener en cuenta:\n\n- **Logo:** no tenía el logo de Cocina Norte, así que el nombre va compuesto en tipografía. Si me pasás el archivo, lo reemplazo.\n- **Colores:** la paleta (rojo brasa, negro hierro, marfil) la elegí yo; no usa los colores de la marca ni los oficiales del Hot Sale.\n- **Titular:** \"HOT\" y \"SALE\" quedan pegados al mango, así que el margen izquierdo es más ancho que el derecho.\n\nTambién quedaron en la carpeta `filosofia-brasa-cardinal.md` (la filosofía de diseño que pide la skill) y `build_hotsale.py` (el script que genera la imagen, por si querés cambiar textos o fechas).",
+  "error": null,
+  "archivos": [
+   {
+    "nombre": "build_hotsale.py",
+    "ruta": "con/build_hotsale.py",
+    "aux": true,
+    "tipo": "codigo"
+   },
+   {
+    "nombre": "filosofia-brasa-cardinal.md",
+    "ruta": "con/filosofia-brasa-cardinal.md",
+    "aux": false,
+    "tipo": "texto",
+    "vista": "con/filosofia-brasa-cardinal.md.html"
+   },
+   {
+    "nombre": "hotsale.png",
+    "ruta": "con/hotsale.png",
+    "aux": false,
+    "tipo": "imagen",
+    "paginas": [
+     "con/hotsale.png"
+    ]
+   }
+  ]
+ }
+}
