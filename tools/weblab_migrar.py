@@ -261,6 +261,49 @@ def main():
             "ref": {"url": f"prog-ejemplos/patrones/{pid}.html", "antes": d_.get("antes_file", "prog-ejemplos/patrones/_sin-patron.html"), "thumb": f"prog-ejemplos/patrones/{pid}.webp",
                     "cambia": d_["cambia"], "antes_txt": d_["antes"], "sin": "Sin el patrón", "prueba": bool(d_.get("prueba"))}}
 
+    # ejemplos personalizados por tipo de negocio (tools/lab_demos_negocios*.py; Restaurante reutiliza el Brasa del experimento de Impeccable)
+    neg_dir = ROOT / "frontend" / "prog-ejemplos" / "negocios"
+    for f in fichas:
+        lg = f.get("legacy") or {}
+        if lg.get("cat") != "negocios": continue
+        h, w = neg_dir / f"{lg['id']}.html", neg_dir / f"{lg['id']}.webp"
+        if not h.exists() or not w.exists(): raise SystemExit(f"falta el ejemplo del negocio {lg['id']}: corré lab_demos_negocios.py y lab_demos_miniaturas.py --negocios")
+        eid = "ejemplo-negocio-" + lg["id"]
+        evid[eid] = {"id": eid, "tipo": "demo", "titulo": f"Sitio de ejemplo para {f['nombre']}", "origen": "propio",
+                     "descripcion": "Sitio de un negocio inventado, diseñado para este rubro, con su función principal funcionando. Hecho para esta ficha.",
+                     "ref": {"url": f"prog-ejemplos/negocios/{lg['id']}.html", "thumb": f"prog-ejemplos/negocios/{lg['id']}.webp", "solo": True,
+                             "cambia": "Un negocio inventado de este rubro, con identidad propia y su función principal andando. Probala: no es un cliente real."}}
+        f["evidencias"] = [e for e in f["evidencias"] if e != "maqueta-preset"]
+        f["evidencias"].append(eid)
+        f["evidencias"].sort(key=lambda e: 0 if e.startswith("proyecto-") or e.startswith("fn-") else 1)
+
+    # tipos de web: ejemplo propio donde faltaba + tarjetas de ejemplos reales de terceros con un "qué mirar"
+    PROPIO_TIPO = {"landing": ("conversion-optimized", "patrones", "Una landing de una sola acción: la de «Optimizado para conversión»."),
+                   "catalogo": ("comercio", "negocios", "Un catálogo sin carrito: los productos se tocan y el pedido sale armado por WhatsApp."),
+                   "pwa": ("pwa", "negocios", "Una web que se instala como app y avisa cuando no hay internet.")}
+    MIRAR = {"landing": "Fijate qué única acción propone arriba de todo y cómo se repite al final.", "institucional": "Fijate cómo ordena el menú para públicos distintos (clientes, inversores, prensa).",
+             "ecommerce": "Fijate en los filtros del catálogo, la ficha de producto y los pasos de la compra.", "blog": "Fijate cómo organiza las secciones y qué destaca en la portada.",
+             "saas": "Fijate cómo explica los planes y la prueba gratis.", "reservas": "Fijate cómo se busca un profesional y cómo se elige el horario.",
+             "marketplace": "Fijate en el buscador, las categorías y las señales de confianza.", "docs": "Fijate en el buscador, el índice y cómo se llega a una guía concreta."}
+    for f in fichas:
+        lg = f.get("legacy") or {}
+        if lg.get("cat") != "soluciones": continue
+        k = lg["id"]
+        e_ = evid.get("ejemplo-" + f["id"])
+        if e_ and k in MIRAR:
+            tarj = [{"n": n_, "u": u_, "q": MIRAR[k]} for n_, u_ in e_.get("enlaces", []) if str(u_).startswith("http")]
+            if tarj: e_["ref"] = {"tarjetas": tarj}
+        if k in PROPIO_TIPO:
+            pid, carpeta, txt = PROPIO_TIPO[k]
+            arch = ROOT / "frontend" / "prog-ejemplos" / carpeta
+            if not (arch / f"{pid}.html").exists(): raise SystemExit(f"falta el ejemplo propio {carpeta}/{pid}.html")
+            thumb = f"prog-ejemplos/{carpeta}/{pid}.webp" if (arch / f"{pid}.webp").exists() else None
+            eid = "ejemplo-propio-" + k
+            evid[eid] = {"id": eid, "tipo": "demo", "titulo": "Ejemplo propio de este tipo de web", "origen": "propio", "descripcion": txt,
+                         "ref": {"url": f"prog-ejemplos/{carpeta}/{pid}.html", "thumb": thumb, "solo": True, "cambia": txt}}
+            if thumb is None: del evid[eid]["ref"]["thumb"]
+            f["evidencias"].insert(0, eid)
+
     # ── 4) relaciones entre fichas ──
     por_id = {f["id"]: f for f in fichas}
     def agregar(d, t, a):
@@ -322,6 +365,10 @@ def main():
         if not h or h["e"] != "funciona": continue
         eid = "proyecto-herramienta-" + hid
         evid[eid] = {"id": eid, "tipo": "proyecto", "titulo": h["n"], "origen": "propio", "descripcion": "Herramienta pública funcionando (estado declarado en herramientas.html).", "enlaces": [["Verla en Herramientas", f"herramientas.html#{hid}"]]}
+        if LP.CAPTURAS_HERR.get(hid):
+            evid[eid]["ref"] = {"capturas": LP.CAPTURAS_HERR[hid], "nota": "Capturas del sitio publicado: la herramienta funcionando con datos de ejemplo.", "url_preview": LP.CAPTURAS_HERR[hid][0][1]}
+            for _, src in LP.CAPTURAS_HERR[hid]:
+                if not (ROOT / "frontend" / src).exists(): raise SystemExit(f"falta la captura {src}")
         proyectos.append({
             "id": "herramienta-" + hid, "tipo": "proyecto", "subtipo": "herramienta propia", "areas": ["ia-datos"], "temas": ["mercado-libre"], "rubros": [],
             "nivel": None, "valor": None, "valor_origen": "sin clasificar", "valor_estado": "sin clasificar", "nombre": h["n"], "resumen": h["v"],

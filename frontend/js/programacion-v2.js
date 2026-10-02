@@ -168,7 +168,7 @@
       <div class="lb-sg"><p class="wl-group-title">Temas</p><div class="lb-temas">${Object.entries(TEMAS).map(([t, n]) => `<button type="button" class="lb-fb" data-tema="${t}" aria-pressed="${S.f.tema === t}">${n} <small>${temas[t] || 0}</small></button>`).join('')}</div></div>
       <details class="lb-sg lb-leyenda"><summary>Qué significa cada etiqueta</summary>
         <p class="lb-lg-t">Evidencia</p><ul>${Object.entries(EV).map(([k, n]) => `<li><span class="lb-ev" data-k="${k}">${n}</span>${esc(EV_NOTA[k].replace(/^[^:]+: /, ''))}</li>`).join('')}<li><span class="lb-ev" data-k="sin">Sin ejemplo todavía</span>Todavía no tiene nada para ver.</li></ul>
-        <p class="lb-lg-t">Valor</p><ul>${Object.entries(VAL).map(([k, v]) => `<li>${valChip(k, '', true)}${esc(v[2])}</li>`).join('')}<li><span class="wl-val is-prov" data-v="base">Prov.</span>Provisional: criterio todavía sin revisar.</li></ul></details>`;
+        <p class="lb-lg-t">Valor</p><ul>${Object.entries(VAL).map(([k, v]) => `<li>${valChip(k, '', true)}${esc(v[2])}</li>`).join('')}<li><span class="wl-val is-prov" data-v="base">Prov.</span>Propuesta: este valor todavía está en revisión.</li></ul></details>`;
     $('lb-side').innerHTML = h;
   }
 
@@ -256,7 +256,7 @@
     const texto = el => {
       if (el.dataset.tip) return el.dataset.tip;
       if (el.matches('.lb-ev[data-k]')) return el.dataset.k === 'sin' ? 'Todavía no tiene nada para ver.' : EV_NOTA[el.dataset.k] || '';
-      if (el.matches('.wl-val')) { const v = VAL[el.dataset.v]; return v ? v[2] + (el.classList.contains('is-prov') ? ' Provisional: criterio todavía sin revisar.' : '') : ''; }
+      if (el.matches('.wl-val')) { const v = VAL[el.dataset.v]; return v ? v[2] + (el.classList.contains('is-prov') ? ' Propuesta: este valor todavía está en revisión.' : '') : ''; }
       return '';
     };
     const mostrar = el => {
@@ -386,7 +386,9 @@
   function tabsDe(f) {
     const t = [];
     for (const e of evDeFicha(f)) {
-      if (e.tipo === 'demo' && e.ref?.url && e.ref?.antes) {   // demo hecha para la ficha: la misma página sin y con el estilo
+      if (e.tipo === 'demo' && e.ref?.solo) {   // un sitio de ejemplo para tocar (sin comparación)
+        t.push({ k: 'dej', label: 'Sitio de ejemplo', nota: EV_NOTA.demo + ' ' + (e.ref.cambia || ''), html: () => frame(e.ref.url, 'Sitio de ejemplo', true), open: e.ref.url, openLabel: 'Abrir el sitio' });
+      } else if (e.tipo === 'demo' && e.ref?.url && e.ref?.antes) {   // demo hecha para la ficha: la misma página sin y con el estilo
         const extra = e.ref.prueba ? ' Es animada o interactiva: probala en la pestaña «Ejemplo».' : '';
         t.push({ k: 'cmp', label: 'Antes / después', nota: EV_NOTA.demo + (e.ref.antes_txt ? ' Misma oferta, armada de dos maneras: a la izquierda sin el patrón y a la derecha con el patrón. ' + e.ref.antes_txt : ' Misma página y mismo contenido: a la izquierda sin el estilo y a la derecha con el estilo aplicado.') + (e.ref.cambia ? ' ' + e.ref.cambia : '') + extra, html: () => cmpHTML([e.ref.sin || 'Sin el estilo', e.ref.antes], ['Con ' + f.nombre, e.ref.url]), open: e.ref.url });
         t.push({ k: 'dej', label: 'Ejemplo', nota: EV_NOTA.demo + (e.ref.cambia ? ' ' + e.ref.cambia : ''), html: () => frame(e.ref.url, 'Ejemplo', true), open: e.ref.url });
@@ -399,6 +401,8 @@
         const ab = (e.enlaces || []).find(([, u]) => /^https?:/.test(u));
         // Cada proyecto es su propia pestaña (en una funcionalidad o un tipo de web, el nombre del proyecto)
         t.push({ k: 'cap-' + e.id, label: f.tipo === 'proyecto' ? 'Capturas' : f.tipo === 'funcionalidad' ? (e.ref.proyecto || e.titulo) : (e.ref.funcion || e.titulo), nota: (e.ref.nota || EV_NOTA.proyecto), caps: e.ref.capturas, html: () => galeriaHTML(e.ref.capturas), open: ab ? ab[1] : null, openLabel: ab ? ab[0] : '' });
+      } else if (e.tipo === 'ejemplo' && e.ref?.tarjetas?.length) {
+        t.push({ k: 'ej', label: 'Ejemplos reales', nota: EV_NOTA.ejemplo + ' No los puedo mostrar acá adentro: se abren en su sitio.', html: () => `<div class="lb-terc">${e.ref.tarjetas.map(c => `<a class="lb-tcard" href="${esc(c.u)}" target="_blank" rel="noopener"><b>${esc(c.n)}</b><small>${esc(c.u.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''))}</small><span>${esc(c.q)}</span><em>Abrir ↗</em></a>`).join('')}</div>` });
       } else if (e.tipo === 'ejemplo') {
         t.push({ k: 'ej', label: 'Ejemplos de terceros', nota: EV_NOTA.ejemplo, legacy: 'ejemplo' });
       } else if (e.tipo === 'maqueta' && e.id !== 'maqueta-preset') {
@@ -474,7 +478,7 @@
     const tabs = tabsDe(f), solo = !tabs.length;
     const prov = f.valor_estado === 'provisional';
     const v = veredicto(f);
-    const porque = f.valor ? `<p class="lb-porque"><b>${VAL[f.valor][0]}${prov ? ' (provisorio)' : ''}.</b> ${esc(f.valor_porque)}<small>${prov ? '<span class="lb-prov">Provisional/heredado:</span> criterio automático o asignado sin revisar por Darío. ' : 'Validado por Darío. '}${f.valor_revisado ? 'Valor revisado en octubre de 2026.' : ''}</small></p>` : '';
+    const porque = f.valor ? `<p class="lb-porque"><b>${VAL[f.valor][0]}${prov ? ' (propuesta)' : ''}.</b> ${esc(f.valor_porque)}<small>${prov ? '<span class="lb-prov">Valor propuesto:</span> es mi criterio inicial y todavía lo estoy revisando. ' : 'Valor confirmado. '}${f.valor_revisado ? 'Valor revisado en octubre de 2026.' : ''}</small></p>` : '';
     const veredHTML = v && v.key !== 'sin' ? `<section class="lb-porque" style="margin-top:1.3rem"><b>Qué mostró el experimento: ${esc(v.label)}.</b> ${esc(v.texto)}<small><b>Cómo se analizó:</b> mismo prompt, mismo modelo, carpeta vacía y una sola corrida por lado. Se comparan el resultado contra el pedido, el tiempo, el costo y los pasos.</small></section>` : '';
     const extra = f.extra || {};
     const proyecto = f.tipo === 'proyecto' ? `${extra.tecnologias?.length ? `<div><dt>Hecho con</dt><dd><ul class="lb-glos">${extra.tecnologias.map(t => `<li><b>${esc(sinParen(t))}</b>${glosa(t) ? ' ' + esc(glosa(t)) : ''}</li>`).join('')}</ul></dd></div>` : ''}${extra.estado ? `<div><dt>Estado</dt><dd>${esc(extra.estado)}</dd></div>` : ''}${extra.pendiente?.length ? `<div><dt>Pendiente</dt><dd><ul>${extra.pendiente.map(x => `<li>${esc(x)}</li>`).join('')}</ul></dd></div>` : ''}` : '';
@@ -487,7 +491,7 @@
         <h1>${esc(f.nombre)}</h1>${f.resumen ? `<p class="lb-sub">${esc(f.resumen)}</p>` : ''}
         <div class="lb-meta">${valChip(f.valor, f.valor_estado)}${nivChip(f.nivel)}<span class="lb-evs" style="margin:0">${evChips([...new Set(evDeFicha(f).map(e => e.tipo))])}</span><a class="lb-btn is-cta lb-cta" href="contacto.html?asunto=${encodeURIComponent('Quiero algo así: ' + f.nombre)}">Quiero algo así</a></div>
         ${porque}
-        ${f.nucleo_borrador ? '<p class="lb-borrador">Texto escrito como borrador para revisar.</p>' : ''}
+        ${f.nucleo_borrador ? '<p class="lb-borrador">Texto en revisión: puede cambiar.</p>' : ''}
         <dl class="lb-fd">${cuerpo || '<div><dt>Contenido</dt><dd>Todavía sin texto para esta ficha.</dd></div>'}</dl>
         ${veredHTML}${promptHTML(f)}${tecnicoHTML(f)}
       </article>${solo ? '' : '<section class="lb-vw" aria-label="Ejemplo"></section>'}</div>`;

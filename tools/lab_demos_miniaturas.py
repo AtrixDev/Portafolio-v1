@@ -31,7 +31,21 @@ def patrones():
         b.close()
     print(f"OK · {len(P.PATRONES)} miniaturas de patrones")
 
+def negocios():
+    """Miniaturas de los ejemplos por tipo de negocio (--negocios)."""
+    out = Path(__file__).resolve().parent.parent / "frontend" / "prog-ejemplos" / "negocios"
+    with sync_playwright() as p:
+        b = p.chromium.launch(executable_path="/usr/bin/google-chrome", args=["--no-sandbox"])
+        pg = b.new_context(viewport={"width": 1280, "height": 800}, reduced_motion="no-preference").new_page()
+        for f in sorted(out.glob("*.html")):
+            pg.goto(f"http://localhost:8767/prog-ejemplos/negocios/{f.name}", wait_until="load"); pg.wait_for_timeout(2600)
+            pg.screenshot(path=str(TMP / f"n-{f.stem}.png"))
+            Image.open(TMP / f"n-{f.stem}.png").convert("RGB").resize((640, 400), Image.LANCZOS).save(out / f"{f.stem}.webp", "WEBP", quality=78, method=6)
+        b.close()
+    print("OK · miniaturas de negocios")
+
 def main():
+    if "--negocios" in sys.argv: return negocios()
     if "--patrones" in sys.argv: return patrones()
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     ids = args or list(L.STYLES)

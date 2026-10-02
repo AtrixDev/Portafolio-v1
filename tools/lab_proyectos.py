@@ -231,7 +231,6 @@ EJEMPLO_PROPIO = {
     ("soluciones", "saas"): ["ml-tracker"],
     ("soluciones", "dashboard"): ["ml-tracker"],
     ("negocios", "consultorio"): ["odontologia-almagro"],
-    ("negocios", "tienda"): ["tenshi", "tienda-de-coleccionables"],
 }
 # Funciones concretas que ilustran un tipo de web (el id es de una funcionalidad y el proyecto que la muestra)
 EJEMPLO_PROPIO_FN = {
@@ -244,3 +243,17 @@ EJEMPLO_PROPIO_FN = {
 # Dónde se usó de verdad cada servicio o stack: se muestran las capturas del proyecto (o de la función que lo usa, si la hay).
 # Solo figuran en la lista de tecnologías de cada proyecto; el detalle del uso no se afirma más allá de eso.
 USO_FUNCION = {("mercadopago", "tenshi"): "pagos-mercado-pago", ("mercadopago", "tienda-de-coleccionables"): "pagos-mercado-pago"}
+
+
+# Capturas de las 8 herramientas públicas (de herramientas.html y de su página completa, en producción)
+_H = "herramientas/"
+CAPTURAS_HERR = {
+    "auditoria": [["La herramienta con una cuenta de ejemplo", IMG + _H + "auditoria-herramienta.webp"], ["Página donde se conecta la cuenta", IMG + _H + "auditoria-pagina.webp"]],
+    "chequeo": [["Pegás el link de una publicación", IMG + _H + "chequeo-herramienta.webp"]],
+    "simulador": [["Se mueven los criterios y cambia el puntaje", IMG + _H + "simulador-herramienta.webp"]],
+    "diagnostico": [["El catálogo de problemas", IMG + _H + "diagnostico-herramienta.webp"], ["Cómo se detecta y qué hacer", IMG + _H + "diagnostico-pagina.webp"]],
+    "opiniones": [["Ejemplo con 12 opiniones", IMG + _H + "opiniones-herramienta.webp"]],
+    "importacion": [["La herramienta con un caso de ejemplo", IMG + _H + "importacion-herramienta.webp"], ["Página completa", IMG + _H + "importacion-pagina.webp"]],
+    "informe": [["Vista previa del informe", IMG + _H + "informe-herramienta.webp"], ["Informe de muestra completo", IMG + _H + "informe-pagina.webp"]],
+    "perdida": [["La herramienta con un caso de ejemplo", IMG + _H + "perdida-herramienta.webp"], ["Página completa", IMG + _H + "perdida-pagina.webp"]],
+}

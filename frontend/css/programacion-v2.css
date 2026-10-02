@@ -363,3 +363,13 @@ a.lb-link { text-decoration: underline; text-decoration-color: var(--accent-line
 .lb-sbar-n:empty { display: none; }
 @media (max-width: 640px) { .lb-sbar-n { display: none; } .lb-s2 { flex: 1 1 auto; } }
 .lb-s2 input[type=search]::-webkit-search-cancel-button, .lb-s2 input[type=search]::-webkit-search-decoration { -webkit-appearance: none; appearance: none; display: none; }
+
+/* ── Ejemplos reales de terceros: tarjetas con "qué mirar" ── */
+.lb-terc { display: grid; gap: .7rem; }
+.lb-tcard { display: grid; gap: .25rem; padding: 1rem 1.1rem; border-radius: 14px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line-strong); color: var(--text); text-decoration: none; transition: transform .16s var(--ease-out), box-shadow .16s; }
+.lb-tcard b { font: 750 1.15rem var(--font-display); letter-spacing: -.02em; }
+.lb-tcard small { font: 500 .78rem var(--font-mono); color: var(--muted); }
+.lb-tcard span { font-size: .9rem; line-height: 1.45; color: var(--text-2); margin-top: .2rem; }
+.lb-tcard em { font: 700 .82rem var(--font-sans); font-style: normal; color: var(--accent-text); margin-top: .2rem; }
+.lb-tcard:active { transform: scale(.985); }
+@media (hover: hover) { .lb-tcard:hover { box-shadow: inset 0 0 0 1.5px var(--accent-line), var(--shadow-card); transform: translateY(-2px); } }
