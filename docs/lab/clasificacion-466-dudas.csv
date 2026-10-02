@@ -1,0 +1,158 @@
+﻿gravedad,tipo_duda,coleccion,id,nombre,motivo
+alta,estilo-estructura,estilos,conversion-optimized,Optimizado para conversión,Se propone tratarlo como patrón de página con 'variante_de'. Confirmar equivalente: funnel-3-step-conversion
+alta,estilo-estructura,estilos,feature-rich-showcase,Vidriera de funcionalidades,Se propone tratarlo como patrón de página con 'variante_de'. Confirmar equivalente: feature-rich-showcase
+alta,estilo-estructura,estilos,hero-centric-design,Diseño centrado en el hero,Se propone tratarlo como patrón de página con 'variante_de'. Confirmar equivalente: hero-centric-design
+alta,estilo-estructura,estilos,interactive-product-demo,Demo interactiva del producto,Se propone tratarlo como patrón de página con 'variante_de'. Confirmar equivalente: product-demo-features
+alta,estilo-estructura,estilos,minimal-direct,Mínimo y directo,Se propone tratarlo como patrón de página con 'variante_de'. Confirmar equivalente: minimal-single-column
+alta,estilo-estructura,estilos,social-proof-focused,Centrado en prueba social,Se propone tratarlo como patrón de página con 'variante_de'. Confirmar equivalente: hero-testimonials-cta
+alta,estilo-estructura,estilos,storytelling-driven,Guiado por el storytelling,Se propone tratarlo como patrón de página con 'variante_de'. Confirmar equivalente: scroll-triggered-storytelling
+alta,estilo-estructura,estilos,trust-authority,Confianza y autoridad,Se propone tratarlo como patrón de página con 'variante_de'. Confirmar equivalente: trust-authority-conversion
+alta,id-repetido,estilos,feature-rich-showcase,Vidriera de funcionalidades,"Mismo id en ['estilos', 'landing']; se propone sufijo por subtipo"
+alta,id-repetido,estilos,hero-centric-design,Diseño centrado en el hero,"Mismo id en ['estilos', 'landing']; se propone sufijo por subtipo"
+alta,id-repetido,landing,feature-rich-showcase,Vidriera de funcionalidades,"Mismo id en ['estilos', 'landing']; se propone sufijo por subtipo"
+alta,id-repetido,landing,hero-centric-design,Diseño centrado en el hero,"Mismo id en ['estilos', 'landing']; se propone sufijo por subtipo"
+alta,id-repetido,servicios,claude-api,Claude API (Anthropic),"Mismo id en ['servicios', 'skills']; se propone sufijo por subtipo"
+alta,id-repetido,skills,claude-api,Claude API,"Mismo id en ['servicios', 'skills']; se propone sufijo por subtipo"
+alta,negocio-rubro-a-confirmar,negocios,construccion,"Constructora, arquitectura o reformas","Equivalentes propuestos: construction-architecture, architecture-interior"
+alta,negocio-rubro-a-confirmar,negocios,consultorio,Consultorio médico u odontológico,"Equivalentes propuestos: medical-clinic, dental-practice"
+alta,negocio-rubro-a-confirmar,negocios,delivery,"Rotisería, delivery o dark kitchen",Equivalentes propuestos: food-delivery-on-demand
+alta,negocio-rubro-a-confirmar,negocios,educacion,"Instituto, cursos o clases particulares","Equivalentes propuestos: online-course-e-learning, educational-app"
+alta,negocio-rubro-a-confirmar,negocios,estetica,"Peluquería, barbería o centro de estética",Equivalentes propuestos: beauty-spa-wellness-service
+alta,negocio-rubro-a-confirmar,negocios,estudio,Estudio contable o jurídico,Equivalentes propuestos: legal-services
+alta,negocio-rubro-a-confirmar,negocios,eventos,"Salón de eventos, catering o fotografía","Equivalentes propuestos: wedding-event-planning, event-management, photography-studio"
+alta,negocio-rubro-a-confirmar,negocios,gimnasio,"Gimnasio, box o estudio de yoga",Equivalentes propuestos: fitness-gym-app
+alta,negocio-rubro-a-confirmar,negocios,hogar,"Plomero, electricista o aire acondicionado",Equivalentes propuestos: home-services-plumber-electrician
+alta,negocio-rubro-a-confirmar,negocios,inmobiliaria,Inmobiliaria,Equivalentes propuestos: real-estate-property
+alta,negocio-rubro-a-confirmar,negocios,profesional,Profesional independiente,"Equivalentes propuestos: portfolio-personal, b2b-service"
+alta,negocio-rubro-a-confirmar,negocios,restaurante,"Restaurante, bar o café","Equivalentes propuestos: restaurant-food-service, bakery-cafe, brewery-winery"
+alta,negocio-rubro-a-confirmar,negocios,tienda,Marca que vende en Mercado Libre,"Equivalentes propuestos: e-commerce, e-commerce-luxury"
+alta,negocio-rubro-a-confirmar,negocios,turismo,"Cabañas, hotel boutique o turismo","Equivalentes propuestos: hotel-hospitality, travel-tourism-agency"
+alta,negocio-rubro-a-confirmar,negocios,veterinaria,Veterinaria y pet shop,Equivalentes propuestos: veterinary-clinic
+alta,valor-contradice-a-Dario,skills,ui-ux-pro-max,UI UX Pro Max,Darío dijo 'base' y el dato actual es 'pro'
+media,estilo-panel,estilos,comparative-analysis-dashboard,Dashboard comparativo,Se propone 'patrón de panel' relacionado con el tipo de web Dashboard / panel de gestión
+media,estilo-panel,estilos,data-dense-dashboard,Dashboard denso en datos,Se propone 'patrón de panel' relacionado con el tipo de web Dashboard / panel de gestión
+media,estilo-panel,estilos,drill-down-analytics,Analítica con drill-down,Se propone 'patrón de panel' relacionado con el tipo de web Dashboard / panel de gestión
+media,estilo-panel,estilos,executive-dashboard,Dashboard ejecutivo,Se propone 'patrón de panel' relacionado con el tipo de web Dashboard / panel de gestión
+media,estilo-panel,estilos,financial-dashboard,Dashboard financiero,Se propone 'patrón de panel' relacionado con el tipo de web Dashboard / panel de gestión
+media,estilo-panel,estilos,heat-map-heatmap-style,Mapa de calor,Se propone 'patrón de panel' relacionado con el tipo de web Dashboard / panel de gestión
+media,estilo-panel,estilos,predictive-analytics,Analítica predictiva,Se propone 'patrón de panel' relacionado con el tipo de web Dashboard / panel de gestión
+media,estilo-panel,estilos,real-time-monitoring,Monitoreo en tiempo real,Se propone 'patrón de panel' relacionado con el tipo de web Dashboard / panel de gestión
+media,estilo-panel,estilos,sales-intelligence-dashboard,Dashboard de inteligencia comercial,Se propone 'patrón de panel' relacionado con el tipo de web Dashboard / panel de gestión
+media,estilo-panel,estilos,user-behavior-analytics,Analítica de comportamiento de usuarios,Se propone 'patrón de panel' relacionado con el tipo de web Dashboard / panel de gestión
+media,estilo-sin-colores,estilos,accessible-ethical,Accesible y ético,No define colores propios (sigue clasificado como estilo visual: revisar si lo es)
+media,estilo-sin-colores,estilos,flat-design,Diseño flat,No define colores propios (sigue clasificado como estilo visual: revisar si lo es)
+media,estilo-sin-colores,estilos,inclusive-design,Diseño inclusivo,No define colores propios (sigue clasificado como estilo visual: revisar si lo es)
+media,estilo-sin-colores,estilos,interactive-cursor-design,Diseño con cursor interactivo,No define colores propios (sigue clasificado como estilo visual: revisar si lo es)
+media,estilo-sin-colores,estilos,kinetic-typography,Tipografía cinética,No define colores propios (sigue clasificado como estilo visual: revisar si lo es)
+media,estilo-sin-colores,estilos,liquid-glass,Liquid Glass,No define colores propios (sigue clasificado como estilo visual: revisar si lo es)
+media,estilo-sin-colores,estilos,parallax-storytelling,Storytelling con parallax,No define colores propios (sigue clasificado como estilo visual: revisar si lo es)
+media,estilo-sin-colores,estilos,pixel-art,Pixel art,No define colores propios (sigue clasificado como estilo visual: revisar si lo es)
+media,estilo-sin-colores,estilos,skeuomorphism,Esqueuomorfismo,No define colores propios (sigue clasificado como estilo visual: revisar si lo es)
+media,id-repetido,rubros,financial-dashboard,Dashboard financiero,Mismo id que una ficha; los rubros viven en su propio espacio 'rubro:'
+media,negocio-sin-rubro,negocios,comercio,Comercio de barrio con catálogo,Sin rubro equivalente en la lista de 95 (queda como solución sin faceta)
+media,nombre-casi-igual,estilos,bento-box-grid,Grilla bento,Parecido a estilos/bento-grids (Grillas bento) — similitud 0.96
+media,nombre-casi-igual,estilos,brutalism,Brutalismo,Parecido a estilos/neubrutalism (Neobrutalismo) — similitud 0.87
+media,nombre-casi-igual,estilos,feature-rich-showcase,Vidriera de funcionalidades,Parecido a landing/feature-rich-showcase (Vidriera de funcionalidades) — similitud 1.00
+media,nombre-casi-igual,estilos,hero-centric-design,Diseño centrado en el hero,Parecido a landing/hero-centric-design (Diseño centrado en el hero) — similitud 1.00
+baja,area-doble,servicios,sanity,Sanity,Servicio que también sirve para construir webs; confirmar segunda área
+baja,area-doble,servicios,tiendanube,Tienda Nube,Servicio que también sirve para construir webs; confirmar segunda área
+baja,area-doble,servicios,wordpress,WordPress,Servicio que también sirve para construir webs; confirmar segunda área
+baja,area-doble,stacks,shadcn,shadcn/ui,Librería de estilos: ¿Programación o Desarrollo web? (hoy van en Stacks)
+baja,area-doble,stacks,tailwind,Tailwind CSS,Librería de estilos: ¿Programación o Desarrollo web? (hoy van en Stacks)
+baja,valor-nivel-raro,soluciones,ecommerce,E-commerce / tienda online,Imprescindible con nivel Avanzado
+baja,valor-nivel-raro,ux,92-disclaimer,Aviso,Imprescindible con nivel Avanzado
+informativa,estilo-sin-colores,estilos,comparative-analysis-dashboard,Dashboard comparativo,No define colores propios (ya marcado como estructura/panel: coincide con que no es un estilo visual)
+informativa,estilo-sin-colores,estilos,conversion-optimized,Optimizado para conversión,No define colores propios (ya marcado como estructura/panel: coincide con que no es un estilo visual)
+informativa,estilo-sin-colores,estilos,drill-down-analytics,Analítica con drill-down,No define colores propios (ya marcado como estructura/panel: coincide con que no es un estilo visual)
+informativa,estilo-sin-colores,estilos,executive-dashboard,Dashboard ejecutivo,No define colores propios (ya marcado como estructura/panel: coincide con que no es un estilo visual)
+informativa,estilo-sin-colores,estilos,feature-rich-showcase,Vidriera de funcionalidades,No define colores propios (ya marcado como estructura/panel: coincide con que no es un estilo visual)
+informativa,estilo-sin-colores,estilos,hero-centric-design,Diseño centrado en el hero,No define colores propios (ya marcado como estructura/panel: coincide con que no es un estilo visual)
+informativa,estilo-sin-colores,estilos,interactive-product-demo,Demo interactiva del producto,No define colores propios (ya marcado como estructura/panel: coincide con que no es un estilo visual)
+informativa,estilo-sin-colores,estilos,minimal-direct,Mínimo y directo,No define colores propios (ya marcado como estructura/panel: coincide con que no es un estilo visual)
+informativa,estilo-sin-colores,estilos,predictive-analytics,Analítica predictiva,No define colores propios (ya marcado como estructura/panel: coincide con que no es un estilo visual)
+informativa,estilo-sin-colores,estilos,sales-intelligence-dashboard,Dashboard de inteligencia comercial,No define colores propios (ya marcado como estructura/panel: coincide con que no es un estilo visual)
+informativa,estilo-sin-colores,estilos,social-proof-focused,Centrado en prueba social,No define colores propios (ya marcado como estructura/panel: coincide con que no es un estilo visual)
+informativa,estilo-sin-colores,estilos,storytelling-driven,Guiado por el storytelling,No define colores propios (ya marcado como estructura/panel: coincide con que no es un estilo visual)
+informativa,estilo-sin-colores,estilos,trust-authority,Confianza y autoridad,No define colores propios (ya marcado como estructura/panel: coincide con que no es un estilo visual)
+informativa,estilo-sin-colores,estilos,user-behavior-analytics,Analítica de comportamiento de usuarios,No define colores propios (ya marcado como estructura/panel: coincide con que no es un estilo visual)
+informativa,sin-evidencia,servicios,clarity,Microsoft Clarity,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,claude-api,Claude API (Anthropic),No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,clerk,Clerk,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,cloudflare-pages,Cloudflare Pages,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,cloudinary,Cloudinary,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,firebase,Firebase,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,formspree,Formspree,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,ga4,Google Analytics 4,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,github-pages,GitHub Pages,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,groq,Groq,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,mercadopago,Mercado Pago,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,mongodb-atlas,MongoDB Atlas,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,netlify,Netlify,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,nic-ar,NIC Argentina,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,plausible,Plausible,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,railway,Railway,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,render,Render,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,resend,Resend,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,sanity,Sanity,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,sentry,Sentry,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,stripe,Stripe,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,supabase,Supabase,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,tiendanube,Tienda Nube,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,vercel,Vercel,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,servicios,wordpress,WordPress,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,skills,claude-ads,Claude Ads,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,skills,grill-me,Grill Me,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,skills,image,Image,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,skills,remotion,Remotion Best Practices,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,skills,video,Video,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,soluciones,catalogo,Catálogo sin carrito,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,soluciones,pwa,PWA (web instalable),No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,16-overflow-hidden,Overflow hidden,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,17-fixed-positioning,Posición fija,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,18-stacking-context,Contexto de apilamiento,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,2-sticky-navigation,Navegación fija,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,20-viewport-units,Unidades de viewport,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,21-container-width,Ancho del contenedor,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,23-touch-spacing,Separación táctil,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,24-gesture-conflicts,Conflicto de gestos,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,25-tap-delay,Demora al tocar,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,26-pull-to-refresh,Deslizar para actualizar,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,29-hover-states,Estados hover,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,3-active-state,Estado activo,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,30-active-states,Estados activos,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,31-disabled-states,Estados deshabilitados,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,34-success-feedback,Feedback de éxito,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,39-heading-hierarchy,Jerarquía de títulos,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,42-screen-reader,Lector de pantalla,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,45-skip-links,Links para saltear,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,5-deep-linking,Links profundos,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,55-error-placement,Ubicación del error,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,56-inline-validation,Validación en línea,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,57-input-types,Tipos de campo,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,58-autofill-support,Soporte de autocompletado,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,59-required-indicators,Indicador de obligatorio,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,6-breadcrumbs,Breadcrumbs,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,60-password-visibility,Ver la contraseña,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,62-input-affordance,Aspecto de campo,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,63-mobile-keyboards,Teclados mobile,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,64-mobile-first,Mobile primero,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,65-breakpoint-testing,Prueba de breakpoints,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,70-image-scaling,Escalado de imágenes,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,71-table-handling,Manejo de tablas,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,72-line-height,Interlineado,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,73-line-length,Largo de línea,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,74-font-size-scale,Escala de tamaños,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,77-heading-clarity,Claridad de los títulos,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,79-empty-states,Estados vacíos,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,80-error-recovery,Recuperación de errores,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,81-progress-indicators,Indicadores de progreso,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,82-toast-notifications,Notificaciones toast,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,83-confirmation-messages,Mensajes de confirmación,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,84-truncation,Truncado,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,85-date-formatting,Formato de fecha,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,86-number-formatting,Formato de números,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,87-placeholder-content,Contenido de ejemplo,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,88-user-freedom,Libertad del usuario,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,89-autocomplete,Autocompletado,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,90-no-results,Sin resultados,No tiene ninguna evidencia detectada
+informativa,sin-evidencia,ux,97-asset-weight,Peso de los recursos,No tiene ninguna evidencia detectada

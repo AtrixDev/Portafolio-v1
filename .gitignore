@@ -28,3 +28,6 @@ tools/.ml-perfil/
 
 # Bocetos y propuestas de diseño (solo locales)
 _propuestas/
+tools/lab_proyectos_privado.py
+docs/lab/proyectos-verificables.md
+docs/lab/casos-ambiguos.md
