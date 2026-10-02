@@ -22,7 +22,7 @@ NAV_ITEMS = [  # (id, texto, href)
     ("herramientas", "Herramientas", "herramientas.html"),
     ("lab", "Lab ML", "lab.html"),
     ("sistema", "Sistema", "sistema.html"),
-    ("programacion", "Programación", "programacion.html"),
+    ("programacion", "Base de datos", "programacion.html"),
     ("web", "Revisá tu web", "web.html"),
     ("contacto", "Contacto", "contacto.html"),
 ]

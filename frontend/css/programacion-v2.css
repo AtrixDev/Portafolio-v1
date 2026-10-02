@@ -335,7 +335,7 @@ a.lb-link { text-decoration: underline; text-decoration-color: var(--accent-line
 .lb-gal-main img { width: 100%; height: auto; max-height: calc(100vh - var(--nav-h, 64px) - var(--lb-bar, 52px) - 16rem); object-fit: contain; }
 @media (max-width: 1000px) { .lb-gal-main img { max-height: none; } }
 /* ── Carita feliz ── */
-.lb-cara { display: inline-block; width: 30px; height: 30px; margin-left: .35rem; vertical-align: -9px; transform-origin: 50% 85%; filter: drop-shadow(0 2px 3px rgba(120,80,0,.25)); animation: lb-hola 1.3s var(--ease-out) .6s 1 both; }
+.lb-cara { display: inline-block; margin-left: .45rem; font: 700 1.7rem/1 var(--font-sans); letter-spacing: 0; text-transform: none; color: var(--text); vertical-align: -4px; transform-origin: 50% 85%; animation: lb-hola 1.3s var(--ease-out) .6s 1 both; }
 .lb-top-t:hover .lb-cara { animation: lb-hola .9s var(--ease-out) 1 both; }
 @keyframes lb-hola { 0% { transform: rotate(0); } 25% { transform: rotate(-14deg) scale(1.12); } 50% { transform: rotate(10deg) scale(1.12); } 75% { transform: rotate(-6deg); } 100% { transform: rotate(0); } }
 @media (prefers-reduced-motion: reduce) { .lb-cara, .lb-top-t:hover .lb-cara { animation: none; } }
