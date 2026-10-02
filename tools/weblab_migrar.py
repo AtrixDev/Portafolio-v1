@@ -485,8 +485,8 @@ def validar(datos, fichas, proyectos, funcs, rubros_out, legacy, rel, fusionadas
         for e in lista:
             f = por_id[nid[(col, e["id"])]]
             blob = json.dumps([f["nucleo"], f["tecnico"], f["reutilizable"], f["extra"]], ensure_ascii=False)
-            if f["nombre"] != e["name"] and not (col == "estilos" and e["id"] in FUSIONAR_ESTILO_EN_LANDING): fallos.append(f"nombre cambiado {col}/{e['id']}")
-            if (f["resumen"] or "") != (e.get("summary") or "") and col != "estilos" and not f.get("nucleo_borrador"): fallos.append(f"resumen cambiado {col}/{e['id']}")
+            if f["nombre"] != e["name"] and (col, e["id"]) not in VT.TEXTOS and not (col == "estilos" and e["id"] in FUSIONAR_ESTILO_EN_LANDING): fallos.append(f"nombre cambiado {col}/{e['id']}")
+            if (col, e["id"]) not in VT.TEXTOS and (f["resumen"] or "") != (e.get("summary") or "") and col != "estilos" and not f.get("nucleo_borrador"): fallos.append(f"resumen cambiado {col}/{e['id']}")
             if f.get("nucleo_borrador") and (e.get("summary") or "") not in blob and (e.get("summary") or "") != (f["resumen"] or ""): fallos.append(f"resumen original perdido {col}/{e['id']}")
             for k, v in e.get("fields", []):
                 if json.dumps(v, ensure_ascii=False)[1:-1] not in blob and not (col == "estilos" and e["id"] in FUSIONAR_ESTILO_EN_LANDING):
