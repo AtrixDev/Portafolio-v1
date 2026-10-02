@@ -598,6 +598,70 @@
     let t; const sync = v => { $('lb-q').value = v; $('lb-q2').value = v; $('lb-s2x').hidden = !v; };
     const onQ = e => { sync(e.target.value); clearTimeout(t); t = setTimeout(() => { S.q = e.target.value; if (!$('lb-base').hidden) renderBase(); else location.hash = '#/'; }, 140); };
     $('lb-q').addEventListener('input', onQ); $('lb-q2').addEventListener('input', onQ);
+    // ── Sugerencias al escribir: lo mejor primero, con sinónimos, teclado y atajos cuando el cuadro está vacío ──
+    const SINON = { turnos: ['agenda', 'reserva', 'citas', 'calendario'], turno: ['agenda', 'reserva', 'citas'], pagos: ['mercado pago', 'checkout', 'cobro'], pago: ['mercado pago', 'checkout', 'cobro'], cobrar: ['mercado pago', 'checkout'], tienda: ['ecommerce', 'carrito', 'catalogo'], vender: ['ecommerce', 'tienda', 'carrito'], web: ['sitio', 'pagina', 'landing'], pagina: ['landing', 'sitio'], whatsapp: ['mensaje', 'contacto'], google: ['seo', 'posicionamiento', 'analytics'], buscar: ['seo', 'buscador'], rapido: ['rendimiento', 'velocidad'], lento: ['rendimiento'], seguro: ['seguridad'], diseno: ['estilo', 'ui', 'glassmorphism'], ia: ['inteligencia artificial', 'skill', 'claude'], ml: ['mercado libre'], meli: ['mercado libre'], opiniones: ['resenas', 'reviews'], resenas: ['opiniones', 'reviews'], precio: ['precios', 'costos'], cliente: ['crm', 'contacto'] };
+    const POP = [['turnos', 'Turnos y agenda'], ['mercado pago', 'Cobrar con Mercado Pago'], ['tienda', 'Tienda online'], ['whatsapp', 'WhatsApp'], ['seo', 'Aparecer en Google'], ['glassmorphism', 'Estilos de diseño']];
+    const sugBox = id => { const el = document.createElement('div'); el.className = 'lb-sug'; el.id = id; el.setAttribute('role', 'listbox'); el.hidden = true; return el; };
+    const ALIAS = { blog: 'seo geo google posicionamiento buscadores articulos trafico', 'blog-con-editor': 'seo google articulos', ga4: 'analytics metricas estadisticas visitas', mercadopago: 'cobrar cobro pagos checkout cuotas', 'cuentas-de-cliente': 'login usuarios registro' };
+    const hay = f => norm(`${f.n} ${f.d} ${ALIAS[f.id] || ''} ${f.id.replace(/-/g, ' ')} ${f.s} ${TIPOS[f.t]} ${f.tm.map(t => TEMAS[t]).join(' ')}`);
+    const puntaje = (f, ws) => {
+      const n = norm(f.n), h = hay(f); let pts = 0;
+      for (const w of ws) {
+        const alts = [w, ...(SINON[w] || []).map(norm)];
+        let mejor = 0;
+        alts.forEach((x, k) => { const peso = k ? .6 : 1;
+          if (n === x) mejor = Math.max(mejor, 10 * peso); else if (n.startsWith(x)) mejor = Math.max(mejor, 8 * peso);
+          else if (new RegExp('\\b' + x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).test(n)) mejor = Math.max(mejor, 6 * peso);
+          else if (x.length > 3 && n.includes(x)) mejor = Math.max(mejor, 4 * peso); else if (x.length > 3 ? h.includes(x) : new RegExp('\\b' + x).test(h)) mejor = Math.max(mejor, 2 * peso); });
+        if (!mejor) return 0; pts += mejor;
+      }
+      return pts + (VRANK[f.v] === 0 ? .4 : 0) + (f.e.length ? .3 : 0);
+    };
+    const buscarSug = q => {
+      const ws = norm(q.trim()).split(/\s+/).filter(Boolean); if (!ws.length) return { l: [], n: 0 };
+      const l = S.idx.map(f => [f, puntaje(f, ws)]).filter(x => x[1] > 0).sort((a, b) => b[1] - a[1] || a[0].n.localeCompare(b[0].n, 'es'));
+      return { l: l.map(x => x[0]), n: l.length, ws };
+    };
+    const marca = (txt, ws) => {
+      const base = Array.from(txt), nn = base.map(c => norm(c) || c); const mk = new Array(base.length).fill(false);
+      const flat = nn.join('');
+      if (flat.length === base.length) ws.forEach(w => { let i = flat.indexOf(w); while (i > -1) { for (let k = i; k < i + w.length; k++) mk[k] = true; i = flat.indexOf(w, i + w.length); } });
+      let o = '', abre = false; base.forEach((c, i) => { if (mk[i] && !abre) { o += '<mark>'; abre = true; } if (!mk[i] && abre) { o += '</mark>'; abre = false; } o += esc(c); }); return o + (abre ? '</mark>' : '');
+    };
+    const areaN = f => (AREAS.find(a => a[0] === f.a[0]) || [0, ''])[1];
+    const fila = (f, ws, i) => `<a class="lb-sug-i" role="option" id="sug-${i}" href="#/f/${encodeURIComponent(f.id)}" data-i="${i}">
+      ${f.p ? `<img src="${esc(f.p)}" alt="" loading="lazy" decoding="async" width="56" height="40">` : `<span class="lb-sug-ph">${ic(AREA_IC[f.a[0]] || IC.todo)}</span>`}
+      <span class="lb-sug-t"><b>${marca(f.n, ws)}</b><small>${esc(TIPOS[f.t])} · ${esc(areaN(f))}</small></span><span class="lb-sug-go" aria-hidden="true">→</span></a>`;
+    const pintar = (box, q) => {
+      if (!q.trim()) { box.innerHTML = `<p class="lb-sug-h">Lo que más se busca</p><div class="lb-sug-pop">${POP.map(([k, n]) => `<button type="button" class="lb-sug-chip" data-q="${esc(k)}">${esc(n)}</button>`).join('')}</div><p class="lb-sug-f">Escribí lo que necesitás: una función, una herramienta o tu rubro.</p>`; return; }
+      const r = buscarSug(q);
+      if (!r.n) { box.innerHTML = `<p class="lb-sug-h">No encontré “${esc(q.trim())}”</p><p class="lb-sug-f">Probá con otra palabra, o con alguno de estos:</p><div class="lb-sug-pop">${POP.map(([k, n]) => `<button type="button" class="lb-sug-chip" data-q="${esc(k)}">${esc(n)}</button>`).join('')}</div>`; return; }
+      box.innerHTML = `<p class="lb-sug-h">${r.n} ${r.n === 1 ? 'resultado' : 'resultados'}</p>${r.l.slice(0, 6).map((f, i) => fila(f, r.ws, i)).join('')}${r.n > 6 ? `<button type="button" class="lb-sug-all" data-all="1">Ver los ${r.n} resultados en la base →</button>` : ''}`;
+    };
+    [['lb-q', 'lb-sug1'], ['lb-q2', 'lb-sug2']].forEach(([inId, boxId]) => {
+      const inp = $(inId), box = sugBox(boxId), cont = inp.closest('.wl-search'); cont.appendChild(box); inp.setAttribute('aria-controls', boxId); inp.setAttribute('aria-expanded', 'false');
+      let act = -1;
+      const abrir = () => { pintar(box, inp.value); box.hidden = false; act = -1; inp.setAttribute('aria-expanded', 'true'); };
+      const cerrar = () => { box.hidden = true; act = -1; inp.setAttribute('aria-expanded', 'false'); inp.removeAttribute('aria-activedescendant'); };
+      const items = () => [...box.querySelectorAll('.lb-sug-i')];
+      const marcar = n => { const it = items(); it.forEach(x => x.classList.remove('is-act')); if (n >= 0 && it[n]) { it[n].classList.add('is-act'); inp.setAttribute('aria-activedescendant', it[n].id); it[n].scrollIntoView({ block: 'nearest' }); } act = n; };
+      inp.addEventListener('focus', abrir); inp.addEventListener('input', () => { pintar(box, inp.value); box.hidden = false; act = -1; });
+      inp.addEventListener('keydown', e => {
+        const it = items();
+        if (e.key === 'ArrowDown' && it.length) { e.preventDefault(); if (box.hidden) abrir(); marcar((act + 1) % it.length); }
+        else if (e.key === 'ArrowUp' && it.length) { e.preventDefault(); marcar((act - 1 + it.length) % it.length); }
+        else if (e.key === 'Enter') { if (act >= 0 && it[act]) { e.preventDefault(); const href = it[act].getAttribute('href'); cerrar(); inp.blur(); location.hash = href; } else { cerrar(); irAResultados(); } }
+        else if (e.key === 'Escape' && !box.hidden) { e.stopPropagation(); cerrar(); }
+      });
+      box.addEventListener('mousedown', e => e.preventDefault());
+      box.addEventListener('click', e => {
+        const c = e.target.closest('[data-q]'); if (c) { sync(c.dataset.q); S.q = c.dataset.q; inp.value = c.dataset.q; pintar(box, c.dataset.q); if (!$('lb-base').hidden) renderBase(); return; }
+        if (e.target.closest('[data-all]')) { cerrar(); irAResultados(); return; }
+        if (e.target.closest('.lb-sug-i')) cerrar();
+      });
+      inp.addEventListener('blur', () => setTimeout(cerrar, 120));
+    });
+    function irAResultados() { const h = $('lb-head'); if (!h) return; S.q = $('lb-q').value; renderBase(); h.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth', block: 'start' }); }
     $('lb-s2x').addEventListener('click', () => { sync(''); S.q = ''; renderBase(); $('lb-q2').focus(); });
     document.addEventListener('click', e => {
       const o = e.target.closest('[data-open]'); if (o) { location.hash = '#/f/' + encodeURIComponent(o.dataset.open); return; }
