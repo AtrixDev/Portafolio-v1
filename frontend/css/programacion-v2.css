@@ -328,3 +328,23 @@ a.lb-link { text-decoration: underline; text-decoration-color: var(--accent-line
 .lb-glos { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
 .lb-glos li { line-height: 1.5; color: var(--text-2); }
 .lb-glos b { color: var(--text); }
+
+/* ── Capturas: todas a la vista ── */
+.lb-gal { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem .8rem; }
+.lb-shot { margin: 0; display: grid; gap: .4rem; }
+.lb-shot.is-first { grid-column: 1 / -1; }
+.lb-shot a { display: block; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-md), inset 0 0 0 1px var(--line-strong); background: var(--surface-2); }
+.lb-shot img { display: block; width: 100%; height: auto; transition: transform .4s var(--ease-out); }
+@media (hover: hover) { .lb-shot a:hover img { transform: scale(1.02); } }
+.lb-shot figcaption { font: 600 .82rem var(--font-sans); color: var(--text); }
+@media (max-width: 640px) { .lb-gal { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .lb-shot img { transition: none; } }
+#lb-ficha .lb-vw:has(.lb-gal) { position: static; height: auto; }
+#lb-ficha .lb-vw:has(.lb-gal) .lb-stage { overflow: visible; }
+
+/* ── Carita feliz ── */
+.lb-cara { display: inline-block; width: 18px; height: 18px; margin-left: .25rem; vertical-align: -4px; transform-origin: 50% 80%; animation: lb-hola 1.3s var(--ease-out) .6s 1 both; }
+@keyframes lb-hola { 0% { transform: rotate(0); } 25% { transform: rotate(-14deg) scale(1.12); } 50% { transform: rotate(10deg) scale(1.12); } 75% { transform: rotate(-6deg); } 100% { transform: rotate(0); } }
+@media (prefers-reduced-motion: reduce) { .lb-cara { animation: none; } }
+
+.lb-shot.is-movil a { max-width: 240px; }

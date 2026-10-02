@@ -218,10 +218,10 @@
 
   // ¿Quién sos? Según la elección se muestran los recomendados. Todo apunta a fichas reales de la base.
   const PERFILES = [
-    { id: 'reclutador', n: 'Reclutador', ic: IC.problema, tip: 'Lo que más dice de cómo trabajo: proyectos terminados y funciones comprobadas.',
-      why: 'Lo que más dice de cómo trabajo.', items: [['odontologia-almagro', 'Proyecto en producción'], ['tenshi', 'Proyecto propio'], ['ml-tracker', 'Herramienta propia'], ['panel-de-administracion', 'La que más repetí']] },
-    { id: 'cliente', n: 'Cliente', ic: '<path d="M3 4h2l2.4 11h11L21 7H6M9 20h.01M17 20h.01"/>', tip: 'Si querés una web para tu negocio: qué tipo de web y qué funciones te sirven.',
-      why: 'Para decidir qué web necesita tu negocio.', items: [['ecommerce', 'Si querés vender online'], ['landing', 'Si querés conseguir consultas'], ['institucional', 'Si querés presencia profesional'], ['mercadopago', 'Para cobrar en Argentina']],
+    { id: 'reclutador', n: 'Reclutador', ic: IC.problema, tip: 'Si buscás a alguien de e-commerce: tiendas completas, cobros y herramientas de Mercado Libre.',
+      why: 'Lo que más sirve para evaluar mi trabajo en e-commerce y Mercado Libre.', items: [['tienda-de-coleccionables', 'Tienda online completa'], ['tenshi', 'Tienda con preventas y seña'], ['ml-tracker', 'Herramienta para Mercado Libre'], ['pagos-mercado-pago', 'Cobro con Mercado Pago']] },
+    { id: 'cliente', n: 'Cliente', ic: '<path d="M3 4h2l2.4 11h11L21 7H6M9 20h.01M17 20h.01"/>', tip: 'Si vendés en Mercado Libre o querés una web: tienda propia, revisión de tu cuenta y qué tipo de web te sirve.',
+      why: 'Para vender más en Mercado Libre o tener una web propia.', items: [['tienda', 'Si vendés en Mercado Libre'], ['herramienta-auditoria', 'Revisá tu cuenta de Mercado Libre'], ['ecommerce', 'Tu tienda propia'], ['landing', 'Una web que consigue consultas']],
       mas: ['problema', 'Ver qué le sirve a mi rubro'] },
     { id: 'estudiante', n: 'Estudiante', ic: IC.aprender, tip: 'Si querés aprender: por dónde empezar, con ejemplos para tocar.',
       why: 'Para aprender con algo para probar.', items: [['vanilla', 'Para empezar'], ['impeccable', 'Diseñar mejor con IA'], ['glassmorphism', 'Un estilo con demo para tocar'], ['webapp-testing', 'Verificar tu propio trabajo']],
@@ -240,7 +240,7 @@
       const d = TILE_D[id] || (f.t === 'funcionalidad' ? `La armé en ${nProy(id)} proyectos distintos. ${f.d}` : f.d);
       return `<button type="button" class="lb-tile${n === 0 ? ' is-main' : ''}" data-open="${esc(f.id)}"><span class="lb-tile-k">${esc(k)}</span><strong>${esc(f.n)}</strong><span class="lb-tile-d">${esc(d)}</span>
         <span class="lb-tile-f">${f.v ? valChip(f.v, f.ve, true) : `<span class="lb-tipo">${esc(TIPOS[f.t] || f.t)}</span>`}<span class="lb-tile-go" aria-hidden="true">→</span></span></button>`; }).join('');
-    box.innerHTML = `<p class="lb-top-t">Elegí quién sos y te muestro por dónde empezar</p>
+    box.innerHTML = `<p class="lb-top-t">Elegí quién sos y te muestro por dónde empezar <svg class="lb-cara" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5" fill="var(--accent)"/><circle cx="8.6" cy="10" r="1.5" fill="var(--accent-ink)"/><circle cx="15.4" cy="10" r="1.5" fill="var(--accent-ink)"/><path d="M7 14.2c1 2.2 2.8 3.2 5 3.2s4-1 5-3.2" fill="none" stroke="var(--accent-ink)" stroke-width="1.8" stroke-linecap="round"/></svg></p>
       <div class="lb-perfiles" role="group" aria-label="Quién sos">${PERFILES.map(p => `<button type="button" data-perfil="${p.id}" data-tip="${esc(p.tip)}" aria-pressed="${p.id === per.id}">${ic(p.ic)}<span>${p.n}</span></button>`).join('')}</div>
       <p class="lb-top-why">${esc(per.why)}</p>
       <div class="lb-top-g" key="${per.id}">${tiles}</div>
@@ -378,8 +378,8 @@
   const frame = (src, titulo, interactivo) => `<div class="lb-frame" data-fr><iframe src="${esc(src)}" title="${esc(titulo)}" loading="lazy"${interactivo ? '' : ' tabindex="-1"'}></iframe></div>`;
   const cmpHTML = (a, b) => `<div class="lb-frame is-cmp" data-fr data-cmp style="--x:50%"><iframe src="${esc(a[1])}" title="${esc(a[0])}" loading="lazy" tabindex="-1"></iframe><div class="top"><iframe src="${esc(b[1])}" title="${esc(b[0])}" loading="lazy" tabindex="-1"></iframe></div><span class="ln"></span><span class="kn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 6-6 6 6 6M15 6l6 6-6 6"/></svg></span><span class="lab a">${esc(a[0])}</span><span class="lab b">${esc(b[0])}</span><input type="range" min="0" max="100" value="50" aria-label="Comparar: deslizá la línea"></div>`;
 
-  const galeriaHTML = caps => `<div class="lb-gal"><a class="lb-gal-main" href="${esc(caps[0][1])}" target="_blank" rel="noopener" title="Ver en tamaño real"><img src="${esc(caps[0][1])}" alt="${esc(caps[0][0])}"></a><p class="lb-gal-t">${esc(caps[0][0])}</p>
-    <div class="lb-thumbs" role="group" aria-label="Capturas">${caps.map((c, i) => `<button type="button" data-cap="${i}" aria-pressed="${i === 0}" title="${esc(c[0])}"><img src="${esc(c[1])}" alt="${esc(c[0])}" loading="lazy"></button>`).join('')}</div></div>`;
+  // Todas las capturas a la vista, una debajo de otra; tocar una la abre en tamaño real
+  const galeriaHTML = caps => `<div class="lb-gal">${caps.map(([t, u], n) => `<figure class="lb-shot${n === 0 ? ' is-first' : ''}${/celular|móvil/i.test(t) ? ' is-movil' : ''}"><a href="${esc(u)}" target="_blank" rel="noopener" title="Ver en tamaño real"><img src="${esc(u)}" alt="${esc(t)}" ${n === 0 ? '' : 'loading="lazy"'}></a><figcaption>${esc(t)}</figcaption></figure>`).join('')}</div>`;
   function tabsDe(f) {
     const t = [];
     for (const e of evDeFicha(f)) {
