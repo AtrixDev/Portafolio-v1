@@ -17,11 +17,16 @@
 
   // ── Vocabulario ──
   const AREAS = [
-    ['soluciones', 'Soluciones', 'Tengo un problema, ¿qué puedo hacer?'],
-    ['desarrollo-web', 'Desarrollo web', '¿Qué puedo construir y cómo puede verse o funcionar?'],
+    ['desarrollo-web', 'Desarrollo web', 'Qué puedo construir y cómo puede verse o funcionar.'],
+    ['soluciones', 'Tipos de negocio', 'Elegí tu rubro y mirá qué web y qué funciones le sirven.'],
     ['programacion', 'Programación', '¿Cómo se construye técnicamente?'],
     ['ia-datos', 'IA y datos', '¿Cómo puedo trabajar mejor con IA e información?'],
   ];
+  // Cómo se llaman y en qué orden van los subtipos (lo más importante primero)
+  const SUBN = { 'arquetipo de web': 'Tipos de web', 'proyecto web': 'Proyectos web', 'herramienta propia': 'Herramientas propias', 'por rubro': 'Rubros', 'patrón de página': 'Patrones de página', 'estilo visual': 'Estilos visuales', 'patrón de panel': 'Patrones de panel', 'regla UX': 'Reglas UX', 'par de fuentes': 'Pares de fuentes', funcionalidad: 'Funcionalidades', skill: 'Skills', servicio: 'Servicios', stack: 'Stacks', arquitectura: 'Arquitecturas' };
+  const SUBP = { 'arquetipo de web': 0, 'proyecto web': 1, 'herramienta propia': 1, funcionalidad: 2, 'por rubro': 3, 'patrón de página': 4, 'estilo visual': 5, skill: 4, servicio: 5, stack: 5, arquitectura: 6, 'patrón de panel': 6, 'regla UX': 7, 'par de fuentes': 8 };
+  const EVP = { proyecto: 0, experimento: 1, demo: 2, ejemplo: 3, maqueta: 4 };
+  const subN = s => SUBN[s] || s[0].toUpperCase() + s.slice(1);
   const TIPOS = { solucion: 'Solución', funcionalidad: 'Funcionalidad', tecnica: 'Técnica', herramienta: 'Herramienta', recurso: 'Recurso', proyecto: 'Proyecto' };
   const TEMAS = { automatizacion: 'Automatización', 'identidad-marca': 'Identidad y marca', seguridad: 'Seguridad', accesibilidad: 'Accesibilidad', conversion: 'Conversión', rendimiento: 'Rendimiento', 'mercado-libre': 'Mercado Libre', 'e-commerce': 'E-commerce' };
   const EV = { proyecto: 'Proyecto real', demo: 'Demo', experimento: 'Experimento', maqueta: 'Maqueta', ejemplo: 'Ejemplo de terceros' };
@@ -46,7 +51,7 @@
     valor: '<path d="M12 2.5 21.5 12 12 21.5 2.5 12z"/>', nivel: '<path d="M5 20v-5M12 20V9M19 20V4"/>', ev: '<path d="M4 12l5 5L20 6"/>', tipo: '<path d="M20 12 12 20 3 11V3h8z"/>',
   };
   const ic = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
-  const VISTAS = [['todo', 'Todo', 'todo'], ['problema', 'Tengo un problema', 'problema'], ['aprender', 'Quiero aprender', 'aprender'], ['hace', 'Mi trabajo', 'hace']];
+  const VISTAS = [['todo', 'Todo', 'todo'], ['problema', 'Tengo un negocio', 'problema'], ['aprender', 'Quiero aprender', 'aprender'], ['hace', 'Mi trabajo', 'hace']];
 
   // ── Estado ──
   const S = { idx: [], by: {}, evid: {}, relOut: {}, relIn: {}, legacy: {}, rubros: [], rubrosBy: {}, prev: {},
@@ -77,7 +82,7 @@
       S.rubros = rubros; S.rubrosBy = Object.fromEntries(rubros.map(r => [r.id, r]));
       for (const r of rel) { (S.relOut[r.desde] ||= []).push(r); (S.relIn[r.a] ||= []).push(r); }
       for (const f of idx) if (f.p) S.prev[f.id] = f.p;
-      $('lb-stats').textContent = `${idx.length} entradas · 4 áreas · ${rubros.length} rubros en el recomendador`;
+      if ($('lb-stats')) $('lb-stats').textContent = `${idx.length} entradas · ${rubros.length} rubros en el recomendador`;
       bind();
       route();
     } catch (err) {
@@ -109,20 +114,22 @@
       (!F.ev || (F.ev === 'sin' ? !f.e.length : f.e.includes(F.ev))) &&
       (!q || q.split(/\s+/).every(w => norm(`${f.n} ${f.d} ${f.s} ${TIPOS[f.t]} ${f.tm.map(t => TEMAS[t]).join(' ')}`).includes(w))));
   }
-  const ordenar = l => [...l].sort((a, b) => (VRANK[a.v] ?? 3) - (VRANK[b.v] ?? 3) || (b.e.length ? 1 : 0) - (a.e.length ? 1 : 0) || a.n.localeCompare(b.n, 'es'));
+  // Lo más importante primero: tipo de ficha (tipos de web, proyectos, funciones…), después valor, después la evidencia más fuerte
+  const fuerza = f => Math.min(...(f.e.length ? f.e.map(k => EVP[k] ?? 5) : [6]));
+  const ordenar = l => [...l].sort((a, b) => (SUBP[a.s] ?? 9) - (SUBP[b.s] ?? 9) || (VRANK[a.v] ?? 3) - (VRANK[b.v] ?? 3) || fuerza(a) - fuerza(b) || a.n.localeCompare(b.n, 'es'));
 
   // ── Base ──
   const AREA_IC = { soluciones: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>', 'desarrollo-web': '<path d="M3 5h18v14H3zM3 9h18"/>', programacion: '<path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/>', 'ia-datos': '<path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/>' };
   const cap = t => t[0].toUpperCase() + t.slice(1);
   function renderSide() {
-    const subsDe = a => { const m = {}; S.idx.filter(f => f.a.includes(a)).forEach(f => { m[f.s] = (m[f.s] || 0) + 1; }); return Object.entries(m).sort((x, y) => y[1] - x[1]); };
+    const subsDe = a => { const m = {}; S.idx.filter(f => f.a.includes(a)).forEach(f => { m[f.s] = (m[f.s] || 0) + 1; }); return Object.entries(m).sort((x, y) => (SUBP[x[0]] ?? 9) - (SUBP[y[0]] ?? 9) || y[1] - x[1]); };
     const chev = '<svg class="lb-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
     let h = `<div class="lb-sg"><p class="wl-group-title">Áreas</p>
       <button type="button" class="lb-ar" data-area="" aria-pressed="${!S.f.area}">${ic(IC.todo)}<span>Todas</span><span class="wl-cat-n">${S.idx.length}</span></button>
       ${AREAS.map(([id, n, d]) => {
         const abierta = S.f.area === id;
         return `<div class="lb-ac${abierta ? ' is-open' : ''}"><button type="button" class="lb-ar" data-area="${id}" aria-expanded="${abierta}" title="${esc(d)}">${ic(AREA_IC[id])}<span>${n}</span><span class="wl-cat-n">${S.idx.filter(f => f.a.includes(id)).length}</span>${chev}</button>
-          ${abierta ? `<ul class="lb-subs">${subsDe(id).map(([sub, c]) => `<li><button type="button" data-sub="${esc(sub)}" aria-pressed="${S.f.sub === sub}"><span>${esc(cap(sub))}</span><small>${c}</small></button></li>`).join('')}</ul>` : ''}</div>`;
+          ${abierta ? `<ul class="lb-subs">${subsDe(id).map(([sub, c]) => `<li><button type="button" data-sub="${esc(sub)}" aria-pressed="${S.f.sub === sub}"><span>${esc(subN(sub))}</span><small>${c}</small></button></li>`).join('')}</ul>` : ''}</div>`;
       }).join('')}</div>`;
     const temas = {};
     S.idx.forEach(f => f.tm.forEach(t => { temas[t] = (temas[t] || 0) + 1; }));
@@ -139,22 +146,37 @@
   }
 
   function filtrosHTML(base) {
-    const cnt = (fn) => base.filter(fn).length;
-    const fb = (attr, val, txt, act, extra = '') => `<button type="button" class="lb-fb" ${extra} data-f-${attr}="${esc(val)}" aria-pressed="${String(act) === String(val)}">${txt}</button>`;
+    const cnt = fn => base.filter(fn).length;
+    // Cada opción usa la misma pieza que las tarjetas (valor, nivel, evidencia); el botón solo agrega el estado "elegido"
+    const fc = (attr, val, chip, n, act) => `<button type="button" class="lb-fc" data-f-${attr}="${esc(val)}" aria-pressed="${String(act) === String(val)}">${chip}${n === '' ? '' : `<small>${n}</small>`}</button>`;
+    const todos = (attr, txt, act, n) => fc(attr, '', `<span class="lb-todos">${txt}</span>`, n, act);
     const grp = (lab, icon, body) => `<div class="lb-fg"><span class="lb-fl">${ic(icon)}${lab}</span>${body}</div>`;
-    const valor = grp('Valor', IC.valor, [['', `Todos <small>${base.length}</small>`], ...Object.keys(VAL).map(k => [k, `${VAL[k][1]}${VAL[k][0]} <small>${cnt(f => f.v === k)}</small>`])].map(([k, t]) => fb('valor', k, t, S.f.valor, k ? `data-vv="${k}"` : '')).join(''));
-    const nivel = grp('Nivel', IC.nivel, [['', 'Todos'], ...[1, 2, 3].map(n => [n, `<span class="wl-lvl" data-n="${n}"><span class="wl-lvl-bars" aria-hidden="true"><i></i><i></i><i></i></span></span>${NIV[n]} <small>${cnt(f => f.lv === n)}</small>`])].map(([k, t]) => fb('nivel', k, t, S.f.nivel || '')).join(''));
-    const ev = grp('Evidencia', IC.ev, [['', 'Todas'], ...Object.keys(EV).map(k => [k, `${EV[k]} <small>${cnt(f => f.e.includes(k))}</small>`]), ['sin', `Sin ejemplo todavía <small>${cnt(f => !f.e.length)}</small>`]].map(([k, t]) => fb('ev', k, t, S.f.ev)).join(''));
+    const valor = grp('Valor', IC.valor, todos('valor', 'Todos', S.f.valor, base.length) + Object.keys(VAL).map(k => fc('valor', k, valChip(k, '', true), cnt(f => f.v === k), S.f.valor)).join(''));
+    const nivel = grp('Nivel', IC.nivel, todos('nivel', 'Todos', S.f.nivel || '', '') + [1, 2, 3].map(n => fc('nivel', n, nivChip(n), cnt(f => f.lv === n), S.f.nivel || '')).join(''));
+    const ev = grp('Evidencia', IC.ev, todos('ev', 'Todas', S.f.ev, '') + Object.keys(EV).map(k => fc('ev', k, `<span class="lb-ev" data-k="${k}">${EV[k]}</span>`, cnt(f => f.e.includes(k)), S.f.ev)).join('') + fc('ev', 'sin', '<span class="lb-ev" data-k="sin">Sin ejemplo todavía</span>', cnt(f => !f.e.length), S.f.ev));
     return `<div class="lb-filtros">${valor}${nivel}${ev}</div>`;
+  }
+
+  // Lo que construí: lo más llamativo, arriba de todo y solo cuando no se está filtrando
+  const DEST = ['odontologia-almagro', 'tenshi', 'tienda-de-coleccionables'];
+  function renderDest() {
+    const box = $('lb-dest'); if (!box) return;
+    const libre = !S.q.trim() && S.vista === 'todo' && !S.f.area && !S.f.sub && !S.f.tema && !S.f.valor && !S.f.nivel && !S.f.ev && !S.f.tipo;
+    const lista = DEST.map(id => S.by[id]).filter(f => f && S.prev[f.id]);
+    box.hidden = !(libre && lista.length);
+    if (box.hidden) return;
+    box.innerHTML = `<div class="lb-dest-in"><div class="lb-dest-h"><h2>Lo que construí</h2><button type="button" class="lb-link" data-vista="hace">Ver todo mi trabajo →</button></div>
+      <div class="lb-dest-g">${lista.map((f, n) => `<button type="button" class="lb-dc${n === 0 ? ' is-main' : ''}" data-open="${esc(f.id)}"><span class="lb-dc-img"><img src="${esc(S.prev[f.id])}" alt="" ${n === 0 ? '' : 'loading="lazy"'}></span>
+        <span class="lb-dc-b"><span class="lb-evs">${evChips(f.e)}</span><strong>${esc(f.n)}</strong><span class="lb-dc-d">${esc(f.d)}</span></span></button>`).join('')}</div></div>`;
   }
 
   async function renderBase() {
     $('lb-main').setAttribute('aria-busy', 'true');
-    renderSide(); renderVistas();
+    renderSide(); renderVistas(); renderDest();
     const areaN = AREAS.find(a => a[0] === S.f.area);
     const q = S.q.trim();
     $('lb-head').innerHTML = q ? `<h2>Resultados para “${esc(q)}”</h2><p>Buscando en toda la base.</p>`
-      : S.vista === 'problema' ? '<h2>Tengo un problema</h2><p>Elegí tu rubro y te muestro las soluciones, el diseño recomendado y lo que conviene tener.</p>'
+      : S.vista === 'problema' ? '<h2>Tengo un negocio</h2><p>Elegí tu rubro y te muestro qué tipo de web, qué funciones y qué diseño le sirven.</p>'
       : S.vista === 'aprender' ? '<h2>Quiero aprender</h2><p>Técnicas, herramientas y recursos, de lo más simple a lo más avanzado, con su ejemplo cuando lo tienen.</p>'
       : S.vista === 'hace' ? '<h2>Mi trabajo</h2><p>Lo que construí y lo que probé: proyectos, las funcionalidades y herramientas que se comprobó que usan, y la evidencia de cada cosa (proyecto real, experimento o demo).</p>'
       : `<h2>${areaN ? areaN[1] : 'Todo'}</h2><p>${areaN ? areaN[2] : 'Todas las entradas de la base. Elegí un área a la izquierda o usá el buscador.'}</p>`;

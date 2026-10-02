@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Herramientas, funcionalidades y soluciones con ejemplo para abrir | Darío Colángelo</title>
-  <meta name="description" content="Cada entrada explica qué es, qué soluciona y cuándo conviene, y trae algo para ver: un proyecto real, una demo, un experimento o una maqueta. Siempre dice cuál es.">
+  <title>Qué puede hacer tu web, explicado y a la vista | Darío Colángelo</title>
+  <meta name="description" content="Proyectos que construí, funciones, estilos y herramientas para tu web, cada uno con qué soluciona, cuándo conviene y un ejemplo para abrir.">
   <meta name="author" content="Darío Colángelo">
   <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#efefec" media="(prefers-color-scheme: light)">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Herramientas, funcionalidades y soluciones con ejemplo para abrir">
-  <meta property="og:description" content="Cada entrada explica qué soluciona y cuándo conviene, y trae algo para ver. Siempre dice si es un proyecto real, una demo, un experimento o una maqueta.">
+  <meta property="og:title" content="Qué puede hacer tu web, explicado y a la vista">
+  <meta property="og:description" content="Proyectos que construí, funciones, estilos y herramientas, con qué soluciona cada uno y un ejemplo para abrir.">
   <meta property="og:locale" content="es_AR">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ffe14a'/><text x='50%25' y='54%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%23141207'>DC</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="css/programacion.css?v=7">
   <link rel="stylesheet" href="css/programacion-demos.css?v=11">
   <link rel="stylesheet" href="css/programacion-ux.css?v=4">
-  <link rel="stylesheet" href="css/programacion-v2.css?v=4">
+  <link rel="stylesheet" href="css/programacion-v2.css?v=6">
   <link rel="stylesheet" href="css/surfaces.css">
 </head>
 <body>
@@ -68,16 +68,18 @@
 <div id="lb-base">
   <section class="wl-hero lb-hero" aria-labelledby="lb-title">
     <div class="wl-hero-bg" aria-hidden="true"></div>
-    <h1 class="wl-title" id="lb-title">Herramientas, funcionalidades y soluciones, <span class="grad">con ejemplo para abrir</span></h1>
-    <p class="wl-sub">Cada entrada explica qué es, qué soluciona y cuándo conviene, y trae algo para ver: un proyecto mío, una demo, un experimento o una maqueta. Siempre dice cuál es, así sabés qué estás mirando.</p>
+    <h1 class="wl-title" id="lb-title">Qué puede hacer tu web, <span class="grad">explicado y a la vista</span></h1>
+    <p class="wl-sub">Proyectos que construí, funciones, estilos y herramientas. Cada uno te cuenta qué soluciona y cuándo conviene, y trae un ejemplo para abrir.</p>
     <div class="wl-search" role="search">
       <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-search"/></svg>
       <label for="lb-q" class="sr-only">Buscar en la base</label>
       <input id="lb-q" type="search" placeholder="Buscá: “turnos”, “glassmorphism”, “Mercado Pago”…" autocomplete="off" spellcheck="false">
       <kbd aria-hidden="true">/</kbd>
     </div>
-    <p class="wl-stats" id="lb-stats" aria-live="polite">Cargando la base…</p>
+    <p class="lb-honesto"><span>Siempre te digo qué estás mirando:</span> <span class="lb-ev" data-k="proyecto">Proyecto real</span><span class="lb-ev" data-k="demo">Demo</span><span class="lb-ev" data-k="experimento">Experimento</span><span class="lb-ev" data-k="maqueta">Maqueta</span></p>
+    <p class="wl-stats" id="lb-stats" aria-live="polite"></p>
   </section>
+  <section class="lb-dest" id="lb-dest" aria-label="Lo que construí" hidden></section>
   <div class="wl-app">
     <aside class="wl-side lb-side" aria-label="Menú de la base"><nav id="lb-side"></nav></aside>
     <section class="wl-main" id="lb-main" aria-live="polite" aria-busy="true">
@@ -116,6 +118,6 @@
 <script src="js/programacion-ejemplos.js?v=6"></script>
 <script src="js/programacion-demos.js?v=15"></script>
 <script src="js/programacion-ux.js?v=4"></script>
-<script src="js/programacion-v2.js?v=3"></script>
+<script src="js/programacion-v2.js?v=4"></script>
 </body>
 </html>
