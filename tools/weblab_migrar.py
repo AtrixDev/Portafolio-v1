@@ -23,7 +23,7 @@ sys.path.insert(0, str(HERE))
 from weblab_taxonomia import *            # noqa
 import weblab_niveles as NV
 import lab_proyectos as LP
-from lab_nucleo import NUCLEO_ESCRITO
+from lab_nucleo import NUCLEO_ESCRITO, NUCLEO_SUMA
 
 ROOT = HERE.parent
 SRC = ROOT / "frontend" / "data" / "weblab"
@@ -175,6 +175,11 @@ def main():
             if escrito.get("resumen"): tec.append(["Resumen original", e.get("summary", "")])
             if "valor" in escrito:
                 valor, porque, vorigen, vestado = escrito["valor"], escrito["valor_porque"], "tabla manual (Claude, sin validar)", "provisional"
+        suma = NUCLEO_SUMA.get((col, i))
+        if suma:   # completa huecos del núcleo automático sin reemplazar lo que ya está
+            for sl, items in suma.items():
+                if not nuc.get(sl): nuc[sl] = [dict(x) for x in items]
+            nuc_suma = True
         if col == "skills":
             reut["prompt"] = {"texto": e.get("prompt", ""), "estado": "sin probar"}
             if i in skills_exp: reut["experimento"] = i
@@ -204,7 +209,7 @@ def main():
             "fuente": "Curada en sesiones de trabajo (Darío y Claude)" if col in CURADAS else "Importada y traducida de la skill ui-ux-pro-max",
             "legacy": {"cat": col, "id": i, "col": col}, "col": col,
         }
-        if escrito: ficha["nucleo_borrador"] = True
+        if escrito or suma: ficha["nucleo_borrador"] = True
         if fus: ficha["legacy_extra"] = [{"cat": "estilos", "id": fus["id"]}]
         return ficha
 

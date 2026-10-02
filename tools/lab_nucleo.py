@@ -32,3 +32,15 @@ NUCLEO_ESCRITO = {
         },
     },
 }
+
+
+# ── Tandas del resto de las fichas (ver lab_nucleo_*.py) ──
+import lab_nucleo_skills as _sk, lab_nucleo_servicios as _sv
+for _i, _v in _sk.SK.items(): NUCLEO_ESCRITO.setdefault(("skills", _i), _v)
+for _i, _v in _sv.SV.items(): NUCLEO_ESCRITO.setdefault(("servicios", _i), _v)
+for _i, _v in _sv.ST.items(): NUCLEO_ESCRITO.setdefault(("stacks", _i), _v)
+
+# Completa los huecos sin reemplazar el texto existente
+NUCLEO_SUMA = {}
+import lab_nucleo_suma as _su, lab_nucleo_ux as _ux, lab_nucleo_estilos as _es, lab_nucleo_landing as _lp, lab_nucleo_tipografias as _tp
+for _d in (_su.SUMA, _ux.SUMA_UX, _es.SUMA_ES, _lp.SUMA_LP, _lp.SUMA_SOL, _tp.SUMA_TP): NUCLEO_SUMA.update(_d)
