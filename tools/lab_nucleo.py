@@ -54,3 +54,9 @@ for _i, (_v, _p) in _sx.VALOR_SK.items():
 for _i, (_pasos, _exp) in _sx.COMO_SK.items():
     _pasos = _pasos if _exp else _pasos[:3]
     NUCLEO_ESCRITO[("skills", _i)]["nucleo"]["como"] = _pasos
+
+# ── Servicios y stacks: valor validado por Darío (tanda 2) ──
+import lab_valor_servicios as _vs
+for _k, (_v, _p) in _vs.VALOR_SS.items():
+    _tx.VALOR_DARIO[_k] = _v
+    _tx.VALOR_PORQUE_DARIO[_k] = _p
