@@ -277,6 +277,10 @@ def main():
     for p in LP.PROYECTOS:
         eid = "proyecto-" + p["id"]
         evid[eid] = {"id": eid, "tipo": "proyecto", "titulo": p["nombre"], "origen": "propio", "descripcion": p["estado"], "enlaces": p.get("enlaces", [])}
+        if p.get("capturas"):
+            evid[eid]["ref"] = {"capturas": p["capturas"], "nota": p.get("nota_capturas", ""), "url_preview": p["capturas"][0][1]}
+            for _, src in p["capturas"]:
+                if not (ROOT / "frontend" / src).exists(): raise SystemExit(f"falta la captura {src}")
         proyectos.append({
             "id": p["id"], "tipo": "proyecto", "subtipo": "proyecto web" if "desarrollo-web" in p["areas"] else "herramienta propia", "areas": p["areas"], "temas": p["temas"],
             "rubros": [], "nivel": None, "valor": None, "valor_origen": "sin clasificar", "valor_estado": "sin clasificar", "nombre": p["nombre"], "resumen": p["resumen"],
@@ -328,6 +332,7 @@ def main():
             r = evid.get(e, {}).get("ref", {})
             if r.get("url"): return r["url"]
             if r.get("con"): return r["con"]
+            if r.get("url_preview"): return r["url_preview"]
         return None
     index = [{"id": f["id"], "t": f["tipo"], "s": f["subtipo"], "a": f["areas"], "tm": f["temas"], "r": f["rubros"], "n": f["nombre"], "d": (f["resumen"] or "")[:160],
               "lv": f["nivel"], "v": f["valor"], "ve": f["valor_estado"], "e": kinds(f), "c": f["col"], "p": previa(f)} for f in todas]

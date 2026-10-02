@@ -46,7 +46,7 @@
     valor: '<path d="M12 2.5 21.5 12 12 21.5 2.5 12z"/>', nivel: '<path d="M5 20v-5M12 20V9M19 20V4"/>', ev: '<path d="M4 12l5 5L20 6"/>', tipo: '<path d="M20 12 12 20 3 11V3h8z"/>',
   };
   const ic = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
-  const VISTAS = [['todo', 'Todo', 'todo'], ['problema', 'Tengo un problema', 'problema'], ['aprender', 'Quiero aprender', 'aprender'], ['hace', 'Qué sabe hacer Darío', 'hace']];
+  const VISTAS = [['todo', 'Todo', 'todo'], ['problema', 'Tengo un problema', 'problema'], ['aprender', 'Quiero aprender', 'aprender'], ['hace', 'Mi trabajo', 'hace']];
 
   // ── Estado ──
   const S = { idx: [], by: {}, evid: {}, relOut: {}, relIn: {}, legacy: {}, rubros: [], rubrosBy: {}, prev: {},
@@ -61,7 +61,7 @@
   function card(f) {
     const prev = S.prev[f.id];
     return `<button type="button" class="wl-card lb-card" data-open="${esc(f.id)}">
-      ${prev ? `<div class="lb-pv"><iframe src="${esc(prev)}" loading="lazy" tabindex="-1" aria-hidden="true" title="Vista previa de ${esc(f.n)}"></iframe></div>` : ''}
+      ${prev ? `<div class="lb-pv">${/\.(webp|png|jpe?g)$/i.test(prev) ? `<img src="${esc(prev)}" alt="" loading="lazy">` : `<iframe src="${esc(prev)}" loading="lazy" tabindex="-1" aria-hidden="true" title="Vista previa de ${esc(f.n)}"></iframe>`}</div>` : ''}
       <span class="wl-card-top">${valChip(f.v, f.ve) || `<span class="lb-tipo">${esc(TIPOS[f.t] || f.t)}</span>`}${nivChip(f.lv)}</span>
       <h3>${esc(f.n)}</h3>
       <div class="lb-evs">${evChips(f.e)}</div>
@@ -77,7 +77,7 @@
       S.rubros = rubros; S.rubrosBy = Object.fromEntries(rubros.map(r => [r.id, r]));
       for (const r of rel) { (S.relOut[r.desde] ||= []).push(r); (S.relIn[r.a] ||= []).push(r); }
       for (const f of idx) if (f.p) S.prev[f.id] = f.p;
-      $('lb-stats').textContent = `${idx.length} entradas · ${rubros.length} rubros en el recomendador · cada una dice qué es lo que se muestra`;
+      $('lb-stats').textContent = `${idx.length} entradas · 4 áreas · ${rubros.length} rubros en el recomendador`;
       bind();
       route();
     } catch (err) {
@@ -112,20 +112,25 @@
   const ordenar = l => [...l].sort((a, b) => (VRANK[a.v] ?? 3) - (VRANK[b.v] ?? 3) || (b.e.length ? 1 : 0) - (a.e.length ? 1 : 0) || a.n.localeCompare(b.n, 'es'));
 
   // ── Base ──
+  const AREA_IC = { soluciones: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>', 'desarrollo-web': '<path d="M3 5h18v14H3zM3 9h18"/>', programacion: '<path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/>', 'ia-datos': '<path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/>' };
+  const cap = t => t[0].toUpperCase() + t.slice(1);
   function renderSide() {
-    const porArea = a => S.idx.filter(f => f.a.includes(a)).length;
-    let h = `<div class="wl-group"><p class="wl-group-title">Áreas</p>
-      <a class="wl-cat" href="#/v/todo" data-area="" aria-current="${!S.f.area}"><span>Todas</span><span class="wl-cat-n">${S.idx.length}</span></a>
-      ${AREAS.map(([id, n, d]) => `<a class="wl-cat" href="#/v/todo" data-area="${id}" title="${esc(d)}" aria-current="${S.f.area === id}"><span>${n}</span><span class="wl-cat-n">${porArea(id)}</span></a>`).join('')}</div>`;
-    if (S.f.area) {
-      const subs = {};
-      S.idx.filter(f => f.a.includes(S.f.area)).forEach(f => { subs[f.s] = (subs[f.s] || 0) + 1; });
-      h += `<div class="wl-group"><p class="wl-group-title">Tipo de ficha</p>${Object.entries(subs).sort((a, b) => b[1] - a[1]).map(([s, n]) => `<a class="wl-cat" href="#/v/todo" data-sub="${esc(s)}" aria-current="${S.f.sub === s}"><span>${esc(s[0].toUpperCase() + s.slice(1))}</span><span class="wl-cat-n">${n}</span></a>`).join('')}</div>`;
-    }
+    const subsDe = a => { const m = {}; S.idx.filter(f => f.a.includes(a)).forEach(f => { m[f.s] = (m[f.s] || 0) + 1; }); return Object.entries(m).sort((x, y) => y[1] - x[1]); };
+    const chev = '<svg class="lb-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
+    let h = `<div class="lb-sg"><p class="wl-group-title">Áreas</p>
+      <button type="button" class="lb-ar" data-area="" aria-pressed="${!S.f.area}">${ic(IC.todo)}<span>Todas</span><span class="wl-cat-n">${S.idx.length}</span></button>
+      ${AREAS.map(([id, n, d]) => {
+        const abierta = S.f.area === id;
+        return `<div class="lb-ac${abierta ? ' is-open' : ''}"><button type="button" class="lb-ar" data-area="${id}" aria-expanded="${abierta}" title="${esc(d)}">${ic(AREA_IC[id])}<span>${n}</span><span class="wl-cat-n">${S.idx.filter(f => f.a.includes(id)).length}</span>${chev}</button>
+          ${abierta ? `<ul class="lb-subs">${subsDe(id).map(([sub, c]) => `<li><button type="button" data-sub="${esc(sub)}" aria-pressed="${S.f.sub === sub}"><span>${esc(cap(sub))}</span><small>${c}</small></button></li>`).join('')}</ul>` : ''}</div>`;
+      }).join('')}</div>`;
     const temas = {};
     S.idx.forEach(f => f.tm.forEach(t => { temas[t] = (temas[t] || 0) + 1; }));
-    h += `<div class="wl-group"><p class="wl-group-title">Temas</p><div class="lb-temas">${Object.entries(TEMAS).map(([t, n]) => `<button type="button" class="lb-fb" data-tema="${t}" aria-pressed="${S.f.tema === t}">${n} <small>${temas[t] || 0}</small></button>`).join('')}</div></div>
-      <p class="lb-sidehint">Automatización e Identidad y marca son temas: pasan a ser áreas cuando tengan suficiente contenido.</p>`;
+    h += `<div class="lb-sg"><p class="wl-group-title">Para tu negocio</p>${selectorRubro()}<p class="lb-sidehint">Elegí tu rubro y te armo la página con lo que más se parece a tu caso.</p></div>
+      <div class="lb-sg"><p class="wl-group-title">Temas</p><div class="lb-temas">${Object.entries(TEMAS).map(([t, n]) => `<button type="button" class="lb-fb" data-tema="${t}" aria-pressed="${S.f.tema === t}">${n} <small>${temas[t] || 0}</small></button>`).join('')}</div></div>
+      <details class="lb-sg lb-leyenda"><summary>Qué significa cada etiqueta</summary>
+        <p class="lb-lg-t">Evidencia</p><ul>${Object.entries(EV).map(([k, n]) => `<li><span class="lb-ev" data-k="${k}">${n}</span>${esc(EV_NOTA[k].replace(/^[^:]+: /, ''))}</li>`).join('')}<li><span class="lb-ev" data-k="sin">Sin ejemplo todavía</span>Todavía no tiene nada para ver.</li></ul>
+        <p class="lb-lg-t">Valor</p><ul>${Object.entries(VAL).map(([k, v]) => `<li>${valChip(k, '', true)}${esc(v[2])}</li>`).join('')}<li><span class="wl-val is-prov" data-v="base">Prov.</span>Provisional: criterio todavía sin revisar.</li></ul></details>`;
     $('lb-side').innerHTML = h;
   }
 
@@ -151,7 +156,7 @@
     $('lb-head').innerHTML = q ? `<h2>Resultados para “${esc(q)}”</h2><p>Buscando en toda la base.</p>`
       : S.vista === 'problema' ? '<h2>Tengo un problema</h2><p>Elegí tu rubro y te muestro las soluciones, el diseño recomendado y lo que conviene tener.</p>'
       : S.vista === 'aprender' ? '<h2>Quiero aprender</h2><p>Técnicas, herramientas y recursos, de lo más simple a lo más avanzado, con su ejemplo cuando lo tienen.</p>'
-      : S.vista === 'hace' ? '<h2>Qué sabe hacer Darío</h2><p>Proyectos, y lo que se comprobó que usan o implementan, con la evidencia de cada cosa: proyecto real, experimento o demo.</p>'
+      : S.vista === 'hace' ? '<h2>Mi trabajo</h2><p>Lo que construí y lo que probé: proyectos, las funcionalidades y herramientas que se comprobó que usan, y la evidencia de cada cosa (proyecto real, experimento o demo).</p>'
       : `<h2>${areaN ? areaN[1] : 'Todo'}</h2><p>${areaN ? areaN[2] : 'Todas las entradas de la base. Elegí un área a la izquierda o usá el buscador.'}</p>`;
     const vista = q ? 'todo' : S.vista;
     const grid = $('lb-grid'); let html = '';
@@ -174,13 +179,13 @@
     $('lb-count').textContent = `${lista.length} ${lista.length === 1 ? 'entrada' : 'entradas'}`;
     grid.innerHTML = html;
     $('lb-main').setAttribute('aria-busy', 'false');
-    fitCards();
+    baseListo = true; fitCards();
   }
   const ordenarAprender = l => [...l].sort((a, b) => (a.lv || 9) - (b.lv || 9) || (VRANK[a.v] ?? 3) - (VRANK[b.v] ?? 3) || a.n.localeCompare(b.n, 'es'));
 
   function selectorRubro(sel = '') {
     const g = {}; S.rubros.forEach(r => { (g[r.familia] ||= []).push(r); });
-    return `<select id="lb-rubro-sel" aria-label="Elegí tu rubro"><option value="">Elegí tu rubro…</option>${Object.entries(g).sort((a, b) => (FAMILIAS[a[0]] || a[0]).localeCompare(FAMILIAS[b[0]] || b[0], 'es')).map(([f, l]) => `<optgroup label="${esc(FAMILIAS[f] || f)}">${l.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')).map(r => `<option value="${esc(r.id)}"${r.id === sel ? ' selected' : ''}>${esc(r.nombre)}</option>`).join('')}</optgroup>`).join('')}</select>`;
+    return `<select class="lb-rubro-sel" aria-label="Elegí tu rubro"><option value="">Elegí tu rubro…</option>${Object.entries(g).sort((a, b) => (FAMILIAS[a[0]] || a[0]).localeCompare(FAMILIAS[b[0]] || b[0], 'es')).map(([f, l]) => `<optgroup label="${esc(FAMILIAS[f] || f)}">${l.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')).map(r => `<option value="${esc(r.id)}"${r.id === sel ? ' selected' : ''}>${esc(r.nombre)}</option>`).join('')}</optgroup>`).join('')}</select>`;
   }
 
   // ── Vista: Qué sabe hacer Darío (proyectos → funcionalidades, técnicas y herramientas → evidencias) ──
@@ -209,7 +214,7 @@
       <p class="lb-vacio">Cada cosa dice qué es: <b>proyecto real</b> (lo construí), <b>experimento</b> (lo probé sin y con la herramienta) o <b>demo</b> (hecha para mostrar la idea). Las maquetas generadas no se cuentan acá. <button type="button" class="lb-btn" data-todas-demos>Ver todas las demos</button></p>`;
     $('lb-count').textContent = `${proys.length} proyectos y herramientas`;
     $('lb-main').setAttribute('aria-busy', 'false');
-    fitCards();
+    baseListo = true; fitCards();
   }
 
   function fitCards() { document.querySelectorAll('.lb-pv').forEach(p => { const f = p.querySelector('iframe'); if (f) f.style.transform = `scale(${p.clientWidth / 1280})`; }); }
@@ -218,12 +223,12 @@
   async function showRubro(id) {
     setView('rubro');
     const r = S.rubrosBy[id]; const box = $('lb-rubro');
-    if (!r) { box.innerHTML = '<button class="lb-atras" data-atras>← Volver</button><h1>No encontré ese rubro</h1>'; return; }
+    if (!r) { box.innerHTML = '<div class="lb-fbar"><button type="button" data-atras>← Volver a la base</button><button type="button" class="lb-x" data-atras aria-label="Cerrar">✕</button></div><div class="lb-rwrap"><h1>No encontré ese rubro</h1></div>'; return; }
     const listaCards = ids => ids.map(i => S.by[i]).filter(Boolean).map(card).join('') || '<p class="lb-vacio">Todavía no hay entradas para esto.</p>';
     const neg = r.negocios.map(i => S.by[i]).filter(Boolean);
     const negBody = neg.length ? await ficha(neg[0].id) : null;
     const funcs = negBody ? (negBody.nucleo.aporta || []).filter(x => /Funcionalidades/i.test(x.l)) : [];
-    box.innerHTML = `<button class="lb-atras" data-atras>← Volver a la base</button>
+    box.innerHTML = `<div class="lb-fbar"><button type="button" data-atras>← Volver a la base</button><span class="lb-bc">Para tu negocio / <b>${esc(r.nombre)}</b></span><button type="button" class="lb-x" data-atras aria-label="Cerrar">✕</button></div><div class="lb-rwrap">
       <span class="lb-tipo">Para tu rubro · ${esc(FAMILIAS[r.familia] || '')}</span><h1>${esc(r.nombre)}</h1><p class="lb-sub">${esc(r.resumen)}</p>
       <div class="lb-sel" style="margin-top:1rem">${selectorRubro(r.id)}<button type="button" class="lb-btn" data-ir-rubro>Cambiar rubro</button></div>
       ${neg.length ? `<h2>Soluciones para este rubro</h2><div class="wl-grid">${neg.map(card).join('')}</div>` : ''}
@@ -232,13 +237,13 @@
       <h2>Patrones de landing recomendados</h2><div class="wl-grid">${listaCards(r.recomienda.landing)}</div>
       ${r.palette.length ? `<h2>Paleta recomendada</h2><div class="lb-pal wl-pal">${r.palette.map(([n, h]) => `<button type="button" data-copy="${esc(h)}"><span style="background:${esc(h)}"></span><span>${esc(n)}<br>${esc(h)}</span></button>`).join('')}</div><p class="lb-note" style="margin-top:.5rem">Tocá un color para copiar el código.</p>` : ''}
       <h2>Así se ve</h2><div id="lb-rubro-maq" class="lb-legacy"><p class="lb-note">Armando la maqueta…</p></div><p class="lb-note">Maqueta generada con un negocio inventado de este rubro y su paleta. No es un proyecto real.</p>
-      <h2>Qué tener en cuenta</h2><dl class="lb-dl">${r.campos.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>`;
-    window.scrollTo(0, 0); fitCards();
+      <h2>Qué tener en cuenta</h2><dl class="lb-dl">${r.campos.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl></div>`;
+    fitCards();
     try {
       const old = (await getJSON(OLD + 'rubros.json')).find(e => e.id === r.legacy.id);
       $('lb-rubro-maq').innerHTML = old && window.WLExamples ? await WLExamples.render(old, 'rubros') : '';
     } catch (e) { $('lb-rubro-maq').innerHTML = ''; }
-    document.title = `Para ${r.nombre} | Base de datos | Darío Colángelo`;
+    document.title = `Para ${r.nombre} | Darío Colángelo`;
   }
 
   // ── Ficha a pantalla completa ──
@@ -246,6 +251,8 @@
   const frame = (src, titulo, interactivo) => `<div class="lb-frame" data-fr><iframe src="${esc(src)}" title="${esc(titulo)}" loading="lazy"${interactivo ? '' : ' tabindex="-1"'}></iframe></div>`;
   const cmpHTML = (a, b) => `<div class="lb-frame is-cmp" data-fr data-cmp style="--x:50%"><iframe src="${esc(a[1])}" title="${esc(a[0])}" loading="lazy" tabindex="-1"></iframe><div class="top"><iframe src="${esc(b[1])}" title="${esc(b[0])}" loading="lazy" tabindex="-1"></iframe></div><span class="ln"></span><span class="kn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 6-6 6 6 6M15 6l6 6-6 6"/></svg></span><span class="lab a">${esc(a[0])}</span><span class="lab b">${esc(b[0])}</span><input type="range" min="0" max="100" value="50" aria-label="Comparar: deslizá la línea"></div>`;
 
+  const galeriaHTML = caps => `<div class="lb-gal"><a class="lb-gal-main" href="${esc(caps[0][1])}" target="_blank" rel="noopener" title="Ver en tamaño real"><img src="${esc(caps[0][1])}" alt="${esc(caps[0][0])}"></a><p class="lb-gal-t">${esc(caps[0][0])}</p>
+    <div class="lb-thumbs" role="group" aria-label="Capturas">${caps.map((c, i) => `<button type="button" data-cap="${i}" aria-pressed="${i === 0}" title="${esc(c[0])}"><img src="${esc(c[1])}" alt="${esc(c[0])}" loading="lazy"></button>`).join('')}</div></div>`;
   function tabsDe(f) {
     const t = [];
     for (const e of evDeFicha(f)) {
@@ -257,6 +264,9 @@
         t.push({ k: 'exp', label: 'Experimento completo', nota: EV_NOTA.experimento, legacy: 'skills' });
       } else if (e.tipo === 'demo') {
         t.push({ k: 'dem', label: 'Demo', nota: EV_NOTA.demo, legacy: 'demo' });
+      } else if (e.tipo === 'proyecto' && e.ref?.capturas?.length) {
+        const ab = (e.enlaces || []).find(([, u]) => /^https?:/.test(u));
+        t.push({ k: 'cap', label: 'Capturas', nota: e.ref.nota || EV_NOTA.proyecto, html: () => galeriaHTML(e.ref.capturas), open: ab ? ab[1] : null, openLabel: ab ? ab[0] : '' });
       } else if (e.tipo === 'maqueta' && e.id !== 'maqueta-preset') {
         t.push({ k: 'maq', label: 'Maqueta', nota: EV_NOTA.maqueta, legacy: 'maqueta' });
       }
@@ -327,7 +337,7 @@
   async function showFicha(id) {
     setView('ficha');
     const box = $('lb-ficha'); const f = await ficha(id);
-    if (!f) { box.innerHTML = '<div class="lb-fbar"><button data-atras>← Volver a la base</button></div><div class="lb-info"><h1>No encontré esa ficha</h1></div>'; return; }
+    if (!f) { box.innerHTML = '<div class="lb-fbar"><button type="button" data-atras>← Volver a la base</button><button type="button" class="lb-x" data-atras aria-label="Cerrar">✕</button></div><div class="lb-info"><h1>No encontré esa ficha</h1></div>'; return; }
     const tabs = tabsDe(f), solo = !tabs.length;
     const prov = f.valor_estado === 'provisional';
     const v = veredicto(f);
@@ -338,7 +348,7 @@
     const respaldo = f.tipo === 'funcionalidad' && extra.respaldo?.length ? `<div><dt>Respaldo</dt><dd><ul>${extra.respaldo.map(r => `<li><a href="#/f/${esc(r.proyecto)}">${esc(nombreDe(r.proyecto))}</a> (${r.nivel === 'A' ? 'código y documentación' : 'solo en el código'}). <span class="lb-note">${esc(r.fuente)}</span></li>`).join('')}</ul></dd></div>${extra.nota ? `<div><dt>Nota</dt><dd>${esc(extra.nota)}</dd></div>` : ''}` : '';
     const cuerpo = nucleoHTML(f) + proyecto + respaldo + evidenciasHTML(f) + relHTML(f);
     const area = AREAS.find(a => a[0] === f.areas[0]);
-    box.innerHTML = `<div class="lb-fbar"><button type="button" data-atras>← Volver a la base</button><span>${area ? esc(area[1]) : ''} / <b style="color:var(--text)">${esc(f.nombre)}</b></span></div>
+    box.innerHTML = `<div class="lb-fbar"><button type="button" data-atras>← Volver a la base</button><span class="lb-bc">${area ? esc(area[1]) : ''} / <b>${esc(f.nombre)}</b></span><button type="button" class="lb-x" data-atras aria-label="Cerrar la ficha">✕</button></div>
       <div class="lb-fc${solo ? ' is-solo' : ''}"><article class="lb-info">
         <span class="lb-tipo">${esc(TIPOS[f.tipo])} · ${esc(f.subtipo)}</span>
         <h1>${esc(f.nombre)}</h1>${f.resumen ? `<p class="lb-sub">${esc(f.resumen)}</p>` : ''}
@@ -348,8 +358,7 @@
         <dl class="lb-fd">${cuerpo || '<div><dt>Contenido</dt><dd>Todavía sin texto para esta ficha.</dd></div>'}</dl>
         ${veredHTML}${promptHTML(f)}${tecnicoHTML(f)}
       </article>${solo ? '' : '<section class="lb-vw" aria-label="Ejemplo"></section>'}</div>`;
-    window.scrollTo(0, 0);
-    document.title = `${f.nombre} | Base de datos | Darío Colángelo`;
+    document.title = `${f.nombre} | Darío Colángelo`;
     if (!solo) montarVisor(f, tabs);
     const bp = box.querySelector('[data-copiar-prompt]');
     if (bp) bp.onclick = async () => { try { await navigator.clipboard.writeText(f.reutilizable.prompt.texto); bp.textContent = 'Copiado'; } catch (e) { bp.textContent = 'No se pudo copiar'; } setTimeout(() => { bp.textContent = 'Copiar prompt'; }, 1600); };
@@ -358,7 +367,7 @@
   function montarVisor(f, tabs) {
     const vw = $('lb-ficha').querySelector('.lb-vw'); let actual = tabs[0];
     const pintar = async () => {
-      vw.innerHTML = `<div class="lb-vt">${tabs.length > 1 ? `<div class="lb-seg" role="group" aria-label="Qué ver">${tabs.map(t => `<button type="button" data-tab="${t.k}" aria-pressed="${t.k === actual.k}">${t.label}</button>`).join('')}</div>` : `<span class="lb-tipo">${actual.label}</span>`}${actual.open ? '<button type="button" class="lb-btn" data-abrir>Abrir en grande ↗</button>' : '<span></span>'}</div>
+      vw.innerHTML = `<div class="lb-vt">${tabs.length > 1 ? `<div class="lb-seg" role="group" aria-label="Qué ver">${tabs.map(t => `<button type="button" data-tab="${t.k}" aria-pressed="${t.k === actual.k}">${t.label}</button>`).join('')}</div>` : `<span class="lb-tipo">${actual.label}</span>`}${actual.open ? `<button type="button" class="lb-btn" data-abrir>${actual.openLabel ? esc(actual.openLabel) + ' ↗' : 'Abrir en grande ↗'}</button>` : '<span></span>'}</div>
         <div class="lb-stage"><div class="lb-legacy" ${actual.legacy ? '' : 'hidden'}></div>${actual.html ? actual.html() : ''}</div><p class="lb-vn">${esc(actual.nota)}</p>`;
       const stage = vw.querySelector('.lb-stage');
       if (actual.legacy) {
@@ -366,6 +375,15 @@
         cont.innerHTML = await legacyHTML(f, actual.legacy); if (window.WLDemos) WLDemos.mount(cont);
       }
       ajustarFrames(vw);
+      const gal = vw.querySelector('.lb-gal');
+      if (gal) {
+        const caps = (S.evid[(f.evidencias || []).find(x => S.evid[x]?.ref?.capturas)]?.ref.capturas) || [];
+        gal.querySelectorAll('[data-cap]').forEach(b => b.onclick = () => {
+          const c = caps[+b.dataset.cap]; if (!c) return;
+          gal.querySelector('.lb-gal-main img').src = c[1]; gal.querySelector('.lb-gal-main img').alt = c[0]; gal.querySelector('.lb-gal-main').href = c[1]; gal.querySelector('.lb-gal-t').textContent = c[0];
+          gal.querySelectorAll('[data-cap]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+        });
+      }
       const r = vw.querySelector('input[type=range]'); if (r) r.oninput = () => r.closest('.lb-frame').style.setProperty('--x', r.value + '%');
       const ab = vw.querySelector('[data-abrir]'); if (ab) ab.onclick = () => window.open(actual.open, '_blank', 'noopener');
       vw.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { actual = tabs.find(t => t.k === b.dataset.tab); pintar(); });
@@ -377,30 +395,45 @@
   }
 
   // ── Router ──
+  // La base queda siempre debajo: la ficha y el rubro se abren como un panel completo sobre la misma página
+  let abierto = null, foco = null;
+  const reducido = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function setView(v) {
-    $('lb-base').hidden = v !== 'base'; $('lb-rubro').hidden = v !== 'rubro'; $('lb-ficha').hidden = v !== 'ficha';
+    const ids = { rubro: 'lb-rubro', ficha: 'lb-ficha' };
+    for (const [k, id] of Object.entries(ids)) {
+      const el = $(id);
+      if (k === v) {
+        if (el.hidden) { foco = document.activeElement; el.hidden = false; document.documentElement.classList.add('lb-lock'); requestAnimationFrame(() => el.classList.add('is-open')); setTimeout(() => el.focus({ preventScroll: true }), 30); }
+        el.scrollTop = 0; abierto = k;
+      } else if (!el.hidden) {
+        el.classList.remove('is-open'); setTimeout(() => { el.hidden = true; }, reducido() ? 0 : 220);
+      }
+    }
+    if (!v || v === 'base') { document.documentElement.classList.remove('lb-lock'); if (abierto) { abierto = null; try { foco?.focus({ preventScroll: true }); } catch (e) {} } }
   }
   let internas = 0;
   function route() {
     const h = location.hash.replace(/^#\/?/, ''); const [a, b, ...rest] = h.split('/');
-    if (a === 'f' && b) return showFicha(decodeURIComponent([b, ...rest].join('/')));
-    if (a === 'r' && b) return showRubro(decodeURIComponent([b, ...rest].join('/')));
+    if (a === 'f' && b) { ensureBase(); return showFicha(decodeURIComponent([b, ...rest].join('/'))); }
+    if (a === 'r' && b) { ensureBase(); return showRubro(decodeURIComponent([b, ...rest].join('/'))); }
     if (a === 'v' && b && VISTAS.some(v => v[0] === b)) { S.vista = b; store.set('dc-lab-vista', b); }
     else if (a && b && S.legacy[`${a}/${decodeURIComponent([b, ...rest].join('/'))}`]) { const n = S.legacy[`${a}/${decodeURIComponent([b, ...rest].join('/'))}`]; history.replaceState(null, '', n.startsWith('rubro:') ? `#/r/${encodeURIComponent(n)}` : `#/f/${encodeURIComponent(n)}`); return route(); }
-    setView('base'); document.title = 'Base de datos de herramientas, funcionalidades e información útil | Darío Colángelo';
-    renderBase();
+    const venia = abierto; setView('base'); document.title = 'Herramientas, funcionalidades y soluciones con ejemplo para abrir | Darío Colángelo';
+    if (!(venia && baseListo)) renderBase();
   }
+  let baseListo = false;
+  function ensureBase() { if (!baseListo) renderBase(); }
 
   function bind() {
     window.addEventListener('hashchange', () => { internas++; route(); });
-    document.addEventListener('keydown', e => { if (e.key === '/' && !/input|textarea|select/i.test(document.activeElement.tagName)) { e.preventDefault(); $('lb-q').focus(); } });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && abierto) { e.preventDefault(); if (internas > 0) history.back(); else location.hash = '#/'; return; } if (e.key === '/' && !/input|textarea|select/i.test(document.activeElement.tagName)) { e.preventDefault(); $('lb-q').focus(); } });
     let t; $('lb-q').addEventListener('input', e => { clearTimeout(t); t = setTimeout(() => { S.q = e.target.value; if (!$('lb-base').hidden) renderBase(); else location.hash = '#/'; }, 140); });
     document.addEventListener('click', e => {
       const o = e.target.closest('[data-open]'); if (o) { location.hash = '#/f/' + encodeURIComponent(o.dataset.open); return; }
       if (e.target.closest('[data-atras]')) { if (internas > 0) history.back(); else location.hash = '#/'; return; }
       const vi = e.target.closest('[data-vista]'); if (vi) { S.vista = vi.dataset.vista; store.set('dc-lab-vista', S.vista); if (location.hash !== '#/') history.replaceState(null, '', '#/'); renderBase(); return; }
-      const ar = e.target.closest('[data-area]'); if (ar) { e.preventDefault(); S.f.area = ar.dataset.area; S.f.sub = ''; S.vista = 'todo'; store.set('dc-lab-vista', 'todo'); renderBase(); return; }
-      const su = e.target.closest('[data-sub]'); if (su) { e.preventDefault(); S.f.sub = S.f.sub === su.dataset.sub ? '' : su.dataset.sub; renderBase(); return; }
+      const ar = e.target.closest('[data-area]'); if (ar) { e.preventDefault(); const id = ar.dataset.area; S.f.area = (id && S.f.area === id) ? '' : id; S.f.sub = ''; S.vista = 'todo'; store.set('dc-lab-vista', 'todo'); renderBase(); return; }
+      const su = e.target.closest('[data-sub]'); if (su) { e.preventDefault(); S.f.sub = S.f.sub === su.dataset.sub ? '' : su.dataset.sub; S.vista = 'todo'; renderBase(); return; }
       const te = e.target.closest('[data-tema]'); if (te) { S.f.tema = S.f.tema === te.dataset.tema ? '' : te.dataset.tema; renderBase(); return; }
       const fv = e.target.closest('[data-f-valor]'); if (fv) { S.f.valor = fv.dataset.fValor; renderBase(); return; }
       const fn = e.target.closest('[data-f-nivel]'); if (fn) { S.f.nivel = +fn.dataset.fNivel || 0; renderBase(); return; }
@@ -409,7 +442,7 @@
       if (e.target.closest('[data-ir-rubro]')) { const v = e.target.closest('[data-ir-rubro]').parentElement.querySelector('select')?.value; if (v) location.hash = '#/r/' + encodeURIComponent(v); return; }
       const cp = e.target.closest('[data-copy]'); if (cp) { navigator.clipboard?.writeText(cp.dataset.copy).then(() => { const l = cp.lastElementChild, p = l.innerHTML; l.textContent = 'Copiado'; setTimeout(() => { l.innerHTML = p; }, 1200); }); }
     });
-    document.addEventListener('change', e => { if (e.target.id === 'lb-rubro-sel' && e.target.value) location.hash = '#/r/' + encodeURIComponent(e.target.value); });
+    document.addEventListener('change', e => { if (e.target.matches?.('.lb-rubro-sel') && e.target.value) location.hash = '#/r/' + encodeURIComponent(e.target.value); });
     window.addEventListener('resize', fitCards);
   }
 
