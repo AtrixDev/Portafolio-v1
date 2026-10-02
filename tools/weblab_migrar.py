@@ -23,7 +23,8 @@ sys.path.insert(0, str(HERE))
 from weblab_taxonomia import *            # noqa
 import weblab_niveles as NV
 import lab_proyectos as LP
-from lab_nucleo import NUCLEO_ESCRITO, NUCLEO_SUMA
+from lab_nucleo import NUCLEO_ESCRITO, NUCLEO_SUMA, NUCLEO_AGREGA
+import lab_valor_tipos as VT
 import lab_demos_estilos as DE
 import lab_demos_patrones as DP
 from lab_valor_resto import valor_resto, ORIGEN as VALOR_RESTO_ORIGEN
@@ -181,6 +182,8 @@ def main():
             if escrito.get("resumen"): tec.append(["Resumen original", e.get("summary", "")])
             if "valor" in escrito:
                 valor, porque, vorigen, vestado = escrito["valor"], escrito["valor_porque"], "tabla manual (Claude, sin validar)", "provisional"
+        for sl, items in NUCLEO_AGREGA.get((col, i), {}).items():   # texto que se suma al existente (no lo reemplaza)
+            nuc[sl] = list(nuc.get(sl, [])) + [dict(x) for x in items]
         suma = NUCLEO_SUMA.get((col, i))
         if suma:   # completa huecos del núcleo automático sin reemplazar lo que ya está
             for sl, items in suma.items():
@@ -211,7 +214,7 @@ def main():
             "id": nid[(col, i)], "tipo": tipo, "subtipo": sub, "areas": areas,
             "temas": [t_ for t_, c_ in tm if c_ in ("alta", "media")], "temas_a_revisar": [t_ for t_, c_ in tm if c_ == "baja"],
             "rubros": [x for x in (NEGOCIO_RUBROS.get(i, []) if col == "negocios" else [])],
-            "nivel": e.get("nivel"), "valor": valor, "valor_porque": porque, "valor_revisado": HOY, "valor_origen": vorigen, "valor_estado": vestado,
+            "nivel": VT.NIVEL_TIPOS.get((col, i), e.get("nivel")), "valor": valor, "valor_porque": porque, "valor_revisado": HOY, "valor_origen": vorigen, "valor_estado": vestado,
             "nombre": e["name"], "resumen": (escrito or {}).get("resumen") or e.get("summary", ""), "nucleo": dict(nuc), "evidencias": ev, "reutilizable": reut,
             "tecnico": tec, "extra": extra, "origen": "curada" if col in CURADAS else "importada",
             "fuente": "Curada en sesiones de trabajo (Darío y Claude)" if col in CURADAS else "Importada y traducida de la skill ui-ux-pro-max",
@@ -396,7 +399,8 @@ def main():
             if t_: rel.append({"desde": fn["id"], "tipo": "usa", "a": t_})
         funcs.append({
             "id": fn["id"], "tipo": "funcionalidad", "subtipo": "funcionalidad", "areas": ["ia-datos"] if "mercado-libre" in fn["temas"] and fn["id"].startswith("analisis") else ["desarrollo-web"],
-            "temas": fn["temas"], "rubros": [], "nivel": None, "valor": None, "valor_origen": "sin clasificar", "valor_estado": "sin clasificar",
+            "temas": fn["temas"], "rubros": [], "nivel": None, "valor": VT.VALOR_FUNCIONES[fn["id"]][0], "valor_porque": VT.VALOR_FUNCIONES[fn["id"]][1],
+            "valor_revisado": HOY, "valor_origen": "validado por Darío", "valor_estado": "validado",
             "nombre": fn["nombre"], "resumen": fn["resumen"], "nucleo": {"que_es": [{"l": "", "x": fn["que_es"]}]}, "evidencias": evs, "reutilizable": {}, "tecnico": [],
             "extra": {"respaldo": [{"proyecto": p_, "nivel": n_, "fuente": f_} for p_, n_, f_ in fn["en"]], "nota": fn.get("nota", "")},
             "origen": "propia", "fuente": "Comprobada en el código y la documentación de los proyectos (ver cada respaldo)", "legacy": None, "col": "proyectos",

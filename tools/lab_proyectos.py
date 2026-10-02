@@ -83,6 +83,7 @@ PROYECTOS = [
             "aporta": [
                 "Una sola base para el sitio, la gestión del consultorio y el portal del paciente.",
                 "El estimador de precios se alimenta de los aranceles que se cargan en el panel: el precio que ve el paciente sale del mismo lugar que usa el consultorio.",
+                "Alcance según su código: 151 endpoints y 23 modelos de datos.",
                 "Seguridad cuidada: doble verificación por email para el administrador, límite de intentos, y las sesiones se pueden invalidar (según su documentación).",
             ],
         },
@@ -230,6 +231,7 @@ EJEMPLO_PROPIO = {
     ("soluciones", "portfolio"): ["este-portfolio"],
     ("soluciones", "saas"): ["ml-tracker"],
     ("soluciones", "dashboard"): ["ml-tracker"],
+    ("soluciones", "interna"): ["herramienta-auditoria"],
     ("negocios", "consultorio"): ["odontologia-almagro"],
 }
 # Funciones concretas que ilustran un tipo de web (el id es de una funcionalidad y el proyecto que la muestra)

@@ -60,3 +60,11 @@ import lab_valor_servicios as _vs
 for _k, (_v, _p) in _vs.VALOR_SS.items():
     _tx.VALOR_DARIO[_k] = _v
     _tx.VALOR_PORQUE_DARIO[_k] = _p
+
+
+# ── Tipos de web, patrones y funcionalidades: valor confirmado por Darío (02/10) ──
+import lab_valor_tipos as _vt
+for _k, (_v, _p) in {**_vt.VALOR_TIPOS, **_vt.VALOR_PATRONES}.items():
+    _tx.VALOR_DARIO[_k] = _v
+    _tx.VALOR_PORQUE_DARIO[_k] = _p
+NUCLEO_AGREGA = {_k: {sl: [{"l": a, "x": b} for a, b in items] for sl, items in d.items()} for _k, d in _vt.NUCLEO_AGREGA.items()}
