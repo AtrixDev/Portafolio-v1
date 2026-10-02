@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lab de Programación | Base de conocimiento para construir webs | Darío Colángelo</title>
-  <meta name="description" content="Base de conocimiento para construir webs: tipos de sitio, arquitecturas, stacks, servicios, estilos de diseño, tipografías, paletas y buenas prácticas de UX.">
+  <title>Herramientas, funcionalidades y soluciones con ejemplo para abrir | Darío Colángelo</title>
+  <meta name="description" content="Cada entrada explica qué es, qué soluciona y cuándo conviene, y trae algo para ver: un proyecto real, una demo, un experimento o una maqueta. Siempre dice cuál es.">
   <meta name="author" content="Darío Colángelo">
-  <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#efefec" media="(prefers-color-scheme: light)">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Lab de Programación | Base de conocimiento para construir webs | Darío Colángelo">
-  <meta property="og:description" content="Base de conocimiento para construir webs: tipos de sitio, arquitecturas, stacks, servicios, estilos de diseño, tipografías, paletas y buenas prácticas de UX.">
+  <meta property="og:title" content="Herramientas, funcionalidades y soluciones con ejemplo para abrir">
+  <meta property="og:description" content="Cada entrada explica qué soluciona y cuándo conviene, y trae algo para ver. Siempre dice si es un proyecto real, una demo, un experimento o una maqueta.">
   <meta property="og:locale" content="es_AR">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ffe14a'/><text x='50%25' y='54%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%23141207'>DC</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,6 +22,7 @@
   <link rel="stylesheet" href="css/programacion.css?v=7">
   <link rel="stylesheet" href="css/programacion-demos.css?v=11">
   <link rel="stylesheet" href="css/programacion-ux.css?v=4">
+  <link rel="stylesheet" href="css/programacion-v2.css?v=4">
   <link rel="stylesheet" href="css/surfaces.css">
 </head>
 <body>
@@ -64,73 +64,39 @@
 
 <main id="contenido">
 
-<section class="wl-hero" aria-labelledby="wl-title">
-  <div class="wl-hero-bg" aria-hidden="true"></div>
-  <h1 class="wl-title" id="wl-title">Todo para construir <span class="grad">una web</span></h1>
-  <p class="wl-sub">Mi base de conocimiento: qué tipo de web conviene, cómo se arma por dentro, qué servicios usar y cómo diseñarla. Buscá, explorá y armá la receta de tu próximo proyecto.</p>
-
-  <div class="wl-search" role="search">
-    <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-search"/></svg>
-    <label for="wl-q" class="sr-only">Buscar en el Lab</label>
-    <input id="wl-q" type="search" placeholder="Buscar: “serverless”, “e-commerce”, “glassmorphism”, “contraste”…" autocomplete="off" spellcheck="false">
-    <kbd aria-hidden="true">/</kbd>
-  </div>
-  <p class="wl-stats" id="wl-stats" aria-live="polite">Cargando la base…</p>
-</section>
-
-<div class="wl-app">
-  <aside class="wl-side" aria-label="Categorías">
-    <nav id="wl-cats"></nav>
-    <button type="button" class="wl-recipe-btn" id="wl-recipe-open" aria-haspopup="dialog">
-      <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-bookmark"/></svg>
-      <span>Mi receta</span><span class="wl-badge" id="wl-recipe-count">0</span>
-    </button>
-  </aside>
-
-  <section class="wl-main" aria-live="polite" aria-busy="true" id="wl-main">
-    <header class="wl-cat-head" id="wl-cat-head"></header>
-    <div class="wl-tools" id="wl-tools"></div>
-    <div class="wl-filters" id="wl-filters" role="group" aria-label="Filtrar por etiqueta"></div>
-    <p class="wl-count" id="wl-count"></p>
-    <div class="wl-grid" id="wl-grid"></div>
+<!-- Base -->
+<div id="lb-base">
+  <section class="wl-hero lb-hero" aria-labelledby="lb-title">
+    <div class="wl-hero-bg" aria-hidden="true"></div>
+    <h1 class="wl-title" id="lb-title">Herramientas, funcionalidades y soluciones, <span class="grad">con ejemplo para abrir</span></h1>
+    <p class="wl-sub">Cada entrada explica qué es, qué soluciona y cuándo conviene, y trae algo para ver: un proyecto mío, una demo, un experimento o una maqueta. Siempre dice cuál es, así sabés qué estás mirando.</p>
+    <div class="wl-search" role="search">
+      <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-search"/></svg>
+      <label for="lb-q" class="sr-only">Buscar en la base</label>
+      <input id="lb-q" type="search" placeholder="Buscá: “turnos”, “glassmorphism”, “Mercado Pago”…" autocomplete="off" spellcheck="false">
+      <kbd aria-hidden="true">/</kbd>
+    </div>
+    <p class="wl-stats" id="lb-stats" aria-live="polite">Cargando la base…</p>
   </section>
+  <div class="wl-app">
+    <aside class="wl-side lb-side" aria-label="Menú de la base"><nav id="lb-side"></nav></aside>
+    <section class="wl-main" id="lb-main" aria-live="polite" aria-busy="true">
+      <header class="wl-cat-head" id="lb-head"></header>
+      <div class="lb-vistas-wrap" id="lb-vistas"></div>
+      <div id="lb-filtros"></div>
+      <p class="wl-count" id="lb-count"></p>
+      <div class="wl-grid" id="lb-grid"></div>
+    </section>
+  </div>
 </div>
+
+<!-- Página de rubro (recomendador) -->
+<div id="lb-rubro" class="lb-overlay" role="dialog" aria-modal="true" aria-label="Recomendador por rubro" tabindex="-1" hidden></div>
+
+<!-- Ficha a pantalla completa -->
+<div id="lb-ficha" class="lb-overlay" role="dialog" aria-modal="true" aria-label="Ficha" tabindex="-1" hidden></div>
 
 </main>
-
-<!-- Ficha -->
-<div class="wl-drawer" id="wl-drawer" role="dialog" aria-modal="true" aria-labelledby="wl-d-title" hidden>
-  <div class="wl-drawer-panel">
-    <div class="wl-drawer-top">
-      <span class="wl-d-cat" id="wl-d-cat"></span>
-      <div class="wl-drawer-tools">
-        <button type="button" class="wl-tool" id="wl-d-link" aria-label="Copiar link a esta ficha"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-link"/></svg></button>
-        <button type="button" class="wl-tool" id="wl-d-close" aria-label="Cerrar ficha"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-x"/></svg></button>
-      </div>
-    </div>
-    <div class="wl-drawer-body" id="wl-d-body"></div>
-  </div>
-</div>
-
-<!-- Receta -->
-<div class="wl-drawer" id="wl-recipe" role="dialog" aria-modal="true" aria-labelledby="wl-r-title" hidden>
-  <div class="wl-drawer-panel">
-    <div class="wl-drawer-top">
-      <h2 class="wl-r-title" id="wl-r-title">Mi receta</h2>
-      <div class="wl-drawer-tools">
-        <button type="button" class="wl-tool" id="wl-r-close" aria-label="Cerrar receta"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-x"/></svg></button>
-      </div>
-    </div>
-    <div class="wl-drawer-body">
-      <p class="wl-r-intro">Sumá fichas con <strong>“Agregar a mi receta”</strong> y armá el plan de una web: qué tipo es, cómo se construye, con qué servicios y cómo se ve. Se guarda en este navegador.</p>
-      <div id="wl-r-slots"></div>
-      <div class="wl-r-actions">
-        <button type="button" class="btn-primary" id="wl-r-copy"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-copy"/></svg><span>Copiar como Markdown</span></button>
-        <button type="button" class="btn-secondary" id="wl-r-clear"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-trash"/></svg>Vaciar</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <footer>
   <p class="footer-name">Darío Colángelo<span>.</span></p>
@@ -150,6 +116,6 @@
 <script src="js/programacion-ejemplos.js?v=6"></script>
 <script src="js/programacion-demos.js?v=15"></script>
 <script src="js/programacion-ux.js?v=4"></script>
-<script src="js/programacion.js?v=7"></script>
+<script src="js/programacion-v2.js?v=3"></script>
 </body>
 </html>
