@@ -275,6 +275,7 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') ocultar(); });
   }
 
+  const syncN = () => { const n = $('lb-sn'); if (n) n.textContent = S.q.trim() ? $('lb-count').textContent : ''; };
   async function renderBase() {
     $('lb-main').setAttribute('aria-busy', 'true');
     renderSide(); renderVistas(); renderDest(); renderTop();
@@ -304,7 +305,7 @@
       if (lista.length > 120) html += `<p class="lb-vacio">Mostrando 120 de ${lista.length}. Usá el buscador o los filtros para acotar.</p>`;
     }
     if (!lista.length) html += '<p class="lb-vacio">Ninguna entrada cumple con esos filtros. Sacá alguno para ver más.</p>';
-    $('lb-count').textContent = `${lista.length} ${lista.length === 1 ? 'entrada' : 'entradas'}`;
+    $('lb-count').textContent = `${lista.length} ${lista.length === 1 ? 'entrada' : 'entradas'}`; syncN();
     grid.innerHTML = html;
     $('lb-main').setAttribute('aria-busy', 'false');
     baseListo = true; fitCards();
@@ -340,7 +341,7 @@
       <h3 class="lb-grupo">Probado en experimentos<small>${exp.length}</small></h3>${ordenar(exp).map(card).join('')}
       <h3 class="lb-grupo">Con demo para tocar<small>${demos.length}</small></h3>${ordenar(demos).slice(0, 12).map(card).join('')}
       <p class="lb-vacio">Cada cosa dice qué es: <b>proyecto real</b> (lo construí), <b>experimento</b> (lo probé sin y con la herramienta) o <b>demo</b> (hecha para mostrar la idea). Las maquetas generadas no se cuentan acá. <button type="button" class="lb-btn" data-todas-demos>Ver todas las demos</button></p>`;
-    $('lb-count').textContent = `${proys.length} proyectos y herramientas`;
+    $('lb-count').textContent = `${proys.length} proyectos y herramientas`; syncN();
     $('lb-main').setAttribute('aria-busy', 'false');
     baseListo = true; fitCards();
   }
@@ -558,8 +559,12 @@
   function bind() {
     tooltips();
     window.addEventListener('hashchange', () => { internas++; route(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape' && abierto) { e.preventDefault(); if (internas > 0) history.back(); else location.hash = '#/'; return; } if (e.key === '/' && !/input|textarea|select/i.test(document.activeElement.tagName)) { e.preventDefault(); $('lb-q').focus(); } });
-    let t; $('lb-q').addEventListener('input', e => { clearTimeout(t); t = setTimeout(() => { S.q = e.target.value; if (!$('lb-base').hidden) renderBase(); else location.hash = '#/'; }, 140); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && abierto) { e.preventDefault(); if (internas > 0) history.back(); else location.hash = '#/'; return; } if (e.key === '/' && !/input|textarea|select/i.test(document.activeElement.tagName)) { e.preventDefault(); ($('lb-q').getBoundingClientRect().bottom > 80 ? $('lb-q') : $('lb-q2')).focus(); } });
+    // Dos buscadores (el del título y el que queda fijo arriba de la base) que siempre muestran lo mismo
+    let t; const sync = v => { $('lb-q').value = v; $('lb-q2').value = v; $('lb-s2x').hidden = !v; };
+    const onQ = e => { sync(e.target.value); clearTimeout(t); t = setTimeout(() => { S.q = e.target.value; if (!$('lb-base').hidden) renderBase(); else location.hash = '#/'; }, 140); };
+    $('lb-q').addEventListener('input', onQ); $('lb-q2').addEventListener('input', onQ);
+    $('lb-s2x').addEventListener('click', () => { sync(''); S.q = ''; renderBase(); $('lb-q2').focus(); });
     document.addEventListener('click', e => {
       const o = e.target.closest('[data-open]'); if (o) { location.hash = '#/f/' + encodeURIComponent(o.dataset.open); return; }
       if (e.target.closest('[data-atras]')) { if (internas > 0) history.back(); else location.hash = '#/'; return; }

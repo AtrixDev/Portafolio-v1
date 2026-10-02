@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="css/programacion.css?v=7">
   <link rel="stylesheet" href="css/programacion-demos.css?v=11">
   <link rel="stylesheet" href="css/programacion-ux.css?v=4">
-  <link rel="stylesheet" href="css/programacion-v2.css?v=19">
+  <link rel="stylesheet" href="css/programacion-v2.css?v=21">
   <link rel="stylesheet" href="css/surfaces.css">
 </head>
 <body>
@@ -87,6 +87,17 @@
     </div>
   </section>
   <section class="lb-dest" id="lb-dest" aria-label="Lo que construí" hidden></section>
+  <div class="lb-sbar" id="lb-sbar">
+    <div class="lb-sbar-in">
+      <div class="wl-search lb-s2" role="search">
+        <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-search"/></svg>
+        <label for="lb-q2" class="sr-only">Buscar en la base</label>
+        <input id="lb-q2" type="search" placeholder="Buscá en toda la base…" autocomplete="off" spellcheck="false">
+        <button type="button" class="lb-s2x" id="lb-s2x" aria-label="Borrar la búsqueda" hidden>✕</button>
+      </div>
+      <span class="lb-sbar-n" id="lb-sn" aria-live="polite"></span>
+    </div>
+  </div>
   <div class="wl-app">
     <aside class="wl-side lb-side" aria-label="Menú de la base"><nav id="lb-side"></nav></aside>
     <section class="wl-main" id="lb-main" aria-live="polite" aria-busy="true">
@@ -125,6 +136,6 @@
 <script src="js/programacion-ejemplos.js?v=6"></script>
 <script src="js/programacion-demos.js?v=15"></script>
 <script src="js/programacion-ux.js?v=4"></script>
-<script src="js/programacion-v2.js?v=15"></script>
+<script src="js/programacion-v2.js?v=16"></script>
 </body>
 </html>
