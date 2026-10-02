@@ -69,9 +69,10 @@ def cargar():
 
 def claves_js():
     ux, stacks, exp = set(), set(), set()
-    for f in (JS / "programacion-demos.js", JS / "programacion-ux.js"):
+    for f in (JS / "programacion-demos.js", JS / "programacion-ux.js", JS / "programacion-ux2.js"):
         t = f.read_text(encoding="utf-8")
         ux |= set(re.findall(r"'ux/([0-9a-z-]+)'\s*:", t))
+        ux |= set(re.findall(r"^\s*R\('([0-9a-z-]+)',", t, re.M))   # programacion-ux2.js registra con R('id', ...)
         stacks |= set(re.findall(r"'stacks/([0-9a-z-]+)'\s*:", t))
         exp |= set(re.findall(r"'skills/([0-9a-z-]+)'\s*:\s*\{\s*exp:", t))
     return ux, stacks, exp

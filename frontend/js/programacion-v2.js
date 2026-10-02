@@ -517,7 +517,7 @@
           gal.querySelectorAll('[data-cap]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
         });
       }
-      const r = vw.querySelector('input[type=range]'); if (r) r.oninput = () => r.closest('.lb-frame').style.setProperty('--x', r.value + '%');
+      const r = vw.querySelector('.lb-frame input[type=range]'); if (r) r.oninput = () => r.closest('.lb-frame').style.setProperty('--x', r.value + '%');
       const ab = vw.querySelector('[data-abrir]'); if (ab) ab.onclick = () => window.open(actual.open, '_blank', 'noopener');
       vw.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { actual = tabs.find(t => t.k === b.dataset.tab); pintar(); });
     };
