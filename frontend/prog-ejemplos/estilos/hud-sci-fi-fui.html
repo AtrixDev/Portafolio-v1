@@ -1,0 +1,59 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Plata · HUD / FUI de ciencia ficción</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+:root{--bg:#eef0f4;--card:#fff;--card2:#e4e7ee;--edge:#d5d9e2;--ink:#1a1d29;--ink2:#575d70;--acc:#2f5bea;--accink:#fff;--r:14px;--rb:8px;--font:Manrope,system-ui,sans-serif}
+body{min-height:100vh;font-family:var(--font);color:var(--ink);background:var(--bg);overflow-x:hidden;position:relative}
+.bg{display:none}
+:where(.g){background:var(--card);border:1px solid var(--edge);border-radius:var(--r)}
+.w{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:22px 28px 60px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:12px 18px}
+nav b{font-weight:800;font-size:20px;letter-spacing:-.02em}
+nav ul{display:flex;gap:26px;list-style:none;padding:0;font-size:14px;font-weight:500;color:var(--ink2)}
+.btn{display:inline-block;padding:11px 20px;border-radius:var(--rb);font-weight:700;font-size:14px;color:var(--accink);background:var(--acc);text-decoration:none}
+.btn.s{background:var(--card);color:var(--ink);border:1px solid var(--edge)}
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;padding:70px 0 40px}
+h1{font-size:62px;line-height:1.02;font-weight:800;letter-spacing:-.04em}
+.lead{margin:20px 0 28px;font-size:18px;line-height:1.55;color:var(--ink2);max-width:44ch}
+.row{display:flex;gap:12px}
+.stack{position:relative;height:420px}
+.card{position:absolute;padding:22px}
+.c1{inset:0 40px 70px 0;display:grid;align-content:space-between}
+.c1 small{color:var(--ink2);font-size:13px;font-weight:600}
+.c1 .n{font-size:44px;font-weight:800;letter-spacing:-.03em;margin-top:4px}
+.bars{display:flex;align-items:flex-end;gap:10px;height:120px}
+.bars i{flex:1;border-radius:4px 4px 0 0;background:var(--acc)}
+.c2{right:0;bottom:0;width:260px;padding:16px 18px;display:grid;gap:10px}
+.t{display:flex;justify-content:space-between;font-size:14px;font-weight:600}
+.t span{color:var(--ink2);font-weight:500}
+.pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:34px}
+.pills span{padding:9px 16px;border-radius:var(--rb);background:var(--card2);border:1px solid var(--edge);font-size:13.5px;font-weight:600}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}
+.feat div{padding:24px;background:var(--card)}
+.feat h3{font-size:19px;font-weight:700;margin-bottom:8px;letter-spacing:-.01em}
+.feat p{font-size:15px;line-height:1.5;color:var(--ink2)}
+@media(max-width:860px){.hero,.feat{grid-template-columns:1fr}h1{font-size:44px}nav ul{display:none}}
+
+:root{--bg:#02070e;--card:rgba(6,30,48,.55);--card2:rgba(6,40,60,.6);--edge:rgba(0,229,255,.55);--ink:#d7f9ff;--ink2:#6fb7c6;--acc:#00e5ff;--accink:#02070e;--r:0;--rb:0;--font:'Share Tech Mono',monospace}
+body{background:radial-gradient(circle at 50% 30%,#06223a,#02070e 70%),repeating-linear-gradient(0deg,rgba(0,229,255,.04) 0 1px,transparent 1px 28px),repeating-linear-gradient(90deg,rgba(0,229,255,.04) 0 1px,transparent 1px 28px)}
+.g{border:1px solid rgba(0,229,255,.5);box-shadow:0 0 18px rgba(0,229,255,.18),inset 0 0 22px rgba(0,229,255,.08);background-image:linear-gradient(#00e5ff,#00e5ff),linear-gradient(#00e5ff,#00e5ff),linear-gradient(#00e5ff,#00e5ff),linear-gradient(#00e5ff,#00e5ff);background-repeat:no-repeat;background-size:14px 2px,2px 14px,14px 2px,2px 14px;background-position:0 0,0 0,100% 100%,100% 100%}
+nav b{font-family:Orbitron;letter-spacing:.18em;text-transform:uppercase;font-size:16px;color:#00e5ff}nav ul{text-transform:uppercase;letter-spacing:.14em;font-size:11px}
+h1{font-family:Orbitron;font-weight:500;font-size:46px;text-transform:uppercase;letter-spacing:.02em;text-shadow:0 0 14px rgba(0,229,255,.6)}
+.lead{font-size:14px;color:#8fd3df}
+.btn{background:rgba(0,229,255,.12);color:#00e5ff;border:1px solid #00e5ff;box-shadow:0 0 14px rgba(0,229,255,.35);text-transform:uppercase;letter-spacing:.14em;font-size:11px}
+.btn.s{color:#6fb7c6;border-color:rgba(0,229,255,.35);box-shadow:none}
+.bars i{background:linear-gradient(#00e5ff,rgba(0,229,255,.15));border-radius:0;box-shadow:0 0 10px rgba(0,229,255,.5)}
+.pills span{background:transparent;border:1px solid rgba(0,229,255,.45);color:#8fd3df;text-transform:uppercase;letter-spacing:.1em;font-size:10.5px;border-radius:0}
+.c1 .n{font-family:Orbitron;font-weight:500;text-shadow:0 0 12px rgba(0,229,255,.7)}.c1 small{text-transform:uppercase;letter-spacing:.14em;font-size:10px}
+</style></head><body>
+<div class="bg" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="w" id="main">
+<nav class="g"><b>Plata</b><ul><li>Cuentas</li><li>Gastos</li><li>Ahorro</li><li>Ayuda</li></ul><a class="btn" href="#">Abrir mi cuenta</a></nav>
+<section class="hero"><div><h1>Tu plata, a la vista y en orden.</h1><p class="lead">Juntá tus cuentas, seguí tus gastos del mes y fijate cuánto te queda, sin planillas ni vueltas.</p>
+<div class="row"><a class="btn" href="#">Empezar gratis</a><a class="btn s" href="#">Ver cómo funciona</a></div>
+<div class="pills"><span>Pagos con QR</span><span>Alertas de gastos</span><span>Metas de ahorro</span></div></div>
+<div class="stack"><div class="card g c1"><div><small>Disponible este mes</small><div class="n">$ 842.300</div></div><div class="bars" aria-hidden="true"><i style="height:48%"></i><i style="height:72%"></i><i style="height:40%"></i><i style="height:88%"></i><i style="height:62%"></i><i style="height:100%"></i></div></div>
+<div class="card g c2"><div class="t">Supermercado <span>− $ 48.900</span></div><div class="t">Sueldo <span>+ $ 1.250.000</span></div><div class="t">Alquiler <span>− $ 420.000</span></div></div></div></section>
+<section class="feat"><div class="g"><h3>Todo en una pantalla</h3><p>Tus cuentas y tarjetas juntas, con el saldo real de cada una.</p></div><div class="g"><h3>Gastos sin cargar nada</h3><p>Se ordenan solos por categoría. Vos solo mirás.</p></div><div class="g"><h3>Metas con fecha</h3><p>Decís cuánto y para cuándo; te avisa si vas bien.</p></div></section>
+</div>
+</body></html>

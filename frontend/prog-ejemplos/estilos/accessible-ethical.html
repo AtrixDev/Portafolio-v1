@@ -5,7 +5,7 @@
 :root{--bg:#eef0f4;--card:#fff;--card2:#e4e7ee;--edge:#d5d9e2;--ink:#1a1d29;--ink2:#575d70;--acc:#2f5bea;--accink:#fff;--r:14px;--rb:8px;--font:Manrope,system-ui,sans-serif}
 body{min-height:100vh;font-family:var(--font);color:var(--ink);background:var(--bg);overflow-x:hidden;position:relative}
 .bg{display:none}
-.g{background:var(--card);border:1px solid var(--edge);border-radius:var(--r)}
+:where(.g){background:var(--card);border:1px solid var(--edge);border-radius:var(--r)}
 .w{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:22px 28px 60px}
 nav{display:flex;align-items:center;justify-content:space-between;padding:12px 18px}
 nav b{font-weight:800;font-size:20px;letter-spacing:-.02em}

@@ -1,0 +1,62 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Plata · Analógico vintage / película retro</title>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Playfair+Display:ital,wght@1,700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+:root{--bg:#eef0f4;--card:#fff;--card2:#e4e7ee;--edge:#d5d9e2;--ink:#1a1d29;--ink2:#575d70;--acc:#2f5bea;--accink:#fff;--r:14px;--rb:8px;--font:Manrope,system-ui,sans-serif}
+body{min-height:100vh;font-family:var(--font);color:var(--ink);background:var(--bg);overflow-x:hidden;position:relative}
+.bg{display:none}
+:where(.g){background:var(--card);border:1px solid var(--edge);border-radius:var(--r)}
+.w{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:22px 28px 60px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:12px 18px}
+nav b{font-weight:800;font-size:20px;letter-spacing:-.02em}
+nav ul{display:flex;gap:26px;list-style:none;padding:0;font-size:14px;font-weight:500;color:var(--ink2)}
+.btn{display:inline-block;padding:11px 20px;border-radius:var(--rb);font-weight:700;font-size:14px;color:var(--accink);background:var(--acc);text-decoration:none}
+.btn.s{background:var(--card);color:var(--ink);border:1px solid var(--edge)}
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;padding:70px 0 40px}
+h1{font-size:62px;line-height:1.02;font-weight:800;letter-spacing:-.04em}
+.lead{margin:20px 0 28px;font-size:18px;line-height:1.55;color:var(--ink2);max-width:44ch}
+.row{display:flex;gap:12px}
+.stack{position:relative;height:420px}
+.card{position:absolute;padding:22px}
+.c1{inset:0 40px 70px 0;display:grid;align-content:space-between}
+.c1 small{color:var(--ink2);font-size:13px;font-weight:600}
+.c1 .n{font-size:44px;font-weight:800;letter-spacing:-.03em;margin-top:4px}
+.bars{display:flex;align-items:flex-end;gap:10px;height:120px}
+.bars i{flex:1;border-radius:4px 4px 0 0;background:var(--acc)}
+.c2{right:0;bottom:0;width:260px;padding:16px 18px;display:grid;gap:10px}
+.t{display:flex;justify-content:space-between;font-size:14px;font-weight:600}
+.t span{color:var(--ink2);font-weight:500}
+.pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:34px}
+.pills span{padding:9px 16px;border-radius:var(--rb);background:var(--card2);border:1px solid var(--edge);font-size:13.5px;font-weight:600}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}
+.feat div{padding:24px;background:var(--card)}
+.feat h3{font-size:19px;font-weight:700;margin-bottom:8px;letter-spacing:-.01em}
+.feat p{font-size:15px;line-height:1.5;color:var(--ink2)}
+@media(max-width:860px){.hero,.feat{grid-template-columns:1fr}h1{font-size:44px}nav ul{display:none}}
+
+:root{--bg:#d8c8a8;--card:#f4ead2;--card2:#eadcb8;--edge:#bfa77a;--ink:#3b2e1e;--ink2:#6b5a43;--acc:#c0562f;--accink:#fff5e0;--r:3px;--rb:3px;--font:'Courier Prime',monospace}
+body{background:radial-gradient(circle at 15% 10%,rgba(255,150,60,.35),transparent 45%),radial-gradient(circle at 90% 85%,rgba(255,100,80,.25),transparent 45%),linear-gradient(#e0d0ae,#cdb98f)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;opacity:.35;mix-blend-mode:multiply;z-index:9;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.g{border:0;background:#f7efdb;box-shadow:0 10px 22px rgba(70,45,10,.3)}
+.card.g{padding:14px 14px 40px;background:#fbf5e6;transform:rotate(-1.5deg)}.c2{transform:rotate(2deg)}
+.c1::after{content:"'78  10  02";position:absolute;right:14px;bottom:10px;font:400 12px 'Special Elite';color:#c0562f;letter-spacing:.1em}
+nav{background:#2f2418!important;color:#f1e3c4}nav ul{color:#d8c7a3}
+h1{font-family:'Playfair Display',serif;font-style:italic;font-weight:700;color:#5a3a1e;font-size:58px;letter-spacing:-.02em}
+.lead{color:#4a3a28;font-size:16px}
+.btn{background:#c0562f;box-shadow:0 4px 0 #8a3a1c;font-family:'Special Elite';letter-spacing:.04em}.btn.s{background:#f4ead2;color:#3b2e1e;border:1px solid #bfa77a;box-shadow:0 4px 0 #cdb98f}
+.bars i{background:linear-gradient(#d9774a,#a8441f);border-radius:1px 1px 0 0}.bars i:nth-child(even){background:linear-gradient(#6fa6a0,#3f7771)}
+.pills span{background:#eadcb8;border:1px solid #bfa77a}
+.feat .g{padding:20px 22px;background:#fbf5e6;border-top:12px solid #f7efdb}
+.feat h3{font-family:'Playfair Display',serif;font-style:italic}
+</style></head><body>
+<div class="bg" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="w" id="main">
+<nav class="g"><b>Plata</b><ul><li>Cuentas</li><li>Gastos</li><li>Ahorro</li><li>Ayuda</li></ul><a class="btn" href="#">Abrir mi cuenta</a></nav>
+<section class="hero"><div><h1>Tu plata, a la vista y en orden.</h1><p class="lead">Juntá tus cuentas, seguí tus gastos del mes y fijate cuánto te queda, sin planillas ni vueltas.</p>
+<div class="row"><a class="btn" href="#">Empezar gratis</a><a class="btn s" href="#">Ver cómo funciona</a></div>
+<div class="pills"><span>Pagos con QR</span><span>Alertas de gastos</span><span>Metas de ahorro</span></div></div>
+<div class="stack"><div class="card g c1"><div><small>Disponible este mes</small><div class="n">$ 842.300</div></div><div class="bars" aria-hidden="true"><i style="height:48%"></i><i style="height:72%"></i><i style="height:40%"></i><i style="height:88%"></i><i style="height:62%"></i><i style="height:100%"></i></div></div>
+<div class="card g c2"><div class="t">Supermercado <span>− $ 48.900</span></div><div class="t">Sueldo <span>+ $ 1.250.000</span></div><div class="t">Alquiler <span>− $ 420.000</span></div></div></div></section>
+<section class="feat"><div class="g"><h3>Todo en una pantalla</h3><p>Tus cuentas y tarjetas juntas, con el saldo real de cada una.</p></div><div class="g"><h3>Gastos sin cargar nada</h3><p>Se ordenan solos por categoría. Vos solo mirás.</p></div><div class="g"><h3>Metas con fecha</h3><p>Decís cuánto y para cuándo; te avisa si vas bien.</p></div></section>
+</div>
+</body></html>

@@ -16,7 +16,7 @@ BASE = """*{box-sizing:border-box;margin:0}
 :root{--bg:#eef0f4;--card:#fff;--card2:#e4e7ee;--edge:#d5d9e2;--ink:#1a1d29;--ink2:#575d70;--acc:#2f5bea;--accink:#fff;--r:14px;--rb:8px;--font:Manrope,system-ui,sans-serif}
 body{min-height:100vh;font-family:var(--font);color:var(--ink);background:var(--bg);overflow-x:hidden;position:relative}
 .bg{display:none}
-.g{background:var(--card);border:1px solid var(--edge);border-radius:var(--r)}
+:where(.g){background:var(--card);border:1px solid var(--edge);border-radius:var(--r)}
 .w{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:22px 28px 60px}
 nav{display:flex;align-items:center;justify-content:space-between;padding:12px 18px}
 nav b{font-weight:800;font-size:20px;letter-spacing:-.02em}
@@ -465,6 +465,421 @@ h1{font-weight:700;letter-spacing:-.045em;font-size:56px}
 .ask .sp{color:#8b8cff}.ask input{flex:1;background:none;border:0;outline:0;color:var(--ink);font:500 14px Inter,sans-serif}.ask input::placeholder{color:#7d8099}
 .ask button{width:34px;height:34px;border-radius:50%;border:0;background:linear-gradient(135deg,#8b8cff,#22d3ee);color:#0a0b12;font-weight:800;cursor:pointer}""",
     js="""<script>(function(){var l=document.querySelector('.lead');if(!l||matchMedia('(prefers-reduced-motion:reduce)').matches)return;var t=l.textContent;l.textContent='';l.classList.add('typing');var i=0;(function f(){l.textContent=t.slice(0,i);i+=2;if(i<=t.length+2)setTimeout(f,18);else l.classList.remove('typing')})()})()</script>""")
+
+
+
+# ───────────── Segundo lote: el resto de los estilos visuales ─────────────
+STYLES["neumorphism"] = dict(
+    titulo="Neumorfismo", fuentes="family=Nunito:wght@400;600;700;800",
+    cambia="Todo parece moldeado en el mismo material: las piezas sobresalen o se hunden con una luz clara arriba a la izquierda y una sombra suave abajo a la derecha. Se ve calmo y táctil, pero con textos grises el contraste es bajo.",
+    css=""":root{--bg:#e0e5ec;--card:#e0e5ec;--card2:#e0e5ec;--edge:transparent;--ink:#5a6a85;--ink2:#7d8aa3;--acc:#6d8cff;--accink:#fff;--r:26px;--rb:16px;--font:Nunito,system-ui,sans-serif}
+.g{border:0;box-shadow:9px 9px 18px #a3b1c6,-9px -9px 18px #fff}
+.btn{background:#e0e5ec;color:#4d6bd8;box-shadow:6px 6px 12px #a3b1c6,-6px -6px 12px #fff}
+.btn:active{box-shadow:inset 4px 4px 8px #a3b1c6,inset -4px -4px 8px #fff}
+.btn.s{border:0;color:var(--ink)}
+.pills span{border:0;background:#e0e5ec;box-shadow:inset 3px 3px 6px #a3b1c6,inset -3px -3px 6px #fff}
+.bars{padding:12px;border-radius:16px;box-shadow:inset 4px 4px 8px #a3b1c6,inset -4px -4px 8px #fff}
+.bars i{background:linear-gradient(#8ea6ff,#6d8cff);border-radius:8px}
+h1{color:#4a5a78}""")
+
+STYLES["brutalism"] = dict(
+    titulo="Brutalismo", fuentes="family=Space+Mono:wght@400;700",
+    cambia="Sin pulir a propósito: tipografía de sistema, bordes negros visibles, enlaces azules subrayados, cajas rectas y composiciones que rompen la prolijidad. Se reconoce al instante y rechaza lo convencional.",
+    css=""":root{--bg:#e9e9e9;--card:#fff;--card2:#ff0;--edge:#000;--ink:#000;--ink2:#000;--acc:#0000ee;--accink:#fff;--r:0;--rb:0;--font:'Times New Roman',Times,serif}
+.g{border:3px solid #000;box-shadow:none}
+nav{background:#ff0;border-width:4px}nav b{font-family:'Space Mono',monospace;font-size:22px;text-transform:uppercase}
+nav ul{color:#0000ee;text-decoration:underline}
+h1{font-family:Arial,Helvetica,sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;font-size:64px;line-height:.95}
+.lead{color:#000;font-size:19px}
+.btn{border:3px solid #000;background:#0000ee;color:#fff;font-family:'Space Mono',monospace;text-transform:uppercase}
+.btn.s{background:#fff;color:#000}
+.c1{background:#fff;transform:rotate(-1.5deg)}.c2{transform:rotate(1.5deg);background:#ff0}
+.bars i{background:#000;border-radius:0}
+.pills span{border:2px solid #000;background:#fff;font-family:'Space Mono',monospace}
+.feat .g:nth-child(2){margin-top:20px}.feat .g:nth-child(3){margin-top:40px}""")
+
+STYLES["vibrant-block-based"] = dict(
+    titulo="Vibrante y en bloques", fuentes="family=Poppins:wght@500;700;800",
+    cambia="La página se arma con grandes bloques de color plano y formas geométricas, con tipografía muy gruesa y botones enormes. Transmite energía y se escanea de un vistazo.",
+    css=""":root{--bg:#fff;--card:#fff;--card2:#fff;--edge:transparent;--ink:#111;--ink2:#333;--acc:#ff3d71;--accink:#fff;--r:0;--rb:999px;--font:Poppins,system-ui,sans-serif}
+.g{border:0}
+nav{background:#111;color:#fff;border-radius:0}nav ul{color:#ddd}
+.hero{gap:0;padding:0;margin:0 -28px;align-items:stretch}
+.hero>div:first-child{background:#3b3bff;color:#fff;padding:60px 44px}
+.lead{color:#e4e4ff}h1{font-weight:800}
+.btn{padding:15px 28px;font-size:15px}.btn.s{background:#fff;color:#111;border:0}
+.pills span{background:#ffe14a;color:#111;border:0}
+.stack{height:auto;min-height:420px;background:#ffe14a;padding:40px}
+.c1{inset:40px 80px 110px 40px;background:#ff3d71;color:#fff}.c1 small{color:#fff}.bars i{background:#111;border-radius:0}
+.c2{right:40px;bottom:40px;background:#fff}
+.feat{margin:0 -28px;gap:0}.feat .g{padding:40px;border-radius:0}
+.feat .g:nth-child(1){background:#00c2a8}.feat .g:nth-child(2){background:#ff8a3d}.feat .g:nth-child(3){background:#8b5cf6;color:#fff}
+.feat p{color:inherit;opacity:.9}.feat h3{font-size:24px;font-weight:800}""")
+
+STYLES["claymorphism"] = dict(
+    titulo="Claymorfismo", fuentes="family=Nunito:wght@600;700;800;900",
+    cambia="Piezas hinchadas y redondeadas, como de arcilla o goma: sombras dobles por dentro y por fuera, colores pastel y tipografía gorda. Se ve amigable y divertido, ideal para público joven o infantil.",
+    css=""":root{--bg:#efe8ff;--card:#f7f2ff;--card2:#ffe3f1;--edge:transparent;--ink:#3a2a6a;--ink2:#6b5a99;--acc:#7c5cff;--accink:#fff;--r:34px;--rb:22px;--font:Nunito,system-ui,sans-serif}
+.g{border:0;box-shadow:12px 12px 26px rgba(124,92,255,.22),inset -8px -8px 14px rgba(124,92,255,.12),inset 8px 8px 14px rgba(255,255,255,.95)}
+h1{font-weight:900;letter-spacing:-.03em}
+.btn{background:linear-gradient(145deg,#9a82ff,#6a49ee);box-shadow:8px 8px 16px rgba(106,73,238,.35),inset -4px -4px 8px rgba(0,0,0,.15),inset 4px 4px 8px rgba(255,255,255,.4);padding:14px 26px;font-weight:800;transition:transform .2s cubic-bezier(.3,1.6,.5,1)}
+.btn:hover{transform:scale(1.06)}.btn:active{transform:scale(.95)}
+.btn.s{background:#fff;color:var(--ink);box-shadow:8px 8px 16px rgba(124,92,255,.2),inset -4px -4px 8px rgba(124,92,255,.1),inset 4px 4px 8px #fff;border:0}
+.pills span{border:0;background:#ffd6ea;box-shadow:inset -3px -3px 6px rgba(0,0,0,.08),inset 3px 3px 6px rgba(255,255,255,.9)}.pills span:nth-child(2){background:#d3f5e6}.pills span:nth-child(3){background:#ffeab8}
+.bars i{border-radius:14px;background:linear-gradient(#ffb0d4,#ff6fae);box-shadow:inset -3px -3px 6px rgba(0,0,0,.12),inset 3px 3px 6px rgba(255,255,255,.7)}
+.feat .g:nth-child(1){background:#ffe3f1}.feat .g:nth-child(2){background:#dcf7ec}.feat .g:nth-child(3){background:#fff1c9}""")
+
+STYLES["retro-futurism"] = dict(
+    titulo="Retrofuturismo", fuentes="family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600",
+    cambia="El futuro como se imaginaba en los años 80: noche violeta, neón magenta y celeste, texto cromado, un sol de atardecer y una grilla en perspectiva en el piso.",
+    css=""":root{--bg:#120a2e;--card:rgba(30,12,66,.7);--card2:rgba(40,16,90,.8);--edge:#ff2bd6;--ink:#f6e9ff;--ink2:#c9b0ee;--acc:#ff2bd6;--accink:#fff;--r:6px;--rb:4px;--font:Rajdhani,system-ui,sans-serif}
+body{background:linear-gradient(#120a2e 0,#2a0f5e 55%,#ff5f9e 78%,#ffb36b 100%)}
+.bg{display:block;position:fixed;inset:auto 0 0 0;height:36vh;z-index:0;background:linear-gradient(transparent 0,#1a0838 2%),repeating-linear-gradient(90deg,#ff2bd6 0 2px,transparent 2px 70px),repeating-linear-gradient(0deg,#ff2bd6 0 2px,transparent 2px 38px);transform:perspective(380px) rotateX(58deg);transform-origin:50% 0;opacity:.55}
+.g{border:1px solid #ff2bd6;box-shadow:0 0 16px rgba(255,43,214,.45),inset 0 0 18px rgba(255,43,214,.15)}
+h1{font-family:Orbitron,sans-serif;font-weight:900;font-size:50px;background:linear-gradient(#fff,#ff9ae9 55%,#7df9ff);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 0 14px rgba(255,43,214,.7))}
+nav b{font-family:Orbitron;letter-spacing:.1em}
+.btn{background:linear-gradient(90deg,#ff2bd6,#7c3aed);box-shadow:0 0 22px rgba(255,43,214,.7);text-transform:uppercase;letter-spacing:.1em;font-family:Orbitron;font-size:12px}
+.btn.s{background:transparent;color:#7df9ff;border:1px solid #7df9ff;box-shadow:0 0 14px rgba(125,249,255,.5)}
+.bars i{background:linear-gradient(#7df9ff,#ff2bd6);box-shadow:0 0 12px rgba(125,249,255,.6)}
+.pills span{background:transparent;border:1px solid #7df9ff;color:#7df9ff}
+.c1 .n{font-family:Orbitron;color:#fff;text-shadow:0 0 16px #ff2bd6}""")
+
+STYLES["flat-design"] = dict(
+    titulo="Diseño flat", fuentes="family=Poppins:wght@400;500;600;700",
+    cambia="Todo plano: colores sólidos, sin sombras, sin degradés y sin texturas. La jerarquía la dan el color y el tamaño del texto. Es simple, liviano y se adapta a cualquier pantalla.",
+    css=""":root{--bg:#ecf0f1;--card:#fff;--card2:#fff;--edge:transparent;--ink:#2c3e50;--ink2:#6b7c8c;--acc:#3498db;--accink:#fff;--r:4px;--rb:4px;--font:Poppins,system-ui,sans-serif}
+.g{border:0;box-shadow:none}
+nav{background:#2c3e50;color:#fff}nav ul{color:#bdc3c7}
+.btn{padding:12px 22px;background:#2ecc71}.btn.s{background:#fff;color:#2c3e50;border:0}
+h1{font-weight:700}
+.c1{background:#3498db;color:#fff}.c1 small{color:#d6eaf8}.bars i{background:#fff;border-radius:0}.bars i:last-child{background:#f1c40f}
+.c2{background:#fff}
+.pills span{border:0;background:#fff}.pills span:nth-child(1){background:#f1c40f}.pills span:nth-child(2){background:#e74c3c;color:#fff}.pills span:nth-child(3){background:#9b59b6;color:#fff}
+.feat .g:nth-child(1){background:#1abc9c;color:#fff}.feat .g:nth-child(2){background:#e67e22;color:#fff}.feat .g:nth-child(3){background:#9b59b6;color:#fff}
+.feat p{color:inherit;opacity:.92}""")
+
+STYLES["skeuomorphism"] = dict(
+    titulo="Esqueuomorfismo", fuentes="family=Playfair+Display:wght@600;700&family=Lato:wght@400;700",
+    cambia="Imita objetos de verdad: mesa de madera, papel con costuras, relieve en los textos y botones metálicos con reflejo. Todo parece algo que se puede tocar.",
+    css=""":root{--bg:#6b4a2f;--card:#f6efdc;--card2:#e9dcc0;--edge:#a8895c;--ink:#3b2a18;--ink2:#6a5136;--acc:#b8332a;--accink:#fff;--r:12px;--rb:8px;--font:Lato,system-ui,sans-serif}
+body{background:repeating-linear-gradient(90deg,rgba(0,0,0,.05) 0 2px,transparent 2px 9px),linear-gradient(#7a5636,#5a3d25)}
+.g{background:linear-gradient(#f8f2e1,#ece0c4);border:2px dashed #a8895c;outline:5px solid #f6efdc;outline-offset:-9px;box-shadow:0 10px 22px rgba(0,0,0,.5),inset 0 1px 0 #fff}
+nav{background:linear-gradient(#8a5a36,#6a4426)!important;color:#f7ecd5;border:2px solid #3e2812;outline:none;box-shadow:0 6px 14px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.25)}nav ul{color:#f1deb9}nav b{text-shadow:0 -1px 0 rgba(0,0,0,.6)}
+h1{font-family:'Playfair Display',serif;color:#f6e9cc;text-shadow:0 2px 0 #3e2812,0 4px 8px rgba(0,0,0,.5);font-size:56px}
+.lead{color:#ecd9b4}
+.btn{background:linear-gradient(#e0574d,#b8332a 55%,#8f241c);border:1px solid #6a1812;text-shadow:0 -1px 0 rgba(0,0,0,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 4px 8px rgba(0,0,0,.45)}
+.btn.s{background:linear-gradient(#f4f4f4,#bdbdbd 55%,#9a9a9a);color:#3b2a18;text-shadow:0 1px 0 #fff;border:1px solid #6d6d6d}
+.pills span{background:linear-gradient(#f8f2e1,#e2d3b0);border:1px solid #a8895c;box-shadow:inset 0 1px 0 #fff,0 2px 4px rgba(0,0,0,.35)}
+.bars i{background:linear-gradient(90deg,#8f241c,#d44a3f,#8f241c);border-radius:3px 3px 0 0;box-shadow:inset 0 2px 0 rgba(255,255,255,.4)}
+.c1 .n,.feat h3{text-shadow:0 1px 0 #fff;font-family:'Playfair Display',serif}""")
+
+STYLES["zero-interface"] = dict(
+    titulo="Interfaz cero", fuentes="family=Inter:wght@300;400;500",
+    cambia="La interfaz casi desaparece: sin cajas, sin bordes y sin botones llamativos; solo texto limpio y un indicador de que se puede hablar. La tecnología se hace a un lado y se usa con la voz o con gestos.",
+    bottom='<div class="listen" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span>Te escucho…</span></div>',
+    css=""":root{--bg:#fbfbfa;--card:transparent;--card2:transparent;--edge:transparent;--ink:#1c1c1c;--ink2:#7a7a7a;--acc:#1c1c1c;--accink:#fbfbfa;--r:0;--rb:999px;--font:Inter,system-ui,sans-serif}
+.g{border:0;background:none}
+nav{padding:0}nav ul{display:none}nav .btn{background:none;color:#7a7a7a;padding:0;font-weight:400}
+.hero{padding-top:90px}h1{font-weight:300;letter-spacing:-.04em;font-size:58px}
+.lead{font-weight:300}
+.btn{background:none;color:var(--ink);padding:0;font-weight:500;text-decoration:underline;text-underline-offset:6px}.btn.s{border:0;background:none;color:#7a7a7a}
+.pills span{background:none;border:0;padding:0;color:#7a7a7a;font-weight:400}.pills span+span::before{content:"·";margin:0 10px 0 -2px}
+.stack{height:260px}.c1{inset:0 40px 70px 0;padding:0}.c1 .n{font-weight:300}.bars{height:70px;gap:6px}.bars i{background:#1c1c1c;border-radius:0;opacity:.7}
+.c2{padding:0;width:230px}.t{font-weight:400;font-size:13px}
+.feat{gap:50px}.feat .g{padding:0}.feat h3{font-weight:500;font-size:15px}.feat p{font-size:13px}
+.listen{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);display:flex;align-items:center;gap:5px;color:#7a7a7a;font-size:13px}
+.listen i{width:3px;height:10px;background:#1c1c1c;border-radius:2px;animation:wv 1.1s ease-in-out infinite}
+.listen i:nth-child(2){animation-delay:.12s}.listen i:nth-child(3){animation-delay:.24s}.listen i:nth-child(4){animation-delay:.36s}.listen i:nth-child(5){animation-delay:.48s}
+.listen span{margin-left:8px}@keyframes wv{50%{height:22px}}
+@media(prefers-reduced-motion:reduce){.listen i{animation:none}}""")
+
+STYLES["y2k-aesthetic"] = dict(
+    titulo="Estética Y2K", fuentes="family=Fredoka:wght@500;600;700&family=Orbitron:wght@700",
+    cambia="La nostalgia de los 2000: degradé rosa y celeste, cromados, botones de gel brillantes, estrellas y bordes plateados. Mucho brillo y un aire futurista de cuando internet era nuevo.",
+    css=""":root{--bg:#ffd9f1;--card:rgba(255,255,255,.65);--card2:rgba(255,255,255,.8);--edge:#c7c9e6;--ink:#3a2c6e;--ink2:#6f62a3;--acc:#ff4fb8;--accink:#fff;--r:22px;--rb:999px;--font:Fredoka,system-ui,sans-serif}
+body{background:radial-gradient(circle at 18% 20%,#fff 0 2px,transparent 3px) 0 0/90px 90px,radial-gradient(circle at 70% 60%,#fff 0 1.5px,transparent 2.5px) 0 0/70px 70px,linear-gradient(135deg,#ffc3ec,#c9d6ff 55%,#bff4ff)}
+.g{border:2px solid #fff;box-shadow:0 0 0 2px #b9bde0,0 12px 28px rgba(120,100,200,.3),inset 0 2px 6px #fff}
+nav b{font-family:Orbitron,sans-serif;background:linear-gradient(#ff4fb8,#7c5cff 60%,#00c2ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+h1{font-weight:700;letter-spacing:-.02em;text-shadow:3px 3px 0 #fff}
+.btn{background:linear-gradient(#ff9ad6,#ff4fb8 55%,#e0289a);border:2px solid #fff;box-shadow:0 0 0 2px #ff4fb8,inset 0 3px 5px rgba(255,255,255,.8),0 8px 16px rgba(224,40,154,.4);text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.btn.s{background:linear-gradient(#fff,#d7dcf7);color:var(--ink);box-shadow:0 0 0 2px #b9bde0,inset 0 3px 5px #fff}
+.bars i{background:linear-gradient(#e2e6ff,#9aa6e8 50%,#c9d0ff);border:1px solid #fff;border-radius:8px 8px 0 0}
+.pills span{background:linear-gradient(#fff,#e6e9ff);border:2px solid #fff;box-shadow:0 0 0 1.5px #b9bde0}
+.c1 .n{font-family:Orbitron;font-size:36px}""")
+
+STYLES["cyberpunk-ui"] = dict(
+    titulo="UI cyberpunk", fuentes="family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono",
+    cambia="Noche eléctrica: negro con amarillo, cian y magenta de neón, esquinas cortadas, texto con efecto glitch, líneas de escaneo y detalles de terminal.",
+    css=""":root{--bg:#07070c;--card:#0f0f1a;--card2:#14142a;--edge:#fcee0a;--ink:#f3f3f7;--ink2:#9a9ab8;--acc:#fcee0a;--accink:#07070c;--r:0;--rb:0;--font:Rajdhani,system-ui,sans-serif}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px);z-index:9}
+.g{border:1px solid #fcee0a;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));box-shadow:none}
+nav b{font-family:'Share Tech Mono',monospace;color:#fcee0a;letter-spacing:.1em;text-transform:uppercase}nav ul{font-family:'Share Tech Mono',monospace;text-transform:uppercase;font-size:12px}
+h1{text-transform:uppercase;font-weight:700;letter-spacing:-.01em;text-shadow:3px 0 #ff2a6d,-3px 0 #05d9e8;font-size:60px}
+.lead{font-family:'Share Tech Mono',monospace;font-size:14px;color:#9ad7e0}
+.btn{clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.btn.s{background:transparent;color:#05d9e8;border:1px solid #05d9e8;clip-path:none}
+.c1{border-color:#05d9e8}.bars i{background:linear-gradient(#05d9e8,#ff2a6d);border-radius:0}
+.pills span{background:transparent;border:1px solid #ff2a6d;color:#ff2a6d;font-family:'Share Tech Mono',monospace;border-radius:0}
+.c1 .n{font-family:'Share Tech Mono';color:#fcee0a;text-shadow:2px 0 #ff2a6d}""")
+
+STYLES["organic-biophilic"] = dict(
+    titulo="Orgánico biofílico", fuentes="family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Nunito:wght@400;600",
+    cambia="Inspirado en la naturaleza: verdes y tierras, formas redondeadas que no son círculos ni cuadrados perfectos, textos en serif cálida y mucho aire. Transmite calma y bienestar.",
+    css=""":root{--bg:#f1efe4;--card:#fbf9f0;--card2:#e3ebd3;--edge:#d6dcc0;--ink:#2f3d2a;--ink2:#5d6e54;--acc:#4f7a3a;--accink:#fff;--r:46px 30px 52px 28px/34px 52px 30px 48px;--rb:999px;--font:Nunito,system-ui,sans-serif}
+.g{box-shadow:0 10px 30px rgba(79,122,58,.12)}
+nav{border-radius:999px}
+h1{font-family:Fraunces,serif;font-weight:700;letter-spacing:-.025em;color:#2f4a24}
+.btn{box-shadow:0 8px 18px rgba(79,122,58,.3)}
+.btn.s{background:#fbf9f0;color:var(--ink);border-color:#cfd7b4}
+.bars i{border-radius:999px 999px 6px 6px;background:linear-gradient(#9ac27a,#4f7a3a)}
+.pills span{background:#e3ebd3;border-color:#d0dbb8}
+.feat .g:nth-child(1){border-radius:50px 28px 50px 30px/30px 50px 28px 50px}.feat .g:nth-child(2){border-radius:28px 50px 30px 50px/50px 30px 50px 28px;background:#e9efd9}.feat .g:nth-child(3){border-radius:48px 34px 28px 54px/40px 28px 52px 34px;background:#f4eddc}
+.feat h3{font-family:Fraunces,serif}""")
+
+STYLES["memphis-design"] = dict(
+    titulo="Diseño Memphis", fuentes="family=Poppins:wght@600;700;800",
+    cambia="El caos alegre de los 80: formas geométricas sueltas, garabatos y puntitos, colores que chocan, bordes negros gruesos y composiciones algo torcidas. Pura personalidad.",
+    css=""":root{--bg:#fff7e6;--card:#fff;--card2:#ffe14a;--edge:#111;--ink:#111;--ink2:#333;--acc:#ff4f9a;--accink:#fff;--r:0;--rb:0;--font:Poppins,system-ui,sans-serif}
+.bg{display:block;position:fixed;inset:0;z-index:0;background:radial-gradient(#111 1.6px,transparent 2px) 0 0/22px 22px,transparent;opacity:.12}
+.bg i{position:absolute}.bg i:nth-child(1){width:130px;height:130px;background:#00c2d1;border-radius:50%;top:8%;right:6%;opacity:.9}
+.bg i:nth-child(2){width:0;height:0;border-left:70px solid transparent;border-right:70px solid transparent;border-bottom:120px solid #ff4f9a;left:3%;bottom:14%;transform:rotate(18deg)}
+.bg i:nth-child(3){width:150px;height:30px;background:repeating-linear-gradient(135deg,#111 0 8px,transparent 8px 16px);right:12%;bottom:8%;transform:rotate(-8deg)}
+.bg{opacity:1;background:none}
+.g{border:3px solid #111;box-shadow:7px 7px 0 #111}
+nav{background:#ffe14a}
+h1{font-weight:800;letter-spacing:-.04em;text-transform:uppercase;font-size:56px}
+.btn{border:3px solid #111;box-shadow:4px 4px 0 #111;transform:rotate(-1.5deg)}.btn.s{transform:rotate(1.5deg);background:#fff}
+.c1{background:#9ee8ff;transform:rotate(-2deg)}.c2{background:#fff;transform:rotate(2deg)}
+.bars i{background:#ff4f9a;border:2px solid #111;border-radius:0}.bars i:nth-child(even){background:#ffe14a}
+.pills span{border:2px solid #111;background:#ffe14a;box-shadow:3px 3px 0 #111}.pills span:nth-child(2){background:#ff9ad0}.pills span:nth-child(3){background:#8ef0d4}
+.feat .g:nth-child(1){background:#ff9ad0;transform:rotate(-1deg)}.feat .g:nth-child(2){background:#9ee8ff;transform:rotate(1deg)}.feat .g:nth-child(3){background:#ffe14a;transform:rotate(-1.5deg)}""")
+
+STYLES["vaporwave"] = dict(
+    titulo="Vaporwave", fuentes="family=VT323&family=Major+Mono+Display&family=Poppins:wght@500;700",
+    cambia="Nostalgia de internet de los 90 vista en sueño: degradé de atardecer rosa y violeta, piso de grilla neón, ventanas de sistema operativo antiguo y textos en monoespaciada.",
+    css=""":root{--bg:#2b1055;--card:#c8b6ff;--card2:#ffd1f3;--edge:#fff;--ink:#2b1055;--ink2:#4b2f86;--acc:#ff71ce;--accink:#2b1055;--r:0;--rb:0;--font:'VT323',monospace}
+body{background:linear-gradient(#2b1055 0,#7b2cbf 45%,#ff71ce 80%,#ffb86c 100%)}
+.bg{display:block;position:fixed;inset:auto 0 0 0;height:34vh;z-index:0;background:repeating-linear-gradient(90deg,#01cdfe 0 2px,transparent 2px 64px),repeating-linear-gradient(0deg,#01cdfe 0 2px,transparent 2px 34px),#1a0838;transform:perspective(360px) rotateX(60deg);transform-origin:50% 0;opacity:.7}
+.g{background:#c8b6ff;border:2px solid #fff;box-shadow:inset -2px -2px 0 #6b4fb3,inset 2px 2px 0 #fff,6px 6px 0 rgba(0,0,0,.35)}
+nav{background:#2b1055;color:#fff;border-color:#01cdfe}nav b{font-family:'Major Mono Display',monospace;color:#ff71ce}nav ul{color:#fff;font-size:18px}
+h1{font-family:'Major Mono Display',monospace;font-weight:400;font-size:44px;color:#fff;text-shadow:3px 3px 0 #ff71ce,6px 6px 0 #01cdfe;letter-spacing:-.02em;line-height:1.1}
+.lead{color:#fff;font-size:22px;text-shadow:2px 2px 0 rgba(0,0,0,.35)}
+body{font-size:20px}.btn{background:#c8b6ff;color:#2b1055;border:2px solid #fff;box-shadow:inset -2px -2px 0 #6b4fb3,inset 2px 2px 0 #fff;font-family:'VT323';font-size:20px;text-transform:uppercase}
+.btn.s{background:#ffd1f3}
+.c1{background:#ffd1f3}.c1 .n{font-family:'Major Mono Display';font-size:34px}.bars i{background:linear-gradient(#01cdfe,#b967ff);border:1px solid #fff;border-radius:0}
+.pills span{background:#fff;border:2px solid #2b1055;font-size:18px;box-shadow:3px 3px 0 #ff71ce}
+.t{font-size:19px}""")
+
+STYLES["hud-sci-fi-fui"] = dict(
+    titulo="HUD / FUI de ciencia ficción", fuentes="family=Orbitron:wght@500;700&family=Share+Tech+Mono",
+    cambia="Una pantalla de nave espacial: fondo oscuro, líneas finas cian, esquinas con marcas, números y rótulos en monoespaciada diminuta, y paneles transparentes con brillo.",
+    css=""":root{--bg:#02070e;--card:rgba(6,30,48,.55);--card2:rgba(6,40,60,.6);--edge:rgba(0,229,255,.55);--ink:#d7f9ff;--ink2:#6fb7c6;--acc:#00e5ff;--accink:#02070e;--r:0;--rb:0;--font:'Share Tech Mono',monospace}
+body{background:radial-gradient(circle at 50% 30%,#06223a,#02070e 70%),repeating-linear-gradient(0deg,rgba(0,229,255,.04) 0 1px,transparent 1px 28px),repeating-linear-gradient(90deg,rgba(0,229,255,.04) 0 1px,transparent 1px 28px)}
+.g{border:1px solid rgba(0,229,255,.5);box-shadow:0 0 18px rgba(0,229,255,.18),inset 0 0 22px rgba(0,229,255,.08);background-image:linear-gradient(#00e5ff,#00e5ff),linear-gradient(#00e5ff,#00e5ff),linear-gradient(#00e5ff,#00e5ff),linear-gradient(#00e5ff,#00e5ff);background-repeat:no-repeat;background-size:14px 2px,2px 14px,14px 2px,2px 14px;background-position:0 0,0 0,100% 100%,100% 100%}
+nav b{font-family:Orbitron;letter-spacing:.18em;text-transform:uppercase;font-size:16px;color:#00e5ff}nav ul{text-transform:uppercase;letter-spacing:.14em;font-size:11px}
+h1{font-family:Orbitron;font-weight:500;font-size:46px;text-transform:uppercase;letter-spacing:.02em;text-shadow:0 0 14px rgba(0,229,255,.6)}
+.lead{font-size:14px;color:#8fd3df}
+.btn{background:rgba(0,229,255,.12);color:#00e5ff;border:1px solid #00e5ff;box-shadow:0 0 14px rgba(0,229,255,.35);text-transform:uppercase;letter-spacing:.14em;font-size:11px}
+.btn.s{color:#6fb7c6;border-color:rgba(0,229,255,.35);box-shadow:none}
+.bars i{background:linear-gradient(#00e5ff,rgba(0,229,255,.15));border-radius:0;box-shadow:0 0 10px rgba(0,229,255,.5)}
+.pills span{background:transparent;border:1px solid rgba(0,229,255,.45);color:#8fd3df;text-transform:uppercase;letter-spacing:.1em;font-size:10.5px;border-radius:0}
+.c1 .n{font-family:Orbitron;font-weight:500;text-shadow:0 0 12px rgba(0,229,255,.7)}.c1 small{text-transform:uppercase;letter-spacing:.14em;font-size:10px}""")
+
+STYLES["pixel-art"] = dict(
+    titulo="Pixel art", fuentes="family=Press+Start+2P&family=VT323",
+    cambia="Estética de videojuego de 8 bits: tipografía de píxeles, bordes escalonados sin curvas, colores de paleta limitada y barras en bloques. Nostálgico y muy reconocible.",
+    css=""":root{--bg:#1a1c2c;--card:#292b45;--card2:#3b3f63;--edge:#f4f4f4;--ink:#f4f4f4;--ink2:#a7b1d9;--acc:#ffcd75;--accink:#1a1c2c;--r:0;--rb:0;--font:'VT323',monospace}
+body{font-size:20px;image-rendering:pixelated}
+.g{border:0;box-shadow:0 -4px 0 0 #f4f4f4,0 4px 0 0 #f4f4f4,-4px 0 0 0 #f4f4f4,4px 0 0 0 #f4f4f4}
+nav{margin:4px}nav b{font-family:'Press Start 2P';font-size:15px;color:#ffcd75}nav ul{font-size:20px}
+h1{font-family:'Press Start 2P';font-size:30px;line-height:1.5;letter-spacing:0;font-weight:400;text-shadow:4px 4px 0 #b13e53}
+.lead{font-size:23px}
+.btn{font-family:'Press Start 2P';font-size:11px;padding:14px 18px;box-shadow:0 -4px 0 0 #1a1c2c,0 4px 0 0 #1a1c2c,-4px 0 0 0 #1a1c2c,4px 0 0 0 #1a1c2c,inset -4px -4px 0 rgba(0,0,0,.25);margin:4px}
+.btn.s{background:#3b3f63;color:#f4f4f4;border:0}
+.c1 small{font-size:18px}.c1 .n{font-family:'Press Start 2P';font-size:26px;color:#ffcd75}
+.bars i{background:#38b764;border-radius:0;box-shadow:inset -6px 0 0 rgba(0,0,0,.25)}.bars i:nth-child(even){background:#41a6f6}
+.pills span{border:0;background:#3b3f63;font-size:18px;box-shadow:0 -3px 0 0 #a7b1d9,0 3px 0 0 #a7b1d9,-3px 0 0 0 #a7b1d9,3px 0 0 0 #a7b1d9;margin:3px}
+.t{font-size:19px}.feat h3{font-family:'Press Start 2P';font-size:12px;line-height:1.6}.feat p{font-size:20px}""")
+
+STYLES["e-ink-paper"] = dict(
+    titulo="E-ink / papel", fuentes="family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400",
+    cambia="Se ve como papel o como una pantalla de tinta electrónica: fondo marfil mate, solo tonos de gris y negro, sin sombras ni brillos y texto en serif pensado para leer sin cansarse.",
+    css=""":root{--bg:#ecebe4;--card:#f4f3ec;--card2:#e4e3da;--edge:#1c1c1c;--ink:#1c1c1c;--ink2:#444;--acc:#1c1c1c;--accink:#f4f3ec;--r:2px;--rb:2px;--font:'Source Serif 4',Georgia,serif}
+.g{border:1px solid #1c1c1c;box-shadow:none}
+nav{border-width:0 0 2px 0;border-radius:0;background:none}nav b{font-style:italic}
+h1{font-weight:700;letter-spacing:-.025em;font-size:58px}
+.lead{font-size:19px;color:#2a2a2a}
+.btn{border:2px solid #1c1c1c}.btn.s{background:none;border:2px solid #1c1c1c}
+.bars i{background:repeating-linear-gradient(0deg,#1c1c1c 0 2px,#ecebe4 2px 4px);border:1px solid #1c1c1c;border-radius:0}.bars i:last-child{background:#1c1c1c}
+.pills span{background:none;border:1px solid #1c1c1c}
+.t span{color:#1c1c1c;font-style:italic}""")
+
+STYLES["gen-z-chaos-maximalism"] = dict(
+    titulo="Caos Gen Z / maximalismo", fuentes="family=Bowlby+One&family=Space+Mono:wght@400;700",
+    cambia="Todo a la vez, a propósito: colores ácidos que chocan, pegatinas y etiquetas torcidas, mezcla de tipografías, bordes gruesos y una cinta que atraviesa la pantalla. Parece un collage de internet.",
+    top='<div class="tape" aria-hidden="true"><span>¡NUEVO! ★ TU PLATA ★ SIN PLANILLAS ★ ¡NUEVO! ★ TU PLATA ★ SIN PLANILLAS ★ ¡NUEVO! ★ TU PLATA ★ SIN PLANILLAS ★</span></div>',
+    css=""":root{--bg:#c6ff3d;--card:#fff;--card2:#ff7ad9;--edge:#000;--ink:#000;--ink2:#111;--acc:#7a2dff;--accink:#fff;--r:18px;--rb:999px;--font:'Space Mono',monospace}
+.tape{background:#000;color:#c6ff3d;font-family:'Bowlby One';font-size:15px;white-space:nowrap;overflow:hidden;padding:8px 0;transform:rotate(-1.2deg);margin:12px -10px 0;position:relative;z-index:3}
+.tape span{display:inline-block;animation:tp 20s linear infinite}@keyframes tp{to{transform:translateX(-33%)}}
+.g{border:3px solid #000;box-shadow:6px 6px 0 #000}
+nav{background:#ff7ad9;transform:rotate(.6deg)}nav b{font-family:'Bowlby One';font-size:22px}
+h1{font-family:'Bowlby One';font-weight:400;font-size:54px;letter-spacing:-.01em;line-height:1.02;color:#000;text-shadow:3px 3px 0 #fff,6px 6px 0 #7a2dff}
+.btn{border:3px solid #000;box-shadow:4px 4px 0 #000;transform:rotate(-2deg);font-weight:700}.btn.s{background:#ffe600;transform:rotate(1.5deg)}
+.c1{background:#7a2dff;color:#fff;transform:rotate(-2.5deg)}.c1 small{color:#fff}.bars i{background:#c6ff3d;border:2px solid #000;border-radius:0}
+.c2{transform:rotate(2deg);background:#ffe600}
+.pills span{border:2px solid #000;background:#fff;box-shadow:3px 3px 0 #000}.pills span:nth-child(1){transform:rotate(-3deg);background:#ff7ad9}.pills span:nth-child(2){transform:rotate(2deg);background:#33e1ff}.pills span:nth-child(3){transform:rotate(-1deg);background:#ffe600}
+.feat .g:nth-child(1){background:#ffe600;transform:rotate(-1.5deg)}.feat .g:nth-child(2){background:#33e1ff;transform:rotate(1.2deg)}.feat .g:nth-child(3){background:#ff7ad9;transform:rotate(-1deg)}
+.feat h3{font-family:'Bowlby One';font-weight:400}
+@media(prefers-reduced-motion:reduce){.tape span{animation:none}}""")
+
+STYLES["biomimetic-organic-2-0"] = dict(
+    titulo="Biomimético / orgánico 2.0", fuentes="family=Fraunces:opsz,wght@9..144,400;9..144,600&family=DM+Sans:wght@400;500;700",
+    cambia="Inspirado en cómo crece la naturaleza: manchas translúcidas que respiran y cambian de forma, degradés de células y agua, y tarjetas con contornos que se deforman lentamente.",
+    css=ORBS_ANIM + """:root{--bg:#07181a;--card:rgba(255,255,255,.07);--card2:rgba(255,255,255,.09);--edge:rgba(160,255,225,.22);--ink:#e8fff7;--ink2:#9fd0c2;--acc:#7dffd4;--accink:#052a22;--r:40px;--rb:999px;--font:'DM Sans',system-ui,sans-serif}
+.bg i{filter:blur(48px);opacity:.55;border-radius:60% 40% 55% 45%/50% 60% 40% 50%;animation:morph 14s ease-in-out infinite alternate}
+.bg i:nth-child(1){width:55vmax;height:48vmax;background:radial-gradient(circle,#2dd4a8,transparent 65%);top:-20vmax;left:-12vmax}
+.bg i:nth-child(2){width:46vmax;height:46vmax;background:radial-gradient(circle,#38bdf8,transparent 65%);top:5vmax;right:-18vmax;animation-delay:-5s}
+.bg i:nth-child(3){width:50vmax;height:42vmax;background:radial-gradient(circle,#a3e635,transparent 65%);bottom:-25vmax;left:20vmax;animation-delay:-9s}
+@keyframes morph{50%{border-radius:40% 60% 45% 55%/55% 40% 60% 45%;transform:translate(5vmax,3vmax) scale(1.1)}}
+.g{backdrop-filter:blur(10px);animation:blob 12s ease-in-out infinite alternate}
+@keyframes blob{0%{border-radius:44px 30px 50px 32px/32px 50px 30px 46px}100%{border-radius:30px 48px 32px 52px/48px 32px 50px 30px}}
+nav{animation:none;border-radius:999px}
+h1{font-family:Fraunces,serif;font-weight:600;letter-spacing:-.03em}
+.btn{background:linear-gradient(120deg,#7dffd4,#7dd3fc);box-shadow:0 8px 28px rgba(125,255,212,.3)}
+.btn.s{background:rgba(255,255,255,.08);color:var(--ink);border-color:rgba(160,255,225,.3);box-shadow:none}
+.bars i{border-radius:999px;background:linear-gradient(#7dffd4,#2dd4bf)}
+.pills span{background:rgba(255,255,255,.08);border-color:rgba(160,255,225,.25)}
+@media(prefers-reduced-motion:reduce){.g,.bg i{animation:none}}""")
+
+STYLES["anti-polish-raw-aesthetic"] = dict(
+    titulo="Antipulido / estética cruda", fuentes="family=Caveat:wght@500;700&family=Rock+Salt&family=Special+Elite",
+    cambia="Hecho a mano y sin retocar: papel kraft, trazos irregulares de marcador, notas pegadas con cinta, subrayados de resaltador y letra manuscrita. Imperfecto a propósito, humano y auténtico.",
+    css=""":root{--bg:#d9c9a3;--card:#fbf5e3;--card2:#fff2a8;--edge:#2b2b2b;--ink:#222;--ink2:#444;--acc:#e8402a;--accink:#fff;--r:3px 9px 4px 11px/9px 4px 11px 3px;--rb:4px 12px 6px 10px/10px 5px 12px 4px;--font:'Special Elite','Courier New',monospace}
+body{background-image:radial-gradient(rgba(0,0,0,.06) 1px,transparent 1.5px),linear-gradient(#dccaa1,#cdb98c);background-size:7px 7px,auto}
+.g{border:2.5px solid #2b2b2b;box-shadow:3px 4px 0 rgba(0,0,0,.28)}
+nav{background:#fbf5e3;transform:rotate(-.5deg)}nav b{font-family:'Rock Salt',cursive;font-size:17px;font-weight:400}nav ul{font-family:Caveat,cursive;font-size:20px;font-weight:700}
+h1{font-family:'Rock Salt',cursive;font-weight:400;font-size:44px;line-height:1.25;letter-spacing:0}
+h1::after{content:"";display:block;height:10px;width:70%;background:#ffe44d;opacity:.8;margin-top:-14px;position:relative;z-index:-1;transform:rotate(-1deg)}
+.lead{font-family:Caveat,cursive;font-size:26px;font-weight:500;line-height:1.2}
+.btn{border:2.5px solid #2b2b2b;font-family:Caveat,cursive;font-size:22px;font-weight:700;padding:6px 18px;transform:rotate(-1.5deg)}.btn.s{transform:rotate(1deg);background:#fff2a8}
+.c1{transform:rotate(-1.2deg);background:#fff}.c2{transform:rotate(2deg);background:#fff2a8}
+.c1::before{content:"";position:absolute;top:-12px;left:42%;width:90px;height:24px;background:rgba(255,235,150,.75);transform:rotate(-3deg);box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.bars i{background:repeating-linear-gradient(45deg,#e8402a 0 5px,#f0735f 5px 9px);border:2px solid #2b2b2b;border-radius:3px 6px 0 0}
+.pills span{border:2px dashed #2b2b2b;background:none;font-family:Caveat,cursive;font-size:20px;font-weight:700;transform:rotate(-1deg)}
+.feat .g:nth-child(1){transform:rotate(-1deg)}.feat .g:nth-child(2){transform:rotate(1deg);background:#fff2a8}.feat .g:nth-child(3){transform:rotate(-.6deg)}
+.feat h3{font-family:'Rock Salt',cursive;font-weight:400;font-size:15px}.feat p{font-family:Caveat,cursive;font-size:21px}""")
+
+STYLES["tactile-digital-deformable-ui"] = dict(
+    titulo="Digital táctil / UI deformable", fuentes="family=Fredoka:wght@500;600;700",
+    cambia="Los elementos se sienten como gelatina: botones brillantes y abultados que se aplastan al apretarlos y rebotan al soltarlos, y piezas que se estiran al pasar el mouse.",
+    css=""":root{--bg:#fff0e0;--card:#fff;--card2:#ffe4cf;--edge:transparent;--ink:#4a2a1a;--ink2:#85604b;--acc:#ff6b4a;--accink:#fff;--r:30px;--rb:999px;--font:Fredoka,system-ui,sans-serif}
+.g{border:0;box-shadow:0 10px 0 rgba(255,107,74,.18),0 18px 28px rgba(160,80,40,.12),inset 0 3px 0 #fff;transition:transform .5s cubic-bezier(.3,1.7,.5,1)}
+.g:hover{transform:scale(1.03,.97)}
+.btn{background:radial-gradient(circle at 30% 25%,#ffb199,#ff6b4a 55%,#e8431f);box-shadow:0 8px 0 #c63a1a,0 14px 20px rgba(200,60,30,.35),inset 0 4px 6px rgba(255,255,255,.55);padding:14px 28px;font-size:15px;font-weight:700;transition:transform .35s cubic-bezier(.3,1.9,.5,1),box-shadow .35s}
+.btn:hover{transform:scale(1.08,.94)}.btn:active{transform:translateY(7px) scale(1.04,.88);box-shadow:0 1px 0 #c63a1a,0 4px 8px rgba(200,60,30,.3),inset 0 4px 6px rgba(255,255,255,.5);transition-duration:.08s}
+.btn.s{background:radial-gradient(circle at 30% 25%,#fff,#ffe2cc);color:var(--ink);box-shadow:0 8px 0 #e8c4a8,0 14px 20px rgba(160,80,40,.18),inset 0 4px 6px #fff}
+.pills span{border:0;background:radial-gradient(circle at 30% 25%,#fff,#ffd9be);box-shadow:0 4px 0 #e8c4a8,inset 0 2px 3px #fff}
+.bars i{border-radius:14px 14px 6px 6px;background:radial-gradient(circle at 30% 20%,#ffb199,#ff6b4a);box-shadow:inset 0 3px 4px rgba(255,255,255,.6)}
+h1{font-weight:700;letter-spacing:-.03em}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}""")
+
+STYLES["nature-distilled"] = dict(
+    titulo="Naturaleza destilada", fuentes="family=Cormorant+Garamond:wght@500;600;700&family=Nunito:wght@400;600",
+    cambia="Tonos de tierra apagados (terracota, arena, oliva), textura de lino, tipografía serif suave y mucho espacio. Se siente artesanal, cálido y sin apuro.",
+    css=""":root{--bg:#ece3d3;--card:#f6efe2;--card2:#e5d8c2;--edge:#d3c3a6;--ink:#4a3a2a;--ink2:#7b6a55;--acc:#b5654a;--accink:#fff;--r:18px;--rb:999px;--font:Nunito,system-ui,sans-serif}
+body{background-image:repeating-linear-gradient(0deg,rgba(120,90,50,.04) 0 1px,transparent 1px 4px),repeating-linear-gradient(90deg,rgba(120,90,50,.04) 0 1px,transparent 1px 4px)}
+.g{box-shadow:0 8px 22px rgba(110,80,40,.1)}
+h1{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:72px;letter-spacing:-.02em;line-height:.98;color:#5a3f2a}
+nav b{font-family:'Cormorant Garamond',serif;font-size:26px}
+.btn{background:#b5654a;box-shadow:0 6px 14px rgba(181,101,74,.3)}.btn.s{background:#f6efe2;color:var(--ink);border-color:#d3c3a6}
+.bars i{background:linear-gradient(#c9886d,#a85d42);border-radius:6px 6px 0 0}.bars i:nth-child(odd){background:linear-gradient(#a3a97a,#7b8452)}
+.pills span{background:#e5d8c2;border-color:#d3c3a6}
+.c1{background:#f0e6d4}.feat h3{font-family:'Cormorant Garamond',serif;font-size:24px}""")
+
+STYLES["voice-first-multimodal"] = dict(
+    titulo="Multimodal con voz primero", fuentes="family=Inter:wght@400;500;600;700",
+    cambia="Se piensa para hablarle: un micrófono grande con ondas, subtítulos de lo que se dice, sugerencias de frases y la respuesta en pantalla y en voz. Los botones pasan a segundo plano.",
+    bottom='<div class="mic"><div class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><button type="button" class="micb" aria-label="Hablar">🎙</button><div class="cap">“¿Cuánto me queda este mes?” <b>→ Te quedan $ 842.300</b></div></div>',
+    css=""":root{--bg:#0e1424;--card:rgba(255,255,255,.06);--card2:rgba(255,255,255,.08);--edge:rgba(255,255,255,.12);--ink:#f2f5ff;--ink2:#a6b0cf;--acc:#5b8cff;--accink:#fff;--r:22px;--rb:999px;--font:Inter,system-ui,sans-serif}
+body{background:radial-gradient(60% 45% at 50% 100%,rgba(91,140,255,.35),transparent 70%),#0e1424;padding-bottom:330px}
+h1{font-weight:700;letter-spacing:-.045em}
+.btn{background:rgba(91,140,255,.18);color:#c9d8ff;border:1px solid rgba(91,140,255,.4)}.btn.s{background:transparent;color:#a6b0cf;border-color:rgba(255,255,255,.15)}
+.pills span{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}.pills span::before{content:"“";color:#7fa4ff}.pills span::after{content:"”";color:#7fa4ff}
+.bars i{background:linear-gradient(#8fb0ff,#5b8cff)}
+.mic{position:fixed;left:0;right:0;bottom:0;display:grid;justify-items:center;gap:10px;padding:14px 0 18px;background:linear-gradient(transparent,rgba(14,20,36,.92) 40%);z-index:5}
+.micb{width:74px;height:74px;border-radius:50%;border:0;font-size:28px;background:linear-gradient(135deg,#5b8cff,#8b5cf6);box-shadow:0 0 0 10px rgba(91,140,255,.15),0 0 0 22px rgba(91,140,255,.08),0 14px 34px rgba(91,140,255,.5);cursor:pointer;animation:pl 2.4s ease-in-out infinite}
+@keyframes pl{50%{box-shadow:0 0 0 14px rgba(91,140,255,.18),0 0 0 30px rgba(91,140,255,.06),0 14px 34px rgba(91,140,255,.5)}}
+.wave{display:flex;align-items:center;gap:5px;height:34px}.wave i{width:4px;height:8px;border-radius:2px;background:#8fb0ff;animation:wv 1s ease-in-out infinite}
+.wave i:nth-child(2n){animation-delay:.15s}.wave i:nth-child(3n){animation-delay:.3s}.wave i:nth-child(4){animation-delay:.45s}@keyframes wv{50%{height:30px}}
+.cap{font-size:14px;color:#c2cbe8}.cap b{color:#fff}
+@media(prefers-reduced-motion:reduce){.micb,.wave i{animation:none}}""")
+
+STYLES["chromatic-aberration-rgb-split"] = dict(
+    titulo="Aberración cromática / RGB separado", fuentes="family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@500;700",
+    cambia="Los canales de color se separan como en una lente defectuosa o una cinta VHS: halos rojos y celestes alrededor de los textos y los bordes, con un temblor ocasional y líneas de ruido.",
+    css=""":root{--bg:#0a0a0f;--card:#101018;--card2:#16161f;--edge:#2a2a38;--ink:#f1f1f6;--ink2:#9a9ab0;--acc:#ff2d55;--accink:#fff;--r:6px;--rb:4px;--font:'Space Grotesk',system-ui,sans-serif}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 3px);z-index:9}
+.g{border:1px solid #2a2a38;box-shadow:2px 0 0 rgba(255,45,85,.5),-2px 0 0 rgba(0,229,255,.5)}
+h1{font-weight:700;text-shadow:4px 0 rgba(255,45,85,.85),-4px 0 rgba(0,229,255,.85);animation:jit 5s steps(1) infinite}
+@keyframes jit{0%,92%,100%{transform:none}93%{transform:translate(3px,-1px)}95%{transform:translate(-3px,1px)}97%{transform:translate(2px,0)}}
+nav b{text-shadow:2px 0 rgba(255,45,85,.9),-2px 0 rgba(0,229,255,.9);font-family:'Space Mono',monospace}
+.lead,.t,.feat p{font-family:'Space Mono',monospace;font-size:13px}.lead{font-size:15px}
+.btn{box-shadow:3px 0 0 rgba(0,229,255,.8),-3px 0 0 rgba(255,255,255,.2)}.btn.s{background:transparent;color:var(--ink);border-color:#444}
+.bars i{background:#f1f1f6;border-radius:0;box-shadow:3px 0 0 rgba(255,45,85,.8),-3px 0 0 rgba(0,229,255,.8)}
+.c1 .n{text-shadow:3px 0 rgba(255,45,85,.9),-3px 0 rgba(0,229,255,.9)}
+.pills span{background:transparent;border:1px solid #444;font-family:'Space Mono',monospace;font-size:12px}
+@media(prefers-reduced-motion:reduce){h1{animation:none}}""")
+
+STYLES["vintage-analog-retro-film"] = dict(
+    titulo="Analógico vintage / película retro", fuentes="family=Special+Elite&family=Playfair+Display:ital,wght@1,700&family=Courier+Prime:wght@400;700",
+    cambia="Una foto de los 70 revelada en casa: colores desteñidos cálidos, grano de película, fugas de luz naranja, marcos tipo polaroid y la fecha impresa abajo, como en una cámara de rollo.",
+    css=""":root{--bg:#d8c8a8;--card:#f4ead2;--card2:#eadcb8;--edge:#bfa77a;--ink:#3b2e1e;--ink2:#6b5a43;--acc:#c0562f;--accink:#fff5e0;--r:3px;--rb:3px;--font:'Courier Prime',monospace}
+body{background:radial-gradient(circle at 15% 10%,rgba(255,150,60,.35),transparent 45%),radial-gradient(circle at 90% 85%,rgba(255,100,80,.25),transparent 45%),linear-gradient(#e0d0ae,#cdb98f)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;opacity:.35;mix-blend-mode:multiply;z-index:9;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.g{border:0;background:#f7efdb;box-shadow:0 10px 22px rgba(70,45,10,.3)}
+.card.g{padding:14px 14px 40px;background:#fbf5e6;transform:rotate(-1.5deg)}.c2{transform:rotate(2deg)}
+.c1::after{content:"'78  10  02";position:absolute;right:14px;bottom:10px;font:400 12px 'Special Elite';color:#c0562f;letter-spacing:.1em}
+nav{background:#2f2418!important;color:#f1e3c4}nav ul{color:#d8c7a3}
+h1{font-family:'Playfair Display',serif;font-style:italic;font-weight:700;color:#5a3a1e;font-size:58px;letter-spacing:-.02em}
+.lead{color:#4a3a28;font-size:16px}
+.btn{background:#c0562f;box-shadow:0 4px 0 #8a3a1c;font-family:'Special Elite';letter-spacing:.04em}.btn.s{background:#f4ead2;color:#3b2e1e;border:1px solid #bfa77a;box-shadow:0 4px 0 #cdb98f}
+.bars i{background:linear-gradient(#d9774a,#a8441f);border-radius:1px 1px 0 0}.bars i:nth-child(even){background:linear-gradient(#6fa6a0,#3f7771)}
+.pills span{background:#eadcb8;border:1px solid #bfa77a}
+.feat .g{padding:20px 22px;background:#fbf5e6;border-top:12px solid #f7efdb}
+.feat h3{font-family:'Playfair Display',serif;font-style:italic}""")
+
+STYLES["bauhaus"] = dict(
+    titulo="Bauhaus", fuentes="family=Jost:wght@400;500;700;800",
+    cambia="Formas geométricas básicas (círculo, cuadrado, triángulo), colores primarios (rojo, amarillo y azul) con negro, tipografía geométrica en mayúsculas y composición asimétrica con sombras duras.",
+    css=""":root{--bg:#f4efe4;--card:#fff;--card2:#ffd400;--edge:#111;--ink:#111;--ink2:#333;--acc:#e63312;--accink:#fff;--r:0;--rb:0;--font:Jost,system-ui,sans-serif}
+.bg{display:block;position:fixed;inset:0;z-index:0}
+.bg i{position:absolute}.bg i:nth-child(1){width:220px;height:220px;border-radius:50%;background:#ffd400;top:-60px;right:6%}
+.bg i:nth-child(2){width:150px;height:150px;background:#1d4ed8;bottom:6%;left:-40px;transform:rotate(12deg)}
+.bg i:nth-child(3){width:0;height:0;border-left:80px solid transparent;border-right:80px solid transparent;border-bottom:140px solid #e63312;right:4%;bottom:5%}
+.g{border:3px solid #111;box-shadow:8px 8px 0 #111}
+nav{background:#111;color:#fff}nav b{text-transform:uppercase;letter-spacing:.14em}nav ul{color:#fff;text-transform:uppercase;letter-spacing:.1em;font-size:12px;font-weight:700}
+h1{font-weight:800;text-transform:uppercase;letter-spacing:-.02em;font-size:60px;line-height:.98}
+.btn{border:3px solid #111;text-transform:uppercase;letter-spacing:.1em;font-size:12px;font-weight:800}.btn.s{background:#ffd400;color:#111}
+.c1{background:#1d4ed8;color:#fff}.c1 small{color:#cfe0ff}.bars i{background:#ffd400;border:2px solid #111;border-radius:0}.bars i:nth-child(3){background:#e63312}
+.c2{background:#fff}
+.pills span{border:2px solid #111;background:#fff;text-transform:uppercase;letter-spacing:.08em;font-size:11px;font-weight:700}
+.feat .g:nth-child(1){background:#e63312;color:#fff}.feat .g:nth-child(2){background:#ffd400}.feat .g:nth-child(3){background:#fff}
+.feat .g:nth-child(1) p{color:#fff}.feat h3{text-transform:uppercase;letter-spacing:.04em}""")
+
+STYLES["minimalist-monochrome"] = dict(
+    titulo="Monocromo minimalista", fuentes="family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600",
+    cambia="Solo blanco, negro y grises: una pieza invertida (fondo negro) como único énfasis, serif de contraste fuerte en los títulos, rótulos en mayúsculas chicas y líneas finas, sin una sola curva.",
+    css=""":root{--bg:#fff;--card:#fff;--card2:#fff;--edge:#111;--ink:#111;--ink2:#555;--acc:#111;--accink:#fff;--r:0;--rb:0;--font:Inter,system-ui,sans-serif}
+.g{border:1px solid #111;box-shadow:none}
+nav{border-width:0 0 1px 0}nav b{font-family:'Playfair Display',serif;font-weight:900;font-size:24px}nav ul{text-transform:uppercase;letter-spacing:.16em;font-size:10.5px;font-weight:600}
+h1{font-family:'Playfair Display',serif;font-weight:900;letter-spacing:-.03em;font-size:70px;line-height:.98}
+.lead{font-size:16px}
+.btn{text-transform:uppercase;letter-spacing:.14em;font-size:11px}.btn.s{background:#fff;border:1px solid #111}
+.c1{background:#111;color:#fff;border-color:#111}.c1 small{color:#bbb;text-transform:uppercase;letter-spacing:.14em;font-size:10px}.c1 .n{font-family:'Playfair Display',serif;font-weight:700}
+.bars i{background:#fff;border-radius:0}.bars i:nth-child(odd){background:#777}
+.pills span{background:none;border:1px solid #111;text-transform:uppercase;letter-spacing:.12em;font-size:10.5px}
+.feat h3{font-family:'Playfair Display',serif;font-size:21px}.feat .g{padding:26px}""")
+
 
 
 def render(id_, st):
