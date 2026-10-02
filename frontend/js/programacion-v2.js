@@ -388,7 +388,7 @@
     for (const e of evDeFicha(f)) {
       if (e.tipo === 'demo' && e.ref?.url && e.ref?.antes) {   // demo hecha para la ficha: la misma página sin y con el estilo
         const extra = e.ref.prueba ? ' Es animada o interactiva: probala en la pestaña «Ejemplo».' : '';
-        t.push({ k: 'cmp', label: 'Antes / después', nota: EV_NOTA.demo + ' Misma página y mismo contenido: a la izquierda sin el estilo y a la derecha con el estilo aplicado.' + (e.ref.cambia ? ' ' + e.ref.cambia : '') + extra, html: () => cmpHTML(['Sin el estilo', e.ref.antes], ['Con ' + f.nombre, e.ref.url]), open: e.ref.url });
+        t.push({ k: 'cmp', label: 'Antes / después', nota: EV_NOTA.demo + (e.ref.antes_txt ? ' Misma oferta, armada de dos maneras: a la izquierda sin el patrón y a la derecha con el patrón. ' + e.ref.antes_txt : ' Misma página y mismo contenido: a la izquierda sin el estilo y a la derecha con el estilo aplicado.') + (e.ref.cambia ? ' ' + e.ref.cambia : '') + extra, html: () => cmpHTML([e.ref.sin || 'Sin el estilo', e.ref.antes], ['Con ' + f.nombre, e.ref.url]), open: e.ref.url });
         t.push({ k: 'dej', label: 'Ejemplo', nota: EV_NOTA.demo + (e.ref.cambia ? ' ' + e.ref.cambia : ''), html: () => frame(e.ref.url, 'Ejemplo', true), open: e.ref.url });
       } else if (e.tipo === 'experimento') {
         if (e.ref?.sin && e.ref?.con) t.push({ k: 'cmp', label: 'Antes / después', nota: EV_NOTA.experimento, html: () => cmpHTML(['Sin la skill', e.ref.sin], ['Con ' + f.nombre, e.ref.con]), open: e.ref.con });

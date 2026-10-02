@@ -25,6 +25,7 @@ import weblab_niveles as NV
 import lab_proyectos as LP
 from lab_nucleo import NUCLEO_ESCRITO, NUCLEO_SUMA
 import lab_demos_estilos as DE
+import lab_demos_patrones as DP
 from lab_valor_resto import valor_resto, ORIGEN as VALOR_RESTO_ORIGEN
 
 ROOT = HERE.parent
@@ -202,6 +203,7 @@ def main():
         if col == "soluciones" and e.get("examples"): ev.append("ejemplo-" + nid[(col, i)])
         if col == "estilos" and i == "glassmorphism": ev.append("demo-glassmorphism")
         if col == "estilos" and i in DE.STYLES: ev.append("demo-estilo-" + i)
+        if (col, i) in DP.PATRONES: ev.append("demo-patron-" + i)
         # temas
         tm = [(t_, c_) for t_, c_, _ in temas_de(col, e)]
         ficha = {
@@ -249,6 +251,14 @@ def main():
         evid[f"demo-estilo-{sid}"] = {"id": f"demo-estilo-{sid}", "tipo": "demo", "titulo": f"Plata sin y con {st['titulo']}", "origen": "propio", "descripcion": st["cambia"],
             "ref": {"url": f"prog-ejemplos/estilos/{sid}.html", "antes": "prog-ejemplos/estilos/_plano.html", "thumb": f"prog-ejemplos/estilos/{sid}.webp", "cambia": st["cambia"],
                     "prueba": bool(st.get("js") or "animation" in st["css"])}}
+
+    # demos de patrones de página y de panel: la misma oferta sin el patrón y con el patrón (tools/lab_demos_patrones.py)
+    for (c_, pid), d_ in DP.PATRONES.items():
+        for f_ in (f"{pid}.html", f"{pid}.webp", "_sin-patron.html"):
+            if not (ROOT / "frontend" / "prog-ejemplos" / "patrones" / f_).exists(): raise SystemExit(f"falta la demo de patrón {f_}")
+        evid[f"demo-patron-{pid}"] = {"id": f"demo-patron-{pid}", "tipo": "demo", "titulo": f"Plata sin y con {d_['titulo']}", "origen": "propio", "descripcion": d_["cambia"],
+            "ref": {"url": f"prog-ejemplos/patrones/{pid}.html", "antes": "prog-ejemplos/patrones/_sin-patron.html", "thumb": f"prog-ejemplos/patrones/{pid}.webp",
+                    "cambia": d_["cambia"], "antes_txt": d_["antes"], "sin": "Sin el patrón", "prueba": False}}
 
     # ── 4) relaciones entre fichas ──
     por_id = {f["id"]: f for f in fichas}
