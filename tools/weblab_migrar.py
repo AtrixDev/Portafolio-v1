@@ -354,6 +354,21 @@ def main():
             "extra": {"respaldo": [{"proyecto": p_, "nivel": n_, "fuente": f_} for p_, n_, f_ in fn["en"]], "nota": fn.get("nota", "")},
             "origen": "propia", "fuente": "Comprobada en el código y la documentación de los proyectos (ver cada respaldo)", "legacy": None, "col": "proyectos",
         })
+    # servicios, stacks y arquitecturas: se muestran donde se usaron de verdad (según las tecnologías declaradas de cada proyecto)
+    ficha_por_id = {f["id"]: f for f in fichas}
+    proy_por_id = {p_["id"]: p_ for p_ in LP.PROYECTOS}
+    for r_ in list(rel):
+        if r_["tipo"] != "usa" or r_["desde"] not in proy_por_id or r_["a"] not in ficha_por_id: continue
+        f_, p_ = ficha_por_id[r_["a"]], proy_por_id[r_["desde"]]
+        if not p_.get("capturas"): continue
+        cap_fn = LP.CAPTURAS_FUNCION.get((LP.USO_FUNCION.get((r_["a"], p_["id"])), p_["id"])) if (r_["a"], p_["id"]) in LP.USO_FUNCION else None
+        caps, nota = (cap_fn[0], cap_fn[1]) if cap_fn else (p_["capturas"][:4], p_.get("nota_capturas", ""))
+        eid = f"uso-{r_['a']}-{p_['id']}"
+        evid[eid] = {"id": eid, "tipo": "proyecto", "titulo": f"{f_['nombre']} en {p_['nombre']}", "origen": "propio",
+                     "descripcion": f"Figura entre las tecnologías de {p_['nombre']}. " + nota, "enlaces": [],
+                     "ref": {"capturas": caps, "nota": f"Así se ve {p_['nombre']}, uno de mis proyectos donde uso {f_['nombre']}. " + nota, "url_preview": caps[0][1], "proyecto": p_["nombre"], "funcion": f"En {p_['nombre']}"}}
+        if eid not in f_["evidencias"]: f_["evidencias"].append(eid)
+
     # tipos de web y rubros: se muestran primero los proyectos propios que de verdad son de ese tipo
     for f in fichas:
         lg = f.get("legacy") or {}; k = (lg.get("cat"), lg.get("id"))

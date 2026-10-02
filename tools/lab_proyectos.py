@@ -87,7 +87,7 @@ PROYECTOS = [
             ],
         },
         "tecnologias": ["Next.js 14", "Node.js con Express", "MongoDB (Mongoose)", "Cloudinary", "jsPDF (presupuestos en PDF)", "Tiptap (editor del blog)", "JWT", "Render y Vercel"],
-        "usa": ["stacks/nextjs", "servicios/mongodb-atlas", "servicios/vercel"],
+        "usa": ["stacks/nextjs", "stacks/node-express", "servicios/mongodb-atlas", "servicios/vercel", "servicios/render", "servicios/cloudinary"],
         "implementa": ["agenda-de-turnos", "confirmacion-de-turno-por-enlace", "estimador-de-precios", "ficha-clinica-con-odontograma", "presupuestos-con-pdf", "casos-antes-despues", "blog-con-editor", "panel-de-administracion", "cuentas-de-cliente"],
         "fuente": "sdv4: ESTADO_PROYECTO.txt, README.md, STRUCTURE.md, CIERRE.md, backend/index.js (151 endpoints), backend/models/index.js (23 modelos), rutas del frontend",
         "capturas": [["Portada", IMG + "odontologia-almagro/inicio.webp"], ["Estimador de precios", IMG + "odontologia-almagro/estimador.webp"], ["Quiz diagnóstico", IMG + "odontologia-almagro/quiz.webp"],
@@ -239,3 +239,8 @@ EJEMPLO_PROPIO_FN = {
     ("soluciones", "blog"): [("blog-con-editor", "odontologia-almagro")],
     ("soluciones", "dashboard"): [("panel-de-administracion", "odontologia-almagro")],
 }
+
+
+# Dónde se usó de verdad cada servicio o stack: se muestran las capturas del proyecto (o de la función que lo usa, si la hay).
+# Solo figuran en la lista de tecnologías de cada proyecto; el detalle del uso no se afirma más allá de eso.
+USO_FUNCION = {("mercadopago", "tenshi"): "pagos-mercado-pago", ("mercadopago", "tienda-de-coleccionables"): "pagos-mercado-pago"}
