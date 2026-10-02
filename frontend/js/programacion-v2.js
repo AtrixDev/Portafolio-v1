@@ -381,7 +381,7 @@
 
   // Una captura grande arriba y todas las miniaturas siempre a la vista debajo; al elegir una, pasa arriba
   const galeriaHTML = caps => `<div class="lb-gal"><a class="lb-gal-main" href="${esc(caps[0][1])}" target="_blank" rel="noopener" title="Ver en tamaño real"><img src="${esc(caps[0][1])}" alt="${esc(caps[0][0])}"></a><p class="lb-gal-t">${esc(caps[0][0])}</p>
-    <div class="lb-thumbs" role="group" aria-label="Capturas">${caps.map((c, i) => `<button type="button" data-cap="${i}" aria-pressed="${i === 0}" title="${esc(c[0])}"><img src="${esc(c[1])}" alt="${esc(c[0])}" loading="lazy"></button>`).join('')}</div></div>`;
+    ${caps.length > 1 ? `<div class="lb-thumbs" role="group" aria-label="Capturas">${caps.map((c, i) => `<button type="button" data-cap="${i}" aria-pressed="${i === 0}" title="${esc(c[0])}"><img src="${esc(c[1])}" alt="${esc(c[0])}" loading="lazy"></button>`).join('')}</div>` : ''}</div>`;
   function tabsDe(f) {
     const t = [];
     for (const e of evDeFicha(f)) {
@@ -395,14 +395,17 @@
         t.push({ k: 'dem', label: 'Demo', nota: EV_NOTA.demo, legacy: 'demo' });
       } else if (e.tipo === 'proyecto' && e.ref?.capturas?.length) {
         const ab = (e.enlaces || []).find(([, u]) => /^https?:/.test(u));
-        t.push({ k: 'cap', label: 'Capturas', nota: e.ref.nota || EV_NOTA.proyecto, html: () => galeriaHTML(e.ref.capturas), open: ab ? ab[1] : null, openLabel: ab ? ab[0] : '' });
+        // Cada proyecto es su propia pestaña (en una funcionalidad o un tipo de web, el nombre del proyecto)
+        t.push({ k: 'cap-' + e.id, label: f.tipo === 'proyecto' ? 'Capturas' : f.tipo === 'funcionalidad' ? (e.ref.proyecto || e.titulo) : (e.ref.funcion || e.titulo), nota: (e.ref.nota || EV_NOTA.proyecto), caps: e.ref.capturas, html: () => galeriaHTML(e.ref.capturas), open: ab ? ab[1] : null, openLabel: ab ? ab[0] : '' });
+      } else if (e.tipo === 'ejemplo') {
+        t.push({ k: 'ej', label: 'Ejemplos de terceros', nota: EV_NOTA.ejemplo, legacy: 'ejemplo' });
       } else if (e.tipo === 'maqueta' && e.id !== 'maqueta-preset') {
         t.push({ k: 'maq', label: 'Maqueta', nota: EV_NOTA.maqueta, legacy: 'maqueta' });
       }
     }
     // evitar pestañas repetidas del mismo tipo
-    const orden = { cmp: 0, ej: 1, exp: 2, dem: 3, maq: 4 }, visto = new Set();
-    return t.filter(x => !visto.has(x.k) && visto.add(x.k)).sort((a, b) => orden[a.k] - orden[b.k]);
+    const orden = { cmp: 0, ej: 1, exp: 2, dem: 3, maq: 4 }, visto = new Set(), peso = k => k.startsWith('cap-') ? -1 : orden[k];
+    return t.filter(x => !visto.has(x.k) && visto.add(x.k)).sort((a, b) => peso(a.k) - peso(b.k));
   }
 
   async function legacyHTML(f, modo) {
@@ -505,7 +508,7 @@
       ajustarFrames(vw);
       const gal = vw.querySelector('.lb-gal');
       if (gal) {
-        const caps = (S.evid[(f.evidencias || []).find(x => S.evid[x]?.ref?.capturas)]?.ref.capturas) || [];
+        const caps = actual.caps || [];
         gal.querySelectorAll('[data-cap]').forEach(b => b.onclick = () => {
           const c = caps[+b.dataset.cap]; if (!c) return;
           gal.querySelector('.lb-gal-main img').src = c[1]; gal.querySelector('.lb-gal-main img').alt = c[0]; gal.querySelector('.lb-gal-main').href = c[1]; gal.querySelector('.lb-gal-t').textContent = c[0];

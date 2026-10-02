@@ -313,10 +313,17 @@ def main():
     for fn in LP.FUNCIONALIDADES:
         evs = []
         for pid, niv, fuente in fn["en"]:
-            eid = "proyecto-" + pid
-            if eid in evid:
-                evs.append(eid)
+            cap = LP.CAPTURAS_FUNCION.get((fn["id"], pid))
+            if "proyecto-" + pid in evid:
                 rel.append({"desde": fn["id"], "tipo": "evidenciada_por", "a": pid})
+            if cap:   # captura de la función misma (no del proyecto entero)
+                eid = f"fn-{fn['id']}-{pid}"
+                pn = next(p_["nombre"] for p_ in LP.PROYECTOS if p_["id"] == pid)
+                for _, src in cap[0]:
+                    if not (ROOT / "frontend" / src).exists(): raise SystemExit(f"falta la captura {src}")
+                evid[eid] = {"id": eid, "tipo": "proyecto", "titulo": f"{fn['nombre']} en {pn}", "origen": "propio", "descripcion": cap[1], "enlaces": [],
+                             "ref": {"capturas": cap[0], "nota": cap[1], "url_preview": cap[0][0][1], "proyecto": pn, "funcion": fn["nombre"]}}
+                evs.append(eid)
         for r_ in fn.get("usa", []):
             t_ = resolver(r_)
             if t_: rel.append({"desde": fn["id"], "tipo": "usa", "a": t_})
@@ -327,6 +334,14 @@ def main():
             "extra": {"respaldo": [{"proyecto": p_, "nivel": n_, "fuente": f_} for p_, n_, f_ in fn["en"]], "nota": fn.get("nota", "")},
             "origen": "propia", "fuente": "Comprobada en el código y la documentación de los proyectos (ver cada respaldo)", "legacy": None, "col": "proyectos",
         })
+    # tipos de web y rubros: se muestran primero los proyectos propios que de verdad son de ese tipo
+    for f in fichas:
+        lg = f.get("legacy") or {}; k = (lg.get("cat"), lg.get("id"))
+        propios = [("proyecto-" + pid, pid) for pid in LP.EJEMPLO_PROPIO.get(k, [])] + [(f"fn-{fid}-{pid}", pid) for fid, pid in LP.EJEMPLO_PROPIO_FN.get(k, [])]
+        for eid, pid in reversed(propios):   # insert(0) invierte: así queda el orden de la tabla
+            if eid not in evid: raise SystemExit(f"EJEMPLO_PROPIO apunta a una evidencia que no existe: {eid}")
+            if eid not in f["evidencias"]: f["evidencias"].insert(0, eid)
+            rel.append({"desde": f["id"], "tipo": "evidenciada_por", "a": pid})
     todas = fichas + proyectos + funcs
     # relaciones válidas (todos los ids existen)
     ids_todos = {f["id"] for f in todas}

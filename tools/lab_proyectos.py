@@ -26,7 +26,9 @@ PROYECTOS = [
         "usa": ["servicios/vercel", "servicios/mongodb-atlas", "arquitecturas/serverless", "stacks/vanilla"],
         "implementa": ["analisis-de-cuenta-mercado-libre"],
         "fuente": "backend/api/tracker.js, backend/lib/tracker.js, frontend/js/herr.js, PRODUCT.md",
-        "pendiente": ["La demo pública usa una cuenta simulada: no es una cuenta real de un cliente."],
+        "capturas": [["Panel con una cuenta de ejemplo", IMG + "ml-tracker/demo-panel.webp"], ["Alertas y publicaciones", IMG + "ml-tracker/demo-alertas.webp"]],
+        "nota_capturas": "Demo pública del sistema con una cuenta de ejemplo: 13 publicaciones con datos simulados. Con una cuenta real se conecta a la API oficial de Mercado Libre.",
+                "pendiente": ["La demo pública usa una cuenta simulada: no es una cuenta real de un cliente."],
         "enlaces": [["Demo", "sistema.html#demo"]],
     },
     {
@@ -40,7 +42,9 @@ PROYECTOS = [
         "usa": ["servicios/vercel", "servicios/mongodb-atlas", "arquitecturas/serverless", "stacks/vanilla"],
         "implementa": [],
         "fuente": "frontend/*.html, backend/api/*.js (audit, contact, content, login), backend/lib/diagnostico-web.js, PRODUCT.md",
-        "pendiente": [],
+        "capturas": [["Portada", IMG + "este-portfolio/portada.webp"], ["Herramientas", IMG + "este-portfolio/herramientas.webp"], ["Esta base de datos", IMG + "este-portfolio/base-de-datos.webp"]],
+        "nota_capturas": "Capturas de este mismo sitio, publicado.",
+                "pendiente": [],
         "enlaces": [["Ver el sitio", "index.html"]],
     },
     {
@@ -61,7 +65,8 @@ PROYECTOS = [
         "implementa": ["pagos-mercado-pago", "carrito-y-checkout", "panel-de-administracion", "cuentas-de-cliente", "preventas-con-sena", "calculadora-precio-yen-pesos"],
         "fuente": "tenshi-store: README.md, PRODUCT.md, DESIGN.md, package.json, prisma/schema.prisma, rutas de src/app y archivos de src/lib",
         "capturas": [["Portada, tema claro", IMG + "tenshi/inicio.webp"], ["Portada, tema oscuro", IMG + "tenshi/inicio-oscuro.webp"], ["Catálogo", IMG + "tenshi/productos.webp"],
-                     ["Calendario de lanzamientos", IMG + "tenshi/lanzamientos.webp"], ["Ficha de una preventa", IMG + "tenshi/producto.webp"], ["En el celular", IMG + "tenshi/movil.webp"]],
+                     ["Calendario de lanzamientos", IMG + "tenshi/lanzamientos.webp"], ["Ficha de una preventa", IMG + "tenshi/producto.webp"], ["En el celular", IMG + "tenshi/movil.webp"],
+                     ["Panel de administración: resumen", IMG + "tenshi/fn-admin-resumen.webp"], ["Panel de administración: productos", IMG + "tenshi/fn-admin-productos.webp"]],
         "nota_capturas": "Capturas tomadas en mi computadora, con los productos de ejemplo que trae el proyecto. Todavía no está publicado.",
         "pendiente": [
             "No está publicado (confirmado por Darío): faltan datos de contacto, alias bancario, política de preventas, precios y stock reales, fotos propias y costos de envío, según su README.",
@@ -86,10 +91,12 @@ PROYECTOS = [
         "implementa": ["agenda-de-turnos", "confirmacion-de-turno-por-enlace", "estimador-de-precios", "ficha-clinica-con-odontograma", "presupuestos-con-pdf", "casos-antes-despues", "blog-con-editor", "panel-de-administracion", "cuentas-de-cliente"],
         "fuente": "sdv4: ESTADO_PROYECTO.txt, README.md, STRUCTURE.md, CIERRE.md, backend/index.js (151 endpoints), backend/models/index.js (23 modelos), rutas del frontend",
         "capturas": [["Portada", IMG + "odontologia-almagro/inicio.webp"], ["Estimador de precios", IMG + "odontologia-almagro/estimador.webp"], ["Quiz diagnóstico", IMG + "odontologia-almagro/quiz.webp"],
-                     ["Página de un servicio", IMG + "odontologia-almagro/servicio.webp"], ["Blog", IMG + "odontologia-almagro/blog.webp"], ["En el celular", IMG + "odontologia-almagro/movil.webp"]],
-        "nota_capturas": "Capturas del sitio público en producción. El panel de gestión no se muestra porque trabaja con datos de pacientes.",
+                     ["Página de un servicio", IMG + "odontologia-almagro/servicio.webp"], ["Blog", IMG + "odontologia-almagro/blog.webp"], ["En el celular", IMG + "odontologia-almagro/movil.webp"],
+                     ["Panel de gestión: resumen (datos inventados)", IMG + "odontologia-almagro/fn-dashboard.webp"], ["Panel de gestión: agenda (datos inventados)", IMG + "odontologia-almagro/fn-agenda.webp"],
+                     ["Portal del paciente (cuenta inventada)", IMG + "odontologia-almagro/fn-portal.webp"]],
+        "nota_capturas": "Las primeras seis son del sitio público en producción. Las del panel de gestión y del portal del paciente salen de una copia local del mismo sistema con datos inventados: no hay datos de pacientes reales.",
         "pendiente": [
-            "El panel de gestión y el portal del paciente no se muestran (datos de salud). Sus funciones se describen en texto.",
+            "Las capturas del panel y del portal salen de una copia local con datos inventados; los datos reales de pacientes no se muestran.",
             "No existe todavía, según el propio proyecto: cobro de seña con Mercado Pago al reservar, reserva automática con Google Calendar y recordatorios por la API de WhatsApp Business.",
             "El portal ya no permite solicitar turnos: esa función se eliminó (la documentación del proyecto está desactualizada en ese punto).",
             "Hay funciones en el código (mensajes con plantillas, encuestas post-turno, referidos, respaldos) que todavía no están descriptas: se agregan cuando se confirme qué hacen.",
@@ -108,7 +115,8 @@ PROYECTOS = [
         "implementa": ["pagos-mercado-pago", "carrito-y-checkout", "panel-de-administracion"],
         "fuente": "README.md, package.json, prisma/schema.prisma, rutas de src/app, IDEAS.md (del proyecto de la tienda)",
         "capturas": [["Portada", IMG + "tienda-de-coleccionables/inicio.webp"], ["Catálogo", IMG + "tienda-de-coleccionables/productos.webp"],
-                     ["Ficha de producto", IMG + "tienda-de-coleccionables/producto.webp"], ["En el celular", IMG + "tienda-de-coleccionables/movil.webp"]],
+                     ["Ficha de producto", IMG + "tienda-de-coleccionables/producto.webp"], ["En el celular", IMG + "tienda-de-coleccionables/movil.webp"],
+                     ["Carrito", IMG + "tienda-de-coleccionables/fn-carrito.webp"], ["Pago", IMG + "tienda-de-coleccionables/fn-pago.webp"], ["Panel de administración: productos", IMG + "tienda-de-coleccionables/fn-admin-productos.webp"]],
         "nota_capturas": "Capturas tomadas en mi computadora, con la marca y el logo ocultados (no hay autorización de la marca para mostrarla). Todavía no está publicado.",
         "pendiente": [
             "No envía emails de confirmación aunque el checkout lo promete: el propio proyecto lo registra como pendiente.",
@@ -186,3 +194,48 @@ FUNCIONALIDADES = [
 
 # Herramientas de herramientas.html que se publican como proyecto (las 8 que funcionan, además del ML Tracker)
 HERRAMIENTAS_PROYECTO = ["auditoria", "chequeo", "simulador", "diagnostico", "opiniones", "importacion", "informe", "perdida"]
+
+
+# ── Capturas específicas de cada función, por proyecto (lo que muestra la ficha de la funcionalidad) ──
+def _c(*pares): return [[t, IMG + p] for t, p in pares]
+_LOCAL = "Capturas de mi computadora con el proyecto funcionando en local, con los datos de ejemplo que trae. Todavía no está publicado."
+_INVENTADOS = "Capturas del sistema real en una copia local con datos inventados (nombres, turnos y presupuestos de ejemplo). No hay datos de pacientes reales."
+_PUBLICO = "Capturas del sitio público en producción."
+CAPTURAS_FUNCION = {
+    ("pagos-mercado-pago", "tenshi"): (_c(("Elegir cómo pagar", "tenshi/fn-pago.webp")), _LOCAL),
+    ("pagos-mercado-pago", "tienda-de-coleccionables"): (_c(("Elegir cómo pagar", "tienda-de-coleccionables/fn-pago.webp")), _LOCAL + " Marca y logo ocultos."),
+    ("carrito-y-checkout", "tenshi"): (_c(("Carrito", "tenshi/fn-carrito.webp"), ("Finalizar compra", "tenshi/fn-checkout.webp")), _LOCAL),
+    ("carrito-y-checkout", "tienda-de-coleccionables"): (_c(("Carrito", "tienda-de-coleccionables/fn-carrito.webp"), ("Finalizar compra", "tienda-de-coleccionables/fn-checkout.webp")), _LOCAL + " Marca y logo ocultos."),
+    ("panel-de-administracion", "tenshi"): (_c(("Resumen", "tenshi/fn-admin-resumen.webp"), ("Productos", "tenshi/fn-admin-productos.webp")), _LOCAL),
+    ("panel-de-administracion", "tienda-de-coleccionables"): (_c(("Productos", "tienda-de-coleccionables/fn-admin-productos.webp")), _LOCAL + " Marca y logo ocultos."),
+    ("panel-de-administracion", "odontologia-almagro"): (_c(("Resumen", "odontologia-almagro/fn-dashboard.webp"), ("Pacientes", "odontologia-almagro/fn-pacientes.webp")), _INVENTADOS),
+    ("cuentas-de-cliente", "tenshi"): (_c(("Crear cuenta", "tenshi/fn-cuenta-abrir.webp")), _LOCAL),
+    ("cuentas-de-cliente", "odontologia-almagro"): (_c(("Ingreso al portal", "odontologia-almagro/fn-portal-login.webp"), ("Portal del paciente", "odontologia-almagro/fn-portal.webp")), _INVENTADOS),
+    ("preventas-con-sena", "tenshi"): (_c(("Seña y saldo en la ficha de una preventa", "tenshi/producto.webp")), _LOCAL),
+    ("calculadora-precio-yen-pesos", "tenshi"): (_c(("Calculadora de precios en Configuración", "tenshi/fn-calculadora.webp")), _LOCAL),
+    ("agenda-de-turnos", "odontologia-almagro"): (_c(("Agenda semanal", "odontologia-almagro/fn-agenda.webp")), _INVENTADOS),
+    ("confirmacion-de-turno-por-enlace", "odontologia-almagro"): (_c(("Página que ve el paciente al confirmar", "odontologia-almagro/fn-confirmar.webp")), _INVENTADOS),
+    ("estimador-de-precios", "odontologia-almagro"): (_c(("Estimador de precios", "odontologia-almagro/estimador.webp"), ("Quiz de diagnóstico", "odontologia-almagro/quiz.webp")), _PUBLICO),
+    ("ficha-clinica-con-odontograma", "odontologia-almagro"): (_c(("Ficha del paciente", "odontologia-almagro/fn-ficha.webp"), ("Tratamientos del paciente", "odontologia-almagro/fn-ficha-tratamientos.webp"), ("Odontograma", "odontologia-almagro/fn-odontograma.webp")), _INVENTADOS),
+    ("presupuestos-con-pdf", "odontologia-almagro"): (_c(("Lista de presupuestos", "odontologia-almagro/fn-presupuestos.webp"), ("PDF generado", "odontologia-almagro/fn-presupuesto-pdf.webp")), _INVENTADOS),
+    ("casos-antes-despues", "odontologia-almagro"): (_c(("Cómo se carga un caso en el panel", "odontologia-almagro/fn-casos-form.webp")), "Formulario del panel real, vacío: los casos reales usan fotos de pacientes y no se muestran."),
+    ("blog-con-editor", "odontologia-almagro"): (_c(("Blog público", "odontologia-almagro/blog.webp"), ("Editor del panel", "odontologia-almagro/fn-blog-editor.webp")), "El blog público es del sitio en producción; el editor, de la copia local con datos de ejemplo."),
+    ("analisis-de-cuenta-mercado-libre", "ml-tracker"): (_c(("Panel con una cuenta de ejemplo", "ml-tracker/demo-panel.webp"), ("Alertas y publicaciones", "ml-tracker/demo-alertas.webp")), "Demo pública con una cuenta de ejemplo (datos simulados)."),
+}
+
+# ── Qué proyectos propios sirven de ejemplo de cada tipo de web y rubro (solo coincidencias reales) ──
+EJEMPLO_PROPIO = {
+    ("soluciones", "ecommerce"): ["tenshi", "tienda-de-coleccionables"],
+    ("soluciones", "institucional"): ["odontologia-almagro"],
+    ("soluciones", "portfolio"): ["este-portfolio"],
+    ("soluciones", "saas"): ["ml-tracker"],
+    ("soluciones", "dashboard"): ["ml-tracker"],
+    ("negocios", "consultorio"): ["odontologia-almagro"],
+    ("negocios", "tienda"): ["tenshi", "tienda-de-coleccionables"],
+}
+# Funciones concretas que ilustran un tipo de web (el id es de una funcionalidad y el proyecto que la muestra)
+EJEMPLO_PROPIO_FN = {
+    ("soluciones", "reservas"): [("agenda-de-turnos", "odontologia-almagro"), ("confirmacion-de-turno-por-enlace", "odontologia-almagro")],
+    ("soluciones", "blog"): [("blog-con-editor", "odontologia-almagro")],
+    ("soluciones", "dashboard"): [("panel-de-administracion", "odontologia-almagro")],
+}
