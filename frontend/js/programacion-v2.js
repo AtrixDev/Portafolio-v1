@@ -241,7 +241,7 @@
       const d = TILE_D[id] || (f.t === 'funcionalidad' ? `La armé en ${nProy(id)} proyectos distintos. ${f.d}` : f.d);
       return `<button type="button" class="lb-tile${n === 0 ? ' is-main' : ''}" data-open="${esc(f.id)}"><span class="lb-tile-k">${esc(k)}</span><strong>${esc(f.n)}</strong><span class="lb-tile-d">${esc(d)}</span>
         <span class="lb-tile-f">${f.v ? valChip(f.v, f.ve, true) : `<span class="lb-tipo">${esc(TIPOS[f.t] || f.t)}</span>`}<span class="lb-tile-go" aria-hidden="true">→</span></span></button>`; }).join('');
-    box.innerHTML = `<p class="lb-top-t">Elegí quién sos y te muestro por dónde empezar <span class="lb-cara" aria-hidden="true">ツ</span></p>
+    box.innerHTML = `<p class="lb-top-t">Elegí quién sos y te muestro por dónde empezar<span class="lb-cara" aria-hidden="true">ツ</span></p>
       <div class="lb-perfiles" role="group" aria-label="Quién sos">${PERFILES.map(p => `<button type="button" data-perfil="${p.id}" data-tip="${esc(p.tip)}" aria-pressed="${p.id === per.id}">${ic(p.ic)}<span>${p.n}</span></button>`).join('')}</div>
       <p class="lb-top-why">${esc(per.why)}</p>
       <div class="lb-top-g" key="${per.id}">${tiles}</div>
