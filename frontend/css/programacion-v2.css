@@ -265,7 +265,7 @@ html.lb-lock { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { .lb-fchip { transition: none; } }
 
 /* ── Hero en dos columnas: texto a la izquierda, lo más importante a la derecha ── */
-.lb-hero-in { display: grid; gap: 2.2rem clamp(2rem, 4vw, 4rem); align-items: center; max-width: 1280px; margin: 0 auto; }
+.lb-hero-in { display: grid; gap: 2.2rem clamp(2rem, 4vw, 4rem); align-items: start; max-width: 1280px; margin: 0 auto; }
 @media (min-width: 1060px) { .lb-hero-in { grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); } }
 .lb-top-t { margin: 0 0 .7rem; font: 700 .72rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .lb-top-g { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; animation: lb-sube .24s var(--ease-out); }
@@ -378,7 +378,7 @@ a.lb-link { text-decoration: underline; text-decoration-color: var(--accent-line
 .lb-tile.has-img > :not(.lb-tile-img) { margin-left: 1.05rem; margin-right: 1.05rem; }
 .lb-tile.has-img .lb-tile-k { margin-top: .75rem; }
 .lb-tile.has-img strong { font-size: clamp(1rem, 1.4vw, 1.2rem); }
-.lb-tile.has-img .lb-tile-d { -webkit-line-clamp: 2; }
+.lb-tile.has-img .lb-tile-d { -webkit-line-clamp: 3; }
 .lb-tile.is-main.has-img { background: var(--accent); }
 .lb-hero .wl-stats { margin-top: 1rem; font-size: .76rem; }
 
@@ -420,3 +420,6 @@ a.lb-link { text-decoration: underline; text-decoration-color: var(--accent-line
 .lb-aplicar { margin-top: 2rem; padding: 1.3rem 1.4rem; border-radius: 16px; background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent-line); display: grid; gap: .5rem; justify-items: start; }
 .lb-aplicar h2 { font: 750 1.2rem var(--font-display); letter-spacing: -.02em; margin: 0; } .lb-aplicar p { margin: 0; font-size: .92rem; color: var(--text-2); max-width: 46ch; }
 @media (prefers-reduced-motion: reduce) { .lb-tile-img img, .lb-cc, .lb-emp { transition: none; } }
+
+.lb-hero { padding-top: calc(var(--nav-h, 76px) + 1.6rem); padding-bottom: 1.6rem; }
+.lb-hero-txt { padding-top: .4rem; }

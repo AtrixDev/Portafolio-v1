@@ -215,7 +215,7 @@ def main():
             "temas": [t_ for t_, c_ in tm if c_ in ("alta", "media")], "temas_a_revisar": [t_ for t_, c_ in tm if c_ == "baja"],
             "rubros": [x for x in (NEGOCIO_RUBROS.get(i, []) if col == "negocios" else [])],
             "nivel": VT.NIVEL_TIPOS.get((col, i), e.get("nivel")), "valor": valor, "valor_porque": porque, "valor_revisado": HOY, "valor_origen": vorigen, "valor_estado": vestado,
-            "nombre": e["name"], "resumen": (escrito or {}).get("resumen") or e.get("summary", ""), "nucleo": dict(nuc), "evidencias": ev, "reutilizable": reut,
+            "nombre": VT.TEXTOS.get((col, i), (e["name"],))[0], "resumen": (VT.TEXTOS[(col, i)][1] if (col, i) in VT.TEXTOS else (escrito or {}).get("resumen") or e.get("summary", "")), "nucleo": dict(nuc), "evidencias": ev, "reutilizable": reut,
             "tecnico": tec, "extra": extra, "origen": "curada" if col in CURADAS else "importada",
             "fuente": "Curada en sesiones de trabajo (Darío y Claude)" if col in CURADAS else "Importada y traducida de la skill ui-ux-pro-max",
             "legacy": {"cat": col, "id": i, "col": col}, "col": col,

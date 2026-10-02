@@ -53,3 +53,7 @@ NUCLEO_AGREGA = {
     ("soluciones", "institucional"): {
         "aporta": [("El techo de lo que hice.", "Odontología Almagro es un sitio institucional con sistema de gestión del consultorio y portal de pacientes: un institucional puede ser una página simple o un sistema completo.")]},
 }
+
+# Nombre y resumen que se muestran en lugar de los originales (más claros para quien llega por primera vez)
+TEXTOS = {("negocios", "tienda"): ("Tienda propia para quien vende en Mercado Libre",
+                                     "Vendé en tu propia web sin pagar la comisión del marketplace y quedate con los datos de tus clientes.")}

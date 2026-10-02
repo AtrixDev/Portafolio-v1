@@ -249,7 +249,7 @@
       why: 'Lo que más sirve para evaluar mi trabajo en Mercado Libre.', items: [['ml-tracker', 'Seguimiento de cuentas de Mercado Libre'], ['herramienta-auditoria', 'Auditoría de cuenta'], ['herramienta-chequeo', 'Chequeo de publicación'], ['herramienta-simulador', 'Simulador de puntaje']],
       href: ['lab.html', 'Ver el Lab de Mercado Libre'] },
     { id: 'cliente', n: 'Cliente', ic: '<path d="M3 4h2l2.4 11h11L21 7H6M9 20h.01M17 20h.01"/>', tip: 'Si vendés en Mercado Libre o querés una web: tienda propia, revisión de tu cuenta y qué tipo de web te sirve.',
-      why: 'Para vender más en Mercado Libre o tener una web propia.', items: [['tienda', 'Si vendés en Mercado Libre'], ['herramienta-auditoria', 'Revisá tu cuenta de Mercado Libre'], ['ecommerce', 'Tu tienda propia'], ['landing', 'Una web que consigue consultas']],
+      why: 'Para vender más en Mercado Libre o tener una web propia.', items: [['tienda', 'Si vendés en Mercado Libre: tu propia tienda'], ['herramienta-auditoria', 'Revisá tu cuenta de Mercado Libre'], ['ecommerce', 'Tu tienda propia'], ['landing', 'Una web que consigue consultas']],
       mas: ['problema', 'Ver qué le sirve a mi rubro'] },
     { id: 'estudiante', n: 'Estudiante', ic: IC.aprender, tip: 'Si querés aprender: por dónde empezar, con ejemplos para tocar.',
       why: 'Para aprender con algo para probar.', items: [['vanilla', 'Para empezar'], ['impeccable', 'Diseñar mejor con IA'], ['glassmorphism', 'Un estilo con demo para tocar'], ['webapp-testing', 'Verificar tu propio trabajo']],
@@ -258,7 +258,7 @@
       why: 'Estilos que hoy se ven en productos nuevos. Es criterio mío, no una estadística de mercado.', items: [['liquid-glass', 'Estilo en alza'], ['ai-native-ui', 'Interfaces con IA'], ['bento-grids', 'Layout de moda'], ['motion-driven', 'Movimiento con criterio']] },
   ];
   // Descripción propia solo donde el resumen de la ficha no sirve para una tarjeta
-  const TILE_D = { 'liquid-glass': 'Vidrio translúcido que se deforma como un líquido. Muy llamativo; pesado para celulares básicos.', 'ai-native-ui': 'Interfaces pensadas para conversar con una IA: chat, voz y texto que aparece mientras se genera.',
+  const TILE_D = { tienda: 'Vendé en tu propia web sin pagar la comisión del marketplace y quedate con los datos de tus clientes. Mirá cuánto más te queda por venta.',  'liquid-glass': 'Vidrio translúcido que se deforma como un líquido. Muy llamativo; pesado para celulares básicos.', 'ai-native-ui': 'Interfaces pensadas para conversar con una IA: chat, voz y texto que aparece mientras se genera.',
     'bento-grids': 'Información en tarjetas de distintos tamaños, como un bento: ordenado y fácil de escanear.', 'motion-driven': 'Animaciones y transiciones que guían la atención. Pide cuidar el rendimiento.' };
   function renderTop() {
     const box = $('lb-top'); if (!box) return;

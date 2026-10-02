@@ -31,7 +31,7 @@ VALOR_SS = {
  ("servicios", "sentry"): ("pro", "Detecta fallos en una aplicación en producción: una especialización de mantenimiento."),
  ("servicios", "clarity"): ("pro", "Muestra dónde se pierden los usuarios y permite mejorar una página con evidencia."),
  # stacks
- ("stacks", "vanilla"): ("pro", "Es la base de lo que hacemos a medida, sin plantillas ni frameworks: lo más cercano a este sitio."),
+ ("stacks", "vanilla"): ("imprescindible", "Es el cimiento de toda web: sin dominar HTML, CSS y JavaScript no hay nada a medida, y todo lo demás se apoya en esto."),
  ("stacks", "node-express"): ("pro", "Es la lógica de servidor de las funciones a medida: formularios, integraciones y paneles."),
  ("stacks", "nextjs"): ("pro", "Permite hacer tiendas y aplicaciones a medida con buen SEO."),
  ("stacks", "astro"): ("pro", "Permite hacer sitios de contenido muy rápidos y a medida."),
