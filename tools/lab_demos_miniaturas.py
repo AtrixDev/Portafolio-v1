@@ -18,7 +18,21 @@ from PIL import Image
 D = L.OUT
 TMP = Path("/tmp/claude-1000/caps/est"); TMP.mkdir(parents=True, exist_ok=True)
 
+def patrones():
+    """Miniaturas de las demos de patrones (python3 tools/lab_demos_miniaturas.py --patrones)."""
+    import lab_demos_patrones as P
+    with sync_playwright() as p:
+        b = p.chromium.launch(executable_path="/usr/bin/google-chrome", args=["--no-sandbox"])
+        pg = b.new_context(viewport={"width": 1280, "height": 800}, reduced_motion="no-preference").new_page()
+        for (_, i) in P.PATRONES:
+            pg.goto(f"http://localhost:8767/prog-ejemplos/patrones/{i}.html", wait_until="load"); pg.wait_for_timeout(2600)
+            pg.screenshot(path=str(TMP / f"p-{i}.png"))
+            Image.open(TMP / f"p-{i}.png").convert("RGB").resize((640, 400), Image.LANCZOS).save(P.OUT / f"{i}.webp", "WEBP", quality=78, method=6)
+        b.close()
+    print(f"OK · {len(P.PATRONES)} miniaturas de patrones")
+
 def main():
+    if "--patrones" in sys.argv: return patrones()
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     ids = args or list(L.STYLES)
     with sync_playwright() as p:

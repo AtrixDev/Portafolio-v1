@@ -79,9 +79,25 @@ PATRONES = {
         cambia="Se quita todo lo que no ayuda a una sola acción. Queda una columna con la promesa, tres beneficios, una prueba social y un formulario con un único campo y un único botón destacado. El menú se reduce a «Ingresá», y bajo el botón van las dudas típicas (gratis, sin tarjeta, cancelás cuando quieras)."),
 }
 
+import json, sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import lab_demos_patrones_lib as LIB
+
+def _nombres():
+    src = OUT.parent.parent / "data" / "weblab"; out = {}
+    for f in ("estilos", "landing"):
+        d = json.load(open(src / f"{f}.json", encoding="utf-8")); it = d if isinstance(d, list) else d.get("items", list(d.values()))
+        for e in it: out[(f, e["id"])] = e["name"]
+    return out
+
+_N = _nombres()
+for (col, pid), d in LIB.build_extra().items():
+    d["titulo"] = _N.get((col, pid), d["titulo"]); PATRONES[(col, pid)] = d
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "_sin-patron.html").write_text(SIN, encoding="utf-8")
+    (OUT / "_sin-panel.html").write_text(LIB.SIN_PANEL, encoding="utf-8")
     for (col, i), d in PATRONES.items(): (OUT / f"{i}.html").write_text(d["html"], encoding="utf-8")
     print(f"OK · {len(PATRONES)} demos de patrones + _sin-patron.html en {OUT}")
 

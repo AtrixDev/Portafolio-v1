@@ -254,11 +254,11 @@ def main():
 
     # demos de patrones de página y de panel: la misma oferta sin el patrón y con el patrón (tools/lab_demos_patrones.py)
     for (c_, pid), d_ in DP.PATRONES.items():
-        for f_ in (f"{pid}.html", f"{pid}.webp", "_sin-patron.html"):
+        for f_ in (f"{pid}.html", f"{pid}.webp", d_.get("antes_file", "prog-ejemplos/patrones/_sin-patron.html").split("/")[-1]):
             if not (ROOT / "frontend" / "prog-ejemplos" / "patrones" / f_).exists(): raise SystemExit(f"falta la demo de patrón {f_}")
         evid[f"demo-patron-{pid}"] = {"id": f"demo-patron-{pid}", "tipo": "demo", "titulo": f"Plata sin y con {d_['titulo']}", "origen": "propio", "descripcion": d_["cambia"],
-            "ref": {"url": f"prog-ejemplos/patrones/{pid}.html", "antes": "prog-ejemplos/patrones/_sin-patron.html", "thumb": f"prog-ejemplos/patrones/{pid}.webp",
-                    "cambia": d_["cambia"], "antes_txt": d_["antes"], "sin": "Sin el patrón", "prueba": False}}
+            "ref": {"url": f"prog-ejemplos/patrones/{pid}.html", "antes": d_.get("antes_file", "prog-ejemplos/patrones/_sin-patron.html"), "thumb": f"prog-ejemplos/patrones/{pid}.webp",
+                    "cambia": d_["cambia"], "antes_txt": d_["antes"], "sin": "Sin el patrón", "prueba": bool(d_.get("prueba"))}}
 
     # ── 4) relaciones entre fichas ──
     por_id = {f["id"]: f for f in fichas}
