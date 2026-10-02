@@ -255,14 +255,14 @@ html.lb-lock { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { .lb-dc, .lb-dc-img img { transition: none; } }
 
 /* ── Filtros: las mismas piezas que las tarjetas; el botón solo marca cuál está elegido ── */
-.lb-fc { display: inline-flex; align-items: center; gap: .4rem; min-height: 34px; padding: .2rem .35rem; border: 0; border-radius: 10px; background: none; color: var(--text-2); font: inherit; cursor: pointer; transition: background .16s, box-shadow .16s, transform .16s var(--ease-out); }
-.lb-fc small { font: 500 .72rem var(--font-sans); color: var(--muted); font-variant-numeric: tabular-nums; }
-.lb-fc:hover { background: var(--surface-2); }
-.lb-fc:active { transform: scale(.97); }
-.lb-fc[aria-pressed="true"] { background: var(--surface); box-shadow: 0 0 0 1.5px var(--text-2), var(--shadow-card); }
-.lb-fc[aria-pressed="true"] small { color: var(--text); }
+.lb-fchip { display: inline-flex; align-items: center; gap: .4rem; min-height: 34px; padding: .2rem .35rem; border: 0; border-radius: 10px; background: none; color: var(--text-2); font: inherit; cursor: pointer; transition: background .16s, box-shadow .16s, transform .16s var(--ease-out); }
+.lb-fchip small { font: 500 .72rem var(--font-sans); color: var(--muted); font-variant-numeric: tabular-nums; }
+.lb-fchip:hover { background: var(--surface-2); }
+.lb-fchip:active { transform: scale(.97); }
+.lb-fchip[aria-pressed="true"] { background: var(--surface); box-shadow: 0 0 0 1.5px var(--text-2), var(--shadow-card); }
+.lb-fchip[aria-pressed="true"] small { color: var(--text); }
 .lb-todos { display: inline-flex; align-items: center; min-height: 26px; padding: .3rem .5rem; font: 700 .78rem/1 var(--font-sans); color: var(--text); }
-@media (prefers-reduced-motion: reduce) { .lb-fc { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .lb-fchip { transition: none; } }
 
 /* ── Hero en dos columnas: texto a la izquierda, lo más importante a la derecha ── */
 .lb-hero-in { display: grid; gap: 2.2rem clamp(2rem, 4vw, 4rem); align-items: center; max-width: 1280px; margin: 0 auto; }
@@ -320,7 +320,7 @@ a.lb-link { text-decoration: underline; text-decoration-color: var(--accent-line
 .lb-tip[hidden] { display: none; }
 @media (prefers-reduced-motion: reduce) { .lb-tip { transition: none; } }
 [data-tip] { cursor: help; }
-.lb-fc[data-tip], .lb-fc, button[data-tip], .lb-tile, .lb-pill[data-tip=""] { cursor: pointer; }
+.lb-fchip, button[data-tip], .lb-tile, .lb-pill[data-tip=""] { cursor: pointer; }
 .lb-pill[data-tip=""] { cursor: default; }
 .lb-pill.is-tec[data-tip]:not([data-tip=""]), .lb-pill[tabindex][data-tip]:not([data-tip=""]) { cursor: help; }
 
@@ -329,22 +329,27 @@ a.lb-link { text-decoration: underline; text-decoration-color: var(--accent-line
 .lb-glos li { line-height: 1.5; color: var(--text-2); }
 .lb-glos b { color: var(--text); }
 
-/* ── Capturas: todas a la vista ── */
-.lb-gal { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem .8rem; }
-.lb-shot { margin: 0; display: grid; gap: .4rem; }
-.lb-shot.is-first { grid-column: 1 / -1; }
-.lb-shot a { display: block; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-md), inset 0 0 0 1px var(--line-strong); background: var(--surface-2); }
-.lb-shot img { display: block; width: 100%; height: auto; transition: transform .4s var(--ease-out); }
-@media (hover: hover) { .lb-shot a:hover img { transform: scale(1.02); } }
-.lb-shot figcaption { font: 600 .82rem var(--font-sans); color: var(--text); }
-@media (max-width: 640px) { .lb-gal { grid-template-columns: minmax(0, 1fr); } }
-@media (prefers-reduced-motion: reduce) { .lb-shot img { transition: none; } }
-#lb-ficha .lb-vw:has(.lb-gal) { position: static; height: auto; }
+/* ── Capturas: una grande arriba y las miniaturas siempre a la vista abajo, sin scroll interno ── */
 #lb-ficha .lb-vw:has(.lb-gal) .lb-stage { overflow: visible; }
-
+.lb-gal-main { background: var(--surface-2); }
+.lb-gal-main img { width: 100%; height: auto; max-height: calc(100vh - var(--nav-h, 64px) - var(--lb-bar, 52px) - 16rem); object-fit: contain; }
+@media (max-width: 1000px) { .lb-gal-main img { max-height: none; } }
 /* ── Carita feliz ── */
-.lb-cara { display: inline-block; width: 18px; height: 18px; margin-left: .25rem; vertical-align: -4px; transform-origin: 50% 80%; animation: lb-hola 1.3s var(--ease-out) .6s 1 both; }
+.lb-cara { display: inline-block; width: 30px; height: 30px; margin-left: .35rem; vertical-align: -9px; transform-origin: 50% 85%; filter: drop-shadow(0 2px 3px rgba(120,80,0,.25)); animation: lb-hola 1.3s var(--ease-out) .6s 1 both; }
+.lb-top-t:hover .lb-cara { animation: lb-hola .9s var(--ease-out) 1 both; }
 @keyframes lb-hola { 0% { transform: rotate(0); } 25% { transform: rotate(-14deg) scale(1.12); } 50% { transform: rotate(10deg) scale(1.12); } 75% { transform: rotate(-6deg); } 100% { transform: rotate(0); } }
-@media (prefers-reduced-motion: reduce) { .lb-cara { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .lb-cara, .lb-top-t:hover .lb-cara { animation: none; } }
 
-.lb-shot.is-movil a { max-width: 240px; }
+/* ── Chips legibles sobre la tarjeta amarilla ── */
+.lb-tile.is-main .wl-val, .lb-tile.is-main .wl-val[data-v], .lb-tile.is-main .wl-val.is-prov { background: var(--accent-ink); color: var(--accent); box-shadow: none; }
+.lb-tile.is-main .lb-tipo { color: var(--accent-ink); font-weight: 700; }
+
+/* ── Hero con más cuerpo: título grande y cifras ── */
+.lb-kicker { margin: 0 0 .9rem; display: inline-flex; align-items: center; gap: .5rem; font: 700 .74rem var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--text-2); }
+.lb-kicker::before { content: ""; width: 26px; height: 2px; background: var(--accent-text); }
+.lb-hero h1 { font-size: clamp(3rem, 7vw, 5.6rem); max-width: none; line-height: .95; }
+.lb-nums { display: grid; grid-template-columns: repeat(4, auto); justify-content: start; gap: .5rem clamp(1rem, 2.4vw, 2rem); margin: 1.6rem 0 0; padding: 0; }
+.lb-nums > div { display: grid; gap: .15rem; padding-left: .8rem; border-left: 2px solid var(--line-strong); }
+.lb-nums dt { font: 600 .74rem var(--font-sans); color: var(--text-2); order: 2; max-width: 12ch; line-height: 1.25; }
+.lb-nums dd { margin: 0; font: 800 clamp(1.5rem, 2.6vw, 2.1rem)/1 var(--font-display); letter-spacing: -.04em; font-variant-numeric: tabular-nums; color: var(--text); }
+@media (max-width: 520px) { .lb-nums { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

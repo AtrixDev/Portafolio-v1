@@ -113,7 +113,7 @@
       S.rubros = rubros; S.rubrosBy = Object.fromEntries(rubros.map(r => [r.id, r]));
       for (const r of rel) { (S.relOut[r.desde] ||= []).push(r); (S.relIn[r.a] ||= []).push(r); }
       for (const f of idx) if (f.p) S.prev[f.id] = f.p;
-      if ($('lb-stats')) $('lb-stats').textContent = `${idx.length} entradas · ${rubros.length} rubros en el recomendador`;
+      if ($('lb-nums')) $('lb-nums').innerHTML = [[idx.length, 'entradas en la base'], [idx.filter(f => f.t === 'proyecto').length, 'proyectos y herramientas propias'], [idx.filter(f => f.t === 'funcionalidad').length, 'funcionalidades comprobadas'], [idx.filter(f => f.e.includes('experimento')).length, 'experimentos con y sin skill']].map(([n, t]) => `<div><dt>${t}</dt><dd>${n}</dd></div>`).join('');
       bind();
       route();
     } catch (err) {
@@ -179,7 +179,7 @@
   function filtrosHTML(base) {
     const cnt = fn => base.filter(fn).length;
     // Cada opción usa la misma pieza que las tarjetas (valor, nivel, evidencia); el botón solo agrega el estado "elegido"
-    const fc = (attr, val, chip, n, act) => `<button type="button" class="lb-fc" data-f-${attr}="${esc(val)}" aria-pressed="${String(act) === String(val)}">${chip}${n === '' ? '' : `<small>${n}</small>`}</button>`;
+    const fc = (attr, val, chip, n, act) => `<button type="button" class="lb-fchip" data-f-${attr}="${esc(val)}" aria-pressed="${String(act) === String(val)}">${chip}${n === '' ? '' : `<small>${n}</small>`}</button>`;
     const todos = (attr, txt, act, n) => fc(attr, '', `<span class="lb-todos">${txt}</span>`, n, act);
     const GT = { Valor: 'Cuánto te diferencia hoy saber hacerlo: Imprescindible, Pro o Base.', Nivel: 'Qué tan difícil es de aplicar.', Evidencia: 'Qué se puede ver o comprobar de cada entrada: proyecto real, demo, experimento o maqueta.' };
     const grp = (lab, icon, body) => `<div class="lb-fg"><span class="lb-fl" data-tip="${esc(GT[lab])}">${ic(icon)}${lab}</span>${body}</div>`;
@@ -218,8 +218,9 @@
 
   // ¿Quién sos? Según la elección se muestran los recomendados. Todo apunta a fichas reales de la base.
   const PERFILES = [
-    { id: 'reclutador', n: 'Reclutador', ic: IC.problema, tip: 'Si buscás a alguien de e-commerce: tiendas completas, cobros y herramientas de Mercado Libre.',
-      why: 'Lo que más sirve para evaluar mi trabajo en e-commerce y Mercado Libre.', items: [['tienda-de-coleccionables', 'Tienda online completa'], ['tenshi', 'Tienda con preventas y seña'], ['ml-tracker', 'Herramienta para Mercado Libre'], ['pagos-mercado-pago', 'Cobro con Mercado Pago']] },
+    { id: 'reclutador', n: 'Reclutador', ic: IC.problema, tip: 'Si buscás a alguien para Mercado Libre: herramientas que analizan cuentas y publicaciones.',
+      why: 'Lo que más sirve para evaluar mi trabajo en Mercado Libre.', items: [['ml-tracker', 'Seguimiento de cuentas de Mercado Libre'], ['herramienta-auditoria', 'Auditoría de cuenta'], ['herramienta-chequeo', 'Chequeo de publicación'], ['herramienta-simulador', 'Simulador de puntaje']],
+      href: ['lab.html', 'Ver el Lab de Mercado Libre'] },
     { id: 'cliente', n: 'Cliente', ic: '<path d="M3 4h2l2.4 11h11L21 7H6M9 20h.01M17 20h.01"/>', tip: 'Si vendés en Mercado Libre o querés una web: tienda propia, revisión de tu cuenta y qué tipo de web te sirve.',
       why: 'Para vender más en Mercado Libre o tener una web propia.', items: [['tienda', 'Si vendés en Mercado Libre'], ['herramienta-auditoria', 'Revisá tu cuenta de Mercado Libre'], ['ecommerce', 'Tu tienda propia'], ['landing', 'Una web que consigue consultas']],
       mas: ['problema', 'Ver qué le sirve a mi rubro'] },
@@ -240,11 +241,11 @@
       const d = TILE_D[id] || (f.t === 'funcionalidad' ? `La armé en ${nProy(id)} proyectos distintos. ${f.d}` : f.d);
       return `<button type="button" class="lb-tile${n === 0 ? ' is-main' : ''}" data-open="${esc(f.id)}"><span class="lb-tile-k">${esc(k)}</span><strong>${esc(f.n)}</strong><span class="lb-tile-d">${esc(d)}</span>
         <span class="lb-tile-f">${f.v ? valChip(f.v, f.ve, true) : `<span class="lb-tipo">${esc(TIPOS[f.t] || f.t)}</span>`}<span class="lb-tile-go" aria-hidden="true">→</span></span></button>`; }).join('');
-    box.innerHTML = `<p class="lb-top-t">Elegí quién sos y te muestro por dónde empezar <svg class="lb-cara" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5" fill="var(--accent)"/><circle cx="8.6" cy="10" r="1.5" fill="var(--accent-ink)"/><circle cx="15.4" cy="10" r="1.5" fill="var(--accent-ink)"/><path d="M7 14.2c1 2.2 2.8 3.2 5 3.2s4-1 5-3.2" fill="none" stroke="var(--accent-ink)" stroke-width="1.8" stroke-linecap="round"/></svg></p>
+    box.innerHTML = `<p class="lb-top-t">Elegí quién sos y te muestro por dónde empezar <svg class="lb-cara" viewBox="0 0 40 40" aria-hidden="true"><defs><radialGradient id="lbCaraG" cx="35%" cy="28%" r="78%"><stop offset="0" stop-color="#fff6b0"/><stop offset=".55" stop-color="#ffd83d"/><stop offset="1" stop-color="#f3b21a"/></radialGradient></defs><circle cx="20" cy="20" r="17.5" fill="url(#lbCaraG)"/><ellipse cx="13.5" cy="11.5" rx="4.2" ry="2.1" fill="#fff" opacity=".5" transform="rotate(-28 13.5 11.5)"/><path d="M11.6 19.4q2-3.6 4 0M24.4 19.4q2-3.6 4 0" fill="none" stroke="#5b3a0a" stroke-width="2.1" stroke-linecap="round"/><ellipse cx="9.6" cy="24.6" rx="3.1" ry="2.1" fill="#ff7f96" opacity=".55"/><ellipse cx="30.4" cy="24.6" rx="3.1" ry="2.1" fill="#ff7f96" opacity=".55"/><path d="M14.6 24.2q5.4 6.2 10.8 0" fill="none" stroke="#5b3a0a" stroke-width="2.1" stroke-linecap="round"/></svg></p>
       <div class="lb-perfiles" role="group" aria-label="Quién sos">${PERFILES.map(p => `<button type="button" data-perfil="${p.id}" data-tip="${esc(p.tip)}" aria-pressed="${p.id === per.id}">${ic(p.ic)}<span>${p.n}</span></button>`).join('')}</div>
       <p class="lb-top-why">${esc(per.why)}</p>
       <div class="lb-top-g" key="${per.id}">${tiles}</div>
-      ${per.mas ? `<button type="button" class="lb-link" data-vista="${per.mas[0]}">${esc(per.mas[1])} →</button>` : ''}`;
+      ${per.mas ? `<button type="button" class="lb-link" data-vista="${per.mas[0]}">${esc(per.mas[1])} →</button>` : per.href ? `<a class="lb-link" href="${per.href[0]}">${esc(per.href[1])} →</a>` : ''}`;
   }
 
   // ── Explicaciones al pasar el mouse (o enfocar): rápidas, y la segunda aparece sin demora ──
@@ -378,8 +379,9 @@
   const frame = (src, titulo, interactivo) => `<div class="lb-frame" data-fr><iframe src="${esc(src)}" title="${esc(titulo)}" loading="lazy"${interactivo ? '' : ' tabindex="-1"'}></iframe></div>`;
   const cmpHTML = (a, b) => `<div class="lb-frame is-cmp" data-fr data-cmp style="--x:50%"><iframe src="${esc(a[1])}" title="${esc(a[0])}" loading="lazy" tabindex="-1"></iframe><div class="top"><iframe src="${esc(b[1])}" title="${esc(b[0])}" loading="lazy" tabindex="-1"></iframe></div><span class="ln"></span><span class="kn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 6-6 6 6 6M15 6l6 6-6 6"/></svg></span><span class="lab a">${esc(a[0])}</span><span class="lab b">${esc(b[0])}</span><input type="range" min="0" max="100" value="50" aria-label="Comparar: deslizá la línea"></div>`;
 
-  // Todas las capturas a la vista, una debajo de otra; tocar una la abre en tamaño real
-  const galeriaHTML = caps => `<div class="lb-gal">${caps.map(([t, u], n) => `<figure class="lb-shot${n === 0 ? ' is-first' : ''}${/celular|móvil/i.test(t) ? ' is-movil' : ''}"><a href="${esc(u)}" target="_blank" rel="noopener" title="Ver en tamaño real"><img src="${esc(u)}" alt="${esc(t)}" ${n === 0 ? '' : 'loading="lazy"'}></a><figcaption>${esc(t)}</figcaption></figure>`).join('')}</div>`;
+  // Una captura grande arriba y todas las miniaturas siempre a la vista debajo; al elegir una, pasa arriba
+  const galeriaHTML = caps => `<div class="lb-gal"><a class="lb-gal-main" href="${esc(caps[0][1])}" target="_blank" rel="noopener" title="Ver en tamaño real"><img src="${esc(caps[0][1])}" alt="${esc(caps[0][0])}"></a><p class="lb-gal-t">${esc(caps[0][0])}</p>
+    <div class="lb-thumbs" role="group" aria-label="Capturas">${caps.map((c, i) => `<button type="button" data-cap="${i}" aria-pressed="${i === 0}" title="${esc(c[0])}"><img src="${esc(c[1])}" alt="${esc(c[0])}" loading="lazy"></button>`).join('')}</div></div>`;
   function tabsDe(f) {
     const t = [];
     for (const e of evDeFicha(f)) {
