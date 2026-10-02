@@ -94,13 +94,15 @@
   const evChips = kinds => (kinds && kinds.length ? kinds : ['sin']).map(k => k === 'sin' ? '<span class="lb-ev" data-k="sin">Sin ejemplo todavía</span>' : `<span class="lb-ev" data-k="${k}">${EV[k]}</span>`).join('');
   const nombreDe = id => S.by[id]?.n || S.rubrosBy[id]?.nombre || id;
 
+  // Una sola evidencia por tarjeta: la más fuerte (proyecto real > experimento > demo > ejemplo > maqueta)
+  const mejorEv = kinds => { const k = (kinds || []).slice().sort((a, b) => (EVP[a] ?? 9) - (EVP[b] ?? 9))[0]; return k ? [k] : []; };
   function card(f) {
     const prev = S.prev[f.id];
     return `<button type="button" class="wl-card lb-card" data-open="${esc(f.id)}">
       ${prev ? `<div class="lb-pv">${/\.(webp|png|jpe?g)$/i.test(prev) ? `<img src="${esc(prev)}" alt="" loading="lazy">` : `<iframe src="${esc(prev)}" loading="lazy" tabindex="-1" aria-hidden="true" title="Vista previa de ${esc(f.n)}"></iframe>`}</div>` : ''}
-      <span class="wl-card-top">${valChip(f.v, f.ve) || `<span class="lb-tipo">${esc(TIPOS[f.t] || f.t)}</span>`}${nivChip(f.lv)}</span>
+      <span class="wl-card-top">${valChip(f.v, f.ve) || `<span class="lb-tipo">${esc(TIPOS[f.t] || f.t)}</span>`}${S.vista === 'aprender' ? nivChip(f.lv) : ''}</span>
       <h3>${esc(f.n)}</h3>
-      <div class="lb-evs">${evChips(f.e)}</div>
+      <div class="lb-evs">${evChips(mejorEv(f.e))}</div>
       ${f.d ? `<p class="lb-d">${esc(f.d)}</p>` : ''}
     </button>`;
   }
@@ -113,7 +115,7 @@
       S.rubros = rubros; S.rubrosBy = Object.fromEntries(rubros.map(r => [r.id, r]));
       for (const r of rel) { (S.relOut[r.desde] ||= []).push(r); (S.relIn[r.a] ||= []).push(r); }
       for (const f of idx) if (f.p) S.prev[f.id] = f.p;
-      if ($('lb-nums')) $('lb-nums').innerHTML = [[idx.length, 'entradas en la base'], [idx.filter(f => f.t === 'proyecto').length, 'proyectos y herramientas propias'], [idx.filter(f => f.t === 'funcionalidad').length, 'funcionalidades comprobadas'], [idx.filter(f => f.e.includes('experimento')).length, 'experimentos con y sin skill']].map(([n, t]) => `<div><dt>${t}</dt><dd>${n}</dd></div>`).join('');
+      $('lb-stats').textContent = `${idx.length} entradas · ${idx.filter(f => f.t === 'proyecto').length} proyectos y herramientas propias · ${idx.filter(f => f.t === 'funcionalidad').length} funcionalidades comprobadas · ${idx.filter(f => f.e.includes('experimento')).length} experimentos con y sin skill`;
       bind();
       route();
     } catch (err) {
@@ -168,7 +170,7 @@
       <div class="lb-sg"><p class="wl-group-title">Temas</p><div class="lb-temas">${Object.entries(TEMAS).map(([t, n]) => `<button type="button" class="lb-fb" data-tema="${t}" aria-pressed="${S.f.tema === t}">${n} <small>${temas[t] || 0}</small></button>`).join('')}</div></div>
       <details class="lb-sg lb-leyenda"><summary>Qué significa cada etiqueta</summary>
         <p class="lb-lg-t">Evidencia</p><ul>${Object.entries(EV).map(([k, n]) => `<li><span class="lb-ev" data-k="${k}">${n}</span>${esc(EV_NOTA[k].replace(/^[^:]+: /, ''))}</li>`).join('')}<li><span class="lb-ev" data-k="sin">Sin ejemplo todavía</span>Todavía no tiene nada para ver.</li></ul>
-        <p class="lb-lg-t">Valor</p><ul>${Object.entries(VAL).map(([k, v]) => `<li>${valChip(k, '', true)}${esc(v[2])}</li>`).join('')}<li><span class="wl-val is-prov" data-v="base">Prov.</span>Propuesta: este valor todavía está en revisión.</li></ul></details>`;
+        <p class="lb-lg-t">Valor</p><ul>${Object.entries(VAL).map(([k, v]) => `<li>${valChip(k, '', true)}${esc(v[2])}</li>`).join('')}<li><span class="wl-val is-prov" data-v="base">Prov.</span>Propuesta: este valor todavía lo estoy ajustando.</li></ul></details>`;
     $('lb-side').innerHTML = h;
   }
 
@@ -216,6 +218,31 @@
       }).join('')}</div></div>`;
   }
 
+  // Recorridos curados: lo que probé (experimentos con veredicto) y lo que se puede copiar (demos con antes/después)
+  const PROBE = [['impeccable', 'skills'], ['copywriting', 'skills'], ['frontend-design', 'skills'], ['webapp-testing', 'skills']];
+  const COPIAR = [['glassmorphism', 'Un estilo con demo para tocar'], ['neubrutalism', 'Un estilo con carácter'], ['conversion-optimized', 'Una landing que empuja a una sola acción'], ['pricing-page-cta', 'Una página de precios'], ['data-dense-dashboard', 'Un panel denso en datos'], ['liquid-glass', 'Vidrio que se deforma como un líquido']];
+  function renderCur() {
+    const box = $('lb-cur'); if (!box) return;
+    const libre = !S.q.trim() && S.vista === 'todo' && !S.f.area && !S.f.sub && !S.f.tema && !S.f.valor && !S.f.nivel && !S.f.ev && !S.f.tipo;
+    box.hidden = !libre; $('lb-catt').hidden = !libre; if (!libre) return;
+    const pic = id => S.prev[id] && /\.(webp|png|jpe?g)$/i.test(S.prev[id]) ? `<span class="lb-cc-img"><img src="${esc(S.prev[id])}" alt="" loading="lazy"></span>` : '';
+    const probe = PROBE.filter(([id]) => S.by[id]).map(([id, c]) => { const f = S.by[id], v = window.WLDemos?.veredicto?.(c, id);
+      return `<button type="button" class="lb-cc" data-open="${esc(id)}"><span class="lb-cc-b"><span class="lb-ev" data-k="experimento">Experimento</span>${v && v.key !== 'sin' ? `<span class="lb-ver">${esc(v.label)}</span>` : ''}</span><strong>${esc(f.n)}</strong><span class="lb-cc-d">${esc(f.d)}</span><em>Ver sin y con la skill →</em></button>`; }).join('');
+    const copiar = COPIAR.filter(([id]) => S.by[id]).map(([id, q]) => { const f = S.by[id];
+      return `<button type="button" class="lb-cc has-img" data-open="${esc(id)}">${pic(id)}<span class="lb-cc-b"><span class="lb-ev" data-k="demo">Demo</span></span><strong>${esc(f.n)}</strong><span class="lb-cc-d">${esc(q)}</span></button>`; }).join('');
+    box.innerHTML = `<div class="lb-cur-in"><div class="lb-cur-col"><div class="lb-dest-h"><h2>Lo que probé</h2></div><p class="lb-cur-s">El mismo pedido a Claude, sin y con cada skill: miramos qué cambia, cuánto tarda y cuánto cuesta.</p><div class="lb-cc-g">${probe}</div></div>
+      <div class="lb-cur-col is-wide"><div class="lb-dest-h"><h2>Lo que podés copiar</h2></div><p class="lb-cur-s">Demos con la misma página sin y con el estilo, el patrón o la regla. Deslizás y ves la diferencia.</p><div class="lb-cc-g is-3">${copiar}</div></div></div>`;
+  }
+
+  // Introducción de cada área y tres fichas para empezar
+  const ANCLAS = { 'desarrollo-web': ['ecommerce', 'odontologia-almagro', 'glassmorphism'], soluciones: ['restaurante', 'consultorio', 'tienda'], programacion: ['mercadopago', 'nextjs', 'vanilla'], 'ia-datos': ['impeccable', 'copywriting', 'herramienta-auditoria'] };
+  const INTRO = { 'desarrollo-web': 'Qué se puede construir y cómo se ve y funciona: tipos de web, proyectos, estilos, patrones y reglas de uso.', soluciones: 'Elegí tu tipo de negocio y mirá un sitio de ejemplo pensado para ese rubro.', programacion: 'Con qué se construye: servicios, stacks y arquitecturas, y dónde los usé de verdad.', 'ia-datos': 'Skills de IA probadas con y sin, y las herramientas que hice para analizar cuentas de Mercado Libre.' };
+  function empezar() {
+    const a = S.f.area; if (!a || S.q.trim() || S.f.sub) return '';
+    const t = (ANCLAS[a] || []).filter(id => S.by[id]).map(id => { const f = S.by[id]; return `<button type="button" class="lb-emp" data-open="${esc(id)}"><strong>${esc(f.n)}</strong><span>${esc(f.d)}</span></button>`; }).join('');
+    return t ? `<div class="lb-empezar"><p class="lb-cur-s">${esc(INTRO[a] || '')}</p><p class="lb-emp-t">Empezá por estas tres</p><div class="lb-emp-g">${t}</div></div>` : '';
+  }
+
   // ¿Quién sos? Según la elección se muestran los recomendados. Todo apunta a fichas reales de la base.
   const PERFILES = [
     { id: 'reclutador', n: 'Reclutador', ic: IC.problema, tip: 'Si buscás a alguien para Mercado Libre: herramientas que analizan cuentas y publicaciones.',
@@ -239,7 +266,8 @@
     const per = PERFILES.find(p => p.id === S.perfil) || PERFILES[0];
     const tiles = per.items.filter(([id]) => S.by[id]).map(([id, k], n) => { const f = S.by[id];
       const d = TILE_D[id] || (f.t === 'funcionalidad' ? `La armé en ${nProy(id)} proyectos distintos. ${f.d}` : f.d);
-      return `<button type="button" class="lb-tile${n === 0 ? ' is-main' : ''}" data-open="${esc(f.id)}"><span class="lb-tile-k">${esc(k)}</span><strong>${esc(f.n)}</strong><span class="lb-tile-d">${esc(d)}</span>
+      const img = S.prev[f.id] && /\.(webp|png|jpe?g)$/i.test(S.prev[f.id]) ? `<span class="lb-tile-img"><img src="${esc(S.prev[f.id])}" alt="" ${n === 0 ? '' : 'loading="lazy"'}></span>` : '';
+      return `<button type="button" class="lb-tile${n === 0 ? ' is-main' : ''}${img ? ' has-img' : ''}" data-open="${esc(f.id)}">${img}<span class="lb-tile-k">${esc(k)}</span><strong>${esc(f.n)}</strong><span class="lb-tile-d">${esc(d)}</span>
         <span class="lb-tile-f">${f.v ? valChip(f.v, f.ve, true) : `<span class="lb-tipo">${esc(TIPOS[f.t] || f.t)}</span>`}<span class="lb-tile-go" aria-hidden="true">→</span></span></button>`; }).join('');
     box.innerHTML = `<p class="lb-top-t">Elegí quién sos y te muestro por dónde empezar<span class="lb-cara" aria-hidden="true">ツ</span></p>
       <div class="lb-perfiles" role="group" aria-label="Quién sos">${PERFILES.map(p => `<button type="button" data-perfil="${p.id}" data-tip="${esc(p.tip)}" aria-pressed="${p.id === per.id}">${ic(p.ic)}<span>${p.n}</span></button>`).join('')}</div>
@@ -278,7 +306,7 @@
   const syncN = () => { const n = $('lb-sn'); if (n) n.textContent = S.q.trim() ? $('lb-count').textContent : ''; };
   async function renderBase() {
     $('lb-main').setAttribute('aria-busy', 'true');
-    renderSide(); renderVistas(); renderDest(); renderTop();
+    renderSide(); renderVistas(); renderDest(); renderTop(); renderCur();
     const areaN = AREAS.find(a => a[0] === S.f.area);
     const q = S.q.trim();
     $('lb-head').innerHTML = q ? `<h2>Resultados para “${esc(q)}”</h2><p>Buscando en toda la base.</p>`
@@ -287,7 +315,7 @@
       : S.vista === 'hace' ? '<h2>Mi trabajo</h2><p>Lo que construí y lo que probé: proyectos, las funcionalidades y herramientas que se comprobó que usan, y la evidencia de cada cosa (proyecto real, experimento o demo).</p>'
       : `<h2>${areaN ? areaN[1] : 'Todo'}</h2><p>${areaN ? areaN[2] : 'Todas las entradas de la base. Elegí un área a la izquierda o usá el buscador.'}</p>`;
     const vista = q ? 'todo' : S.vista;
-    const grid = $('lb-grid'); let html = '';
+    const grid = $('lb-grid'); let html = empezar();
     if (vista === 'hace') { await renderHace(); return; }
     let lista = filtrar(vista === 'problema' ? { area: '', tipo: 'solucion' } : vista === 'aprender' ? { tipo: '' } : {});
     if (vista === 'aprender' && !q) lista = lista.filter(f => ['tecnica', 'herramienta', 'recurso'].includes(f.t));
@@ -478,12 +506,13 @@
     const tabs = tabsDe(f), solo = !tabs.length;
     const prov = f.valor_estado === 'provisional';
     const v = veredicto(f);
-    const porque = f.valor ? `<p class="lb-porque"><b>${VAL[f.valor][0]}${prov ? ' (propuesta)' : ''}.</b> ${esc(f.valor_porque)}<small>${prov ? '<span class="lb-prov">Valor propuesto:</span> es mi criterio inicial y todavía lo estoy revisando. ' : 'Valor confirmado. '}${f.valor_revisado ? 'Valor revisado en octubre de 2026.' : ''}</small></p>` : '';
+    const porque = f.valor ? `<p class="lb-porque"><b>${VAL[f.valor][0]}${prov ? ' (propuesta)' : ''}.</b> ${esc(f.valor_porque)}</p>` : '';
     const veredHTML = v && v.key !== 'sin' ? `<section class="lb-porque" style="margin-top:1.3rem"><b>Qué mostró el experimento: ${esc(v.label)}.</b> ${esc(v.texto)}<small><b>Cómo se analizó:</b> mismo prompt, mismo modelo, carpeta vacía y una sola corrida por lado. Se comparan el resultado contra el pedido, el tiempo, el costo y los pasos.</small></section>` : '';
     const extra = f.extra || {};
     const proyecto = f.tipo === 'proyecto' ? `${extra.tecnologias?.length ? `<div><dt>Hecho con</dt><dd><ul class="lb-glos">${extra.tecnologias.map(t => `<li><b>${esc(sinParen(t))}</b>${glosa(t) ? ' ' + esc(glosa(t)) : ''}</li>`).join('')}</ul></dd></div>` : ''}${extra.estado ? `<div><dt>Estado</dt><dd>${esc(extra.estado)}</dd></div>` : ''}${extra.pendiente?.length ? `<div><dt>Pendiente</dt><dd><ul>${extra.pendiente.map(x => `<li>${esc(x)}</li>`).join('')}</ul></dd></div>` : ''}` : '';
     const respaldo = f.tipo === 'funcionalidad' && extra.respaldo?.length ? `<div><dt>Respaldo</dt><dd><ul>${extra.respaldo.map(r => `<li><a href="#/f/${esc(r.proyecto)}">${esc(nombreDe(r.proyecto))}</a> (${r.nivel === 'A' ? 'código y documentación' : 'solo en el código'}). <span class="lb-note">${esc(r.fuente)}</span></li>`).join('')}</ul></dd></div>${extra.nota ? `<div><dt>Nota</dt><dd>${esc(extra.nota)}</dd></div>` : ''}` : '';
-    const cuerpo = nucleoHTML(f) + proyecto + respaldo + evidenciasHTML(f) + relHTML(f);
+    const cta = f.tipo === 'proyecto' ? '' : `<section class="lb-aplicar"><h2>¿Lo aplicamos a tu caso?</h2><p>Contame qué querés lograr y te digo cómo lo resolvería, con qué y en cuánto tiempo.</p><a class="lb-btn is-acc" href="contacto.html?asunto=${encodeURIComponent('Quiero algo así: ' + f.nombre)}">Contarme tu caso</a></section>`;
+    const cuerpo = nucleoHTML(f) + proyecto + respaldo + evidenciasHTML(f) + relHTML(f) + cta;
     const area = AREAS.find(a => a[0] === f.areas[0]);
     box.innerHTML = `<div class="lb-fbar"><button type="button" data-atras>← Volver a la base</button><span class="lb-bc">${area ? esc(area[1]) : ''} / <b>${esc(f.nombre)}</b></span><button type="button" class="lb-x" data-atras aria-label="Cerrar la ficha">✕</button></div>
       <div class="lb-fc${solo ? ' is-solo' : ''}"><article class="lb-info">
@@ -491,7 +520,7 @@
         <h1>${esc(f.nombre)}</h1>${f.resumen ? `<p class="lb-sub">${esc(f.resumen)}</p>` : ''}
         <div class="lb-meta">${valChip(f.valor, f.valor_estado)}${nivChip(f.nivel)}<span class="lb-evs" style="margin:0">${evChips([...new Set(evDeFicha(f).map(e => e.tipo))])}</span><a class="lb-btn is-cta lb-cta" href="contacto.html?asunto=${encodeURIComponent('Quiero algo así: ' + f.nombre)}">Quiero algo así</a></div>
         ${porque}
-        ${f.nucleo_borrador ? '<p class="lb-borrador">Texto en revisión: puede cambiar.</p>' : ''}
+        
         <dl class="lb-fd">${cuerpo || '<div><dt>Contenido</dt><dd>Todavía sin texto para esta ficha.</dd></div>'}</dl>
         ${veredHTML}${promptHTML(f)}${tecnicoHTML(f)}
       </article>${solo ? '' : '<section class="lb-vw" aria-label="Ejemplo"></section>'}</div>`;

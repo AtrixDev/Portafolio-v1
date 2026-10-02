@@ -46,6 +46,10 @@ document.querySelectorAll('.ct-copy').forEach(btn => {
   const motivo = new URLSearchParams(location.search).get('motivo');
   if (motivo && REASONS[motivo]) form.querySelector(`input[name="reason"][value="${motivo}"]`).checked = true;
   const asunto = new URLSearchParams(location.search).get('asunto'), pub = new URLSearchParams(location.search).get('pub');
+  if (asunto && asunto.startsWith('Quiero algo así:') && !msg.value) {   // viene del botón «Quiero algo así» de la Base de datos
+    const que = asunto.slice(16).replace(/[\r\n]+/g, ' ').trim().slice(0, 90);
+    msg.value = `Hola Darío, vi «${que}» en tu Base de datos y quiero algo así para mi negocio.\nMi caso: `;
+  }
   if (asunto === 'auditoria' && !msg.value) msg.value = `Hola Darío, usé la auditoría gratis de tu web y quiero la auditoría completa de mi cuenta de Mercado Libre.${pub && /^https?:\/\/[^\s]*mercadoli/i.test(pub) ? `\nLa publicación que revisé: ${pub}` : ''}`;
   else if (asunto === 'tendencias' && !msg.value) { const cat = (new URLSearchParams(location.search).get('cat') || '').slice(0, 60).replace(/[^\p{L}\p{N} ,.y-]/gu, ''); msg.value = `Hola Darío, usé el buscador de tendencias de tu web y quiero la lista completa${cat && cat !== 'Todo Mercado Libre' ? ` de ${cat}` : ''}. Vendo: `; }
   else if (asunto === 'importacion' && !msg.value) {

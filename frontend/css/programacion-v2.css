@@ -346,10 +346,6 @@ a.lb-link { text-decoration: underline; text-decoration-color: var(--accent-line
 .lb-kicker { margin: 0 0 .9rem; display: inline-flex; align-items: center; gap: .5rem; font: 700 .74rem var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--text-2); }
 .lb-kicker::before { content: ""; width: 26px; height: 2px; background: var(--accent-text); }
 .lb-hero h1 { font-size: clamp(3rem, 7vw, 5.6rem); max-width: none; line-height: .95; }
-.lb-nums { display: grid; grid-template-columns: repeat(4, auto); justify-content: start; gap: .5rem clamp(1rem, 2.4vw, 2rem); margin: 1.6rem 0 0; padding: 0; }
-.lb-nums > div { display: grid; gap: .15rem; padding-left: .8rem; border-left: 2px solid var(--line-strong); }
-.lb-nums dt { font: 600 .74rem var(--font-sans); color: var(--text-2); order: 2; max-width: 12ch; line-height: 1.25; }
-.lb-nums dd { margin: 0; font: 800 clamp(1.5rem, 2.6vw, 2.1rem)/1 var(--font-display); letter-spacing: -.04em; font-variant-numeric: tabular-nums; color: var(--text); }
 @media (max-width: 520px) { .lb-nums { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* ── Buscador fijo arriba de la base: queda a mano mientras se baja ── */
@@ -373,3 +369,54 @@ a.lb-link { text-decoration: underline; text-decoration-color: var(--accent-line
 .lb-tcard em { font: 700 .82rem var(--font-sans); font-style: normal; color: var(--accent-text); margin-top: .2rem; }
 .lb-tcard:active { transform: scale(.985); }
 @media (hover: hover) { .lb-tcard:hover { box-shadow: inset 0 0 0 1.5px var(--accent-line), var(--shadow-card); transform: translateY(-2px); } }
+
+/* ── Portada con imagen: las tarjetas del perfil muestran el proyecto ── */
+.lb-tile.has-img { padding: 0 0 .9rem; overflow: hidden; min-height: 0; }
+.lb-tile-img { display: block; aspect-ratio: 2.2 / 1; overflow: hidden; background: var(--surface-2); box-shadow: inset 0 -1px 0 var(--line); }
+.lb-tile-img img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform .5s var(--ease-out); }
+@media (hover: hover) { .lb-tile.has-img:hover .lb-tile-img img { transform: scale(1.04); } }
+.lb-tile.has-img > :not(.lb-tile-img) { margin-left: 1.05rem; margin-right: 1.05rem; }
+.lb-tile.has-img .lb-tile-k { margin-top: .75rem; }
+.lb-tile.has-img strong { font-size: clamp(1rem, 1.4vw, 1.2rem); }
+.lb-tile.has-img .lb-tile-d { -webkit-line-clamp: 2; }
+.lb-tile.is-main.has-img { background: var(--accent); }
+.lb-hero .wl-stats { margin-top: 1rem; font-size: .76rem; }
+
+/* ── Lo que probé / lo que podés copiar ── */
+.lb-cur { padding: .2rem var(--pad-x) 2.4rem; }
+.lb-cur[hidden] { display: none; }
+.lb-cur-in { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 2rem clamp(1.4rem, 3vw, 2.6rem); }
+.lb-cur-s { margin: -.3rem 0 .9rem; font-size: .92rem; line-height: 1.5; color: var(--text-2); max-width: 52ch; }
+.lb-cc-g { display: grid; gap: .7rem; } .lb-cc-g.is-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.lb-cc { display: grid; gap: .35rem; align-content: start; padding: .9rem 1rem; text-align: left; font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 14px; cursor: pointer; transition: transform .16s var(--ease-out), border-color .16s, box-shadow .16s; }
+.lb-cc.has-img { padding: 0 0 .9rem; overflow: hidden; } .lb-cc.has-img > :not(.lb-cc-img) { margin: 0 .9rem; }
+.lb-cc-img { display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--surface-2); margin-bottom: .2rem; } .lb-cc-img img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.lb-cc strong { font: 750 1.05rem var(--font-display); letter-spacing: -.02em; line-height: 1.15; }
+.lb-cc-d { font-size: .84rem; line-height: 1.4; color: var(--text-2); }
+.lb-cc em { font: 700 .8rem var(--font-sans); font-style: normal; color: var(--accent-text); }
+.lb-cc-b { display: flex; gap: .4rem; flex-wrap: wrap; align-items: center; }
+.lb-ver { font: 700 .7rem var(--font-sans); padding: .2rem .5rem; border-radius: 6px; background: var(--accent); color: var(--accent-ink); }
+.lb-cc:active { transform: scale(.985); }
+@media (hover: hover) { .lb-cc:hover { border-color: var(--accent-line); box-shadow: var(--shadow-card); transform: translateY(-2px); } }
+@media (max-width: 1000px) { .lb-cur-in { grid-template-columns: minmax(0, 1fr); } .lb-cc-g.is-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .lb-cc-g.is-3 { grid-template-columns: minmax(0, 1fr); } }
+
+/* ── Catálogo completo y aviso único de revisión ── */
+.lb-catalogo { width: min(1280px, calc(100% - 2 * var(--pad-x))); margin: 0 auto; padding: .6rem 0 .2rem; border-top: 1px solid var(--line); }
+.lb-catalogo[hidden] { display: none; }
+.lb-catalogo h2 { font-family: var(--font-display); font-size: clamp(1.3rem, 2.2vw, 1.7rem); font-weight: 750; letter-spacing: -.03em; margin-top: 1.4rem; }
+.lb-aviso { margin: .3rem 0 0; font-size: .82rem; color: var(--muted); }
+
+/* ── Intro de cada área ── */
+.lb-empezar { grid-column: 1 / -1; margin-bottom: .6rem; }
+.lb-emp-t { margin: .2rem 0 .6rem; font: 700 .72rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.lb-emp-g { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .7rem; }
+.lb-emp { display: grid; gap: .25rem; padding: .9rem 1rem; text-align: left; font: inherit; color: var(--text); background: var(--accent-soft); border: 1px solid var(--accent-line); border-radius: 14px; cursor: pointer; transition: transform .16s var(--ease-out); }
+.lb-emp strong { font: 750 1.05rem var(--font-display); letter-spacing: -.02em; } .lb-emp span { font-size: .84rem; line-height: 1.4; color: var(--text-2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.lb-emp:active { transform: scale(.985); }
+@media (max-width: 760px) { .lb-emp-g { grid-template-columns: minmax(0, 1fr); } }
+
+/* ── Cierre de la ficha: llevar al contacto con contexto ── */
+.lb-aplicar { margin-top: 2rem; padding: 1.3rem 1.4rem; border-radius: 16px; background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent-line); display: grid; gap: .5rem; justify-items: start; }
+.lb-aplicar h2 { font: 750 1.2rem var(--font-display); letter-spacing: -.02em; margin: 0; } .lb-aplicar p { margin: 0; font-size: .92rem; color: var(--text-2); max-width: 46ch; }
+@media (prefers-reduced-motion: reduce) { .lb-tile-img img, .lb-cc, .lb-emp { transition: none; } }
