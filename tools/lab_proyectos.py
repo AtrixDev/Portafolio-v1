@@ -60,7 +60,7 @@ PROYECTOS = [
         "usa": ["stacks/nextjs", "servicios/mercadopago", "servicios/resend"],
         "implementa": ["pagos-mercado-pago", "carrito-y-checkout", "panel-de-administracion", "cuentas-de-cliente", "preventas-con-sena", "calculadora-precio-yen-pesos"],
         "fuente": "tenshi-store: README.md, PRODUCT.md, DESIGN.md, package.json, prisma/schema.prisma, rutas de src/app y archivos de src/lib",
-        "capturas": [["Portada", IMG + "tenshi/inicio.webp"], ["Portada, tema claro", IMG + "tenshi/inicio-claro.webp"], ["Catálogo", IMG + "tenshi/productos.webp"],
+        "capturas": [["Portada, tema claro", IMG + "tenshi/inicio.webp"], ["Portada, tema oscuro", IMG + "tenshi/inicio-oscuro.webp"], ["Catálogo", IMG + "tenshi/productos.webp"],
                      ["Calendario de lanzamientos", IMG + "tenshi/lanzamientos.webp"], ["Ficha de una preventa", IMG + "tenshi/producto.webp"], ["En el celular", IMG + "tenshi/movil.webp"]],
         "nota_capturas": "Capturas tomadas en mi computadora, con los productos de ejemplo que trae el proyecto. Todavía no está publicado.",
         "pendiente": [

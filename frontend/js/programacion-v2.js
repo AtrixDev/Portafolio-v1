@@ -53,14 +53,45 @@
   const ic = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
   const VISTAS = [['todo', 'Todo', 'todo'], ['problema', 'Tengo un negocio', 'problema'], ['aprender', 'Quiero aprender', 'aprender'], ['hace', 'Mi trabajo', 'hace']];
 
+  // ── Glosario: qué es cada tecnología, en palabras simples ──
+  const GLOS = [
+    [/next\.js/i, 'Un framework para armar sitios y tiendas web: páginas rápidas que Google lee bien.'],
+    [/node\.js con express/i, 'El “cerebro” del sitio, que corre en un servidor: recibe lo que pide la web y guarda y busca datos.'],
+    [/serverless/i, 'Funciones de código que se ejecutan solo cuando alguien las llama, sin mantener un servidor prendido todo el día.'],
+    [/mongodb/i, 'La base de datos: el lugar donde se guardan los datos (turnos, productos, mensajes, usuarios).'],
+    [/cloudinary/i, 'Un servicio que guarda las fotos y las entrega livianas y rápidas a cada pantalla.'],
+    [/jspdf/i, 'Una librería que arma archivos PDF desde el propio sitio, por ejemplo los presupuestos.'],
+    [/tiptap/i, 'Un editor de texto (negritas, títulos, listas) para escribir las notas del blog desde el panel.'],
+    [/^jwt/i, 'Un “pase” firmado que le permite al sitio recordar quién inició sesión sin guardar su contraseña.'],
+    [/render y vercel/i, 'Servicios en la nube donde está publicado el sitio.'],
+    [/vercel/i, 'El servicio donde se publica el sitio: cada cambio sale a internet automáticamente.'],
+    [/prisma/i, 'Una herramienta que conecta el código con la base de datos y la mantiene ordenada: tablas de productos, pedidos y clientes.'],
+    [/typescript/i, 'JavaScript con control de errores: avisa de fallos antes de publicar el sitio.'],
+    [/mercado pago/i, 'Cobros online con tarjeta, dinero en cuenta y cuotas.'],
+    [/resend/i, 'Un servicio para enviar mails automáticos desde el sitio, como confirmaciones y avisos.'],
+    [/tcgdex/i, 'Una base de datos pública de cartas de Pokémon TCG: de ahí salen los nombres y las imágenes de las cartas.'],
+    [/jose|bcrypt/i, 'La seguridad del login: jose firma la sesión de quien entró (como un pase) y bcryptjs guarda las contraseñas cifradas, nunca en texto plano.'],
+    [/zod/i, 'Revisa que los datos que llegan (un formulario, un pedido) tengan el formato correcto antes de usarlos.'],
+    [/sharp/i, 'Reduce y optimiza las imágenes para que el sitio cargue rápido.'],
+    [/css modules/i, 'Una forma de escribir los estilos de cada pieza para que no se pisen entre sí.'],
+    [/api de mercado libre|oauth/i, 'La conexión oficial con Mercado Libre para leer los datos de una cuenta, con permiso del vendedor.'],
+    [/sin framework/i, 'Se escribe en el lenguaje base de la web, sin librerías ni plantillas: más liviano y totalmente a medida.'],
+    [/node\.js/i, 'JavaScript corriendo en el servidor: el código que procesa formularios, pagos y datos fuera del navegador.'],
+  ];
+  const glosa = t => (GLOS.find(([re]) => re.test(t)) || [])[1] || '';
+  const sinParen = t => t.replace(/\s*\(.*\)\s*$/, '');
+  const NIV_TIP = { 1: 'Inicial: se puede empezar sin experiencia previa.', 2: 'Intermedio: pide conocer lo básico de diseño o programación web.', 3: 'Avanzado: pide experiencia, o a alguien que sepa.' };
+  const SUBD = { 'arquetipo de web': 'Los tipos de sitio que se pueden construir: landing, tienda, institucional, panel…', 'proyecto web': 'Webs completas que construí.', 'herramienta propia': 'Herramientas que hice y funcionan.', funcionalidad: 'Cosas concretas que hace una web: cobrar, reservar un turno, administrar contenido.', 'por rubro': 'Tipos de negocio: qué web y qué funciones le sirven a cada uno.', 'patrón de página': 'Cómo ordenar una página para lograr un objetivo, por ejemplo vender o dejar consultas.', 'estilo visual': 'Estilos de diseño: cómo se ve una web (vidrio, minimalista, oscuro…).', 'patrón de panel': 'Cómo organizar un panel de datos o de gestión.', 'regla UX': 'Buenas prácticas para que una web sea fácil y cómoda de usar.', 'par de fuentes': 'Combinaciones de tipografías que funcionan bien juntas.', skill: 'Habilidades que se le agregan a Claude para que haga mejor una tarea.', servicio: 'Servicios externos que se usan para construir una web: hosting, pagos, bases de datos.', stack: 'Conjuntos de tecnologías con las que se programa un sitio.', arquitectura: 'Cómo se organiza por dentro un sitio o una aplicación.' };
+  const VISTA_TIP = { todo: 'Todas las entradas, ordenadas por importancia.', problema: 'Elegí tu rubro y mirá qué web y qué funciones le sirven.', aprender: 'Técnicas y herramientas de lo más simple a lo más avanzado.', hace: 'Los proyectos que construí y lo que se comprobó que hacen.' };
+
   // ── Estado ──
   const S = { idx: [], by: {}, evid: {}, relOut: {}, relIn: {}, legacy: {}, rubros: [], rubrosBy: {}, prev: {},
-    vista: store.get('dc-lab-vista', 'todo'), f: { area: '', sub: '', tema: '', valor: '', nivel: 0, ev: '', tipo: '' }, q: '' };
+    vista: store.get('dc-lab-vista', 'todo'), perfil: store.get('dc-lab-perfil', 'reclutador'), f: { area: '', sub: '', tema: '', valor: '', nivel: 0, ev: '', tipo: '' }, q: '' };
 
   // ── Piezas de interfaz ──
-  const valChip = (v, estado, mini) => v && VAL[v] ? `<span class="wl-val${estado === 'provisional' ? ' is-prov' : ''}" data-v="${v}" title="${esc(VAL[v][2])}${estado === 'provisional' ? ' · Provisional: criterio heredado, todavía sin revisar.' : ''}">${VAL[v][1]}${VAL[v][0]}${estado === 'provisional' && !mini ? ' <small>prov.</small>' : ''}</span>` : '';
-  const nivChip = n => NIV[n] ? `<span class="wl-lvl" data-n="${n}"><span class="wl-lvl-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="wl-lvl-t">${NIV[n]}</span></span>` : '';
-  const evChips = kinds => (kinds && kinds.length ? kinds : ['sin']).map(k => k === 'sin' ? '<span class="lb-ev" data-k="sin">Sin ejemplo todavía</span>' : `<span class="lb-ev" data-k="${k}" title="${esc(EV_NOTA[k])}">${EV[k]}</span>`).join('');
+  const valChip = (v, estado, mini) => v && VAL[v] ? `<span class="wl-val${estado === 'provisional' ? ' is-prov' : ''}" data-v="${v}">${VAL[v][1]}${VAL[v][0]}${estado === 'provisional' && !mini ? ' <small>prov.</small>' : ''}</span>` : '';
+  const nivChip = n => NIV[n] ? `<span class="wl-lvl" data-n="${n}" data-tip="${esc(NIV_TIP[n])}"><span class="wl-lvl-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="wl-lvl-t">${NIV[n]}</span></span>` : '';
+  const evChips = kinds => (kinds && kinds.length ? kinds : ['sin']).map(k => k === 'sin' ? '<span class="lb-ev" data-k="sin">Sin ejemplo todavía</span>' : `<span class="lb-ev" data-k="${k}">${EV[k]}</span>`).join('');
   const nombreDe = id => S.by[id]?.n || S.rubrosBy[id]?.nombre || id;
 
   function card(f) {
@@ -128,8 +159,8 @@
       <button type="button" class="lb-ar" data-area="" aria-pressed="${!S.f.area}">${ic(IC.todo)}<span>Todas</span><span class="wl-cat-n">${S.idx.length}</span></button>
       ${AREAS.map(([id, n, d]) => {
         const abierta = S.f.area === id;
-        return `<div class="lb-ac${abierta ? ' is-open' : ''}"><button type="button" class="lb-ar" data-area="${id}" aria-expanded="${abierta}" title="${esc(d)}">${ic(AREA_IC[id])}<span>${n}</span><span class="wl-cat-n">${S.idx.filter(f => f.a.includes(id)).length}</span>${chev}</button>
-          ${abierta ? `<ul class="lb-subs">${subsDe(id).map(([sub, c]) => `<li><button type="button" data-sub="${esc(sub)}" aria-pressed="${S.f.sub === sub}"><span>${esc(subN(sub))}</span><small>${c}</small></button></li>`).join('')}</ul>` : ''}</div>`;
+        return `<div class="lb-ac${abierta ? ' is-open' : ''}"><button type="button" class="lb-ar" data-area="${id}" aria-expanded="${abierta}" data-tip="${esc(d)}">${ic(AREA_IC[id])}<span>${n}</span><span class="wl-cat-n">${S.idx.filter(f => f.a.includes(id)).length}</span>${chev}</button>
+          ${abierta ? `<ul class="lb-subs">${subsDe(id).map(([sub, c]) => `<li><button type="button" data-sub="${esc(sub)}" data-tip="${esc(SUBD[sub] || '')}" aria-pressed="${S.f.sub === sub}"><span>${esc(subN(sub))}</span><small>${c}</small></button></li>`).join('')}</ul>` : ''}</div>`;
       }).join('')}</div>`;
     const temas = {};
     S.idx.forEach(f => f.tm.forEach(t => { temas[t] = (temas[t] || 0) + 1; }));
@@ -142,7 +173,7 @@
   }
 
   function renderVistas() {
-    $('lb-vistas').innerHTML = `<div class="lb-vistas" role="group" aria-label="Qué venís a hacer">${VISTAS.map(([k, t, i]) => `<button type="button" data-vista="${k}" aria-pressed="${S.vista === k}">${ic(IC[i])}<span>${t}</span></button>`).join('')}</div>`;
+    $('lb-vistas').innerHTML = `<div class="lb-vistas" role="group" aria-label="Qué venís a hacer">${VISTAS.map(([k, t, i]) => `<button type="button" data-vista="${k}" data-tip="${esc(VISTA_TIP[k])}" aria-pressed="${S.vista === k}">${ic(IC[i])}<span>${t}</span></button>`).join('')}</div>`;
   }
 
   function filtrosHTML(base) {
@@ -150,7 +181,8 @@
     // Cada opción usa la misma pieza que las tarjetas (valor, nivel, evidencia); el botón solo agrega el estado "elegido"
     const fc = (attr, val, chip, n, act) => `<button type="button" class="lb-fc" data-f-${attr}="${esc(val)}" aria-pressed="${String(act) === String(val)}">${chip}${n === '' ? '' : `<small>${n}</small>`}</button>`;
     const todos = (attr, txt, act, n) => fc(attr, '', `<span class="lb-todos">${txt}</span>`, n, act);
-    const grp = (lab, icon, body) => `<div class="lb-fg"><span class="lb-fl">${ic(icon)}${lab}</span>${body}</div>`;
+    const GT = { Valor: 'Cuánto te diferencia hoy saber hacerlo: Imprescindible, Pro o Base.', Nivel: 'Qué tan difícil es de aplicar.', Evidencia: 'Qué se puede ver o comprobar de cada entrada: proyecto real, demo, experimento o maqueta.' };
+    const grp = (lab, icon, body) => `<div class="lb-fg"><span class="lb-fl" data-tip="${esc(GT[lab])}">${ic(icon)}${lab}</span>${body}</div>`;
     const valor = grp('Valor', IC.valor, todos('valor', 'Todos', S.f.valor, base.length) + Object.keys(VAL).map(k => fc('valor', k, valChip(k, '', true), cnt(f => f.v === k), S.f.valor)).join(''));
     const nivel = grp('Nivel', IC.nivel, todos('nivel', 'Todos', S.f.nivel || '', '') + [1, 2, 3].map(n => fc('nivel', n, nivChip(n), cnt(f => f.lv === n), S.f.nivel || '')).join(''));
     const ev = grp('Evidencia', IC.ev, todos('ev', 'Todas', S.f.ev, '') + Object.keys(EV).map(k => fc('ev', k, `<span class="lb-ev" data-k="${k}">${EV[k]}</span>`, cnt(f => f.e.includes(k)), S.f.ev)).join('') + fc('ev', 'sin', '<span class="lb-ev" data-k="sin">Sin ejemplo todavía</span>', cnt(f => !f.e.length), S.f.ev));
@@ -166,11 +198,11 @@
     box.hidden = !(libre && lista.length);
     if (box.hidden) return;
     const cuerpos = Object.fromEntries((await getJSON(D + 'proyectos.json')).map(c => [c.id, c]));
-    const pill = (id, cls = '') => `<span class="lb-pill ${cls}">${esc(nombreDe(id))}</span>`;
+    const pill = (id, cls = '') => `<span class="lb-pill ${cls}" tabindex="0" data-tip="${esc(S.by[id]?.d || '')}">${esc(nombreDe(id))}</span>`;
     box.innerHTML = `<div class="lb-dest-in"><div class="lb-dest-h"><h2>Lo que construí</h2><button type="button" class="lb-link" data-vista="hace">Ver todo mi trabajo →</button></div>
       <div class="lb-dest-g">${lista.map(f => {
         const c = cuerpos[f.id] || {}, out = S.relOut[f.id] || [];
-        const funcs = out.filter(r => r.tipo === 'implementa').map(r => r.a), tec = (c.extra?.tecnologias || []).slice(0, 5);
+        const funcs = out.filter(r => r.tipo === 'implementa').map(r => r.a), tec = (c.extra?.tecnologias || []).slice(0, 6);
         const abrir = (S.evid[(c.evidencias || [])[0]]?.enlaces || []).find(([, u]) => /^https?:/.test(u));
         return `<article class="lb-dc"><button type="button" class="lb-dc-img" data-open="${esc(f.id)}" aria-label="Abrir ${esc(f.n)}"><img src="${esc(S.prev[f.id])}" alt="Captura de ${esc(f.n)}" loading="lazy"></button>
           <div class="lb-dc-b"><span class="lb-evs">${evChips(f.e)}</span>
@@ -178,26 +210,68 @@
             <p class="lb-dc-d">${esc(f.d)}</p>
             ${c.extra?.estado ? `<p class="lb-dc-e"><b>Estado.</b> ${esc(c.extra.estado)}</p>` : ''}
             ${funcs.length ? `<div class="lb-dc-l"><span>${funcs.length} funcionalidades comprobadas</span><div>${funcs.slice(0, 4).map(id => pill(id)).join('')}${funcs.length > 4 ? `<span class="lb-pill is-mas">+${funcs.length - 4}</span>` : ''}</div></div>` : ''}
-            ${tec.length ? `<div class="lb-dc-l"><span>Hecho con</span><div>${tec.map(t => `<span class="lb-pill is-tec" title="${esc(t)}">${esc(t.replace(/\s*\(.*\)\s*$/, ''))}</span>`).join('')}</div></div>` : ''}
+            ${tec.length ? `<div class="lb-dc-l"><span>Hecho con</span><div>${tec.map(t => `<span class="lb-pill is-tec" tabindex="0" data-tip="${esc(glosa(t))}">${esc(sinParen(t))}</span>`).join('')}</div></div>` : ''}
             <div class="lb-dc-f"><button type="button" class="lb-link" data-open="${esc(f.id)}">Ver la ficha completa →</button>${abrir ? `<a class="lb-link" href="${esc(abrir[1])}" target="_blank" rel="noopener">Ver el sitio ↗</a>` : ''}</div>
           </div></article>`;
       }).join('')}</div></div>`;
   }
 
-  // Lo más importante de la base, a la vista desde el primer segundo. Cada dato sale de la propia base.
+  // ¿Quién sos? Según la elección se muestran los recomendados. Todo apunta a fichas reales de la base.
+  const PERFILES = [
+    { id: 'reclutador', n: 'Reclutador', ic: IC.problema, tip: 'Lo que más dice de cómo trabajo: proyectos terminados y funciones comprobadas.',
+      why: 'Lo que más dice de cómo trabajo.', items: [['odontologia-almagro', 'Proyecto en producción'], ['tenshi', 'Proyecto propio'], ['ml-tracker', 'Herramienta propia'], ['panel-de-administracion', 'La que más repetí']] },
+    { id: 'cliente', n: 'Cliente', ic: '<path d="M3 4h2l2.4 11h11L21 7H6M9 20h.01M17 20h.01"/>', tip: 'Si querés una web para tu negocio: qué tipo de web y qué funciones te sirven.',
+      why: 'Para decidir qué web necesita tu negocio.', items: [['ecommerce', 'Si querés vender online'], ['landing', 'Si querés conseguir consultas'], ['institucional', 'Si querés presencia profesional'], ['mercadopago', 'Para cobrar en Argentina']],
+      mas: ['problema', 'Ver qué le sirve a mi rubro'] },
+    { id: 'estudiante', n: 'Estudiante', ic: IC.aprender, tip: 'Si querés aprender: por dónde empezar, con ejemplos para tocar.',
+      why: 'Para aprender con algo para probar.', items: [['vanilla', 'Para empezar'], ['impeccable', 'Diseñar mejor con IA'], ['glassmorphism', 'Un estilo con demo para tocar'], ['webapp-testing', 'Verificar tu propio trabajo']],
+      mas: ['aprender', 'Ver todo para aprender'] },
+    { id: 'tendencia', n: 'Tendencia', ic: '<path d="M3 17l6-6 4 4 8-8M15 7h6v6"/>', tip: 'Estilos que hoy se ven en productos nuevos.',
+      why: 'Estilos que hoy se ven en productos nuevos. Es criterio mío, no una estadística de mercado.', items: [['liquid-glass', 'Estilo en alza'], ['ai-native-ui', 'Interfaces con IA'], ['bento-grids', 'Layout de moda'], ['motion-driven', 'Movimiento con criterio']] },
+  ];
+  // Descripción propia solo donde el resumen de la ficha no sirve para una tarjeta
+  const TILE_D = { 'liquid-glass': 'Vidrio translúcido que se deforma como un líquido. Muy llamativo; pesado para celulares básicos.', 'ai-native-ui': 'Interfaces pensadas para conversar con una IA: chat, voz y texto que aparece mientras se genera.',
+    'bento-grids': 'Información en tarjetas de distintos tamaños, como un bento: ordenado y fácil de escanear.', 'motion-driven': 'Animaciones y transiciones que guían la atención. Pide cuidar el rendimiento.' };
   function renderTop() {
     const box = $('lb-top'); if (!box) return;
     const nProy = id => new Set((S.relIn[id] || []).filter(r => r.tipo === 'usa' || r.tipo === 'implementa').map(r => r.desde)).size;
-    const masRepetida = Object.entries((S.relIn || {})).filter(([id]) => S.by[id]?.t === 'funcionalidad').map(([id]) => [id, nProy(id)]).sort((a, b) => b[1] - a[1])[0];
-    const items = [
-      { k: 'Tipo de web imprescindible', id: 'ecommerce', ico: IC.todo, nota: f => f.d },
-      { k: 'La skill que más diferencia', id: 'impeccable', ico: AREA_IC['ia-datos'], nota: f => f.d, main: true },
-      { k: 'El servicio que no puede faltar', id: 'mercadopago', ico: AREA_IC.programacion, nota: () => `Está en ${nProy('mercadopago')} de mis proyectos.` },
-      masRepetida && { k: 'La funcionalidad que más repetí', id: masRepetida[0], ico: IC.hace, nota: () => `La armé en ${masRepetida[1]} proyectos distintos.` },
-    ].filter(x => x && S.by[x.id]);
-    box.innerHTML = `<p class="lb-top-t">Lo más importante, de un vistazo</p><div class="lb-top-g">${items.map(x => { const f = S.by[x.id]; return `<button type="button" class="lb-tile${x.main ? ' is-main' : ''}" data-open="${esc(f.id)}">
-      <span class="lb-tile-k">${ic(x.ico)}${esc(x.k)}</span><strong>${esc(f.n)}</strong><span class="lb-tile-d">${esc(x.nota(f))}</span>
-      <span class="lb-tile-f">${f.v ? valChip(f.v, f.ve, true) : `<span class="lb-tipo">${esc(TIPOS[f.t] || f.t)}</span>`}<span class="lb-tile-go" aria-hidden="true">→</span></span></button>`; }).join('')}</div>`;
+    const per = PERFILES.find(p => p.id === S.perfil) || PERFILES[0];
+    const tiles = per.items.filter(([id]) => S.by[id]).map(([id, k], n) => { const f = S.by[id];
+      const d = TILE_D[id] || (f.t === 'funcionalidad' ? `La armé en ${nProy(id)} proyectos distintos. ${f.d}` : f.d);
+      return `<button type="button" class="lb-tile${n === 0 ? ' is-main' : ''}" data-open="${esc(f.id)}"><span class="lb-tile-k">${esc(k)}</span><strong>${esc(f.n)}</strong><span class="lb-tile-d">${esc(d)}</span>
+        <span class="lb-tile-f">${f.v ? valChip(f.v, f.ve, true) : `<span class="lb-tipo">${esc(TIPOS[f.t] || f.t)}</span>`}<span class="lb-tile-go" aria-hidden="true">→</span></span></button>`; }).join('');
+    box.innerHTML = `<p class="lb-top-t">Elegí quién sos y te muestro por dónde empezar</p>
+      <div class="lb-perfiles" role="group" aria-label="Quién sos">${PERFILES.map(p => `<button type="button" data-perfil="${p.id}" data-tip="${esc(p.tip)}" aria-pressed="${p.id === per.id}">${ic(p.ic)}<span>${p.n}</span></button>`).join('')}</div>
+      <p class="lb-top-why">${esc(per.why)}</p>
+      <div class="lb-top-g" key="${per.id}">${tiles}</div>
+      ${per.mas ? `<button type="button" class="lb-link" data-vista="${per.mas[0]}">${esc(per.mas[1])} →</button>` : ''}`;
+  }
+
+  // ── Explicaciones al pasar el mouse (o enfocar): rápidas, y la segunda aparece sin demora ──
+  function tooltips() {
+    const tip = document.createElement('div'); tip.className = 'lb-tip'; tip.setAttribute('role', 'tooltip'); tip.hidden = true; document.body.appendChild(tip);
+    let timer = 0, ultimo = 0, actual = null;
+    const SEL = '[data-tip], .lb-ev[data-k], .wl-val';
+    const texto = el => {
+      if (el.dataset.tip) return el.dataset.tip;
+      if (el.matches('.lb-ev[data-k]')) return el.dataset.k === 'sin' ? 'Todavía no tiene nada para ver.' : EV_NOTA[el.dataset.k] || '';
+      if (el.matches('.wl-val')) { const v = VAL[el.dataset.v]; return v ? v[2] + (el.classList.contains('is-prov') ? ' Provisional: criterio todavía sin revisar.' : '') : ''; }
+      return '';
+    };
+    const mostrar = el => {
+      const t = texto(el); if (!t) return;
+      actual = el; tip.textContent = t; tip.hidden = false; tip.style.visibility = 'hidden';
+      const r = el.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight;
+      let x = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), innerWidth - w - 8), y = r.top - h - 8; if (y < 8) y = r.bottom + 8;
+      tip.style.left = x + 'px'; tip.style.top = y + 'px'; tip.style.visibility = ''; tip.classList.add('is-on'); ultimo = Date.now();
+    };
+    const ocultar = () => { clearTimeout(timer); tip.hidden = true; tip.classList.remove('is-on'); actual = null; ultimo = Date.now(); };
+    document.addEventListener('mouseover', e => { const el = e.target.closest?.(SEL); if (!el || el === actual) return; clearTimeout(timer); const ya = Date.now() - ultimo < 400 && !tip.hidden || Date.now() - ultimo < 250; timer = setTimeout(() => mostrar(el), ya ? 0 : 140); });
+    document.addEventListener('mouseout', e => { const el = e.target.closest?.(SEL); if (el && !el.contains(e.relatedTarget)) ocultar(); });
+    document.addEventListener('focusin', e => { const el = e.target.closest?.(SEL); if (el) mostrar(el); });
+    document.addEventListener('focusout', ocultar);
+    document.addEventListener('scroll', ocultar, { passive: true, capture: true });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') ocultar(); });
   }
 
   async function renderBase() {
@@ -375,8 +449,7 @@
   function tecnicoHTML(f) {
     const par = [...(f.tecnico || [])];
     const ex = f.extra || {};
-    if (ex.tecnologias?.length) par.unshift(['Tecnologías', ex.tecnologias.join(' · ')]);
-    if (!par.length && !f.fuente) return '';
+        if (!par.length && !f.fuente) return '';
     return `<details class="lb-tec"><summary>Datos técnicos y fuente</summary><dl>${par.map(p => `<div><dt>${esc(p[0])}</dt><dd>${esc(p[1])}${p[2] ? `<em>(${esc(p[2])})</em>` : ''}</dd></div>`).join('')}${f.fuente ? `<div><dt>Fuente</dt><dd>${esc(f.fuente)}</dd></div>` : ''}${f.origen ? `<div><dt>Origen</dt><dd>${esc(f.origen)}</dd></div>` : ''}</dl></details>`;
   }
 
@@ -397,7 +470,7 @@
     const porque = f.valor ? `<p class="lb-porque"><b>${VAL[f.valor][0]}${prov ? ' (provisorio)' : ''}.</b> ${esc(f.valor_porque)}<small>${prov ? '<span class="lb-prov">Provisional/heredado:</span> criterio automático o asignado sin revisar por Darío. ' : 'Validado por Darío. '}${f.valor_revisado ? 'Valor revisado en octubre de 2026.' : ''}</small></p>` : '';
     const veredHTML = v && v.key !== 'sin' ? `<section class="lb-porque" style="margin-top:1.3rem"><b>Qué mostró el experimento: ${esc(v.label)}.</b> ${esc(v.texto)}<small><b>Cómo se analizó:</b> mismo prompt, mismo modelo, carpeta vacía y una sola corrida por lado. Se comparan el resultado contra el pedido, el tiempo, el costo y los pasos.</small></section>` : '';
     const extra = f.extra || {};
-    const proyecto = f.tipo === 'proyecto' ? `${extra.estado ? `<div><dt>Estado</dt><dd>${esc(extra.estado)}</dd></div>` : ''}${extra.pendiente?.length ? `<div><dt>Pendiente</dt><dd><ul>${extra.pendiente.map(x => `<li>${esc(x)}</li>`).join('')}</ul></dd></div>` : ''}` : '';
+    const proyecto = f.tipo === 'proyecto' ? `${extra.tecnologias?.length ? `<div><dt>Hecho con</dt><dd><ul class="lb-glos">${extra.tecnologias.map(t => `<li><b>${esc(sinParen(t))}</b>${glosa(t) ? ' ' + esc(glosa(t)) : ''}</li>`).join('')}</ul></dd></div>` : ''}${extra.estado ? `<div><dt>Estado</dt><dd>${esc(extra.estado)}</dd></div>` : ''}${extra.pendiente?.length ? `<div><dt>Pendiente</dt><dd><ul>${extra.pendiente.map(x => `<li>${esc(x)}</li>`).join('')}</ul></dd></div>` : ''}` : '';
     const respaldo = f.tipo === 'funcionalidad' && extra.respaldo?.length ? `<div><dt>Respaldo</dt><dd><ul>${extra.respaldo.map(r => `<li><a href="#/f/${esc(r.proyecto)}">${esc(nombreDe(r.proyecto))}</a> (${r.nivel === 'A' ? 'código y documentación' : 'solo en el código'}). <span class="lb-note">${esc(r.fuente)}</span></li>`).join('')}</ul></dd></div>${extra.nota ? `<div><dt>Nota</dt><dd>${esc(extra.nota)}</dd></div>` : ''}` : '';
     const cuerpo = nucleoHTML(f) + proyecto + respaldo + evidenciasHTML(f) + relHTML(f);
     const area = AREAS.find(a => a[0] === f.areas[0]);
@@ -478,12 +551,14 @@
   function ensureBase() { if (!baseListo) renderBase(); }
 
   function bind() {
+    tooltips();
     window.addEventListener('hashchange', () => { internas++; route(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && abierto) { e.preventDefault(); if (internas > 0) history.back(); else location.hash = '#/'; return; } if (e.key === '/' && !/input|textarea|select/i.test(document.activeElement.tagName)) { e.preventDefault(); $('lb-q').focus(); } });
     let t; $('lb-q').addEventListener('input', e => { clearTimeout(t); t = setTimeout(() => { S.q = e.target.value; if (!$('lb-base').hidden) renderBase(); else location.hash = '#/'; }, 140); });
     document.addEventListener('click', e => {
       const o = e.target.closest('[data-open]'); if (o) { location.hash = '#/f/' + encodeURIComponent(o.dataset.open); return; }
       if (e.target.closest('[data-atras]')) { if (internas > 0) history.back(); else location.hash = '#/'; return; }
+      const pf = e.target.closest('[data-perfil]'); if (pf) { S.perfil = pf.dataset.perfil; store.set('dc-lab-perfil', S.perfil); renderTop(); return; }
       const vi = e.target.closest('[data-vista]'); if (vi) { S.vista = vi.dataset.vista; store.set('dc-lab-vista', S.vista); if (location.hash !== '#/') history.replaceState(null, '', '#/'); renderBase(); return; }
       const ar = e.target.closest('[data-area]'); if (ar) { e.preventDefault(); const id = ar.dataset.area; S.f.area = (id && S.f.area === id) ? '' : id; S.f.sub = ''; S.vista = 'todo'; store.set('dc-lab-vista', 'todo'); renderBase(); return; }
       const su = e.target.closest('[data-sub]'); if (su) { e.preventDefault(); S.f.sub = S.f.sub === su.dataset.sub ? '' : su.dataset.sub; S.vista = 'todo'; renderBase(); return; }
