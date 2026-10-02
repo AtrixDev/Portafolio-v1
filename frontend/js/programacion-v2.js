@@ -386,9 +386,10 @@
   function tabsDe(f) {
     const t = [];
     for (const e of evDeFicha(f)) {
-      if (e.id === 'demo-glassmorphism') {
-        t.push({ k: 'cmp', label: 'Antes / después', nota: EV_NOTA.demo + ' La misma app, con el mismo contenido: a la izquierda estilo plano y a la derecha con vidrio.', html: () => cmpHTML(['Estilo plano', e.ref.antes], ['Con vidrio', e.ref.url]), open: e.ref.url });
-        t.push({ k: 'ej', label: 'Ejemplo', nota: EV_NOTA.demo, html: () => frame(e.ref.url, 'Ejemplo', true), open: e.ref.url });
+      if (e.tipo === 'demo' && e.ref?.url && e.ref?.antes) {   // demo hecha para la ficha: la misma página sin y con el estilo
+        const extra = e.ref.prueba ? ' Es animada o interactiva: probala en la pestaña «Ejemplo».' : '';
+        t.push({ k: 'cmp', label: 'Antes / después', nota: EV_NOTA.demo + ' Misma página y mismo contenido: a la izquierda sin el estilo y a la derecha con el estilo aplicado.' + (e.ref.cambia ? ' ' + e.ref.cambia : '') + extra, html: () => cmpHTML(['Sin el estilo', e.ref.antes], ['Con ' + f.nombre, e.ref.url]), open: e.ref.url });
+        t.push({ k: 'dej', label: 'Ejemplo', nota: EV_NOTA.demo + (e.ref.cambia ? ' ' + e.ref.cambia : ''), html: () => frame(e.ref.url, 'Ejemplo', true), open: e.ref.url });
       } else if (e.tipo === 'experimento') {
         if (e.ref?.sin && e.ref?.con) t.push({ k: 'cmp', label: 'Antes / después', nota: EV_NOTA.experimento, html: () => cmpHTML(['Sin la skill', e.ref.sin], ['Con ' + f.nombre, e.ref.con]), open: e.ref.con });
         t.push({ k: 'exp', label: 'Experimento completo', nota: EV_NOTA.experimento, legacy: 'skills' });
@@ -405,7 +406,7 @@
       }
     }
     // evitar pestañas repetidas del mismo tipo
-    const orden = { cmp: 0, ej: 1, exp: 2, dem: 3, maq: 4 }, visto = new Set(), peso = k => k.startsWith('cap-') ? -1 : orden[k];
+    const orden = { cmp: 0, dej: 0.5, ej: 1, exp: 2, dem: 3, maq: 4 }, visto = new Set(), peso = k => k.startsWith('cap-') ? -1 : orden[k];
     return t.filter(x => !visto.has(x.k) && visto.add(x.k)).sort((a, b) => peso(a.k) - peso(b.k));
   }
 

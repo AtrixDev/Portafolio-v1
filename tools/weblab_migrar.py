@@ -24,6 +24,7 @@ from weblab_taxonomia import *            # noqa
 import weblab_niveles as NV
 import lab_proyectos as LP
 from lab_nucleo import NUCLEO_ESCRITO, NUCLEO_SUMA
+import lab_demos_estilos as DE
 from lab_valor_resto import valor_resto, ORIGEN as VALOR_RESTO_ORIGEN
 
 ROOT = HERE.parent
@@ -200,6 +201,7 @@ def main():
         if col == "negocios" and e.get("preset"): ev.append("maqueta-preset")
         if col == "soluciones" and e.get("examples"): ev.append("ejemplo-" + nid[(col, i)])
         if col == "estilos" and i == "glassmorphism": ev.append("demo-glassmorphism")
+        if col == "estilos" and i in DE.STYLES: ev.append("demo-estilo-" + i)
         # temas
         tm = [(t_, c_) for t_, c_, _ in temas_de(col, e)]
         ficha = {
@@ -239,7 +241,14 @@ def main():
         if c == "soluciones" and e.get("examples"):
             evid["ejemplo-" + nid[(c, e["id"])]] = {"id": "ejemplo-" + nid[(c, e["id"])], "tipo": "ejemplo", "titulo": "Sitios reales de terceros", "origen": "terceros",
                                                      "descripcion": "Ejemplos de otras empresas, no hechos por Darío.", "enlaces": e["examples"]}
-    evid["demo-glassmorphism"].update({"ref": {"url": "prog-ejemplos/ejemplos/glassmorphism.html", "antes": "prog-ejemplos/ejemplos/glassmorphism-plano.html"}})
+    evid["demo-glassmorphism"].update({"ref": {"url": "prog-ejemplos/ejemplos/glassmorphism.html", "antes": "prog-ejemplos/ejemplos/glassmorphism-plano.html", "thumb": "prog-ejemplos/ejemplos/glassmorphism.webp"}})
+    # demos "mismo contenido, sin y con estilo" de los estilos visuales (tools/lab_demos_estilos.py)
+    for sid, st in DE.STYLES.items():
+        for f_ in (f"{sid}.html", f"{sid}.webp", "_plano.html"):
+            if not (ROOT / "frontend" / "prog-ejemplos" / "estilos" / f_).exists(): raise SystemExit(f"falta la demo {f_}: corré python3 tools/lab_demos_estilos.py")
+        evid[f"demo-estilo-{sid}"] = {"id": f"demo-estilo-{sid}", "tipo": "demo", "titulo": f"Plata sin y con {st['titulo']}", "origen": "propio", "descripcion": st["cambia"],
+            "ref": {"url": f"prog-ejemplos/estilos/{sid}.html", "antes": "prog-ejemplos/estilos/_plano.html", "thumb": f"prog-ejemplos/estilos/{sid}.webp", "cambia": st["cambia"],
+                    "prueba": bool(st.get("js") or "animation" in st["css"])}}
 
     # ── 4) relaciones entre fichas ──
     por_id = {f["id"]: f for f in fichas}
@@ -353,6 +362,7 @@ def main():
     def previa(f):   # página para la vista previa de la tarjeta: demo propia con url, o salida web del experimento
         for e in f["evidencias"]:
             r = evid.get(e, {}).get("ref", {})
+            if r.get("thumb"): return r["thumb"]
             if r.get("url"): return r["url"]
             if r.get("con"): return r["con"]
             if r.get("url_preview"): return r["url_preview"]
