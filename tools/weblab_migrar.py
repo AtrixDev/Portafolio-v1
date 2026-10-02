@@ -24,6 +24,7 @@ from weblab_taxonomia import *            # noqa
 import weblab_niveles as NV
 import lab_proyectos as LP
 from lab_nucleo import NUCLEO_ESCRITO, NUCLEO_SUMA
+from lab_valor_resto import valor_resto, ORIGEN as VALOR_RESTO_ORIGEN
 
 ROOT = HERE.parent
 SRC = ROOT / "frontend" / "data" / "weblab"
@@ -130,6 +131,8 @@ def main():
         i = e["id"]
         if (col, i) in VALOR_DARIO:
             return VALOR_DARIO[(col, i)], VALOR_PORQUE_DARIO[(col, i)], "validado por Darío", "validado"
+        _r = valor_resto(col, e)
+        if _r: return _r[0], _r[1], VALOR_RESTO_ORIGEN, "provisional"
         if col in TABLA_MANUAL or (col, i) in NV.OVERRIDE:
             return e.get("valor"), "Asignado a mano en una sesión anterior (Claude); todavía sin revisar por Darío.", "tabla manual (Claude, sin validar)", "provisional"
         if col == "rubros":
