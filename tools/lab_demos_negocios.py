@@ -138,6 +138,7 @@ import lab_demos_negocios2, lab_demos_negocios3   # noqa: registran el resto de 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     for i, h in B.items(): (OUT / f"{i}.html").write_text(h, encoding="utf-8")
+    import lab_demos_pro; lab_demos_pro.main()  # las demos pro pisan a las simples del mismo id
     print(f"OK · {len(B)} ejemplos de negocios en {OUT}")
 
 

@@ -1,27 +1,18 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Casa Bosque · ejemplo</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"><style>:root{--bg:#f4eee2;--ink:#1c2a22;--pri:#1f4d36;--ring:#1f4d36;--sb:rgba(31,77,54,.4);--f1:'Fraunces',Georgia,serif;--f2:'Instrument Sans',system-ui,sans-serif}:root{--ease:cubic-bezier(.23,1,.32,1);--ease-io:cubic-bezier(.77,0,.175,1);--ease-drawer:cubic-bezier(.32,.72,0,1)}
-*,*::before,*::after{box-sizing:border-box}*{margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:var(--sb,rgba(0,0,0,.35)) transparent}
-body{font-family:var(--f2);color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
-h1,h2,h3,h4{font-family:var(--f1);text-wrap:balance;line-height:1.04}p,li{text-wrap:pretty}
-a{color:inherit;text-decoration:none;text-underline-offset:.2em}button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
-img,svg{max-width:100%}
-::selection{background:var(--sel,var(--pri));color:var(--sel-ink,#fff)}
-:focus-visible{outline:2px solid var(--ring,var(--pri));outline-offset:3px;border-radius:8px}
-input,select,textarea{font:inherit;color:inherit;caret-color:var(--pri)}
-::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:var(--sb,rgba(0,0,0,.3));border-radius:99px;border:2px solid var(--bg)}
-.num{font-variant-numeric:tabular-nums}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.w{max-width:1180px;margin:0 auto;padding:0 clamp(18px,4vw,36px)}
-.press{transition:transform .16s var(--ease),background-color .18s,color .18s,box-shadow .22s,border-color .18s,opacity .18s}.press:active{transform:scale(.97)}
-.js [data-rv]{opacity:0;transform:translateY(16px)}
-.js [data-rv].in{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .7s var(--ease);transition-delay:calc(var(--d,0)*70ms)}
-.demo{position:fixed;left:12px;bottom:12px;z-index:200;max-width:min(520px,calc(100% - 92px));background:rgba(18,18,20,.9);color:#fff;font:600 11.5px/1.4 system-ui,-apple-system,sans-serif;padding:8px 12px;border-radius:10px;backdrop-filter:blur(8px)}
-.demo b{color:#ffd84d;font-weight:700}
-.fw{position:fixed;right:14px;bottom:14px;z-index:200;width:48px;height:48px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 8px 22px rgba(0,0,0,.28);transition:transform .16s var(--ease)}.fw:active{transform:scale(.94)}.fw svg{width:24px;height:24px}
-.toast{position:fixed;left:50%;bottom:76px;z-index:210;max-width:min(560px,calc(100% - 28px));background:#16181a;color:#fff;padding:13px 18px;border-radius:14px;font:600 14px/1.4 system-ui,sans-serif;box-shadow:0 14px 40px rgba(0,0,0,.35);opacity:0;transform:translate(-50%,10px);pointer-events:none;transition:opacity .25s var(--ease),transform .3s var(--ease)}.toast.on{opacity:1;transform:translate(-50%,0)}
-body.dr-open .fw,body.dr-open .demo,body.dr-open .ow{opacity:0;pointer-events:none}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.js [data-rv]{opacity:1;transform:none}}
-@media(max-width:560px){.demo{font-size:10.5px;bottom:8px;left:8px;max-width:calc(100% - 72px)}.fw{width:44px;height:44px;right:10px;bottom:10px}}
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Casa Bosque (tienda propia de una marca que vende en Mercado Libre). Fotos propias de la Mandolina Börner V5 (publicaciones de Darío).
+Mundo: cocina de taller, papel cálido, verde bosque y terracota. Carrito lateral que funciona, estimador de envío y "vista del dueño"."""
+from lab_demos_pro_lib import shell, escribir, WA_ICON
+from lab_demos_negocios2 import _svg, KNIFE, BOARD, GRATER
+
+TOKENS = dict(bg="#f4eee2", ink="#1c2a22", pri="#1f4d36", ring="#1f4d36", sb="rgba(31,77,54,.4)", f1="'Fraunces',Georgia,serif", f2="'Instrument Sans',system-ui,sans-serif")
+FUENTES = "family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Instrument+Sans:wght@400;500;600;700"
+
+ICO_BAG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>'
+ICO_OK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>'
+ICO_X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>'
+
+CSS = r"""
 .ann{background:var(--pri);color:#e7efe3;text-align:center;font-size:13px;padding:9px 14px;letter-spacing:.01em}
 .hd{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 96%,#fff);border-bottom:1px solid transparent;transition:border-color .25s}.hd.sc{border-color:#dccfb6}
 .hd-in{display:flex;align-items:center;justify-content:space-between;height:68px;gap:20px}
@@ -73,17 +64,30 @@ footer{background:var(--pri);color:#dbe7d6;padding:46px 0 90px;margin-top:30px}f
 .gain{margin-top:18px;padding:16px 18px;border-radius:16px;background:#1f4d36;color:#fff;font-weight:600}.gain b{display:block;font:700 28px var(--f1)}.own p{font-size:14.5px;color:#394a40;margin-top:16px}
 @media(max-width:900px){.hd nav{display:none}.hero,.prod,.cuts{grid-template-columns:minmax(0,1fr)}.gal{position:static}.fam .gr{grid-template-columns:minmax(0,1fr)}.stamp{left:8px}.ow{right:66px;padding:11px 14px}}
 @media(max-width:520px){.hero h1{font-size:2.6rem}.buy .btn{flex:1}.cart span.lbl{display:none}.th{gap:6px}}
-</style></head><body>
+"""
+
+PRODS = {
+    "v5": ("Mandolina V5 Powerline", "5 placas · 10 cortes", 38900, "img", "img/mandolina-1.webp"),
+    "cuchillos": ("Set de cuchillos", "Acero inoxidable · 3 piezas", 64500, "svg", _svg(330, 90, KNIFE)),
+    "rallador": ("Rallador multiuso", "Acero inoxidable · 4 caras", 12800, "svg", _svg(260, 160, GRATER)),
+    "tabla": ("Tabla de madera", "Madera maciza · 35 × 24 cm", 21300, "svg", _svg(260, 160, BOARD)),
+}
+
+def ar(n): return f"{n:,}".replace(",", ".")
+
+def construir():
+    fam = "".join(f'''<article class="pc" data-rv style="--d:{i}"><div class="im">{PRODS[k][4]}</div><b>{PRODS[k][0]}</b><small>{PRODS[k][1]}</small><div class="f"><strong class="num">$ {ar(PRODS[k][2])}</strong><button class="add press" data-add="{k}">Agregar</button></div></article>''' for i, k in enumerate(["cuchillos", "rallador", "tabla"]))
+    body = f'''
 <div class="ann">Envíos a todo el país · 6 cuotas sin interés con Mercado Pago · 10 % off por transferencia</div>
 <header class="hd" id="hd"><div class="w hd-in"><a class="logo" href="#top">Casa Bosque</a>
 <nav aria-label="Principal"><a href="#producto">Mandolina</a><a href="#cortes">Cortes</a><a href="#completa">Completá tu cocina</a><a href="#faq">Preguntas</a></nav>
-<button class="cart press" id="open-cart" aria-label="Abrir el carrito"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="lbl">Carrito</span><span class="cnt num" id="cnt">0</span></button></div></header>
+<button class="cart press" id="open-cart" aria-label="Abrir el carrito">{ICO_BAG}<span class="lbl">Carrito</span><span class="cnt num" id="cnt">0</span></button></div></header>
 <main id="top">
 <section class="hero w">
  <div><h1 data-rv>Cortá parejo.<br>Cociná en <em>la mitad</em> del tiempo.</h1>
  <p data-rv style="--d:1">La Mandolina V5 rebana, ralla y hace juliana con una cuchilla de acero inoxidable ultra afilada. Cinco placas, más de diez cortes y garantía de 5 años.</p>
  <div class="cta" data-rv style="--d:2"><button class="btn press" id="buy-hero">Comprar · $ 38.900</button><a class="lnk" href="#cortes">Ver los cortes</a></div>
- <ul class="trust" data-rv style="--d:3"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Envío a todo el país</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>6 cuotas sin interés</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Apta lavavajillas</li></ul></div>
+ <ul class="trust" data-rv style="--d:3"><li>{ICO_OK}Envío a todo el país</li><li>{ICO_OK}6 cuotas sin interés</li><li>{ICO_OK}Apta lavavajillas</li></ul></div>
  <div class="hero-i" data-rv style="--d:1"><div class="plate"><img src="img/mandolina-1.webp" alt="Mandolina V5 roja con sus placas de corte y el sujetador" width="500" height="500"></div><div class="stamp"><b>5 años</b>de garantía en las cuchillas</div></div>
 </section>
 <section class="sec w" id="producto"><div class="prod">
@@ -91,7 +95,7 @@ footer{background:var(--pri);color:#dbe7d6;padding:46px 0 90px;margin-top:30px}f
  <div class="info" data-rv style="--d:1"><h2>Mandolina V5 Powerline</h2>
   <div class="rt"><span class="stars" aria-hidden="true">★★★★★</span><span>4,8 · 312 opiniones</span></div>
   <p>Cuchilla de acero inoxidable ultra afilada con sujetador de seguridad. Hacés rodajas, juliana y cubos en segundos, y todo se guarda en su caja.</p>
-  <ul class="feat"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Más de 10 cortes distintos con 5 placas intercambiables</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Sujetador que protege tu mano mientras cortás</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Caja incluida para guardar las placas</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Apta para lavavajillas</li></ul>
+  <ul class="feat"><li>{ICO_OK}Más de 10 cortes distintos con 5 placas intercambiables</li><li>{ICO_OK}Sujetador que protege tu mano mientras cortás</li><li>{ICO_OK}Caja incluida para guardar las placas</li><li>{ICO_OK}Apta para lavavajillas</li></ul>
   <div class="price"><strong class="num">$ 38.900</strong><span>6 cuotas de <b class="num">$ 6.483</b> sin interés</span></div>
   <p class="tr"><b class="num">$ 35.010</b> pagando por transferencia (10 % off)</p>
   <div class="buy"><div class="qty" role="group" aria-label="Cantidad"><button class="press" id="qm" aria-label="Una menos">−</button><output id="qv" class="num">1</output><button class="press" id="qp" aria-label="Una más">+</button></div><button class="btn press" id="add-main" style="flex:1">Agregar al carrito</button></div>
@@ -104,7 +108,7 @@ footer{background:var(--pri);color:#dbe7d6;padding:46px 0 90px;margin-top:30px}f
 </div>
 <div class="cuts" style="margin-top:clamp(28px,5vw,64px)"><figure class="ph" data-rv><img src="img/mandolina-4.webp" alt="Mandolina cortando cebolla sobre una tabla" width="500" height="500" loading="lazy"><figcaption>Cortes rápidos con movimientos ascendentes y descendentes.</figcaption></figure>
  <div data-rv style="--d:1"><h2>Rápida y segura.</h2><p>El sujetador mantiene la mano lejos de la cuchilla y las placas se guardan en su caja. Después de usarla, va directo al lavavajillas.</p></div></div></section>
-<section class="sec w fam" id="completa"><h2 data-rv>Completá tu cocina</h2><div class="gr"><article class="pc" data-rv style="--d:0"><div class="im"><svg viewBox="0 0 330 90" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"><defs><linearGradient id="st" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6f8"/><stop offset=".5" stop-color="#c9d0d6"/><stop offset="1" stop-color="#8e979f"/></linearGradient><linearGradient id="wd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9b07a"/><stop offset="1" stop-color="#a97b47"/></linearGradient></defs><path d="M14 58C70 24 150 14 214 16L220 62 54 68C32 68 18 64 14 58Z" fill="url(#st)" stroke="#6f7881" stroke-width="1.2"/><path d="M30 60C80 40 150 30 214 30" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="2"/><path d="M220 18H304a10 10 0 0 1 10 10V52a10 10 0 0 1-10 10H220Z" fill="#2a2f2b"/><circle cx="244" cy="40" r="4" fill="#c9d0d6"/><circle cx="276" cy="40" r="4" fill="#c9d0d6"/><circle cx="304" cy="40" r="4" fill="#c9d0d6"/></svg></div><b>Set de cuchillos</b><small>Acero inoxidable · 3 piezas</small><div class="f"><strong class="num">$ 64.500</strong><button class="add press" data-add="cuchillos">Agregar</button></div></article><article class="pc" data-rv style="--d:1"><div class="im"><svg viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"><defs><linearGradient id="st" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6f8"/><stop offset=".5" stop-color="#c9d0d6"/><stop offset="1" stop-color="#8e979f"/></linearGradient><linearGradient id="wd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9b07a"/><stop offset="1" stop-color="#a97b47"/></linearGradient></defs><path d="M70 150 100 14H160L190 150Z" fill="url(#st)" stroke="#6f7881" stroke-width="1.4"/><g fill="#5c646b"><circle cx="112" cy="50" r="4"/><circle cx="130" cy="50" r="4"/><circle cx="148" cy="50" r="4"/><circle cx="108" cy="78" r="4"/><circle cx="126" cy="78" r="4"/><circle cx="144" cy="78" r="4"/><circle cx="162" cy="78" r="4"/><circle cx="102" cy="106" r="4"/><circle cx="120" cy="106" r="4"/><circle cx="138" cy="106" r="4"/><circle cx="156" cy="106" r="4"/><circle cx="174" cy="106" r="4"/></g><rect x="104" y="0" width="52" height="16" rx="8" fill="#2a2f2b"/></svg></div><b>Rallador multiuso</b><small>Acero inoxidable · 4 caras</small><div class="f"><strong class="num">$ 12.800</strong><button class="add press" data-add="rallador">Agregar</button></div></article><article class="pc" data-rv style="--d:2"><div class="im"><svg viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"><defs><linearGradient id="st" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6f8"/><stop offset=".5" stop-color="#c9d0d6"/><stop offset="1" stop-color="#8e979f"/></linearGradient><linearGradient id="wd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9b07a"/><stop offset="1" stop-color="#a97b47"/></linearGradient></defs><rect x="12" y="14" width="236" height="130" rx="18" fill="url(#wd)"/><g stroke="#8a5f33" stroke-opacity=".35" stroke-width="2" fill="none"><path d="M24 40H236M24 70H236M24 100H236M24 126H236"/></g><circle cx="224" cy="40" r="9" fill="#f4efe6"/><rect x="12" y="14" width="236" height="130" rx="18" fill="none" stroke="#7a5430" stroke-opacity=".5"/></svg></div><b>Tabla de madera</b><small>Madera maciza · 35 × 24 cm</small><div class="f"><strong class="num">$ 21.300</strong><button class="add press" data-add="tabla">Agregar</button></div></article></div></section>
+<section class="sec w fam" id="completa"><h2 data-rv>Completá tu cocina</h2><div class="gr">{fam}</div></section>
 <section class="sec w faq" id="faq"><h2 data-rv>Preguntas frecuentes</h2>
 <details open data-rv><summary>¿Cuánto tarda en llegar?</summary><p>De 2 a 5 días hábiles según tu zona. Te mandamos el código de seguimiento apenas despachamos.</p></details>
 <details data-rv><summary>¿Tiene garantía?</summary><p>Sí, 5 años en las cuchillas de acero inoxidable por defectos de fabricación.</p></details>
@@ -114,8 +118,8 @@ footer{background:var(--pri);color:#dbe7d6;padding:46px 0 90px;margin-top:30px}f
 <footer><div class="w"><div><b>Casa Bosque</b><p>Utensilios de cocina de calidad profesional · Atención de lunes a viernes</p></div><p>Pagá con Mercado Pago, transferencia o tarjeta.</p></div></footer>
 <button class="ow press" id="open-ow"><i></i>Vista del dueño</button>
 <div class="ov" id="ov"></div>
-<aside class="dr" id="cartp" role="dialog" aria-modal="true" aria-label="Carrito" aria-hidden="true"><header><h3>Tu carrito</h3><button class="x press" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></header><div class="bd" id="cbd"></div><div class="ft" id="cft"></div></aside>
-<aside class="dr" id="owp" role="dialog" aria-modal="true" aria-label="Vista del dueño" aria-hidden="true"><header><h3>Vista del dueño</h3><button class="x press" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></header>
+<aside class="dr" id="cartp" role="dialog" aria-modal="true" aria-label="Carrito" aria-hidden="true"><header><h3>Tu carrito</h3><button class="x press" data-close aria-label="Cerrar">{ICO_X}</button></header><div class="bd" id="cbd"></div><div class="ft" id="cft"></div></aside>
+<aside class="dr" id="owp" role="dialog" aria-modal="true" aria-label="Vista del dueño" aria-hidden="true"><header><h3>Vista del dueño</h3><button class="x press" data-close aria-label="Cerrar">{ICO_X}</button></header>
 <div class="bd cal own"><p style="margin:0 0 16px;color:#394a40">Esto no lo ve quien compra: es lo que te queda por cada venta de la mandolina, en Mercado Libre y en tu propia tienda.</p>
 <label>Precio de venta<input id="op" type="number" value="38900" min="0" inputmode="numeric"></label>
 <label>Comisión del marketplace (%) <small>Valor de ejemplo, cambialo.</small><input id="oc" type="number" value="15" min="0" max="60" inputmode="decimal"></label>
@@ -123,23 +127,14 @@ footer{background:var(--pri);color:#dbe7d6;padding:46px 0 90px;margin-top:30px}f
 <div class="bars"><div class="b">En el marketplace te quedan<div class="bar"><i id="b1"></i><span class="num" id="t1">—</span></div></div><div class="b">En tu tienda te quedan<div class="bar pro"><i id="b2"></i><span class="num" id="t2">—</span></div></div></div>
 <div class="gain">Ganás más por cada venta<b class="num" id="gn">—</b><span class="num" id="gn2"></span></div>
 <p>Además, en tu tienda guardás el mail y el historial de cada cliente para volver a venderle. La comisión real depende de la categoría y del tipo de publicación.</p></div></aside>
-<button class="fw" data-wa="Hola, quiero hacer una consulta" aria-label="Escribir por WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.2A9.8 9.8 0 0 0 3.6 17l-1.4 4.9 5-1.3A9.8 9.8 0 1 0 12 2.2Zm0 17.9c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.1 8.1 0 1 1 12 20.1Zm4.5-6c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1-1.5-.7-2.5-1.3-3.4-2.9-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.8.8-1 1.7-.9 2.6.2 1.2 1.1 2.5 2.1 3.4 1.6 1.4 3 1.9 4.1 2.2.9.3 2 .2 2.7-.3.5-.4.9-1.1 1-1.7 0-.1 0-.2-.2-.3Z"/></svg></button><div class="demo">Negocio inventado · demo hecha para esta ficha · <b>Diseñada con Impeccable y principios de Emil Kowalski</b></div><div class="toast" id="tt" role="status" aria-live="polite"></div><script>
-document.documentElement.classList.add('js');
-function say(m){var t=document.getElementById('tt');t.textContent=m;t.classList.add('on');clearTimeout(window._t);window._t=setTimeout(function(){t.classList.remove('on')},4200)}
-function wa(m){say('Se abriría WhatsApp con: «'+m+'»')}
-document.addEventListener('click',function(e){var a=e.target.closest('[data-wa]');if(a){e.preventDefault();wa(a.dataset.wa)}});
-(function(){var els=[].slice.call(document.querySelectorAll('[data-rv]'));if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return}
-var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.08});els.forEach(function(e){io.observe(e)});
-setTimeout(function(){els.forEach(function(e){if(e.getBoundingClientRect().top<innerHeight)e.classList.add('in')})},60)})();
-function $(s,r){return(r||document).querySelector(s)}function $$(s,r){return[].slice.call((r||document).querySelectorAll(s))}
-function money(n,c){return(c||'$')+' '+Math.round(n).toLocaleString('es-AR')}
-function tween(el,to,fmt,ms){var from=+el.dataset.v||0,t0=performance.now();ms=ms||520;if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=fmt(to);el.dataset.v=to;return}
-(function f(t){var k=Math.min(1,(t-t0)/ms),e=1-Math.pow(1-k,4);el.textContent=fmt(from+(to-from)*e);if(k<1)requestAnimationFrame(f);else el.dataset.v=to})(t0)}
-</script><script>
+'''
+    return body
+
+JS = r"""
 (function(){
-var P={v5:{n:'Mandolina V5 Powerline',p:38900,t:'<img src="img/mandolina-1.webp" alt="">'},cuchillos:{n:'Set de cuchillos',p:64500,t:'<svg viewBox="0 0 330 90" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"><defs><linearGradient id="st" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6f8"/><stop offset=".5" stop-color="#c9d0d6"/><stop offset="1" stop-color="#8e979f"/></linearGradient><linearGradient id="wd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9b07a"/><stop offset="1" stop-color="#a97b47"/></linearGradient></defs><path d="M14 58C70 24 150 14 214 16L220 62 54 68C32 68 18 64 14 58Z" fill="url(#st)" stroke="#6f7881" stroke-width="1.2"/><path d="M30 60C80 40 150 30 214 30" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="2"/><path d="M220 18H304a10 10 0 0 1 10 10V52a10 10 0 0 1-10 10H220Z" fill="#2a2f2b"/><circle cx="244" cy="40" r="4" fill="#c9d0d6"/><circle cx="276" cy="40" r="4" fill="#c9d0d6"/><circle cx="304" cy="40" r="4" fill="#c9d0d6"/></svg>'},rallador:{n:'Rallador multiuso',p:12800,t:'<svg viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"><defs><linearGradient id="st" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6f8"/><stop offset=".5" stop-color="#c9d0d6"/><stop offset="1" stop-color="#8e979f"/></linearGradient><linearGradient id="wd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9b07a"/><stop offset="1" stop-color="#a97b47"/></linearGradient></defs><path d="M70 150 100 14H160L190 150Z" fill="url(#st)" stroke="#6f7881" stroke-width="1.4"/><g fill="#5c646b"><circle cx="112" cy="50" r="4"/><circle cx="130" cy="50" r="4"/><circle cx="148" cy="50" r="4"/><circle cx="108" cy="78" r="4"/><circle cx="126" cy="78" r="4"/><circle cx="144" cy="78" r="4"/><circle cx="162" cy="78" r="4"/><circle cx="102" cy="106" r="4"/><circle cx="120" cy="106" r="4"/><circle cx="138" cy="106" r="4"/><circle cx="156" cy="106" r="4"/><circle cx="174" cy="106" r="4"/></g><rect x="104" y="0" width="52" height="16" rx="8" fill="#2a2f2b"/></svg>'},tabla:{n:'Tabla de madera',p:21300,t:'<svg viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"><defs><linearGradient id="st" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6f8"/><stop offset=".5" stop-color="#c9d0d6"/><stop offset="1" stop-color="#8e979f"/></linearGradient><linearGradient id="wd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9b07a"/><stop offset="1" stop-color="#a97b47"/></linearGradient></defs><rect x="12" y="14" width="236" height="130" rx="18" fill="url(#wd)"/><g stroke="#8a5f33" stroke-opacity=".35" stroke-width="2" fill="none"><path d="M24 40H236M24 70H236M24 100H236M24 126H236"/></g><circle cx="224" cy="40" r="9" fill="#f4efe6"/><rect x="12" y="14" width="236" height="130" rx="18" fill="none" stroke="#7a5430" stroke-opacity=".5"/></svg>'}};
+var P={v5:{n:'Mandolina V5 Powerline',p:38900,t:'<img src="img/mandolina-1.webp" alt="">'},cuchillos:{n:'Set de cuchillos',p:64500,t:'@@K@@'},rallador:{n:'Rallador multiuso',p:12800,t:'@@G@@'},tabla:{n:'Tabla de madera',p:21300,t:'@@B@@'}};
 var cart={},FREE=60000,qty=1;
-var X='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+var X='@@X@@';
 /* encabezado */
 var hd=$('#hd');addEventListener('scroll',function(){hd.classList.toggle('sc',scrollY>8)},{passive:true});
 /* galería con fundido cruzado */
@@ -155,7 +150,7 @@ $('#cp').addEventListener('keydown',function(e){if(e.key==='Enter')$('#cpb').cli
 function total(){var t=0;for(var k in cart)t+=cart[k]*P[k].p;return t}
 function count(){var n=0;for(var k in cart)n+=cart[k];return n}
 function draw(){var n=count(),t=total(),bd=$('#cbd'),ft=$('#cft'),c=$('#cnt');c.textContent=n;
- if(!n){bd.innerHTML='<div class="empty"><svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"><defs><linearGradient id="st" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6f8"/><stop offset=".5" stop-color="#c9d0d6"/><stop offset="1" stop-color="#8e979f"/></linearGradient><linearGradient id="wd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9b07a"/><stop offset="1" stop-color="#a97b47"/></linearGradient></defs><path d="M34 44h92l-8 62H42Z" fill="#e4d6b6"/><path d="M58 44v-6a22 22 0 0 1 44 0v6" fill="none" stroke="#b9a98a" stroke-width="6" stroke-linecap="round"/><circle cx="68" cy="70" r="4" fill="#fbf7ee"/><circle cx="92" cy="70" r="4" fill="#fbf7ee"/><path d="M66 88q14 10 28 0" fill="none" stroke="#fbf7ee" stroke-width="4" stroke-linecap="round"/></svg><b>Tu carrito está vacío</b>Sumá la mandolina y completá tu cocina.</div>';ft.innerHTML='<button class="btn press" data-close style="background:var(--pri)">Seguir mirando</button>';return}
+ if(!n){bd.innerHTML='<div class="empty">@@E@@<b>Tu carrito está vacío</b>Sumá la mandolina y completá tu cocina.</div>';ft.innerHTML='<button class="btn press" data-close style="background:var(--pri)">Seguir mirando</button>';return}
  var falta=Math.max(0,FREE-t);
  var h='<div class="free">'+(falta?'Te faltan <span class="num">'+money(falta)+'</span> para el envío gratis':'Tenés envío gratis en esta compra')+'<i><b style="width:'+Math.min(100,t/FREE*100)+'%"></b></i></div>';
  for(var k in cart){h+='<div class="ln"><div class="t">'+P[k].t+'</div><div><b>'+P[k].n+'</b><small class="num">'+money(P[k].p)+'</small><div class="q"><button class="press" data-d="-1" data-k="'+k+'" aria-label="Una menos de '+P[k].n+'">−</button><span class="num">'+cart[k]+'</span><button class="press" data-d="1" data-k="'+k+'" aria-label="Una más de '+P[k].n+'">+</button></div></div><strong class="num">'+money(P[k].p*cart[k])+'</strong></div>'}
@@ -180,4 +175,11 @@ function calc(){var p=+$('#op').value||0,c=+$('#oc').value||0,d=+$('#od').value|
  tween($('#gn'),b-a,function(v){return money(v)+' por venta'});$('#gn2').textContent=money((b-a)*100)+' cada 100 ventas'}
 ['op','oc','od'].forEach(function(i){$('#'+i).oninput=calc});calc();draw();
 })();
-</script></body></html>
+""".replace("@@K@@", _svg(330, 90, KNIFE).replace("'", "\\'")).replace("@@G@@", _svg(260, 160, GRATER).replace("'", "\\'")).replace("@@B@@", _svg(260, 160, BOARD).replace("'", "\\'")).replace("@@X@@", ICO_X.replace("'", "\\'")).replace("@@E@@", _svg(160, 120, '<path d="M34 44h92l-8 62H42Z" fill="#e4d6b6"/><path d="M58 44v-6a22 22 0 0 1 44 0v6" fill="none" stroke="#b9a98a" stroke-width="6" stroke-linecap="round"/><circle cx="68" cy="70" r="4" fill="#fbf7ee"/><circle cx="92" cy="70" r="4" fill="#fbf7ee"/><path d="M66 88q14 10 28 0" fill="none" stroke="#fbf7ee" stroke-width="4" stroke-linecap="round"/>').replace("'", "\\'"))
+
+def main():
+    escribir("tienda", shell("Casa Bosque", FUENTES, TOKENS, CSS, construir(), JS))
+    print("OK · tienda (pro)")
+
+if __name__ == "__main__":
+    main()

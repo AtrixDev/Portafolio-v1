@@ -29,6 +29,8 @@ import lab_demos_estilos as DE
 import lab_demos_patrones as DP
 from lab_valor_resto import valor_resto, ORIGEN as VALOR_RESTO_ORIGEN
 
+HECHO_CON = {i: " Diseñada con Impeccable y principios de Emil Kowalski." for i in ("tienda", "inmobiliaria", "estetica", "profesional", "gimnasio")}
+HECHO_CON["restaurante"] = " Diseñada con Impeccable (es el experimento «con skill»)."
 ROOT = HERE.parent
 SRC = ROOT / "frontend" / "data" / "weblab"
 OUT = ROOT / "frontend" / "data" / "lab"
@@ -272,10 +274,11 @@ def main():
         h, w = neg_dir / f"{lg['id']}.html", neg_dir / f"{lg['id']}.webp"
         if not h.exists() or not w.exists(): raise SystemExit(f"falta el ejemplo del negocio {lg['id']}: corré lab_demos_negocios.py y lab_demos_miniaturas.py --negocios")
         eid = "ejemplo-negocio-" + lg["id"]
+        hecho = HECHO_CON.get(lg["id"], "")  # solo donde es cierto: las demos pro y Brasa (experimento hecho con Impeccable)
         evid[eid] = {"id": eid, "tipo": "demo", "titulo": f"Sitio de ejemplo para {f['nombre']}", "origen": "propio",
-                     "descripcion": "Sitio de un negocio inventado, diseñado para este rubro, con su función principal funcionando. Hecho para esta ficha.",
+                     "descripcion": "Sitio de un negocio inventado, diseñado para este rubro, con su función principal funcionando. Hecho para esta ficha." + hecho,
                      "ref": {"url": f"prog-ejemplos/negocios/{lg['id']}.html", "thumb": f"prog-ejemplos/negocios/{lg['id']}.webp", "solo": True,
-                             "cambia": "Un negocio inventado de este rubro, con identidad propia y su función principal andando. Probala: no es un cliente real."}}
+                             "cambia": "Un negocio inventado de este rubro, con identidad propia y su función principal andando. Probala: no es un cliente real." + hecho}}
         f["evidencias"] = [e for e in f["evidencias"] if e != "maqueta-preset"]
         f["evidencias"].append(eid)
         f["evidencias"].sort(key=lambda e: 0 if e.startswith("proyecto-") or e.startswith("fn-") else 1)

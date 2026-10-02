@@ -1,27 +1,21 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lic. Carolina Díaz · ejemplo</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet"><style>:root{--bg:#f4eee4;--ink:#2a2420;--pri:#2f4a3a;--ring:#2f4a3a;--sel:#2f4a3a;--sb:rgba(47,74,58,.4);--f1:'Young Serif',Georgia,serif;--f2:'Figtree',system-ui,sans-serif}:root{--ease:cubic-bezier(.23,1,.32,1);--ease-io:cubic-bezier(.77,0,.175,1);--ease-drawer:cubic-bezier(.32,.72,0,1)}
-*,*::before,*::after{box-sizing:border-box}*{margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:var(--sb,rgba(0,0,0,.35)) transparent}
-body{font-family:var(--f2);color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
-h1,h2,h3,h4{font-family:var(--f1);text-wrap:balance;line-height:1.04}p,li{text-wrap:pretty}
-a{color:inherit;text-decoration:none;text-underline-offset:.2em}button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
-img,svg{max-width:100%}
-::selection{background:var(--sel,var(--pri));color:var(--sel-ink,#fff)}
-:focus-visible{outline:2px solid var(--ring,var(--pri));outline-offset:3px;border-radius:8px}
-input,select,textarea{font:inherit;color:inherit;caret-color:var(--pri)}
-::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:var(--sb,rgba(0,0,0,.3));border-radius:99px;border:2px solid var(--bg)}
-.num{font-variant-numeric:tabular-nums}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.w{max-width:1180px;margin:0 auto;padding:0 clamp(18px,4vw,36px)}
-.press{transition:transform .16s var(--ease),background-color .18s,color .18s,box-shadow .22s,border-color .18s,opacity .18s}.press:active{transform:scale(.97)}
-.js [data-rv]{opacity:0;transform:translateY(16px)}
-.js [data-rv].in{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .7s var(--ease);transition-delay:calc(var(--d,0)*70ms)}
-.demo{position:fixed;left:12px;bottom:12px;z-index:200;max-width:min(520px,calc(100% - 92px));background:rgba(18,18,20,.9);color:#fff;font:600 11.5px/1.4 system-ui,-apple-system,sans-serif;padding:8px 12px;border-radius:10px;backdrop-filter:blur(8px)}
-.demo b{color:#ffd84d;font-weight:700}
-.fw{position:fixed;right:14px;bottom:14px;z-index:200;width:48px;height:48px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 8px 22px rgba(0,0,0,.28);transition:transform .16s var(--ease)}.fw:active{transform:scale(.94)}.fw svg{width:24px;height:24px}
-.toast{position:fixed;left:50%;bottom:76px;z-index:210;max-width:min(560px,calc(100% - 28px));background:#16181a;color:#fff;padding:13px 18px;border-radius:14px;font:600 14px/1.4 system-ui,sans-serif;box-shadow:0 14px 40px rgba(0,0,0,.35);opacity:0;transform:translate(-50%,10px);pointer-events:none;transition:opacity .25s var(--ease),transform .3s var(--ease)}.toast.on{opacity:1;transform:translate(-50%,0)}
-body.dr-open .fw,body.dr-open .demo,body.dr-open .ow{opacity:0;pointer-events:none}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.js [data-rv]{opacity:1;transform:none}}
-@media(max-width:560px){.demo{font-size:10.5px;bottom:8px;left:8px;max-width:calc(100% - 72px)}.fw{width:44px;height:44px;right:10px;bottom:10px}}
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Lic. Carolina Díaz (psicóloga, inventada). Mundo: papel cálido, verde apagado y terracota; tono sereno y claro.
+Orientador de tres preguntas que recomienda la modalidad, primera consulta sin cargo con elección de día y horario, y preguntas frecuentes."""
+import json
+from lab_demos_pro_lib import shell, escribir
+from lab_demos_ilus import CONSULTA
+
+TOKENS = dict(bg="#f4eee4", ink="#2a2420", pri="#2f4a3a", ring="#2f4a3a", sel="#2f4a3a", sb="rgba(47,74,58,.4)", f1="'Young Serif',Georgia,serif", f2="'Figtree',system-ui,sans-serif")
+FUENTES = "family=Young+Serif&family=Figtree:wght@400;500;600;700"
+
+def ic(d, w=1.8): return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{d}</svg>'
+I_OK = ic('<path d="m5 12.500 4.500 4.500L19 7.500"/>', 2.2)
+I_BACK = ic('<path d="M15 6 9 12l6 6"/>', 2)
+I_PIN = ic('<path d="M12 21s7-6 7-11.200a7 7 0 0 0-14 0C5 15 12 21 12 21Z"/><circle cx="12" cy="10" r="2.500"/>')
+I_VID = ic('<rect x="3" y="6" width="13" height="12" rx="2.500"/><path d="m16 10.500 5-3v9l-5-3"/>')
+
+CSS = r"""
 .hd{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 95%,#fff);border-bottom:1px solid transparent;transition:border-color .25s}.hd.sc{border-color:#ddd0b8}
 .hd-in{display:flex;align-items:center;justify-content:space-between;height:72px;gap:18px}.logo{font:400 21px var(--f1);line-height:1.1}.logo small{display:block;font:500 12.5px var(--f2);color:#5b5248;margin-top:2px}
 .hd nav{display:flex;gap:28px;font-weight:500;font-size:15px}.hd nav a{position:relative;padding:6px 0}.hd nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.5px;background:var(--pri);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}.hd nav a:hover::after{transform:scaleX(1)}
@@ -54,14 +48,11 @@ footer{background:var(--ink);color:#d9d0c2;padding:44px 0 92px;margin-top:20px}f
 @media(max-width:900px){.hd nav{display:none}.hero,.abt,.turn{grid-template-columns:minmax(0,1fr)}.vis{max-width:300px}.abt dl div{grid-template-columns:minmax(0,1fr);gap:2px}}
 @media(max-width:560px){.mod summary{grid-template-columns:minmax(0,1fr) auto}.mod summary span{grid-column:1;grid-row:2}.mod summary::after{grid-row:1;grid-column:2}}
 @media(max-width:560px){.hd .btn{padding:10px 16px;font-size:14px;white-space:nowrap}.logo{white-space:nowrap}}
-</style></head><body>
+"""
+
+BODY = f'''
 <header class="hd" id="hd"><div class="w hd-in"><a class="logo" href="#top">Lic. Carolina Díaz<small>Psicóloga · M.N. 41.236</small></a><nav aria-label="Principal"><a href="#empezar">Por dónde empezar</a><a href="#modalidades">Modalidades</a><a href="#sobre">Sobre mí</a><a href="#faq">Preguntas</a></nav><a class="btn press" href="#turno">Pedir primera sesión</a></div></header>
-<main id="top"><section class="w hero"><div><h1 data-rv>Hablemos de <em>lo que te pasa.</em></h1><p data-rv style="--d:1">Psicóloga en Palermo y por videollamada. Un espacio tranquilo, sin juicios, para entender qué te está pasando y qué podés hacer con eso.</p><div class="cta" data-rv style="--d:2"><a class="btn press" href="#turno">Pedir primera sesión</a><a class="btn o press" href="#empezar">No sé por dónde empezar</a></div><div class="meta" data-rv style="--d:3"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.500 4.500 4.500L19 7.500"/></svg>Primera consulta de 20 min sin cargo</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6 7-11.200a7 7 0 0 0-14 0C5 15 12 21 12 21Z"/><circle cx="12" cy="10" r="2.500"/></svg>Presencial en Palermo</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2.500"/><path d="m16 10.500 5-3v9l-5-3"/></svg>O por videollamada</span></div></div><div class="vis" data-rv style="--d:1"><svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true" ><defs><linearGradient id="co" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#efe3d3"/><stop offset="1" stop-color="#c9a98a"/></linearGradient></defs>
-<path d="M0 500V200C0 90 90 0 200 0s200 90 200 200v300Z" fill="url(#co)"/><rect x="0" y="400" width="400" height="100" fill="#a97f5f" opacity=".55"/>
-<g><rect x="96" y="290" width="150" height="86" rx="22" fill="#2f4a3a"/><rect x="80" y="316" width="40" height="76" rx="16" fill="#3b5d49"/><rect x="226" y="316" width="40" height="76" rx="16" fill="#3b5d49"/><rect x="96" y="340" width="150" height="50" rx="14" fill="#3b5d49"/><rect x="100" y="388" width="10" height="26" fill="#5a3b22"/><rect x="232" y="388" width="10" height="26" fill="#5a3b22"/></g>
-<g><rect x="292" y="360" width="56" height="54" rx="8" fill="#c46a4a"/><path d="M320 360c-4-60-30-90-52-110 36 6 56 30 62 80 8-52 30-84 64-96-22 30-40 62-38 126Z" fill="#4f7a49"/><path d="M320 360c0-40-14-70-34-96 30 14 40 50 40 96Z" fill="#6f9a62"/></g>
-<g><path d="M60 120v200" stroke="#5a3b22" stroke-width="6"/><path d="M34 120h52l-10-34H44Z" fill="#f3c9b6"/><rect x="46" y="316" width="28" height="8" rx="4" fill="#5a3b22"/></g>
-<g fill="#fff" opacity=".9"><rect x="244" y="110" width="76" height="96" rx="6"/></g><g fill="#a9c8c0"><rect x="252" y="118" width="60" height="80"/></g><path d="M282 118v80M252 158h60" stroke="#fff" stroke-width="4"/></svg></div></section>
+<main id="top"><section class="w hero"><div><h1 data-rv>Hablemos de <em>lo que te pasa.</em></h1><p data-rv style="--d:1">Psicóloga en Palermo y por videollamada. Un espacio tranquilo, sin juicios, para entender qué te está pasando y qué podés hacer con eso.</p><div class="cta" data-rv style="--d:2"><a class="btn press" href="#turno">Pedir primera sesión</a><a class="btn o press" href="#empezar">No sé por dónde empezar</a></div><div class="meta" data-rv style="--d:3"><span>{I_OK}Primera consulta de 20 min sin cargo</span><span>{I_PIN}Presencial en Palermo</span><span>{I_VID}O por videollamada</span></div></div><div class="vis" data-rv style="--d:1">{CONSULTA}</div></section>
 <section class="w sec" id="empezar"><h2 data-rv>¿Por dónde empezar?</h2><p class="lead" data-rv style="--d:1">Tres preguntas cortas y te cuento qué tipo de consulta te puede servir. No guardamos tus respuestas.</p><div class="pick" id="pick" data-rv style="--d:2"></div></section>
 <section class="w sec" id="modalidades"><h2 data-rv>Cómo trabajo</h2><p class="lead" data-rv style="--d:1">Cuatro tipos de consulta. Cada una tiene su duración y su ritmo, y los vamos ajustando juntos.</p>
 <div class="mod" data-rv style="--d:2"><details open><summary><b>Terapia individual</b><span>50 min</span></summary><p>Un espacio propio para trabajar ansiedad, estrés, duelos, cambios o lo que sientas que te pesa. Al comienzo nos vemos una vez por semana y después se espacia según cómo vayas.</p></details>
@@ -70,28 +61,18 @@ footer{background:var(--ink);color:#d9d0c2;padding:44px 0 92px;margin-top:20px}f
 <details><summary><b>Orientación vocacional</b><span>4 encuentros</span></summary><p>Exploramos intereses, habilidades y opciones reales para elegir o cambiar de carrera con más claridad. Se hace en cuatro encuentros de una hora.</p></details></div></section>
 <section class="w sec" id="sobre"><div class="abt"><h2 data-rv>Sobre mí</h2><div class="tx" data-rv style="--d:1"><p>Soy psicóloga y trabajo desde hace doce años en consultorio. Me formé en terapia cognitivo-conductual y suelo combinarla con herramientas de atención plena.</p><p>Mi forma de trabajar es clara: te explico qué hacemos y para qué, fijamos objetivos juntos y los revisamos cada tanto. No hace falta que llegues con todo claro.</p><dl><div><dt>Formación</dt><dd>Licenciatura en Psicología, UBA</dd></div><div><dt>Especialización</dt><dd>Terapia cognitivo-conductual · Adultos y adolescentes</dd></div><div><dt>Atención</dt><dd>Presencial en Palermo y por videollamada</dd></div></dl></div></div></section>
 <section class="w sec" id="turno"><div class="turn"><div data-rv><h2 style="font:400 clamp(2rem,4.2vw,3.4rem)/1.04 var(--f1);letter-spacing:-.02em">Primera consulta sin cargo</h2><p class="lead">Veinte minutos para conocernos, contarme qué te trae y decidir juntos si seguimos. Elegí cuándo te queda cómodo.</p></div>
-<div class="tcard" data-rv style="--d:1"><h3>Elegí tu horario</h3><p>Te confirmo por WhatsApp.</p><span class="l">MODALIDAD</span><div class="mo" id="mo"><button type="button" class="press" data-m="presencial" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6 7-11.200a7 7 0 0 0-14 0C5 15 12 21 12 21Z"/><circle cx="12" cy="10" r="2.500"/></svg>Presencial</button><button type="button" class="press" data-m="videollamada" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2.500"/><path d="m16 10.500 5-3v9l-5-3"/></svg>Videollamada</button></div><span class="l">DÍA</span><div class="dy" id="dy"></div><span class="l">HORARIO</span><div class="hr" id="hr"></div><button class="btn press" id="go" disabled>Elegí día y horario</button></div></div></section>
+<div class="tcard" data-rv style="--d:1"><h3>Elegí tu horario</h3><p>Te confirmo por WhatsApp.</p><span class="l">MODALIDAD</span><div class="mo" id="mo"><button type="button" class="press" data-m="presencial" aria-pressed="true">{I_PIN}Presencial</button><button type="button" class="press" data-m="videollamada" aria-pressed="false">{I_VID}Videollamada</button></div><span class="l">DÍA</span><div class="dy" id="dy"></div><span class="l">HORARIO</span><div class="hr" id="hr"></div><button class="btn press" id="go" disabled>Elegí día y horario</button></div></div></section>
 <section class="w sec faq" id="faq"><h2 data-rv>Preguntas frecuentes</h2>
 <details open data-rv><summary>¿Lo que cuento queda en reserva?</summary><p>Sí. Todo lo que hablamos es confidencial y está protegido por el secreto profesional.</p></details>
 <details data-rv><summary>¿Atienden por obra social o prepaga?</summary><p>Atiendo de forma particular. Te doy la factura para que pidas reintegro si tu cobertura lo permite.</p></details>
 <details data-rv><summary>¿Cómo es la primera sesión?</summary><p>Charlamos sobre qué te trae, te cuento cómo trabajo y decidimos juntos si seguimos y con qué frecuencia. No hay compromiso.</p></details>
 <details data-rv><summary>¿Y si tengo que cancelar?</summary><p>Podés mover o cancelar tu sesión hasta 24 horas antes escribiéndome por WhatsApp.</p></details></section></main>
 <footer><div class="w"><b>Lic. Carolina Díaz</b><p>Psicóloga · M.N. 41.236 · Palermo, Ciudad de Buenos Aires. Esta página es un ejemplo: la profesional y los datos son inventados.</p><p class="urg">Si estás atravesando una emergencia, llamá al 135 o al 107.</p></div></footer>
-<button class="fw" data-wa="Hola, quiero hacer una consulta" aria-label="Escribir por WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.2A9.8 9.8 0 0 0 3.6 17l-1.4 4.9 5-1.3A9.8 9.8 0 1 0 12 2.2Zm0 17.9c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.1 8.1 0 1 1 12 20.1Zm4.5-6c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1-1.5-.7-2.5-1.3-3.4-2.9-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.8.8-1 1.7-.9 2.6.2 1.2 1.1 2.5 2.1 3.4 1.6 1.4 3 1.9 4.1 2.2.9.3 2 .2 2.7-.3.5-.4.9-1.1 1-1.7 0-.1 0-.2-.2-.3Z"/></svg></button><div class="demo">Negocio inventado · demo hecha para esta ficha · <b>Diseñada con Impeccable y principios de Emil Kowalski</b></div><div class="toast" id="tt" role="status" aria-live="polite"></div><script>
-document.documentElement.classList.add('js');
-function say(m){var t=document.getElementById('tt');t.textContent=m;t.classList.add('on');clearTimeout(window._t);window._t=setTimeout(function(){t.classList.remove('on')},4200)}
-function wa(m){say('Se abriría WhatsApp con: «'+m+'»')}
-document.addEventListener('click',function(e){var a=e.target.closest('[data-wa]');if(a){e.preventDefault();wa(a.dataset.wa)}});
-(function(){var els=[].slice.call(document.querySelectorAll('[data-rv]'));if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return}
-var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.08});els.forEach(function(e){io.observe(e)});
-setTimeout(function(){els.forEach(function(e){if(e.getBoundingClientRect().top<innerHeight)e.classList.add('in')})},60)})();
-function $(s,r){return(r||document).querySelector(s)}function $$(s,r){return[].slice.call((r||document).querySelectorAll(s))}
-function money(n,c){return(c||'$')+' '+Math.round(n).toLocaleString('es-AR')}
-function tween(el,to,fmt,ms){var from=+el.dataset.v||0,t0=performance.now();ms=ms||520;if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=fmt(to);el.dataset.v=to;return}
-(function f(t){var k=Math.min(1,(t-t0)/ms),e=1-Math.pow(1-k,4);el.textContent=fmt(from+(to-from)*e);if(k<1)requestAnimationFrame(f);else el.dataset.v=to})(t0)}
-</script><script>
+'''
+
+JS = r"""
 (function(){
-var OK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.500 4.500 4.500L19 7.500"/></svg>',BK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6 9 12l6 6"/></svg>',AR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+var OK='@@OK@@',BK='@@BK@@',AR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 var hd=$('#hd');addEventListener('scroll',function(){hd.classList.toggle('sc',scrollY>8)},{passive:true});
 var Q=[{k:'who',t:'¿Para quién es la consulta?',o:[['yo','Para mí'],['pareja','Para mi pareja y para mí'],['hijo','Para mi hijo o hija adolescente']]},
 {k:'how',t:'¿Cómo preferís que nos encontremos?',o:[['presencial','Presencial, en Palermo'],['videollamada','Por videollamada']]},
@@ -123,4 +104,12 @@ $('#dy').onclick=function(e){var b=e.target.closest('button');if(!b)return;day=+
 $('#hr').onclick=function(e){var b=e.target.closest('button');if(!b||b.disabled)return;hora=b.dataset.h;$$('button',this).forEach(function(x){x.setAttribute('aria-pressed',x===b)});go()};
 hs();go();
 })();
-</script></body></html>
+"""
+
+def main():
+    js = JS.replace("@@OK@@", I_OK).replace("@@BK@@", I_BACK)
+    escribir("profesional", shell("Lic. Carolina Díaz", FUENTES, TOKENS, CSS, BODY, js))
+    print("OK · profesional (pro)")
+
+if __name__ == "__main__":
+    main()

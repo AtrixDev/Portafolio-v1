@@ -1,27 +1,28 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lumière · ejemplo</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"><style>:root{--bg:#f3edf8;--ink:#2b1a3f;--pri:#5b3a8c;--ring:#5b3a8c;--sel:#5b3a8c;--sb:rgba(91,58,140,.4);--f1:'Instrument Serif',Georgia,serif;--f2:'DM Sans',system-ui,sans-serif}:root{--ease:cubic-bezier(.23,1,.32,1);--ease-io:cubic-bezier(.77,0,.175,1);--ease-drawer:cubic-bezier(.32,.72,0,1)}
-*,*::before,*::after{box-sizing:border-box}*{margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:var(--sb,rgba(0,0,0,.35)) transparent}
-body{font-family:var(--f2);color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
-h1,h2,h3,h4{font-family:var(--f1);text-wrap:balance;line-height:1.04}p,li{text-wrap:pretty}
-a{color:inherit;text-decoration:none;text-underline-offset:.2em}button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
-img,svg{max-width:100%}
-::selection{background:var(--sel,var(--pri));color:var(--sel-ink,#fff)}
-:focus-visible{outline:2px solid var(--ring,var(--pri));outline-offset:3px;border-radius:8px}
-input,select,textarea{font:inherit;color:inherit;caret-color:var(--pri)}
-::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:var(--sb,rgba(0,0,0,.3));border-radius:99px;border:2px solid var(--bg)}
-.num{font-variant-numeric:tabular-nums}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.w{max-width:1180px;margin:0 auto;padding:0 clamp(18px,4vw,36px)}
-.press{transition:transform .16s var(--ease),background-color .18s,color .18s,box-shadow .22s,border-color .18s,opacity .18s}.press:active{transform:scale(.97)}
-.js [data-rv]{opacity:0;transform:translateY(16px)}
-.js [data-rv].in{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .7s var(--ease);transition-delay:calc(var(--d,0)*70ms)}
-.demo{position:fixed;left:12px;bottom:12px;z-index:200;max-width:min(520px,calc(100% - 92px));background:rgba(18,18,20,.9);color:#fff;font:600 11.5px/1.4 system-ui,-apple-system,sans-serif;padding:8px 12px;border-radius:10px;backdrop-filter:blur(8px)}
-.demo b{color:#ffd84d;font-weight:700}
-.fw{position:fixed;right:14px;bottom:14px;z-index:200;width:48px;height:48px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 8px 22px rgba(0,0,0,.28);transition:transform .16s var(--ease)}.fw:active{transform:scale(.94)}.fw svg{width:24px;height:24px}
-.toast{position:fixed;left:50%;bottom:76px;z-index:210;max-width:min(560px,calc(100% - 28px));background:#16181a;color:#fff;padding:13px 18px;border-radius:14px;font:600 14px/1.4 system-ui,sans-serif;box-shadow:0 14px 40px rgba(0,0,0,.35);opacity:0;transform:translate(-50%,10px);pointer-events:none;transition:opacity .25s var(--ease),transform .3s var(--ease)}.toast.on{opacity:1;transform:translate(-50%,0)}
-body.dr-open .fw,body.dr-open .demo,body.dr-open .ow{opacity:0;pointer-events:none}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.js [data-rv]{opacity:1;transform:none}}
-@media(max-width:560px){.demo{font-size:10.5px;bottom:8px;left:8px;max-width:calc(100% - 72px)}.fw{width:44px;height:44px;right:10px;bottom:10px}}
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Lumière (peluquería y estética en Recoleta, inventada). Mundo: lila suave, ciruela y papel rosado; serif itálica.
+Menú de servicios con pestañas, armado del turno (servicios, día y horario con disponibilidad) y mensaje listo para WhatsApp."""
+import json
+from lab_demos_pro_lib import shell, escribir
+from lab_demos_ilus import BOTANICO, MAPA
+
+TOKENS = dict(bg="#f3edf8", ink="#2b1a3f", pri="#5b3a8c", ring="#5b3a8c", sel="#5b3a8c", sb="rgba(91,58,140,.4)", f1="'Instrument Serif',Georgia,serif", f2="'DM Sans',system-ui,sans-serif")
+FUENTES = "family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700"
+
+def ic(d, w=1.8): return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{d}</svg>'
+I_PLUS = ic('<path d="M12 5v14M5 12h14"/>', 2)
+I_OK = ic('<path d="m5 12.500 4.500 4.500L19 7.500"/>', 2.2)
+I_X = ic('<path d="M6 6l12 12M18 6 6 18"/>', 2)
+I_CLK = ic('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>')
+
+SERV = {
+ "Pelo": [("Corte y brushing", "Lavado, corte a medida y brushing.", 60, 18500), ("Color de raíz", "Retoque de color en raíces.", 90, 26000), ("Balayage", "Iluminación natural, a mano alzada.", 180, 62000), ("Keratina", "Alisado y brillo que dura semanas.", 120, 38000)],
+ "Uñas": [("Manicuría semipermanente", "Limado, cutículas y esmalte de 3 semanas.", 60, 14000), ("Pedicuría", "Cuidado completo de pies y esmaltado.", 60, 15500), ("Uñas esculpidas", "Extensión y diseño a elección.", 120, 24000)],
+ "Rostro": [("Limpieza profunda", "Limpieza, extracción e hidratación.", 75, 21000), ("Máscara hidratante", "Ideal para piel seca o apagada.", 45, 16000), ("Perfilado de cejas", "Diseño según tu rostro.", 30, 8500)],
+ "Depilación": [("Piernas completas", "Cera tibia, piel suave por semanas.", 45, 15000), ("Axilas", "Rápido y prolijo.", 15, 5000), ("Cavado", "Cera o depilación definitiva a consultar.", 20, 7500)],
+}
+
+CSS = r"""
 .hd{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 94%,#fff);border-bottom:1px solid transparent;transition:border-color .25s}.hd.sc{border-color:#dccdee}
 .hd-in{display:flex;align-items:center;justify-content:space-between;height:70px;gap:18px}.logo{font:italic 400 34px var(--f1);color:var(--pri);letter-spacing:-.01em}
 .hd nav{display:flex;gap:30px;font-weight:500;font-size:15px}.hd nav a{position:relative;padding:6px 0}.hd nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.5px;background:var(--pri);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}.hd nav a:hover::after{transform:scaleX(1)}
@@ -54,39 +55,26 @@ footer{background:var(--ink);color:#d9cdea;padding:44px 0 90px;margin-top:30px}f
 @media(max-width:900px){.hd nav{display:none}.hero,.book,.pol,.loc{grid-template-columns:minmax(0,1fr)}.sum{position:static}.arch{max-width:300px}.pol dl div{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:560px){.menu li{grid-template-columns:minmax(0,1fr) auto}.menu .dt{grid-column:1;text-align:left;grid-template-columns:auto auto;gap:4px 12px;justify-content:start}.menu .add{grid-row:1;grid-column:2}.slots{grid-template-columns:repeat(3,minmax(0,1fr))}.days button{font-size:11px}.days button b{font-size:18px}}
 @media(max-width:560px){.hd .btn{padding:10px 16px;font-size:14px;white-space:nowrap}.logo{white-space:nowrap}}
-</style></head><body>
+"""
+
+BODY = f'''
 <header class="hd" id="hd"><div class="w hd-in"><a class="logo" href="#top">Lumière</a><nav aria-label="Principal"><a href="#turno">Servicios</a><a href="#antes">Antes de venir</a><a href="#donde">Cómo llegar</a></nav><a class="btn press" href="#turno">Reservar turno</a></div></header>
-<main id="top"><section class="w hero"><div><h1 data-rv>Reservá tu turno en <em>tres toques.</em></h1><p data-rv style="--d:1">Peluquería y estética en Recoleta. Elegí el servicio, el día y el horario, y te confirmamos por WhatsApp.</p><div class="cta" data-rv style="--d:2"><a class="btn press" href="#turno">Elegir mi turno</a><small>Martes a sábado, de 10 a 19 h</small></div></div><div class="arch" data-rv style="--d:1"><svg viewBox="0 0 400 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true" ><defs><linearGradient id="bt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e4d4f5"/><stop offset="1" stop-color="#9a78cf"/></linearGradient></defs>
-<path d="M0 480V200C0 90 90 0 200 0s200 90 200 200v280Z" fill="url(#bt)"/><circle cx="200" cy="170" r="76" fill="#f6e9e2"/><path d="M200 110c-34 0-56 26-56 60 0 30 18 52 40 60 8 2 12 6 12 14v36h8v-36c0-8 4-12 12-14 22-8 40-30 40-60 0-34-22-60-56-60Z" fill="#f3cfc0" opacity="0"/>
-<path d="M120 480C120 360 150 300 200 260c50 40 80 100 80 220Z" fill="#3b2a5a"/><path d="M200 250c-22 0-40-18-40-40s18-40 40-40 40 18 40 40-18 40-40 40Z" fill="#f3cfc0"/><path d="M160 206c4-44 74-52 82-4-18-8-44-12-82 4Z" fill="#3b2a5a"/>
-<g fill="#6f9a62"><path d="M40 480c0-60 14-120 56-160-20 50-14 110-6 160Z"/><path d="M360 480c0-70-18-130-62-170 22 54 16 116 8 170Z"/></g>
-<g fill="#86b07a"><ellipse cx="70" cy="330" rx="16" ry="30" transform="rotate(-30 70 330)"/><ellipse cx="96" cy="388" rx="14" ry="28" transform="rotate(-18 96 388)"/><ellipse cx="338" cy="338" rx="16" ry="30" transform="rotate(30 338 338)"/><ellipse cx="312" cy="396" rx="14" ry="28" transform="rotate(18 312 396)"/></g>
-<g fill="#fff"><circle cx="60" cy="250" r="12"/><circle cx="342" cy="262" r="12"/><circle cx="84" cy="218" r="8"/><circle cx="320" cy="226" r="8"/></g><g fill="#f4b5c9"><circle cx="60" cy="250" r="5"/><circle cx="342" cy="262" r="5"/></g></svg></div></section>
+<main id="top"><section class="w hero"><div><h1 data-rv>Reservá tu turno en <em>tres toques.</em></h1><p data-rv style="--d:1">Peluquería y estética en Recoleta. Elegí el servicio, el día y el horario, y te confirmamos por WhatsApp.</p><div class="cta" data-rv style="--d:2"><a class="btn press" href="#turno">Elegir mi turno</a><small>Martes a sábado, de 10 a 19 h</small></div></div><div class="arch" data-rv style="--d:1">{BOTANICO}</div></section>
 <section class="w sec" id="turno"><h2 data-rv>Armá tu turno</h2><p class="lead" data-rv style="--d:1">Sumá todos los servicios que quieras: te los hacemos en una sola visita y el horario se ajusta al tiempo total.</p>
 <div class="book"><div data-rv><div class="tabs" id="tabs" role="tablist" aria-label="Tipo de servicio"><span class="ind" id="ind"></span></div><ul class="menu" id="menu"></ul></div>
 <aside class="sum" data-rv style="--d:1" aria-label="Tu turno"><h3>Tu turno</h3><p class="st" id="st">Elegí uno o más servicios</p><div class="sel" id="sel" aria-live="polite"></div>
-<div class="tot"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><b id="td" style="font-weight:600">0 min</b></span><strong class="num" id="tp">$ 0</strong></div>
+<div class="tot"><span>{I_CLK}<b id="td" style="font-weight:600">0 min</b></span><strong class="num" id="tp">$ 0</strong></div>
 <span class="lbl">DÍA</span><div class="days" id="days" role="group" aria-label="Día"></div><span class="lbl">HORARIO</span><div class="slots" id="slots" role="group" aria-label="Horario"></div>
 <span class="lbl"><label for="nm">TU NOMBRE</label></span><input class="nm" id="nm" placeholder="Cómo te llamamos" autocomplete="given-name"><div class="msg" id="msg" aria-live="polite"></div>
 <button class="btn press" id="go" disabled>Reservar por WhatsApp</button><p class="fine">Te confirmamos por el mismo chat. Sin pagar nada ahora.</p></aside></div></section>
 <section class="w sec"><div class="pol" id="antes"><h2 style="padding-top:26px" data-rv>Antes de venir</h2><dl data-rv style="--d:1"><div><dt>Seña</dt><dd>Para servicios de más de 2 horas pedimos una seña del 20 % por transferencia. Se descuenta del total.</dd></div><div><dt>Cambios</dt><dd>Podés mover o cancelar tu turno hasta 24 horas antes, sin costo, escribiéndonos por WhatsApp.</dd></div><div><dt>Llegada</dt><dd>Te pedimos llegar 5 minutos antes. Si hay una demora de más de 15 minutos, reprogramamos.</dd></div><div><dt>Medios de pago</dt><dd>Efectivo, transferencia, débito y crédito en cuotas con Mercado Pago.</dd></div></dl></div></section>
-<section class="w sec" id="donde"><div class="loc"><div data-rv><h2>Cómo llegar</h2><p>Av. Callao 1500, Recoleta. A dos cuadras del subte, con bicicletero en la puerta.</p><a class="btn o press" href="#">Abrir en el mapa</a></div><div class="map" data-rv style="--d:1"><svg viewBox="0 0 520 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true" ><rect width="520" height="320" fill="#efe7d3"/><g fill="#d9e6c4"><rect x="30" y="30" width="150" height="90" rx="10"/><rect x="360" y="190" width="130" height="100" rx="10"/></g><g stroke="#fff" stroke-width="22" stroke-linecap="square"><path d="M0 160H520M250 0V320"/></g><g stroke="#fff" stroke-width="12"><path d="M0 70H520M0 250H520M120 0V320M390 0V320"/></g><g stroke="#cfc6ae" stroke-width="2" stroke-dasharray="10 12"><path d="M0 160H520M250 0V320"/></g><g fill="#8a8470" font-family="Nunito,sans-serif" font-size="13" font-weight="700"><text x="270" y="150">Av. Rivadavia</text><text x="258" y="40" transform="rotate(90 258 40)">Nazca</text></g><g transform="translate(250 160)"><ellipse cx="0" cy="30" rx="20" ry="6" fill="#3b2a12" opacity=".2"/><path d="M0 28C-28 -2-22-40 0-40S28-2 0 28Z" fill="#c2453a"/><circle cx="0" cy="-16" r="9" fill="#fff"/></g></svg></div></div></section></main>
+<section class="w sec" id="donde"><div class="loc"><div data-rv><h2>Cómo llegar</h2><p>Av. Callao 1500, Recoleta. A dos cuadras del subte, con bicicletero en la puerta.</p><a class="btn o press" href="#">Abrir en el mapa</a></div><div class="map" data-rv style="--d:1">{MAPA}</div></div></section></main>
 <footer><div class="w"><div><b>Lumière</b><p>Peluquería y estética · Recoleta · Martes a sábado de 10 a 19 h</p></div><p>Los servicios y precios de esta página son un ejemplo.</p></div></footer>
-<button class="fw" data-wa="Hola, quiero hacer una consulta" aria-label="Escribir por WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.2A9.8 9.8 0 0 0 3.6 17l-1.4 4.9 5-1.3A9.8 9.8 0 1 0 12 2.2Zm0 17.9c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.1 8.1 0 1 1 12 20.1Zm4.5-6c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1-1.5-.7-2.5-1.3-3.4-2.9-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.8.8-1 1.7-.9 2.6.2 1.2 1.1 2.5 2.1 3.4 1.6 1.4 3 1.9 4.1 2.2.9.3 2 .2 2.7-.3.5-.4.9-1.1 1-1.7 0-.1 0-.2-.2-.3Z"/></svg></button><div class="demo">Negocio inventado · demo hecha para esta ficha · <b>Diseñada con Impeccable y principios de Emil Kowalski</b></div><div class="toast" id="tt" role="status" aria-live="polite"></div><script>
-document.documentElement.classList.add('js');
-function say(m){var t=document.getElementById('tt');t.textContent=m;t.classList.add('on');clearTimeout(window._t);window._t=setTimeout(function(){t.classList.remove('on')},4200)}
-function wa(m){say('Se abriría WhatsApp con: «'+m+'»')}
-document.addEventListener('click',function(e){var a=e.target.closest('[data-wa]');if(a){e.preventDefault();wa(a.dataset.wa)}});
-(function(){var els=[].slice.call(document.querySelectorAll('[data-rv]'));if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return}
-var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.08});els.forEach(function(e){io.observe(e)});
-setTimeout(function(){els.forEach(function(e){if(e.getBoundingClientRect().top<innerHeight)e.classList.add('in')})},60)})();
-function $(s,r){return(r||document).querySelector(s)}function $$(s,r){return[].slice.call((r||document).querySelectorAll(s))}
-function money(n,c){return(c||'$')+' '+Math.round(n).toLocaleString('es-AR')}
-function tween(el,to,fmt,ms){var from=+el.dataset.v||0,t0=performance.now();ms=ms||520;if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=fmt(to);el.dataset.v=to;return}
-(function f(t){var k=Math.min(1,(t-t0)/ms),e=1-Math.pow(1-k,4);el.textContent=fmt(from+(to-from)*e);if(k<1)requestAnimationFrame(f);else el.dataset.v=to})(t0)}
-</script><script>
+'''
+
+JS = r"""
 (function(){
-var SV={"Pelo": [["Corte y brushing", "Lavado, corte a medida y brushing.", 60, 18500], ["Color de raíz", "Retoque de color en raíces.", 90, 26000], ["Balayage", "Iluminación natural, a mano alzada.", 180, 62000], ["Keratina", "Alisado y brillo que dura semanas.", 120, 38000]], "Uñas": [["Manicuría semipermanente", "Limado, cutículas y esmalte de 3 semanas.", 60, 14000], ["Pedicuría", "Cuidado completo de pies y esmaltado.", 60, 15500], ["Uñas esculpidas", "Extensión y diseño a elección.", 120, 24000]], "Rostro": [["Limpieza profunda", "Limpieza, extracción e hidratación.", 75, 21000], ["Máscara hidratante", "Ideal para piel seca o apagada.", 45, 16000], ["Perfilado de cejas", "Diseño según tu rostro.", 30, 8500]], "Depilación": [["Piernas completas", "Cera tibia, piel suave por semanas.", 45, 15000], ["Axilas", "Rápido y prolijo.", 15, 5000], ["Cavado", "Cera o depilación definitiva a consultar.", 20, 7500]]},X='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>',PL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+var SV=@@SV@@,X='@@X@@',PL='@@PL@@';
 var sel={},day=null,slot=null,tab=Object.keys(SV)[0],dias=[];
 var hd=$('#hd');addEventListener('scroll',function(){hd.classList.toggle('sc',scrollY>8)},{passive:true});
 /* pestañas con indicador que se desliza */
@@ -119,4 +107,12 @@ function sum(){var l=all(),m=l.reduce(function(a,s){return a+s.m},0),p=l.reduce(
 menu();sum();ind();addEventListener('resize',ind);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(ind);
 })();
-</script></body></html>
+"""
+
+def main():
+    js = JS.replace("@@SV@@", json.dumps(SERV, ensure_ascii=False)).replace("@@X@@", I_X).replace("@@PL@@", I_PLUS)
+    escribir("estetica", shell("Lumière", FUENTES, TOKENS, CSS, BODY, js))
+    print("OK · estetica (pro)")
+
+if __name__ == "__main__":
+    main()

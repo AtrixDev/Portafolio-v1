@@ -1,27 +1,24 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Box Norte · ejemplo</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet"><style>:root{--bg:#0e1012;--ink:#f2f3ee;--pri:#c8f031;--ring:#c8f031;--sel:#c8f031;--sel-ink:#0e1012;--sb:rgba(200,240,49,.45);--f1:'Barlow Condensed',Impact,sans-serif;--f2:'Barlow',system-ui,sans-serif}:root{--ease:cubic-bezier(.23,1,.32,1);--ease-io:cubic-bezier(.77,0,.175,1);--ease-drawer:cubic-bezier(.32,.72,0,1)}
-*,*::before,*::after{box-sizing:border-box}*{margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:var(--sb,rgba(0,0,0,.35)) transparent}
-body{font-family:var(--f2);color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
-h1,h2,h3,h4{font-family:var(--f1);text-wrap:balance;line-height:1.04}p,li{text-wrap:pretty}
-a{color:inherit;text-decoration:none;text-underline-offset:.2em}button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
-img,svg{max-width:100%}
-::selection{background:var(--sel,var(--pri));color:var(--sel-ink,#fff)}
-:focus-visible{outline:2px solid var(--ring,var(--pri));outline-offset:3px;border-radius:8px}
-input,select,textarea{font:inherit;color:inherit;caret-color:var(--pri)}
-::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:var(--sb,rgba(0,0,0,.3));border-radius:99px;border:2px solid var(--bg)}
-.num{font-variant-numeric:tabular-nums}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.w{max-width:1180px;margin:0 auto;padding:0 clamp(18px,4vw,36px)}
-.press{transition:transform .16s var(--ease),background-color .18s,color .18s,box-shadow .22s,border-color .18s,opacity .18s}.press:active{transform:scale(.97)}
-.js [data-rv]{opacity:0;transform:translateY(16px)}
-.js [data-rv].in{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .7s var(--ease);transition-delay:calc(var(--d,0)*70ms)}
-.demo{position:fixed;left:12px;bottom:12px;z-index:200;max-width:min(520px,calc(100% - 92px));background:rgba(18,18,20,.9);color:#fff;font:600 11.5px/1.4 system-ui,-apple-system,sans-serif;padding:8px 12px;border-radius:10px;backdrop-filter:blur(8px)}
-.demo b{color:#ffd84d;font-weight:700}
-.fw{position:fixed;right:14px;bottom:14px;z-index:200;width:48px;height:48px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 8px 22px rgba(0,0,0,.28);transition:transform .16s var(--ease)}.fw:active{transform:scale(.94)}.fw svg{width:24px;height:24px}
-.toast{position:fixed;left:50%;bottom:76px;z-index:210;max-width:min(560px,calc(100% - 28px));background:#16181a;color:#fff;padding:13px 18px;border-radius:14px;font:600 14px/1.4 system-ui,sans-serif;box-shadow:0 14px 40px rgba(0,0,0,.35);opacity:0;transform:translate(-50%,10px);pointer-events:none;transition:opacity .25s var(--ease),transform .3s var(--ease)}.toast.on{opacity:1;transform:translate(-50%,0)}
-body.dr-open .fw,body.dr-open .demo,body.dr-open .ow{opacity:0;pointer-events:none}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.js [data-rv]{opacity:1;transform:none}}
-@media(max-width:560px){.demo{font-size:10.5px;bottom:8px;left:8px;max-width:calc(100% - 72px)}.fw{width:44px;height:44px;right:10px;bottom:10px}}
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Box Norte (box de funcional y fuerza, inventado). Mundo: industrial oscuro, lima y tipografía condensada.
+Grilla de clases por día con lugares disponibles que cambian al reservar, próxima clase calculada con la hora real y planes con descuento trimestral."""
+import json
+from lab_demos_pro_lib import shell, escribir
+from lab_demos_ilus import PESA
+
+TOKENS = dict(bg="#0e1012", ink="#f2f3ee", pri="#c8f031", ring="#c8f031", sel="#c8f031", **{"sel-ink": "#0e1012"}, sb="rgba(200,240,49,.45)", f1="'Barlow Condensed',Impact,sans-serif", f2="'Barlow',system-ui,sans-serif")
+FUENTES = "family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700"
+
+def ic(d, w=2): return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{d}</svg>'
+I_OK = ic('<path d="m5 12.500 4.500 4.500L19 7.500"/>', 2.4)
+I_CLK = ic('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>')
+
+CLASES = {  # día 0..5 = lun..sáb ; (hora, tipo, coach, minutos)
+ "sem": [("07:00", "Fuerza", "Nico", 60), ("09:00", "Funcional", "Lu", 60), ("12:30", "WOD", "Fran", 45), ("18:30", "Funcional", "Lu", 60), ("20:00", "Fuerza", "Nico", 60)],
+ "sab": [("10:00", "WOD", "Fran", 60), ("11:30", "Movilidad", "Lu", 45)],
+}
+
+CSS = r"""
 body{background:var(--bg)}
 .hd{position:sticky;top:0;z-index:40;background:rgba(14,16,18,.94);border-bottom:1px solid transparent;transition:border-color .25s}.hd.sc{border-color:#262a2f}
 .hd-in{display:flex;align-items:center;justify-content:space-between;height:68px;gap:18px}.logo{font:800 30px var(--f1);letter-spacing:.04em;text-transform:uppercase}.logo i{font-style:normal;color:var(--pri)}
@@ -58,11 +55,12 @@ footer{padding:36px 0 92px;color:#8e9397;font-size:14px}footer .w{display:flex;j
 @media(max-width:900px){.hd nav{display:none}.hero{grid-template-columns:minmax(0,1fr)}.hv{max-width:360px;margin:0 auto 40px}.pg{grid-template-columns:minmax(0,1fr)}.pn.f{transform:none}.co li{grid-template-columns:56px minmax(0,1fr)}.co li p{grid-column:2}}
 @media(max-width:640px){.cl{grid-template-columns:76px minmax(0,1fr);gap:6px 16px;padding:16px}.cl .sp{grid-column:2}.cl .btn{grid-column:1/-1;width:100%}.cl .h{font-size:32px}.next{right:0}}
 @media(max-width:560px){.hd .btn{padding:10px 16px;font-size:14px;white-space:nowrap}.logo{white-space:nowrap}}
-</style></head><body>
+"""
+
+BODY = f'''
 <header class="hd" id="hd"><div class="w hd-in"><a class="logo" href="#top">Box <i>Norte</i></a><nav aria-label="Principal"><a href="#clases">Clases</a><a href="#planes">Planes</a><a href="#coaches">Coaches</a></nav><a class="btn press" href="#clases">Clase gratis</a></div></header>
 <main id="top"><section class="w hero"><div><h1 data-rv>Entrená fuerte.<span>Entrená acá.</span></h1><p data-rv style="--d:1">Box de funcional y fuerza en Núñez. Clases de 60 minutos con coach, grupos chicos y tu primera clase sin cargo.</p><div class="cta" data-rv style="--d:2"><a class="btn press" href="#clases">Reservar mi clase</a><a class="btn o press" href="#planes">Ver planes</a></div></div>
-<div class="hv" data-rv style="--d:1"><div class="kb"><svg viewBox="0 0 300 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true" ><defs><linearGradient id="kb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c8f031"/><stop offset="1" stop-color="#7fa314"/></linearGradient></defs>
-<ellipse cx="150" cy="316" rx="110" ry="14" fill="#c8f031" opacity=".18"/><path d="M92 120c-4-60 28-92 58-92s62 32 58 92" fill="none" stroke="url(#kb)" stroke-width="26" stroke-linecap="round"/><circle cx="150" cy="212" r="104" fill="url(#kb)"/><circle cx="150" cy="212" r="104" fill="none" stroke="#0f1113" stroke-width="4" opacity=".25"/><ellipse cx="116" cy="170" rx="30" ry="18" fill="#fff" opacity=".28" transform="rotate(-30 116 170)"/><text x="150" y="232" font-family="Barlow Condensed,Impact,sans-serif" font-size="70" font-weight="900" text-anchor="middle" fill="#0f1113">24</text><text x="150" y="262" font-family="Barlow Condensed,Impact,sans-serif" font-size="22" font-weight="700" text-anchor="middle" fill="#0f1113">KG</text></svg></div><div class="next" id="next" aria-live="polite"></div></div></section>
+<div class="hv" data-rv style="--d:1"><div class="kb">{PESA}</div><div class="next" id="next" aria-live="polite"></div></div></section>
 <section class="w sec" id="clases"><h2 data-rv>Clases de la semana</h2><p class="lead" data-rv style="--d:1">Elegí el día, tocá la clase y reservá tu lugar. Los cupos son de 14 personas.</p>
 <div class="bar"><div class="days" id="days" role="tablist" aria-label="Día de la semana"><span class="ind" id="ind"></span></div><div class="fl" id="fl" role="group" aria-label="Tipo de clase"></div></div>
 <div class="list" id="list" aria-live="polite"></div></section>
@@ -72,21 +70,11 @@ footer{padding:36px 0 92px;color:#8e9397;font-size:14px}footer .w{display:flex;j
 <section class="fin"><div class="w"><h2>Tu primera clase es gratis.</h2><div><p>Probá una clase, conocé al grupo y decidí después. Sin matrícula y pagando la cuota con Mercado Pago.</p><div style="margin-top:18px"><a class="btn press" href="#clases">Reservar clase gratis</a></div></div></div></section>
 <footer><div class="w"><div><b>Box Norte</b><p>Av. del Libertador 7400, Núñez · Lunes a sábado</p></div><p>Las clases y los precios de esta página son un ejemplo.</p></div></footer>
 <div class="mine-bar" id="mine" role="status"><div><b id="mn"></b><span id="mt"></span></div><button class="btn press" id="mgo">Confirmar por WhatsApp</button></div>
-<button class="fw" data-wa="Hola, quiero hacer una consulta" aria-label="Escribir por WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.2A9.8 9.8 0 0 0 3.6 17l-1.4 4.9 5-1.3A9.8 9.8 0 1 0 12 2.2Zm0 17.9c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.1 8.1 0 1 1 12 20.1Zm4.5-6c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1-1.5-.7-2.5-1.3-3.4-2.9-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.8.8-1 1.7-.9 2.6.2 1.2 1.1 2.5 2.1 3.4 1.6 1.4 3 1.9 4.1 2.2.9.3 2 .2 2.7-.3.5-.4.9-1.1 1-1.7 0-.1 0-.2-.2-.3Z"/></svg></button><div class="demo">Negocio inventado · demo hecha para esta ficha · <b>Diseñada con Impeccable y principios de Emil Kowalski</b></div><div class="toast" id="tt" role="status" aria-live="polite"></div><script>
-document.documentElement.classList.add('js');
-function say(m){var t=document.getElementById('tt');t.textContent=m;t.classList.add('on');clearTimeout(window._t);window._t=setTimeout(function(){t.classList.remove('on')},4200)}
-function wa(m){say('Se abriría WhatsApp con: «'+m+'»')}
-document.addEventListener('click',function(e){var a=e.target.closest('[data-wa]');if(a){e.preventDefault();wa(a.dataset.wa)}});
-(function(){var els=[].slice.call(document.querySelectorAll('[data-rv]'));if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return}
-var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.08});els.forEach(function(e){io.observe(e)});
-setTimeout(function(){els.forEach(function(e){if(e.getBoundingClientRect().top<innerHeight)e.classList.add('in')})},60)})();
-function $(s,r){return(r||document).querySelector(s)}function $$(s,r){return[].slice.call((r||document).querySelectorAll(s))}
-function money(n,c){return(c||'$')+' '+Math.round(n).toLocaleString('es-AR')}
-function tween(el,to,fmt,ms){var from=+el.dataset.v||0,t0=performance.now();ms=ms||520;if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=fmt(to);el.dataset.v=to;return}
-(function f(t){var k=Math.min(1,(t-t0)/ms),e=1-Math.pow(1-k,4);el.textContent=fmt(from+(to-from)*e);if(k<1)requestAnimationFrame(f);else el.dataset.v=to})(t0)}
-</script><script>
+'''
+
+JS = r"""
 (function(){
-var C={"sem": [["07:00", "Fuerza", "Nico", 60], ["09:00", "Funcional", "Lu", 60], ["12:30", "WOD", "Fran", 45], ["18:30", "Funcional", "Lu", 60], ["20:00", "Fuerza", "Nico", 60]], "sab": [["10:00", "WOD", "Fran", 60], ["11:30", "Movilidad", "Lu", 45]]},CAP=14,DN=['Lun','Mar','Mié','Jue','Vie','Sáb'],OK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.500 4.500 4.500L19 7.500"/></svg>',CLK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+var C=@@C@@,CAP=14,DN=['Lun','Mar','Mié','Jue','Vie','Sáb'],OK='@@OK@@',CLK='@@CLK@@';
 var hd=$('#hd');addEventListener('scroll',function(){hd.classList.toggle('sc',scrollY>8)},{passive:true});
 function dia(d){return d===5?C.sab:C.sem}
 function tomados(d,i){return 3+((d*7+i*5)%12)}
@@ -122,4 +110,12 @@ function planes(){$('#pg').innerHTML=PL.map(function(x,i){return'<article class=
 $('#tg').onclick=function(e){var b=e.target.closest('button');if(!b)return;per=b.dataset.m;this.dataset.m=per;$$('button',this).forEach(function(x){x.setAttribute('aria-pressed',x===b)});$$('.pv').forEach(function(s){var v=PL[+s.dataset.i].p*(per==='tri'?.9:1);tween(s,v,money,420)})};
 planes();list();next();mine();ind();addEventListener('resize',ind);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(ind);
 })();
-</script></body></html>
+"""
+
+def main():
+    js = JS.replace("@@C@@", json.dumps(CLASES, ensure_ascii=False)).replace("@@OK@@", I_OK).replace("@@CLK@@", I_CLK)
+    escribir("gimnasio", shell("Box Norte", FUENTES, TOKENS, CSS, BODY, js))
+    print("OK · gimnasio (pro)")
+
+if __name__ == "__main__":
+    main()
