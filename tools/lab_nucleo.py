@@ -44,3 +44,13 @@ for _i, _v in _sv.ST.items(): NUCLEO_ESCRITO.setdefault(("stacks", _i), _v)
 NUCLEO_SUMA = {}
 import lab_nucleo_suma as _su, lab_nucleo_ux as _ux, lab_nucleo_estilos as _es, lab_nucleo_landing as _lp, lab_nucleo_tipografias as _tp
 for _d in (_su.SUMA, _ux.SUMA_UX, _es.SUMA_ES, _lp.SUMA_LP, _lp.SUMA_SOL, _tp.SUMA_TP): NUCLEO_SUMA.update(_d)
+
+# ── Skills: valor validado por Darío y bloque "cómo empezar" ──
+import lab_nucleo_skills_extra as _sx
+import weblab_taxonomia as _tx
+for _i, (_v, _p) in _sx.VALOR_SK.items():
+    _tx.VALOR_DARIO[("skills", _i)] = _v
+    _tx.VALOR_PORQUE_DARIO[("skills", _i)] = _p
+for _i, (_pasos, _exp) in _sx.COMO_SK.items():
+    _pasos = _pasos if _exp else _pasos[:3]
+    NUCLEO_ESCRITO[("skills", _i)]["nucleo"]["como"] = _pasos
