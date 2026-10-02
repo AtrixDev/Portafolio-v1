@@ -157,22 +157,52 @@
     return `<div class="lb-filtros">${valor}${nivel}${ev}</div>`;
   }
 
-  // Lo que construí: lo más llamativo, arriba de todo y solo cuando no se está filtrando
+  // Lo que construí: lo más llamativo, arriba de todo y solo cuando no se está filtrando. Todo sale de datos comprobados.
   const DEST = ['odontologia-almagro', 'tenshi', 'tienda-de-coleccionables'];
-  function renderDest() {
+  async function renderDest() {
     const box = $('lb-dest'); if (!box) return;
     const libre = !S.q.trim() && S.vista === 'todo' && !S.f.area && !S.f.sub && !S.f.tema && !S.f.valor && !S.f.nivel && !S.f.ev && !S.f.tipo;
     const lista = DEST.map(id => S.by[id]).filter(f => f && S.prev[f.id]);
     box.hidden = !(libre && lista.length);
     if (box.hidden) return;
+    const cuerpos = Object.fromEntries((await getJSON(D + 'proyectos.json')).map(c => [c.id, c]));
+    const pill = (id, cls = '') => `<span class="lb-pill ${cls}">${esc(nombreDe(id))}</span>`;
     box.innerHTML = `<div class="lb-dest-in"><div class="lb-dest-h"><h2>Lo que construí</h2><button type="button" class="lb-link" data-vista="hace">Ver todo mi trabajo →</button></div>
-      <div class="lb-dest-g">${lista.map((f, n) => `<button type="button" class="lb-dc${n === 0 ? ' is-main' : ''}" data-open="${esc(f.id)}"><span class="lb-dc-img"><img src="${esc(S.prev[f.id])}" alt="" ${n === 0 ? '' : 'loading="lazy"'}></span>
-        <span class="lb-dc-b"><span class="lb-evs">${evChips(f.e)}</span><strong>${esc(f.n)}</strong><span class="lb-dc-d">${esc(f.d)}</span></span></button>`).join('')}</div></div>`;
+      <div class="lb-dest-g">${lista.map(f => {
+        const c = cuerpos[f.id] || {}, out = S.relOut[f.id] || [];
+        const funcs = out.filter(r => r.tipo === 'implementa').map(r => r.a), tec = (c.extra?.tecnologias || []).slice(0, 5);
+        const abrir = (S.evid[(c.evidencias || [])[0]]?.enlaces || []).find(([, u]) => /^https?:/.test(u));
+        return `<article class="lb-dc"><button type="button" class="lb-dc-img" data-open="${esc(f.id)}" aria-label="Abrir ${esc(f.n)}"><img src="${esc(S.prev[f.id])}" alt="Captura de ${esc(f.n)}" loading="lazy"></button>
+          <div class="lb-dc-b"><span class="lb-evs">${evChips(f.e)}</span>
+            <button type="button" class="lb-dc-t" data-open="${esc(f.id)}">${esc(f.n)}</button>
+            <p class="lb-dc-d">${esc(f.d)}</p>
+            ${c.extra?.estado ? `<p class="lb-dc-e"><b>Estado.</b> ${esc(c.extra.estado)}</p>` : ''}
+            ${funcs.length ? `<div class="lb-dc-l"><span>${funcs.length} funcionalidades comprobadas</span><div>${funcs.slice(0, 4).map(id => pill(id)).join('')}${funcs.length > 4 ? `<span class="lb-pill is-mas">+${funcs.length - 4}</span>` : ''}</div></div>` : ''}
+            ${tec.length ? `<div class="lb-dc-l"><span>Hecho con</span><div>${tec.map(t => `<span class="lb-pill is-tec" title="${esc(t)}">${esc(t.replace(/\s*\(.*\)\s*$/, ''))}</span>`).join('')}</div></div>` : ''}
+            <div class="lb-dc-f"><button type="button" class="lb-link" data-open="${esc(f.id)}">Ver la ficha completa →</button>${abrir ? `<a class="lb-link" href="${esc(abrir[1])}" target="_blank" rel="noopener">Ver el sitio ↗</a>` : ''}</div>
+          </div></article>`;
+      }).join('')}</div></div>`;
+  }
+
+  // Lo más importante de la base, a la vista desde el primer segundo. Cada dato sale de la propia base.
+  function renderTop() {
+    const box = $('lb-top'); if (!box) return;
+    const nProy = id => new Set((S.relIn[id] || []).filter(r => r.tipo === 'usa' || r.tipo === 'implementa').map(r => r.desde)).size;
+    const masRepetida = Object.entries((S.relIn || {})).filter(([id]) => S.by[id]?.t === 'funcionalidad').map(([id]) => [id, nProy(id)]).sort((a, b) => b[1] - a[1])[0];
+    const items = [
+      { k: 'Tipo de web imprescindible', id: 'ecommerce', ico: IC.todo, nota: f => f.d },
+      { k: 'La skill que más diferencia', id: 'impeccable', ico: AREA_IC['ia-datos'], nota: f => f.d, main: true },
+      { k: 'El servicio que no puede faltar', id: 'mercadopago', ico: AREA_IC.programacion, nota: () => `Está en ${nProy('mercadopago')} de mis proyectos.` },
+      masRepetida && { k: 'La funcionalidad que más repetí', id: masRepetida[0], ico: IC.hace, nota: () => `La armé en ${masRepetida[1]} proyectos distintos.` },
+    ].filter(x => x && S.by[x.id]);
+    box.innerHTML = `<p class="lb-top-t">Lo más importante, de un vistazo</p><div class="lb-top-g">${items.map(x => { const f = S.by[x.id]; return `<button type="button" class="lb-tile${x.main ? ' is-main' : ''}" data-open="${esc(f.id)}">
+      <span class="lb-tile-k">${ic(x.ico)}${esc(x.k)}</span><strong>${esc(f.n)}</strong><span class="lb-tile-d">${esc(x.nota(f))}</span>
+      <span class="lb-tile-f">${f.v ? valChip(f.v, f.ve, true) : `<span class="lb-tipo">${esc(TIPOS[f.t] || f.t)}</span>`}<span class="lb-tile-go" aria-hidden="true">→</span></span></button>`; }).join('')}</div>`;
   }
 
   async function renderBase() {
     $('lb-main').setAttribute('aria-busy', 'true');
-    renderSide(); renderVistas(); renderDest();
+    renderSide(); renderVistas(); renderDest(); renderTop();
     const areaN = AREAS.find(a => a[0] === S.f.area);
     const q = S.q.trim();
     $('lb-head').innerHTML = q ? `<h2>Resultados para “${esc(q)}”</h2><p>Buscando en toda la base.</p>`
@@ -185,7 +215,8 @@
     if (vista === 'hace') { await renderHace(); return; }
     let lista = filtrar(vista === 'problema' ? { area: '', tipo: 'solucion' } : vista === 'aprender' ? { tipo: '' } : {});
     if (vista === 'aprender' && !q) lista = lista.filter(f => ['tecnica', 'herramienta', 'recurso'].includes(f.t));
-    $('lb-filtros').innerHTML = filtrosHTML(lista);
+    const totalArea = filtrar({ ...(vista === 'problema' ? { area: '', tipo: 'solucion' } : vista === 'aprender' ? { tipo: '' } : {}), valor: '', nivel: 0, ev: '' });
+    $('lb-filtros').innerHTML = filtrosHTML(vista === 'aprender' && !q ? totalArea.filter(f => ['tecnica', 'herramienta', 'recurso'].includes(f.t)) : totalArea);
     if (vista === 'problema') {
       html += `<div class="lb-pregunta"><h2>¿De qué es tu negocio?</h2><p>Con tu rubro te armo la página con las soluciones, estilos, paleta y funcionalidades que más se parecen a tu caso.</p>
         <div class="lb-sel">${selectorRubro()}<button type="button" class="lb-btn is-acc" data-ir-rubro>Ver para mi rubro</button></div></div>`;
@@ -440,7 +471,7 @@
     if (a === 'r' && b) { ensureBase(); return showRubro(decodeURIComponent([b, ...rest].join('/'))); }
     if (a === 'v' && b && VISTAS.some(v => v[0] === b)) { S.vista = b; store.set('dc-lab-vista', b); }
     else if (a && b && S.legacy[`${a}/${decodeURIComponent([b, ...rest].join('/'))}`]) { const n = S.legacy[`${a}/${decodeURIComponent([b, ...rest].join('/'))}`]; history.replaceState(null, '', n.startsWith('rubro:') ? `#/r/${encodeURIComponent(n)}` : `#/f/${encodeURIComponent(n)}`); return route(); }
-    const venia = abierto; setView('base'); document.title = 'Herramientas, funcionalidades y soluciones con ejemplo para abrir | Darío Colángelo';
+    const venia = abierto; setView('base'); document.title = 'Base de datos de herramientas, funcionalidades y proyectos | Darío Colángelo';
     if (!(venia && baseListo)) renderBase();
   }
   let baseListo = false;
