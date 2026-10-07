@@ -48,6 +48,7 @@
       "postgres-fts"
     ],
     "evidence_type": "official_documentation",
+    "adoption": "default",
     "library_refs": [
       "supabase"
     ],
@@ -126,6 +127,7 @@
       "mongodb-docs"
     ],
     "evidence_type": "official_documentation",
+    "adoption": "when_needed",
     "library_refs": [
       "mongodb-atlas"
     ],
@@ -200,6 +202,7 @@
       "redis-docs"
     ],
     "evidence_type": "official_documentation",
+    "adoption": "when_needed",
     "library_refs": [],
     "profile": {
       "complexity": {
@@ -284,6 +287,7 @@
       "nextjs-rendering"
     ],
     "evidence_type": "official_documentation",
+    "adoption": "when_needed",
     "library_refs": [
       "nextjs"
     ],
@@ -366,6 +370,7 @@
       "astro-why"
     ],
     "evidence_type": "official_documentation",
+    "adoption": "when_needed",
     "library_refs": [
       "astro"
     ],
@@ -439,6 +444,7 @@
       "aws-s3"
     ],
     "evidence_type": "official_documentation",
+    "adoption": "when_needed",
     "library_refs": [],
     "profile": {
       "complexity": {
@@ -514,6 +520,7 @@
       "elastic-search-docs"
     ],
     "evidence_type": "official_documentation",
+    "adoption": "specialized",
     "library_refs": [],
     "profile": {
       "complexity": {
@@ -589,6 +596,7 @@
       "rabbitmq-docs"
     ],
     "evidence_type": "official_documentation",
+    "adoption": "when_needed",
     "library_refs": [],
     "profile": {
       "complexity": {
@@ -660,6 +668,7 @@
       "claude-code-subagents"
     ],
     "evidence_type": "official_documentation",
+    "adoption": "when_needed",
     "library_refs": [],
     "profile": {
       "complexity": {
@@ -730,6 +739,7 @@
       "playwright-docs"
     ],
     "evidence_type": "official_documentation",
+    "adoption": "when_needed",
     "library_refs": [],
     "profile": {
       "complexity": {

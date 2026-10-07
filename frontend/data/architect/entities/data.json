@@ -77,6 +77,7 @@
       "postgres-docs"
     ],
     "evidence_type": "official_documentation",
+    "adoption": "default",
     "library_refs": [
       "supabase"
     ]
@@ -162,6 +163,7 @@
       "mongodb-docs"
     ],
     "evidence_type": "official_framework",
+    "adoption": "when_needed",
     "library_refs": [
       "mongodb-atlas"
     ]
@@ -246,6 +248,7 @@
       "mdn-http-caching"
     ],
     "evidence_type": "official_framework",
+    "adoption": "when_needed",
     "library_refs": [],
     "diagram": {
       "purpose": "concept",
@@ -366,6 +369,7 @@
       "aws-s3"
     ],
     "evidence_type": "official_documentation",
+    "adoption": "when_needed",
     "library_refs": []
   },
   {
@@ -445,6 +449,7 @@
       "elastic-search-docs"
     ],
     "evidence_type": "official_documentation",
+    "adoption": "when_needed",
     "library_refs": []
   }
 ]

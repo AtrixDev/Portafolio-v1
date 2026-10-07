@@ -1,5 +1,5 @@
 // js/architect/ui.js — Helpers de presentación (puros: devuelven strings HTML ya escapados). Sin acceso al DOM.
-import { ENTITY_TYPES, EVIDENCE_TYPES, LEVELS, EXAMPLE_KINDS, typeLabel } from './model.js';
+import { ENTITY_TYPES, EVIDENCE_TYPES, LEVELS, EXAMPLE_KINDS, ADOPTION, FIT, NECESSITY, typeLabel } from './model.js';
 
 export const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 export const GROUP_ORDER = Object.freeze(['Producto', 'Arquitectura', 'Frontend', 'Backend y datos', 'Seguridad', 'Calidad', 'Operación', 'IA', 'Tecnologías y herramientas']);
@@ -10,6 +10,11 @@ export const href = (id) => `#/c/${encodeURIComponent(id)}`;
 const EVIDENCE_TONE = { standard: 'ok', official_documentation: 'info', official_framework: 'info', expert_source: '', industry_practice: '', recommendation: 'warn', example: 'warn', opinion: 'bad' };
 export const evidenceBadge = (t, { help = false } = {}) => `<span class="ui-badge ${EVIDENCE_TONE[t] ? 'ui-badge--' + EVIDENCE_TONE[t] : ''}" ${help ? `title="${esc(EVIDENCE_TYPES[t]?.help || '')}"` : ''}>${esc(EVIDENCE_TYPES[t]?.label || t)}</span>`;
 export const levelBadge = l => `<span class="ui-badge">${esc(LEVELS[l] || l)}</span>`;
+const ADOPTION_TONE = { default: 'ok', when_needed: '', specialized: 'info' };
+/** «Existe en la base» ≠ «recomendado»: cuánta justificación pide en un proyecto. Los tipos de producto y los atributos de calidad no lo llevan. */
+export const adoptionBadge = (a, { help = false } = {}) => ADOPTION[a] ? `<span class="ui-badge ${ADOPTION_TONE[a] ? 'ui-badge--' + ADOPTION_TONE[a] : ''}" ${help ? `title="${esc(ADOPTION[a].help)}"` : ''}>${esc(ADOPTION[a].label)}</span>` : '';
+export const fitBadge = f => FIT[f] ? `<span class="ui-badge ${FIT[f].tone ? 'ui-badge--' + FIT[f].tone : ''}">${esc(FIT[f].label)}</span>` : '';
+export const necessityBadge = n => NECESSITY[n] ? `<span class="ui-badge" title="${esc(NECESSITY[n].help)}">${esc(NECESSITY[n].label)}</span>` : '';
 export const typeBadge = t => `<span class="ui-badge ar-type">${esc(typeLabel(t))}</span>`;
 export const kindBadge = k => `<span class="ui-badge ${k === 'real_project' ? 'ui-badge--ok' : 'ui-badge--warn'}" title="${esc(EXAMPLE_KINDS[k]?.help || '')}">${esc(EXAMPLE_KINDS[k]?.label || k)}</span>`;
 
@@ -22,7 +27,7 @@ export function card(e) {
     <span class="ar-card-kicker">${esc(typeLabel(e.type))}${e.diagram ? ' · con diagrama' : ''}</span>
     <h3>${esc(e.name)}</h3>
     <p>${esc(e.summary)}</p>
-    <span class="ar-card-badges">${levelBadge(e.level)}${evidenceBadge(e.evidence_type)}</span>
+    <span class="ar-card-badges">${levelBadge(e.level)}${evidenceBadge(e.evidence_type)}${adoptionBadge(e.adoption)}</span>
   </a></li>`;
 }
 

@@ -375,7 +375,39 @@
      "better_when": "Hay partes públicas indexables y partes personalizadas o muy interactivas en el mismo producto.",
      "revisit": [
       "Definir por escrito qué estrategia usa cada tipo de página, para no mezclar sin regla."
-     ]
+     ],
+     "justified_when": {
+      "all": [
+       {
+        "s": "public_seo",
+        "is": "yes"
+       },
+       {
+        "any": [
+         {
+          "s": "auth",
+          "in": [
+           "users",
+           "roles",
+           "multi_tenant"
+          ]
+         },
+         {
+          "s": "payments",
+          "in": [
+           "simple",
+           "split"
+          ]
+         },
+         {
+          "s": "interactive",
+          "is": "high"
+         }
+        ]
+       }
+      ]
+     },
+     "unjustified": "No hay partes de naturaleza distinta (pública indexable y personalizada) que justifiquen elegir la estrategia por página: una sola alcanza."
     }
    ]
   },
@@ -636,7 +668,8 @@
         "is": "heavy"
        },
        "delta": 5,
-       "reason": "Hay tareas largas o pesadas fuera de la petición: un trabajador conectado por una cola evita que bloqueen al usuario."
+       "reason": "Hay tareas largas o pesadas fuera de la petición: un trabajador conectado por una cola evita que bloqueen al usuario.",
+       "required": true
       },
       {
        "when": {
@@ -670,7 +703,15 @@
      "revisit": [
       "Evitar que el frente y el trabajador compartan modelos de datos sin un contrato.",
       "Diseñar el caso de «escribió en la base pero no llegó a encolar» (outbox)."
-     ]
+     ],
+     "justified_when": {
+      "s": "background",
+      "in": [
+       "some",
+       "heavy"
+      ]
+     },
+     "unjustified": "Sin tareas fuera de la petición, un trabajador separado no aporta."
     },
     {
      "id": "microservices",
@@ -735,7 +776,35 @@
      "revisit": [
       "Antes de separar, pasar por un monolito modular y comprobar que los límites del dominio son estables.",
       "Exige automatización de despliegue, pruebas y monitoreo distribuido."
-     ]
+     ],
+     "justified_when": {
+      "all": [
+       {
+        "s": "team",
+        "is": "large"
+       },
+       {
+        "any": [
+         {
+          "s": "scale",
+          "in": [
+           "medium",
+           "large"
+          ]
+         },
+         {
+          "s": "integrations",
+          "is": "many"
+         },
+         {
+          "s": "background",
+          "is": "heavy"
+         }
+        ]
+       }
+      ]
+     },
+     "unjustified": "Existe y se explica en la base, pero este proyecto no muestra la necesidad que lo justificaría (varios equipos que deban desplegar y escalar por separado). Un monolito, o uno modular, da orden sin ese costo de operación."
     },
     {
      "id": "event-driven",
@@ -782,7 +851,7 @@
         ]
        },
        "delta": -4,
-       "reason": "Exige práctica con duplicados, orden y consistencia eventual: demasiado para un equipo chico."
+       "reason": "Duplicados, orden y consistencia eventual suman carga de operación y mantenimiento que un equipo chico rara vez compensa."
       },
       {
        "when": {
@@ -796,7 +865,51 @@
      "better_when": "Muchas partes deben reaccionar a los mismos hechos y se acepta consistencia eventual.",
      "revisit": [
       "Definir el formato y la versión de los eventos como un contrato antes de crecer."
-     ]
+     ],
+     "justified_when": {
+      "any": [
+       {
+        "all": [
+         {
+          "s": "integrations",
+          "is": "many"
+         },
+         {
+          "s": "background",
+          "is": "heavy"
+         }
+        ]
+       },
+       {
+        "all": [
+         {
+          "s": "realtime",
+          "is": "core"
+         },
+         {
+          "s": "scale",
+          "is": "large"
+         }
+        ]
+       },
+       {
+        "all": [
+         {
+          "s": "product",
+          "is": "marketplace"
+         },
+         {
+          "s": "scale",
+          "in": [
+           "medium",
+           "large"
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     "unjustified": "Existe y se explica en la base, pero no hay muchas partes que deban reaccionar a los mismos hechos: llamadas directas o una cola simple alcanzan."
     }
    ]
   },
@@ -820,7 +933,8 @@
         "not": "none"
        },
        "delta": 3,
-       "reason": "Hay pagos: las transacciones y la integridad de una base relacional evitan inconsistencias con el dinero."
+       "reason": "Hay pagos: las transacciones y la integridad de una base relacional evitan inconsistencias con el dinero.",
+       "required": true
       },
       {
        "when": {
@@ -914,7 +1028,20 @@
      "better_when": "Los datos son documentos de estructura variable y el patrón de acceso es simple.",
      "revisit": [
       "Diseñar el modelo según las consultas; si aparecen relaciones y consultas imprevistas, considerar una base relacional."
-     ]
+     ],
+     "justified_when": {
+      "any": [
+       {
+        "s": "data_shape",
+        "is": "flexible"
+       },
+       {
+        "s": "scale",
+        "is": "large"
+       }
+      ]
+     },
+     "unjustified": "Los datos son estructurados y con relaciones: una base relacional los cubre sin resignar consultas ni transacciones."
     },
     {
      "id": "none",
@@ -1022,7 +1149,27 @@
      "revisit": [
       "Cachear solo lo que se midió como problema, y definir cómo y cuándo se invalida."
      ],
-     "not_needed": "Todavía no hay evidencia de un problema de rendimiento: conviene medir antes de sumar una caché."
+     "not_needed": "Todavía no hay evidencia de un problema de rendimiento: conviene medir antes de sumar una caché.",
+     "justified_when": {
+      "any": [
+       {
+        "s": "scale",
+        "in": [
+         "medium",
+         "large"
+        ]
+       },
+       {
+        "s": "product",
+        "is": "dashboard"
+       },
+       {
+        "s": "catalog",
+        "is": "large"
+       }
+      ]
+     },
+     "unjustified": "Todavía no hay evidencia de un problema de rendimiento: conviene medir antes de sumar una caché."
     },
     {
      "id": "object-storage",
@@ -1037,7 +1184,8 @@
         ]
        },
        "delta": 5,
-       "reason": "Se suben o sirven archivos: van a un almacenamiento de objetos, no a la base de datos ni al servidor de la aplicación."
+       "reason": "Se suben o sirven archivos: van a un almacenamiento de objetos, no a la base de datos ni al servidor de la aplicación.",
+       "required": true
       },
       {
        "when": {
@@ -1078,7 +1226,8 @@
         "is": "central"
        },
        "delta": 5,
-       "reason": "La búsqueda es central en el producto: relevancia, filtros y tolerancia a errores justifican un motor dedicado."
+       "reason": "La búsqueda es central en el producto: relevancia, filtros y tolerancia a errores justifican un motor dedicado.",
+       "required": true
       },
       {
        "when": {
@@ -1101,7 +1250,20 @@
      "revisit": [
       "Mantener el índice sincronizado con la base de datos, que sigue siendo la fuente de verdad."
      ],
-     "not_needed": "Una búsqueda simple se resuelve con la búsqueda de texto de la base de datos; un motor dedicado agrega una pieza que operar."
+     "not_needed": "Una búsqueda simple se resuelve con la búsqueda de texto de la base de datos; un motor dedicado agrega una pieza que operar.",
+     "justified_when": {
+      "any": [
+       {
+        "s": "search",
+        "is": "central"
+       },
+       {
+        "s": "catalog",
+        "is": "large"
+       }
+      ]
+     },
+     "unjustified": "Existe y se explica en la base, pero la búsqueda de texto de la base de datos cubre la necesidad actual con una pieza menos que operar."
     }
    ]
   },
@@ -1126,7 +1288,8 @@
         "is": "csr"
        },
        "delta": 4,
-       "reason": "El navegador arma la interfaz y necesita una API de datos."
+       "reason": "El navegador arma la interfaz y necesita una API de datos.",
+       "required": true
       },
       {
        "when": {
@@ -1166,7 +1329,8 @@
         "is": "core"
        },
        "delta": 6,
-       "reason": "Las actualizaciones en vivo son centrales: una conexión abierta evita repetir peticiones."
+       "reason": "Las actualizaciones en vivo son centrales: una conexión abierta evita repetir peticiones.",
+       "required": true
       }
      ],
      "better_when": "Las actualizaciones deben llegar al instante y las inicia el servidor.",
@@ -1185,7 +1349,8 @@
         "is": "heavy"
        },
        "delta": 5,
-       "reason": "Hay tareas largas o pesadas: una cola las saca de la petición, absorbe picos y permite reintentos."
+       "reason": "Hay tareas largas o pesadas: una cola las saca de la petición, absorbe picos y permite reintentos.",
+       "required": true
       },
       {
        "when": {
@@ -1243,7 +1408,28 @@
      "revisit": [
       "Documentar los temas y el formato de los mensajes como un contrato."
      ],
-     "not_needed": "No hay varios consumidores que reaccionen a los mismos hechos."
+     "not_needed": "No hay varios consumidores que reaccionen a los mismos hechos.",
+     "justified_when": {
+      "any": [
+       {
+        "d": "architecture",
+        "is": "event-driven"
+       },
+       {
+        "all": [
+         {
+          "s": "realtime",
+          "is": "core"
+         },
+         {
+          "s": "scale",
+          "is": "large"
+         }
+        ]
+       }
+      ]
+     },
+     "unjustified": "Existe y se explica en la base, pero no hay varios consumidores que reaccionen a los mismos hechos."
     }
    ]
   },
@@ -1268,7 +1454,8 @@
         "not": "none"
        },
        "delta": 5,
-       "reason": "Hay cuentas de usuario: hay que resolver quién es cada persona y qué puede hacer, por separado."
+       "reason": "Hay cuentas de usuario: hay que resolver quién es cada persona y qué puede hacer, por separado.",
+       "required": true
       }
      ],
      "better_when": "Hay cuentas o funciones restringidas.",
@@ -1510,7 +1697,15 @@
      "revisit": [
       "Medir primero si un workflow o una sola llamada resuelven el caso.",
       "Limitar pasos, costo, tiempo y permisos; una persona aprueba las acciones irreversibles."
-     ]
+     ],
+     "justified_when": {
+      "s": "ai",
+      "in": [
+       "automate",
+       "open_ended"
+      ]
+     },
+     "unjustified": "Existe y se explica en la base, pero con pasos conocidos un flujo con caminos fijos es más barato, predecible y verificable."
     },
     {
      "id": "multi-agent",
@@ -1536,7 +1731,20 @@
      "better_when": "Un solo agente no alcanza y las subtareas son independientes.",
      "revisit": [
       "Comprobar con mediciones que un solo agente no alcanza antes de sumar más."
-     ]
+     ],
+     "justified_when": {
+      "all": [
+       {
+        "s": "ai",
+        "is": "open_ended"
+       },
+       {
+        "s": "scale",
+        "is": "large"
+       }
+      ]
+     },
+     "unjustified": "Existe y se explica en la base, pero más agentes no implica mejor resultado: primero hay que comprobar que uno solo no alcanza."
     }
    ]
   },
@@ -1662,7 +1870,24 @@
      "better_when": "Un solo agente no alcanza y las tareas son independientes.",
      "revisit": [
       "Empezar con una sola herramienta y medir antes de sumar más agentes."
-     ]
+     ],
+     "justified_when": {
+      "all": [
+       {
+        "s": "team",
+        "is": "large"
+       },
+       {
+        "s": "scale",
+        "is": "large"
+       },
+       {
+        "s": "dev_ai",
+        "is": "coding"
+       }
+      ]
+     },
+     "unjustified": "Existe y se explica en la base, pero coordinar varios agentes suma costo y revisión: con tareas acotadas alcanza un solo agente supervisado."
     }
    ]
   }
@@ -1950,7 +2175,7 @@
      "event-driven"
     ]
    },
-   "text": "Operar piezas distribuidas exige automatización de despliegue, monitoreo y práctica con consistencia eventual."
+   "text": "Operar piezas distribuidas exige sostener automatización de despliegue, monitoreo y manejo de consistencia eventual: es un costo de mantenimiento permanente."
   },
   {
    "when": {

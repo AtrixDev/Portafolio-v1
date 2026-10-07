@@ -25,12 +25,16 @@ export function validateRules(rules, signals, K) {
       if (c.pseudo) { if (!c.name || !c.summary) err.push(`${cat}: una opción sin ficha necesita name y summary`); }
       else if (!K.get(c.id)) err.push(`${cat}: la entidad no existe`);
       if (!c.better_when) err.push(`${cat}: falta better_when (cuándo sería mejor)`);
+      // Proporcionalidad: lo «especializado» nunca se recomienda por puntaje: necesita una condición de justificación explícita.
+      if (!c.pseudo && K.get(c.id)?.adoption === 'specialized' && !c.justified_when) err.push(`${cat}: es una opción especializada: necesita justified_when (la condición que la justifica)`);
+      if (c.justified_when) { err.push(...validateCond(c.justified_when, signals, before, `${cat}: justified_when: `)); if (!c.unjustified) err.push(`${cat}: justified_when necesita «unjustified» (por qué no se necesita cuando no se cumple)`); }
       if (!Array.isArray(c.revisit)) err.push(`${cat}: revisit debe ser una lista`);
       if (d.kind === 'set' && c.base < (d.threshold ?? rules.threshold_default) && !c.not_needed) err.push(`${cat}: una opción de un conjunto que puede quedar afuera necesita not_needed`);
       for (const r of c.rules) {
         err.push(...validateCond(r.when, signals, before, `${cat}: regla: `));
         if (!Number.isFinite(r.delta) || !r.delta) err.push(`${cat}: delta inválido`);
         if (!r.reason) err.push(`${cat}: una regla necesita reason`);
+        if (r.required !== undefined && (r.required !== true || r.delta < 0)) err.push(`${cat}: required solo puede ser true y en una regla positiva`);
       }
     }
     if (d.kind === 'choice' && d.candidates.length < 2) err.push(`${at}: una elección necesita al menos 2 opciones`);
@@ -41,10 +45,18 @@ export function validateRules(rules, signals, K) {
 }
 
 function score(c, ctx) {
-  let total = c.base; const pos = [], neg = [];
-  for (const r of c.rules) if (evalCond(r.when, ctx)) { total += r.delta; (r.delta > 0 ? pos : neg).push(r.reason); }
-  return { total, pos, neg };
+  let total = c.base, required = false; const pos = [], neg = [];
+  for (const r of c.rules) if (evalCond(r.when, ctx)) { total += r.delta; (r.delta > 0 ? pos : neg).push(r.reason); if (r.required) required = true; }
+  // Proporcionalidad: una opción avanzada solo puede proponerse si el proyecto muestra la necesidad que la justifica
+  // (con datos desconocidos no se justifica: ante la duda, lo más simple). Si no, queda en la base como «no se necesita todavía».
+  const justified = !c.justified_when || evalCond(c.justified_when, ctx);
+  return { total, pos, neg, required, justified };
 }
+
+/** Qué tan «propia» es la propuesta: la exige el proyecto, la justifica el proyecto, o es simplemente la opción simple que alcanza. */
+const necessityOf = (c, s) => s.required ? 'required' : c.justified_when ? 'justified' : 'proportional';
+/** Cómo queda una opción NO elegida frente a este proyecto (ver FIT en model.js). */
+const fitOf = (s, close) => !s.justified ? 'not_needed' : close ? 'viable' : s.neg.length ? 'not_fit' : 'not_needed';
 
 /** decide(rules, K, { signals, source }) → resultado completo. `signals` y `source` salen de builder.resolve(). */
 export function decide(rules, K, { signals, source, askable }) {
@@ -65,22 +77,23 @@ export function decide(rules, K, { signals, source, askable }) {
     let picks, alternatives, margin = null;
 
     if (d.kind === 'choice') {
-      scored.sort((a, b) => b.total - a.total || b.c.base - a.c.base || a.i - b.i);
+      scored.sort((a, b) => (b.justified - a.justified) || b.total - a.total || b.c.base - a.c.base || a.i - b.i);   // las no justificadas nunca quedan primeras
       const top = scored[0];
-      margin = top.total - (scored[1]?.total ?? top.total - 3);
+      margin = top.total - (scored[1]?.justified ? scored[1].total : top.total - 3);
       picks = [{
         ...entry(top),
         reasons: top.pos.length ? top.pos : [top.c.default_reason || 'Es el punto de partida más simple con la información disponible.'],
         against: top.neg,
         tradeoffs: top.c.pseudo ? [] : (K.get(top.c.id).tradeoffs || []).slice(0, 2),
         revisit: top.c.revisit,
+        fit: 'appropriate', necessity: necessityOf(top.c, top),
       }];
-      alternatives = scored.slice(1).map(s => ({ ...entry(s), better_when: s.c.better_when, why_not: s.neg.length ? s.neg : (s.total < top.total ? [top.pos.length ? `Con lo que se sabe del proyecto, la elegida responde mejor: ${top.pos[0].charAt(0).toLowerCase()}${top.pos[0].slice(1)}` : 'Tiene menos respaldo que la opción elegida con lo que se sabe del proyecto.'] : []), close: top.total - s.total <= 2 }));
+      alternatives = scored.slice(1).map(s => ({ ...entry(s), better_when: s.c.better_when, fit: fitOf(s, s.justified && top.total - s.total <= 2), why_not: !s.justified ? [s.c.unjustified, ...s.neg] : s.neg.length ? s.neg : (s.total < top.total ? [top.pos.length ? `Con lo que se sabe del proyecto, la elegida responde mejor: ${top.pos[0].charAt(0).toLowerCase()}${top.pos[0].slice(1)}` : 'Tiene menos respaldo que la opción elegida con lo que se sabe del proyecto.'] : []), close: s.justified && top.total - s.total <= 2 }));
     } else {
       const th = d.threshold ?? rules.threshold_default;
-      const inc = scored.filter(s => s.total >= th).sort((a, b) => b.total - a.total || a.i - b.i);
-      picks = inc.map(s => ({ ...entry(s), reasons: s.pos.length ? s.pos : [s.c.default_reason || 'Aplica a todo proyecto de este tipo.'], against: s.neg, tradeoffs: s.c.pseudo ? [] : (K.get(s.c.id).tradeoffs || []).slice(0, 2), revisit: s.c.revisit }));
-      alternatives = scored.filter(s => s.total < th).map(s => ({ ...entry(s), better_when: s.c.better_when, why_not: [s.c.not_needed].filter(Boolean), close: th - s.total <= 1 }));
+      const inc = scored.filter(s => s.total >= th && s.justified).sort((a, b) => b.total - a.total || a.i - b.i);
+      picks = inc.map(s => ({ ...entry(s), reasons: s.pos.length ? s.pos : [s.c.default_reason || 'Aplica a todo proyecto de este tipo.'], against: s.neg, tradeoffs: s.c.pseudo ? [] : (K.get(s.c.id).tradeoffs || []).slice(0, 2), revisit: s.c.revisit, fit: 'appropriate', necessity: necessityOf(s.c, s) }));
+      alternatives = scored.filter(s => !(s.total >= th && s.justified)).map(s => ({ ...entry(s), better_when: s.c.better_when, fit: fitOf(s, s.justified && th - s.total <= 1), why_not: [!s.justified && s.total >= th ? s.c.unjustified : s.c.not_needed].filter(Boolean), close: s.justified && th - s.total <= 1 }));
     }
     decided[d.id] = picks.map(p => p.id);
 

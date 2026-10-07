@@ -89,6 +89,7 @@
       "mdn-http-caching"
     ],
     "evidence_type": "expert_source",
+    "adoption": "default",
     "library_refs": [
       "estatico"
     ]
@@ -188,6 +189,7 @@
       "astro-why"
     ],
     "evidence_type": "expert_source",
+    "adoption": "default",
     "library_refs": [
       "jamstack"
     ],
@@ -333,6 +335,7 @@
       "nextjs-rendering"
     ],
     "evidence_type": "official_documentation",
+    "adoption": "when_needed",
     "library_refs": [
       "ssr"
     ],
@@ -469,6 +472,7 @@
       "webdev-rendering"
     ],
     "evidence_type": "official_documentation",
+    "adoption": "when_needed",
     "library_refs": [
       "spa-api"
     ],
@@ -603,6 +607,7 @@
       "webdev-rendering"
     ],
     "evidence_type": "official_documentation",
+    "adoption": "when_needed",
     "library_refs": [
       "hibrida"
     ]

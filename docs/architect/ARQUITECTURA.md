@@ -65,7 +65,7 @@ backend/test/architect-*.test.mjs
 | 7 Prompt Generator | hecha | `prompts.js`, `prompts.json` |
 | 8 Project Pack | hecha | `pack.js`, `pack.json`, `views-project.js` |
 
-Verificación: `node --test backend/test/` → 250/250 (76 del Architect, incluido un barrido de 1500 proyectos aleatorios); `python3 tools/qa-architect.py` → 111/111 en Chromium (con `node tools/dev-server.mjs`).
+Verificación: `node --test backend/test/` → 258/258 (84 del Architect, incluido un barrido de 1500 proyectos aleatorios); `python3 tools/qa-architect.py` → 115/115 en Chromium (con `node tools/dev-server.mjs`).
 
 ## 7. Pendiente / límites declarados
 
@@ -76,6 +76,19 @@ Verificación: `node --test backend/test/` → 250/250 (76 del Architect, inclui
 - «Autenticación y autorización» es una sola ficha que enseña la diferencia; si se amplía el contenido conviene separarla en dos.
 - Las alternativas cercanas explican el porqué con la razón principal de la opción elegida, pero no cuantifican la diferencia.
 
-## 8. QA profundo (07/10/2026)
+## 8. Universo teórico vs. aplicación práctica (07/10/2026)
+
+La base cubre todo lo que existe, aunque sea avanzado; la recomendación es proporcional al proyecto. Cuatro preguntas distintas:
+
+| Pregunta | Dónde vive | Valores |
+|---|---|---|
+| ¿Existe? | Figura en la base (ficha completa o de apoyo) | — |
+| ¿Cuánta justificación pide? | `adoption` de cada concepto | `default` Punto de partida habitual · `when_needed` Según necesidad · `specialized` Especializado |
+| ¿Se necesita? | `necessity` de cada propuesta | `required` (lo exige el proyecto, regla con `required: true`) · `justified` (opción avanzada con su condición cumplida) · `proportional` (la opción simple que alcanza) |
+| ¿Es apropiado para ESTE proyecto? | `fit` de cada opción | `appropriate` (propuesta) · `viable` Puede servir · `not_needed` No se necesita todavía · `not_fit` No es apropiado hoy |
+
+Reglas del motor: (1) una opción con `justified_when` solo puede proponerse si esa condición se cumple; con datos desconocidos no se cumple (ante la duda, lo más simple); (2) todo concepto `specialized` debe tener `justified_when` y `unjustified` (lo valida `validateRules`); (3) el criterio es el proyecto (alcance, escala, equipo como carga de operación, tiempo, criticidad vía datos sensibles y pagos), nunca la capacidad de quien lo construye. Aún no hay señales de presupuesto ni de criticidad propias: son una ampliación futura del Project Builder.
+
+## 9. QA profundo (07/10/2026)
 
 Encontrado y corregido: SSR con cualquier producto lanzaba una excepción al armar el blueprint (etiqueta de 45 caracteres); el producto «otro» sin datos proponía sitio estático con base relacional; el sitio estático podía proponerse para productos con lógica propia; la cola de mensajes sugería operar un broker aunque el proyecto fuera chico; tres fuentes (ADR, C4) no se mostraban en ninguna parte; un hash mal formado lanzaba un error en `main.js`. Prueba nueva: `backend/test/architect-barrido.test.mjs`.

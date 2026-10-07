@@ -53,6 +53,32 @@ export const SOURCE_KINDS = Object.freeze(['specification', 'documentation', 'gu
 
 export const LEVELS = Object.freeze({ beginner: 'Inicial', intermediate: 'Intermedio', advanced: 'Avanzado' });
 
+// ── Universo teórico vs. aplicación práctica ──
+// La base cubre TODO lo que existe, aunque sea avanzado. Que algo exista en la base no lo vuelve una recomendación:
+// «adoption» dice cuánta justificación pide en un proyecto (criterio de este proyecto, no un estándar). No mide a quién lo construye.
+export const ADOPTION = Object.freeze({
+  default:     { label: 'Punto de partida habitual', help: 'Suele ser razonable sin más información: no hace falta una razón especial para considerarlo.' },
+  when_needed:{ label: 'Según necesidad',           help: 'Aporta cuando el proyecto tiene la necesidad que resuelve; sin ella, suma costo sin beneficio.' },
+  specialized:{ label: 'Especializado',             help: 'Existe y conviene conocerlo, pero solo se recomienda con una razón fuerte y específica del proyecto.' },
+});
+export const ADOPTION_IDS = Object.freeze(Object.keys(ADOPTION));
+/** Los tipos de producto y los atributos de calidad no se «adoptan»: no llevan este campo. */
+export const NO_ADOPTION_TYPES = Object.freeze(['product_type', 'quality_attribute']);
+
+// ── Decisión contextual: cuatro preguntas distintas ──
+// 1) ¿Existe? → figura en la base.  2) ¿Puede servir? (fit «viable»)  3) ¿Se necesita? (necessity)  4) ¿Es apropiado para ESTE proyecto? (fit «appropriate»)
+export const FIT = Object.freeze({
+  appropriate: { label: 'Apropiado para este proyecto', tone: 'ok' },
+  viable:      { label: 'Puede servir',                 tone: 'warn' },
+  not_needed:  { label: 'No se necesita todavía',       tone: '' },
+  not_fit:     { label: 'No es apropiado hoy',          tone: 'bad' },
+});
+export const NECESSITY = Object.freeze({
+  required:     { label: 'Se necesita',                  help: 'Lo que se sabe del proyecto lo exige.' },
+  justified:    { label: 'Se justifica por el proyecto', help: 'Es una opción avanzada y el proyecto muestra la necesidad que la justifica.' },
+  proportional: { label: 'Proporcional',                 help: 'Es la opción más simple que cubre lo que el proyecto pide.' },
+});
+
 // ── Relaciones entre entidades (dirigidas; cada una tiene su lectura inversa para el panel «Relaciones») ──
 export const RELATIONS = Object.freeze({
   alternative_to:   { label: 'es alternativa a',      inverse: 'es alternativa a',        symmetric: true },
@@ -103,6 +129,8 @@ export function validateEntity(e, where = '') {
   if (!DEPTHS.includes(e.depth)) bad(`depth debe ser ${DEPTHS.join(' o ')}`);
   if (!Object.keys(LEVELS).includes(e.level)) bad(`level inválido: ${e.level}`);
   if (!EVIDENCE_IDS.includes(e.evidence_type)) bad(`evidence_type inválido: ${e.evidence_type}`);
+  if (NO_ADOPTION_TYPES.includes(e.type)) { if (e.adoption !== undefined) bad(`un ${e.type} no lleva adoption`); }
+  else if (!ADOPTION_IDS.includes(e.adoption)) bad(`adoption debe ser ${ADOPTION_IDS.join(', ')}`);
   const min = MIN[e.depth] || MIN.full;
   for (const k of ['explanation', 'how_it_works', 'when_to_use', 'when_not_to_use', 'pros', 'cons', 'tradeoffs', 'common_mistakes', 'decision_questions']) {
     if (!isStrArr(e[k], min[k])) bad(`${k} debe ser una lista de textos${min[k] ? ` (mínimo ${min[k]})` : ''}`);

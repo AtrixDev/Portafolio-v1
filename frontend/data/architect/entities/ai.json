@@ -83,6 +83,7 @@
       "anthropic-effective-agents"
     ],
     "evidence_type": "recommendation",
+    "adoption": "default",
     "library_refs": []
   },
   {
@@ -182,6 +183,7 @@
       "claude-code-docs"
     ],
     "evidence_type": "official_documentation",
+    "adoption": "default",
     "library_refs": []
   },
   {
@@ -265,6 +267,7 @@
       "anthropic-effective-agents"
     ],
     "evidence_type": "expert_source",
+    "adoption": "when_needed",
     "library_refs": [],
     "diagram": {
       "purpose": "concept",
@@ -413,6 +416,7 @@
       "anthropic-effective-agents"
     ],
     "evidence_type": "expert_source",
+    "adoption": "specialized",
     "library_refs": [],
     "diagram": {
       "purpose": "concept",
@@ -551,6 +555,7 @@
       "claude-code-subagents"
     ],
     "evidence_type": "expert_source",
+    "adoption": "specialized",
     "library_refs": []
   }
 ]

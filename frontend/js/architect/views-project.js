@@ -3,7 +3,7 @@ import * as B from './builder.js';
 import { renderDiagramSVG, describeDiagram, DIAGRAM_PURPOSES, KIND_LABEL } from './diagram.js';
 import { toMermaid } from './blueprint.js';
 import { adrToMarkdown } from './adr.js';
-import { esc, href } from './ui.js';
+import { esc, href, fitBadge, necessityBadge } from './ui.js';
 import { NIVEL } from './context.js';
 
 export const TABS = [['decisiones', 'Decisiones'], ['blueprint', 'Blueprint'], ['adr', 'ADR'], ['prompts', 'Prompts'], ['pack', 'Project Pack']];
@@ -63,7 +63,7 @@ export function builderView(M, state, K, { editing = null, q = '' } = {}) {
 }
 
 // ═══ Decisiones ═══
-const pickCard = (d, p) => `<li class="ar-pick"><div class="ar-pick-h"><b>${p.entity ? `<a href="${href(p.id)}" data-aprender="${esc(p.id)}" class="ar-concept">${esc(p.name)}</a>` : esc(p.name)}</b>${p.entity ? `<button type="button" class="ar-learn ar-learn--sm" data-aprender="${esc(p.id)}">Aprender</button>` : ''}</div>
+const pickCard = (d, p) => `<li class="ar-pick"><div class="ar-pick-h"><b>${p.entity ? `<a href="${href(p.id)}" data-aprender="${esc(p.id)}" class="ar-concept">${esc(p.name)}</a>` : esc(p.name)}</b> ${fitBadge(p.fit)} ${necessityBadge(p.necessity)}${p.entity ? `<button type="button" class="ar-learn ar-learn--sm" data-aprender="${esc(p.id)}">Aprender</button>` : ''}</div>
   <p class="ar-pick-s">${esc(p.summary)}</p>
   <h4>Por qué</h4><ul class="ar-list">${p.reasons.map(r => `<li>${esc(r)}</li>`).join('')}</ul>
   ${p.against?.length ? `<h4>En contra</h4><ul class="ar-list is-bad">${p.against.map(r => `<li>${esc(r)}</li>`).join('')}</ul>` : ''}
@@ -77,7 +77,7 @@ export function decisionsView(res, K, M, ctx) {
     ${d.confidence.note ? `<p class="ar-note">${esc(d.confidence.note)}${d.confidence.missing.length ? ` Falta: ${d.confidence.missing.map(m => esc(M.signals[m]?.label || m)).join(', ')}.` : ''}${d.confidence.assumed.length ? ` Supuestos: ${d.confidence.assumed.map(m => esc(M.signals[m]?.label || m)).join(', ')}.` : ''}</p>` : ''}
     <p class="ar-lbl">${d.kind === 'choice' ? 'Propuesta' : 'Se proponen'}</p>
     <ul class="ar-picks">${d.picks.map(p => pickCard(d, p)).join('')}</ul>
-    ${d.alternatives.length ? `<details class="ar-alts-box"><summary>Alternativas y por qué no (${d.alternatives.length})</summary><ul>${d.alternatives.map(a => `<li><b>${a.entity ? `<a href="${href(a.id)}" data-aprender="${esc(a.id)}" class="ar-concept">${esc(a.name)}</a>` : esc(a.name)}</b>${a.close ? ' <span class="ui-badge ui-badge--warn">Quedó cerca</span>' : ''}<p><em>Sería mejor si:</em> ${esc(a.better_when)}</p>${a.why_not.length ? `<p><em>Hoy no, porque:</em> ${esc(a.why_not.join(' '))}</p>` : ''}</li>`).join('')}</ul></details>` : ''}
+    ${d.alternatives.length ? `<details class="ar-alts-box"><summary>Alternativas y por qué no (${d.alternatives.length})</summary><ul>${d.alternatives.map(a => `<li><b>${a.entity ? `<a href="${href(a.id)}" data-aprender="${esc(a.id)}" class="ar-concept">${esc(a.name)}</a>` : esc(a.name)}</b>${a.fit ? ' ' + fitBadge(a.fit) : ''}<p><em>Sería mejor si:</em> ${esc(a.better_when)}</p>${a.why_not.length ? `<p><em>Hoy no, porque:</em> ${esc(a.why_not.join(' '))}</p>` : ''}</li>`).join('')}</ul></details>` : ''}
   </section>`).join('');
   const calidad = res.quality.map(q => `<li><a href="${href(q.id)}" data-aprender="${esc(q.id)}">${esc(q.entity.name)}</a><span class="ar-w ar-w-${q.weight}" title="${esc(q.reasons.join(' '))}">${NIVEL[q.weight]}</span></li>`).join('');
   return `
@@ -112,7 +112,7 @@ export function adrView(adrs, date, K) {
       <div class="ar-adr-body">
         ${[['Contexto', a.context], ['Razones', a.rationale], ['Trade-offs', a.tradeoffs], ['Consecuencias', a.consequences], ['Condiciones para reconsiderar', a.revisit]].map(([t, l]) => l.length ? `<h4>${t}</h4><ul class="ar-list">${l.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '').join('')}
         <h4>Decisión</h4><p>${esc(a.decision)}</p>
-        ${a.rejected.length ? `<h4>Alternativas rechazadas</h4><ul class="ar-list">${a.rejected.map(r => `<li><b>${esc(r.name)}</b>: ${esc(r.why.join(' '))} <em>Sería mejor si:</em> ${esc(r.better_when)}</li>`).join('')}</ul>` : ''}
+        ${a.rejected.length ? `<h4>Alternativas rechazadas</h4><ul class="ar-list">${a.rejected.map(r => `<li><b>${esc(r.name)}</b>${r.fit ? ' ' + fitBadge(r.fit) : ''}: ${esc(r.why.join(' '))} <em>Sería mejor si:</em> ${esc(r.better_when)}</li>`).join('')}</ul>` : ''}
         ${a.sources.length ? `<h4>Fuentes</h4><ul class="ar-list">${a.sources.map(s => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a> — ${esc(s.organization)} (${esc(s.evidence)})</li>`).join('')}</ul>` : ''}
         <p class="ar-actions"><button type="button" class="btn-secondary" data-copiar="adr:${esc(a.id)}">Copiar Markdown</button></p>
       </div></details>`).join('');

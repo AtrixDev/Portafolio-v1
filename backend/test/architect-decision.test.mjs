@@ -302,3 +302,60 @@ test('lo que se decide antes condiciona lo posterior (comunicación depende del 
   const wqw = correr({ product: 'saas', background: 'heavy', team: 'small' });
   assert.ok(dec(wqw, 'communication').picks.find(p => p.id === 'message-queue').reasons.some(t => /trabajador conectado por una cola/.test(t) || /tareas largas/.test(t)));
 });
+
+// ═══ Universo teórico vs. aplicación práctica ═══
+import { ADOPTION_IDS, NO_ADOPTION_TYPES, FIT, NECESSITY } from '../../frontend/js/architect/model.js';
+{
+  const E = K.entities, R2 = JSON.parse(readFileSync(new URL('../../frontend/data/architect/rules.json', import.meta.url), 'utf8'));
+  const dec2 = a => { let st = B.emptyState(); for (const [q, v] of Object.entries(a)) st = B.setAnswer(M, st, q, v).state; return decide(R2, K, B.resolve(M, st)); };
+  const d = (res, id) => res.decisions.find(x => x.id === id);
+
+  test('todo concepto de práctica declara su «adoption» y los tipos de producto y calidad no', () => {
+    for (const e of E) NO_ADOPTION_TYPES.includes(e.type) ? assert.equal(e.adoption, undefined, e.id) : assert.ok(ADOPTION_IDS.includes(e.adoption), `${e.id}: ${e.adoption}`);
+    assert.equal(K.get('microservices').adoption, 'specialized');
+    assert.equal(K.get('monolith').adoption, 'default');
+  });
+  test('lo especializado existe en la base pero no puede recomendarse sin una condición de justificación (lo valida el esquema de reglas)', () => {
+    for (const dd of R2.decisions) for (const c of dd.candidates) if (!c.pseudo && K.get(c.id).adoption === 'specialized') assert.ok(c.justified_when && c.unjustified, `${dd.id}/${c.id}`);
+    const roto = structuredClone(R2); delete roto.decisions.find(x => x.id === 'architecture').candidates.find(c => c.id === 'microservices').justified_when;
+    assert.match(validateRules(roto, M.signals, K).join(' | '), /microservices: es una opción especializada: necesita justified_when/);
+  });
+  test('microservicios están explicados en la base pero un proyecto chico o mediano recibe un monolito (modular si hace falta) y se le dice que no se necesita todavía', () => {
+    for (const a of [{ product: 'saas', team: 'small', scale: 'medium' }, { product: 'ecommerce', team: 'solo', scale: 'small' }, { product: 'saas', team: 'large', scale: 'small' }]) {
+      const arq = d(dec2(a), 'architecture'), ms = arq.alternatives.find(x => x.id === 'microservices');
+      assert.notEqual(arq.picks[0].id, 'microservices');
+      assert.equal(ms.fit, 'not_needed'); assert.match(ms.why_not[0], /no muestra la necesidad que lo justificaría/);
+    }
+    assert.ok(K.get('microservices').explanation.length >= 2, 'la ficha sigue completa');
+  });
+  test('una opción avanzada se propone solo cuando el proyecto la justifica, y entonces se marca como «justificada»', () => {
+    const grande = d(dec2({ product: 'saas', team: 'large', scale: 'large', background: 'heavy', realtime: 'core', integrations: 'many', ai: 'open_ended' }), 'ai_product');
+    assert.ok(grande.picks.some(p => p.id === 'ai-agent' || p.id === 'ai-workflow'));
+    const hy = d(dec2({ product: 'saas', team: 'large', scale: 'large' }), 'rendering');
+    assert.equal(hy.picks[0].id, 'hybrid-rendering'); assert.equal(hy.picks[0].necessity, 'justified');
+    const chico = d(dec2({ product: 'landing', team: 'solo', scale: 'small' }), 'rendering');
+    assert.equal(chico.alternatives.find(x => x.id === 'hybrid-rendering').fit, 'not_needed');
+  });
+  test('ante la duda no se recomienda complejidad: con la información desconocida una opción avanzada no se justifica', () => {
+    const r = dec2({ product: 'other' });
+    for (const [dim, id] of [['architecture', 'microservices'], ['architecture', 'event-driven'], ['data_layers', 'search-engine'], ['data_layers', 'cache']]) {
+      const x = d(r, dim); assert.ok(!x.picks.some(p => p.id === id), `${dim}/${id}`);
+    }
+  });
+  test('cada propuesta dice si es apropiada y por qué se necesita; cada alternativa, si puede servir, no se necesita o no es apropiada', () => {
+    for (const a of [{ product: 'ecommerce', team: 'small', scale: 'medium' }, { product: 'marketplace', team: 'large', scale: 'large' }, { product: 'landing' }]) {
+      for (const dd of dec2(a).decisions) {
+        for (const p of dd.picks) { assert.equal(p.fit, 'appropriate'); assert.ok(NECESSITY[p.necessity], `${dd.id}/${p.id}`); }
+        for (const x of dd.alternatives) { assert.ok(FIT[x.fit] && x.fit !== 'appropriate', `${dd.id}/${x.id}: ${x.fit}`); assert.ok(x.why_not.length || x.fit === 'viable', `${dd.id}/${x.id} sin explicación`); }
+      }
+    }
+  });
+  test('lo que exige el proyecto se marca «se necesita» (pagos → base relacional; archivos → almacenamiento de objetos)', () => {
+    const r = dec2({ product: 'ecommerce', team: 'solo', scale: 'small' });
+    assert.equal(d(r, 'data_store').picks[0].necessity, 'required');
+    assert.equal(d(r, 'data_layers').picks.find(p => p.id === 'object-storage').necessity, 'required');
+  });
+  test('el criterio es el proyecto, no la capacidad de quien lo construye: ninguna regla ni riesgo habla de «práctica», «experiencia» o «nivel» de la persona', () => {
+    assert.doesNotMatch(JSON.stringify(R2), /exige práctica|tu nivel|sin experiencia|principiante/i);
+  });
+}

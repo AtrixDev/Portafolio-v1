@@ -231,3 +231,7 @@
 }
 
 .ar-actions .ar-link, .ar-foot .ar-link, .ar-count .ar-link { min-height: var(--tap); padding-inline: var(--sp-2); }
+
+/* Universo vs. práctica: cuánta justificación pide un concepto antes de recomendarlo */
+.ar-adopt { max-width: 62ch; font-size: var(--fs-sm); color: var(--text-2); margin: var(--sp-3) 0 0; }
+.ar-adopt em { font-style: normal; color: var(--text); }

@@ -7,7 +7,7 @@ import { buildContext, aplica, NIVEL } from './context.js';
 import { renderAll } from './prompts.js';
 import { describeDiagram, DIAGRAM_PURPOSES } from './diagram.js';
 import { validateCond } from './conditions.js';
-import { PROFILE_KEYS, PROFILE_LABELS, EVIDENCE_TYPES } from './model.js';
+import { PROFILE_KEYS, PROFILE_LABELS, EVIDENCE_TYPES, FIT, NECESSITY } from './model.js';
 
 export const PACK_SECTIONS = ['summary', 'requirements', 'architecture', 'blueprint', 'adrs', 'data_model', 'technology', 'structure', 'roadmap', 'testing', 'security', 'qa', 'ai_strategy', 'prompts', 'definition_of_done', 'risks', 'open_questions'];
 const TITLES = { summary: 'Resumen del proyecto', requirements: 'Requisitos', architecture: 'Arquitectura', blueprint: 'Blueprint (diagramas)', adrs: 'Decisiones de arquitectura (ADR)', data_model: 'Modelo de datos de partida', technology: 'Recomendaciones de tecnología', structure: 'Estructura del proyecto', roadmap: 'Hoja de ruta', testing: 'Estrategia de pruebas', security: 'Lista de verificación de seguridad', qa: 'Lista de verificación de calidad (QA)', ai_strategy: 'Estrategia de desarrollo con IA', prompts: 'Prompts para Claude Code', definition_of_done: 'Definición de terminado', risks: 'Riesgos', open_questions: 'Preguntas abiertas' };
@@ -26,8 +26,8 @@ export function buildPack({ M, state, res, K, packData, promptsData, date = '' }
 
   const arch = res.decisions.filter(d => d.picks.length).map(d => {
     const lines = [`### ${d.title}`, `**Propuesta:** ${d.picks.map(p => p.name).join(', ')} · **Confianza:** ${d.confidence.level}${d.confidence.note ? ` — ${d.confidence.note}` : ''}`, ''];
-    for (const p of d.picks) lines.push(`- **${p.name}**: ${p.reasons.join(' ')}`);
-    if (d.alternatives.length) lines.push('', '_Alternativas y cuándo serían mejores:_', ...d.alternatives.map(a => `- ${a.name}: ${a.better_when}${a.why_not.length ? ` _(Hoy no, porque: ${a.why_not[0]})_` : ''}`));
+    for (const p of d.picks) lines.push(`- **${p.name}** _(${FIT[p.fit]?.label} · ${NECESSITY[p.necessity]?.label})_: ${p.reasons.join(' ')}`);
+    if (d.alternatives.length) lines.push('', '_Alternativas y cuándo serían mejores:_', ...d.alternatives.map(a => `- ${a.name} — ${FIT[a.fit]?.label || ''}: ${a.better_when}${a.why_not.length ? ` _(Hoy no, porque: ${a.why_not[0]})_` : ''}`));
     return lines.join('\n');
   }).join('\n\n');
 

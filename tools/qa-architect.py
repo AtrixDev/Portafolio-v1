@@ -212,6 +212,17 @@ with sync_playwright() as p:
         chk(f'[estado raro] {nombre}: mensaje claro y sin errores de JS', not e2 and esperado.lower() in q.inner_text('main').lower(), (e2[:1],)); q.close()
     q = c.new_page(); e2 = []; q.on('pageerror', lambda x: e2.append(str(x))); q.goto(BASE); q.evaluate("localStorage.setItem('dc-architect-project','{{{no json')"); q.goto(BASE + '#/proyecto'); q.wait_for_timeout(300)
     chk('[estado raro] proyecto guardado corrupto: arranca vacío sin romper', not e2 and q.locator('#ar-form').count() == 1, e2[:1]); q.close(); c.close()
+    # ── universo vs. práctica: «existe» no es «se recomienda» ──
+    c = br.new_context(viewport={'width': 1280, 'height': 900}, reduced_motion='reduce'); c.route('**/api/*', lambda r: r.fulfill(status=404, json={}))
+    q = c.new_page(); q.goto(BASE + '#/c/microservices'); q.wait_for_selector('.ar-sec')
+    chk('Ficha de microservicios: marcada «Especializado» y aclara que existir en la base no es recomendarlo', 'Especializado' in q.inner_text('.ar-badges') and 'no significa que se recomiende' in q.inner_text('header'))
+    q.goto(BASE + '#/'); q.wait_for_selector('.ar-card'); chk('Explorer: las tarjetas de práctica muestran su nivel de adopción', q.locator('.ar-card', has_text='Microservicios').inner_text().count('Especializado') == 1)
+    q.goto(BASE + '#/proyecto/decisiones?p=' + PROY['saas']); q.wait_for_selector('.ar-dec'); t = q.inner_text('main')
+    chk('Decisiones: la propuesta muestra «Apropiado para este proyecto» y su necesidad', 'Apropiado para este proyecto' in t and ('Proporcional' in t or 'Se necesita' in t))
+    q.locator('.ar-dec', has_text='Cómo se organiza el sistema').locator('summary').click()
+    ar = q.locator('.ar-dec', has_text='Cómo se organiza el sistema').inner_text()
+    chk('Decisiones: microservicios figura como «No se necesita todavía» con su explicación', re.search(r'Microservicios[\s\S]{0,60}No se necesita todavía', ar) is not None and 'no muestra la necesidad' in ar, ar[:200])
+    q.close(); c.close()
     chk('Sin errores de JS durante toda la sesión', not errs, errs[:3])
     br.close()
 f = [r for r in R if not r[1]]

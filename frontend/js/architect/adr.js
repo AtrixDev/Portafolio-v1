@@ -1,7 +1,7 @@
 // js/architect/adr.js — Architecture Decision Records generados a partir de las decisiones del Decision Engine. Puro.
 // Estructura: Título · Estado · Contexto · Problema · Opciones · Decisión · Razones · Trade-offs · Consecuencias · Alternativas rechazadas · Cuándo reconsiderar · Fuentes.
 // Un ADR generado es una PROPUESTA (criterio de este proyecto, basado en reglas y en las fuentes de cada concepto): se revisa antes de aceptarlo.
-import { EVIDENCE_TYPES } from './model.js';
+import { EVIDENCE_TYPES, FIT } from './model.js';
 
 export const ADR_SECTIONS = ['context', 'problem', 'options', 'decision', 'rationale', 'tradeoffs', 'consequences', 'rejected', 'revisit', 'sources'];
 
@@ -24,7 +24,7 @@ export function buildADRs(res, K, project = {}, M = null) {
       for (const t of p.tradeoffs) consequences.push(`${p.name}: ${t}`);
       const e = p.entity; if (e && e.cons?.length) consequences.push(`${p.name}, desventaja conocida: ${e.cons[0]}`);
     }
-    const rejected = d.alternatives.map(a => ({ name: a.name, why: a.why_not.length ? a.why_not : ['No quedó entre las opciones recomendadas con lo que se sabe del proyecto.'], better_when: a.better_when }));
+    const rejected = d.alternatives.map(a => ({ name: a.name, fit: a.fit, why: a.why_not.length ? a.why_not : ['No quedó entre las opciones recomendadas con lo que se sabe del proyecto.'], better_when: a.better_when }));
     const revisit = [...new Set(picks.flatMap(p => p.revisit))];
     for (const a of d.alternatives.filter(x => x.close)) revisit.push(`Reconsiderar a favor de «${a.name}» si: ${a.better_when}`);
     const srcs = new Map();
@@ -55,7 +55,7 @@ export function adrToMarkdown(a, { date = '' } = {}) {
   sec('Razones', a.rationale);
   sec('Trade-offs', a.tradeoffs);
   sec('Consecuencias', a.consequences);
-  if (a.rejected.length) { L.push('## Alternativas rechazadas', ''); for (const r of a.rejected) L.push(`- **${r.name}**: ${r.why.join(' ')} _Sería mejor si:_ ${r.better_when}`); L.push(''); }
+  if (a.rejected.length) { L.push('## Alternativas rechazadas', ''); for (const r of a.rejected) L.push(`- **${r.name}**${r.fit ? ` (${FIT[r.fit].label})` : ''}: ${r.why.join(' ')} _Sería mejor si:_ ${r.better_when}`); L.push(''); }
   sec('Condiciones para reconsiderar', a.revisit);
   sec('Fuentes', a.sources.map(s => `[${s.name}](${s.url}) — ${s.organization} (${s.evidence})`));
   return L.join('\n').replace(/\n{3,}/g, '\n\n').trimEnd() + '\n';

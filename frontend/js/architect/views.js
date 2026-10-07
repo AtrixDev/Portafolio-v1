@@ -1,7 +1,7 @@
 // js/architect/views.js — Vistas del Explorer y de la ficha de concepto. Devuelven HTML (string); app.js lo inserta y conecta eventos.
-import { LEVELS, EVIDENCE_TYPES, EVIDENCE_IDS, EXAMPLE_KINDS, typeLabel } from './model.js';
+import { LEVELS, EVIDENCE_TYPES, EVIDENCE_IDS, EXAMPLE_KINDS, ADOPTION, typeLabel } from './model.js';
 import { renderDiagramSVG, describeDiagram } from './diagram.js';
-import { esc, GROUP_ORDER, href, card, evidenceBadge, levelBadge, typeBadge, kindBadge, list, paras, formatDate } from './ui.js';
+import { esc, GROUP_ORDER, href, card, evidenceBadge, adoptionBadge, levelBadge, typeBadge, kindBadge, list, paras, formatDate } from './ui.js';
 
 // ═══ Explorer ═══
 const filtrosDe = f => ({ types: f.types || [], levels: f.level ? [f.level] : [], evidence: f.evidence ? [f.evidence] : [], groups: f.groups || [] });
@@ -101,7 +101,8 @@ ${compact ? '' : `<nav class="ar-crumbs" aria-label="Ruta"><a href="#/">Explorar
   <p class="ui-eyebrow">${esc(typeLabel(e.type))}</p>
   <h1 class="ui-sh__title" id="${idp}ar-h1" tabindex="-1">${esc(e.name)}</h1>
   <p class="ui-sh__lead">${esc(e.summary)}</p>
-  <p class="ar-badges">${levelBadge(e.level)}${evidenceBadge(e.evidence_type, { help: true })}${full ? '' : '<span class="ui-badge" title="Ficha de apoyo: más breve que una ficha completa">Ficha de apoyo</span>'}</p>
+  <p class="ar-badges">${levelBadge(e.level)}${evidenceBadge(e.evidence_type, { help: true })}${adoptionBadge(e.adoption, { help: true })}${full ? '' : '<span class="ui-badge" title="Ficha de apoyo: más breve que una ficha completa">Ficha de apoyo</span>'}</p>
+  ${e.adoption ? `<p class="ar-adopt">${esc(ADOPTION[e.adoption].help)} <em>Que esté en la base no significa que se recomiende: depende de cada proyecto.</em></p>` : ''}
   ${lib}
 </header>
 <div class="ar-layout">

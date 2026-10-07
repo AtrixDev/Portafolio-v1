@@ -59,6 +59,8 @@ test('barrido: 1500 proyectos aleatorios recorren decisiones, blueprints, ADR, p
 
     // ── toda decisión se explica ──
     for (const dec of res.decisions) {
+      for (const p of dec.picks) if (p.entity?.adoption === 'specialized') assert.ok(p.necessity === 'justified' && p.fit === 'appropriate', `«${p.id}» es especializado y se propuso sin justificación · ${ctx}`);
+      for (const x of dec.alternatives) assert.ok(['viable', 'not_needed', 'not_fit'].includes(x.fit), `«${x.id}» sin fit · ${ctx}`);
       for (const p of dec.picks) assert.ok(p.reasons.length, `«${dec.id}»: la propuesta «${p.id}» no explica por qué · ${ctx}`);
       for (const a of dec.alternatives) assert.ok(a.better_when, `«${dec.id}»: la alternativa «${a.id}» no dice cuándo sería mejor`);
     }
