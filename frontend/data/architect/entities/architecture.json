@@ -93,7 +93,8 @@
       "azure-architecture-styles"
     ],
     "evidence_type": "expert_source",
-    "adoption": "default",
+    "justification": "baseline",
+    "practical_level": 2,
     "library_refs": [
       "monolito"
     ],
@@ -221,7 +222,8 @@
       "fowler-monolith-first"
     ],
     "evidence_type": "industry_practice",
-    "adoption": "when_needed",
+    "justification": "by_need",
+    "practical_level": 2,
     "library_refs": [
       "monolito"
     ],
@@ -403,7 +405,8 @@
       "fowler-monolith-first"
     ],
     "evidence_type": "official_framework",
-    "adoption": "specialized",
+    "justification": "strong_reason",
+    "practical_level": 4,
     "library_refs": [
       "microservicios"
     ],
@@ -598,7 +601,8 @@
       "fowler-event-driven"
     ],
     "evidence_type": "official_framework",
-    "adoption": "specialized",
+    "justification": "strong_reason",
+    "practical_level": 4,
     "library_refs": [],
     "diagram": {
       "purpose": "concept",
@@ -764,7 +768,8 @@
       "azure-queue-load-leveling"
     ],
     "evidence_type": "official_framework",
-    "adoption": "when_needed",
+    "justification": "by_need",
+    "practical_level": 3,
     "library_refs": [],
     "diagram": {
       "purpose": "concept",

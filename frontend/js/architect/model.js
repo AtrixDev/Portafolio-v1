@@ -55,15 +55,31 @@ export const LEVELS = Object.freeze({ beginner: 'Inicial', intermediate: 'Interm
 
 // ── Universo teórico vs. aplicación práctica ──
 // La base cubre TODO lo que existe, aunque sea avanzado. Que algo exista en la base no lo vuelve una recomendación:
-// «adoption» dice cuánta justificación pide en un proyecto (criterio de este proyecto, no un estándar). No mide a quién lo construye.
-export const ADOPTION = Object.freeze({
-  default:     { label: 'Punto de partida habitual', help: 'Suele ser razonable sin más información: no hace falta una razón especial para considerarlo.' },
-  when_needed:{ label: 'Según necesidad',           help: 'Aporta cuando el proyecto tiene la necesidad que resuelve; sin ella, suma costo sin beneficio.' },
-  specialized:{ label: 'Especializado',             help: 'Existe y conviene conocerlo, pero solo se recomienda con una razón fuerte y específica del proyecto.' },
+// «justification» dice cuánta justificación pide un concepto antes de recomendarlo en un proyecto (nada que ver con popularidad ni con su uso en el mercado) (criterio de este proyecto, no un estándar). No mide a quién lo construye.
+export const JUSTIFICATION = Object.freeze({
+  baseline:      { label: 'Punto de partida habitual', help: 'Suele ser razonable sin más información: no hace falta una razón especial para considerarlo.' },
+  by_need:       { label: 'Según necesidad',           help: 'Aporta cuando el proyecto tiene la necesidad que resuelve; sin ella, suma costo sin beneficio.' },
+  strong_reason: { label: 'Requiere razón fuerte',     help: 'Existe y conviene conocerlo, pero solo se recomienda si el proyecto muestra una razón fuerte y específica.' },
 });
-export const ADOPTION_IDS = Object.freeze(Object.keys(ADOPTION));
-/** Los tipos de producto y los atributos de calidad no se «adoptan»: no llevan este campo. */
-export const NO_ADOPTION_TYPES = Object.freeze(['product_type', 'quality_attribute']);
+export const JUSTIFICATION_IDS = Object.freeze(Object.keys(JUSTIFICATION));
+/** Los tipos de producto y los atributos de calidad no necesitan justificarse: no llevan este campo. */
+export const NO_JUSTIFICATION_TYPES = Object.freeze(['product_type', 'quality_attribute']);
+
+// ── Complejidad práctica (1–4) ──
+// Contextualiza la APLICACIÓN, nunca limita la teoría: la base explica conceptos de cualquier nivel.
+// En un proyecto: nivel = el mayor entre el del tipo de producto y el de lo que pide (ver «complexity» en rules.json).
+// En un concepto: «practical_level» = desde qué nivel de proyecto suele entrar en juego y cuánto cuidado pide aplicarlo bien.
+// No es lo mismo que «level» (dificultad para aprenderlo). Un proyecto de nivel 4 no se bloquea: se hace visible su complejidad y su riesgo.
+export const PRACTICAL_LEVELS = Object.freeze({
+  1: { label: 'Nivel 1 · Informativo', short: 'Nivel 1', summary: 'Sitios principalmente informativos.', examples: ['landing', 'sitio institucional', 'portfolio', 'sitio profesional informativo'] },
+  2: { label: 'Nivel 2 · Con backend y persistencia', short: 'Nivel 2', summary: 'Un sitio que guarda datos propios o integra servicios.', examples: ['e-commerce', 'reservas o turnos', 'formularios avanzados', 'CMS', 'integraciones con APIs', 'web con backend y persistencia'] },
+  3: { label: 'Nivel 3 · Aplicación o sistema', short: 'Nivel 3', summary: 'Una aplicación con usuarios, roles y procesos.', examples: ['sistema de gestión', 'dashboard', 'portal', 'aplicación web', 'SaaS pequeño o mediano'] },
+  4: { label: 'Nivel 4 · Distribuido o de alta criticidad', short: 'Nivel 4', summary: 'Piezas distribuidas, o fallas con costo muy alto.', examples: ['sistema distribuido', 'multi-tenant complejo', 'tiempo real avanzado', 'microservicios', 'alta criticidad o escala'] },
+});
+export const PRACTICAL_LEVEL_IDS = Object.freeze([1, 2, 3, 4]);
+/** Zona práctica habitual: hasta este nivel. Por encima no se bloquea nada: se avisa y se pide más supervisión. */
+export const PRACTICAL_ZONE_MAX = 3;
+export const NO_PRACTICAL_LEVEL_TYPES = Object.freeze(['quality_attribute']);
 
 // ── Decisión contextual: cuatro preguntas distintas ──
 // 1) ¿Existe? → figura en la base.  2) ¿Puede servir? (fit «viable»)  3) ¿Se necesita? (necessity)  4) ¿Es apropiado para ESTE proyecto? (fit «appropriate»)
@@ -129,8 +145,10 @@ export function validateEntity(e, where = '') {
   if (!DEPTHS.includes(e.depth)) bad(`depth debe ser ${DEPTHS.join(' o ')}`);
   if (!Object.keys(LEVELS).includes(e.level)) bad(`level inválido: ${e.level}`);
   if (!EVIDENCE_IDS.includes(e.evidence_type)) bad(`evidence_type inválido: ${e.evidence_type}`);
-  if (NO_ADOPTION_TYPES.includes(e.type)) { if (e.adoption !== undefined) bad(`un ${e.type} no lleva adoption`); }
-  else if (!ADOPTION_IDS.includes(e.adoption)) bad(`adoption debe ser ${ADOPTION_IDS.join(', ')}`);
+  if (NO_PRACTICAL_LEVEL_TYPES.includes(e.type)) { if (e.practical_level !== undefined) bad(`un ${e.type} no lleva practical_level`); }
+  else if (!PRACTICAL_LEVEL_IDS.includes(e.practical_level)) bad('practical_level debe ser 1, 2, 3 o 4');
+  if (NO_JUSTIFICATION_TYPES.includes(e.type)) { if (e.justification !== undefined) bad(`un ${e.type} no lleva justification`); }
+  else if (!JUSTIFICATION_IDS.includes(e.justification)) bad(`justification debe ser ${JUSTIFICATION_IDS.join(', ')}`);
   const min = MIN[e.depth] || MIN.full;
   for (const k of ['explanation', 'how_it_works', 'when_to_use', 'when_not_to_use', 'pros', 'cons', 'tradeoffs', 'common_mistakes', 'decision_questions']) {
     if (!isStrArr(e[k], min[k])) bad(`${k} debe ser una lista de textos${min[k] ? ` (mínimo ${min[k]})` : ''}`);

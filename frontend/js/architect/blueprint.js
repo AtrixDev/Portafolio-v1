@@ -62,7 +62,7 @@ export function buildBlueprints(res, K, ctx = {}) {
         edges.push({ from: 'queue', to: 'worker', label: 'entrega', async: true });
         if (hasDb) edges.push({ from: 'worker', to: 'db', label: 'guarda el resultado' });
       }
-      if (ws) { edges.push({ from: 'api', to: 'client', label: 'actualizaciones en vivo (WebSocket)', async: true }); }
+      if (ws) { edges.push({ from: 'api', to: 'client', label: 'actualizaciones en vivo', async: true }); }
       if (aiProduct) { nodes.push({ id: 'ai', label: aiProduct === 'ai-agent' ? 'Agente de IA con herramientas acotadas' : aiProduct === 'ai-workflow' ? 'Workflow con pasos de modelo' : 'Asistente de IA', kind: 'ai', layer: 4, link: entity(aiProduct) }); edges.push({ from: 'api', to: 'ai', label: 'consulta' }); }
       if (nodes.length > 13) nodes.length = 13;
     }

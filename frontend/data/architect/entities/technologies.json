@@ -48,7 +48,8 @@
       "postgres-fts"
     ],
     "evidence_type": "official_documentation",
-    "adoption": "default",
+    "justification": "baseline",
+    "practical_level": 2,
     "library_refs": [
       "supabase"
     ],
@@ -127,7 +128,8 @@
       "mongodb-docs"
     ],
     "evidence_type": "official_documentation",
-    "adoption": "when_needed",
+    "justification": "by_need",
+    "practical_level": 3,
     "library_refs": [
       "mongodb-atlas"
     ],
@@ -202,7 +204,8 @@
       "redis-docs"
     ],
     "evidence_type": "official_documentation",
-    "adoption": "when_needed",
+    "justification": "by_need",
+    "practical_level": 3,
     "library_refs": [],
     "profile": {
       "complexity": {
@@ -287,7 +290,8 @@
       "nextjs-rendering"
     ],
     "evidence_type": "official_documentation",
-    "adoption": "when_needed",
+    "justification": "by_need",
+    "practical_level": 2,
     "library_refs": [
       "nextjs"
     ],
@@ -370,7 +374,8 @@
       "astro-why"
     ],
     "evidence_type": "official_documentation",
-    "adoption": "when_needed",
+    "justification": "by_need",
+    "practical_level": 1,
     "library_refs": [
       "astro"
     ],
@@ -444,7 +449,8 @@
       "aws-s3"
     ],
     "evidence_type": "official_documentation",
-    "adoption": "when_needed",
+    "justification": "by_need",
+    "practical_level": 2,
     "library_refs": [],
     "profile": {
       "complexity": {
@@ -520,7 +526,8 @@
       "elastic-search-docs"
     ],
     "evidence_type": "official_documentation",
-    "adoption": "specialized",
+    "justification": "strong_reason",
+    "practical_level": 3,
     "library_refs": [],
     "profile": {
       "complexity": {
@@ -596,7 +603,8 @@
       "rabbitmq-docs"
     ],
     "evidence_type": "official_documentation",
-    "adoption": "when_needed",
+    "justification": "by_need",
+    "practical_level": 3,
     "library_refs": [],
     "profile": {
       "complexity": {
@@ -668,7 +676,8 @@
       "claude-code-subagents"
     ],
     "evidence_type": "official_documentation",
-    "adoption": "when_needed",
+    "justification": "by_need",
+    "practical_level": 1,
     "library_refs": [],
     "profile": {
       "complexity": {
@@ -739,7 +748,8 @@
       "playwright-docs"
     ],
     "evidence_type": "official_documentation",
-    "adoption": "when_needed",
+    "justification": "by_need",
+    "practical_level": 2,
     "library_refs": [],
     "profile": {
       "complexity": {

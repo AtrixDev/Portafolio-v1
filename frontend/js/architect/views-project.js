@@ -3,7 +3,9 @@ import * as B from './builder.js';
 import { renderDiagramSVG, describeDiagram, DIAGRAM_PURPOSES, KIND_LABEL } from './diagram.js';
 import { toMermaid } from './blueprint.js';
 import { adrToMarkdown } from './adr.js';
-import { esc, href, fitBadge, necessityBadge } from './ui.js';
+import { esc, href, fitBadge, necessityBadge, practicalBadge } from './ui.js';
+import { PRACTICAL_LEVELS } from './model.js';
+import { SUPERVISION_TXT } from './complexity.js';
 import { NIVEL } from './context.js';
 
 export const TABS = [['decisiones', 'Decisiones'], ['blueprint', 'Blueprint'], ['adr', 'ADR'], ['prompts', 'Prompts'], ['pack', 'Project Pack']];
@@ -70,6 +72,21 @@ const pickCard = (d, p) => `<li class="ar-pick"><div class="ar-pick-h"><b>${p.en
   ${p.tradeoffs.length ? `<h4>Trade-offs</h4><ul class="ar-list">${p.tradeoffs.map(r => `<li>${esc(r)}</li>`).join('')}</ul>` : ''}
   ${p.revisit.length ? `<h4>Cuándo reconsiderar</h4><ul class="ar-list">${p.revisit.map(r => `<li>${esc(r)}</li>`).join('')}</ul>` : ''}</li>`;
 
+/** Complejidad práctica del proyecto: visible, sin bloquear nada. */
+export function complexityView(c) {
+  if (!c) return '';
+  const meter = [1, 2, 3, 4].map(n => `<li class="ar-cx-step${n <= c.level ? ' is-on' : ''}${n > c.zone_max ? ' is-out' : ''}"${n === c.level ? ' aria-current="step"' : ''}><b>${n}</b><span>${esc(PRACTICAL_LEVELS[n].label.split(' · ')[1])}</span></li>`).join('');
+  const zone = c.within_zone ? '<span class="ui-badge ui-badge--ok">Dentro de la zona práctica habitual</span>' : '<span class="ui-badge ui-badge--warn">Fuera de la zona práctica habitual</span>';
+  return `<section class="ar-cx ui-card" aria-labelledby="h-cx"><h2 id="h-cx" class="ar-h2">Complejidad práctica</h2>
+    <ol class="ar-cx-meter" aria-label="Nivel de complejidad práctica: ${c.level} de 4">${meter}</ol>
+    <p class="ar-cx-lead"><b>${esc(c.label)}</b> ${zone}${c.uncertain ? ' <span class="ui-badge">Estimado: falta definir el tipo de producto</span>' : ''}</p>
+    <p class="ar-sub">La zona habitual son los niveles 1 a ${c.zone_max}. ${esc(SUPERVISION_TXT[c.supervision])} Los niveles contextualizan la aplicación: no limitan lo que la base explica ni bloquean ningún proyecto.</p>
+    <h3 class="ar-h3">Por qué este nivel</h3><ul class="ar-list">${c.drivers.map(d => `<li>${esc(d.reason)}</li>`).join('')}</ul>
+    ${c.parts.length ? `<h3 class="ar-h3">Partes que piden más cuidado</h3><ul class="ar-list">${c.parts.map(p => `<li><a href="${href(p.id)}" data-aprender="${esc(p.id)}" class="ar-concept">${esc(p.name)}</a> ${practicalBadge(p.level, { help: true })} <em>${esc(p.title)}.</em> ${p.level >= 4 ? 'Conocimiento avanzado y supervisión cercana.' : 'Conviene revisarlo con más cuidado.'}${p.simpler_option ? ` <b>Más simple:</b> <a href="${href(p.simpler_option.id)}" data-aprender="${esc(p.simpler_option.id)}" class="ar-concept">${esc(p.simpler_option.name)}</a> (${esc(PRACTICAL_LEVELS[p.simpler_option.level].short.toLowerCase())}).` : p.simpler_text ? ` <b>Más simple:</b> ${esc(p.simpler_text)}` : ''}</li>`).join('')}</ul>` : ''}
+    ${c.simpler.length ? `<h3 class="ar-h3">Qué lo haría más simple</h3><ul class="ar-list">${c.simpler.map(s => `<li>${esc(s.reason)} <b>→</b> ${esc(s.simpler)}</li>`).join('')}</ul>` : ''}
+  </section>`;
+}
+
 export function decisionsView(res, K, M, ctx) {
   const dec = res.decisions.filter(d => d.picks.length || d.alternatives.length);
   const cards = dec.map(d => `<section class="ar-dec ui-card" aria-labelledby="dec-${esc(d.id)}">
@@ -82,6 +99,7 @@ export function decisionsView(res, K, M, ctx) {
   const calidad = res.quality.map(q => `<li><a href="${href(q.id)}" data-aprender="${esc(q.id)}">${esc(q.entity.name)}</a><span class="ar-w ar-w-${q.weight}" title="${esc(q.reasons.join(' '))}">${NIVEL[q.weight]}</span></li>`).join('');
   return `
 <section class="ar-intro ui-card"><p><b>${esc(ctx.product)}.</b> ${esc(ctx.idea)}</p><p class="ar-sub">Estas son <b>propuestas con criterio de este proyecto</b>, no verdades universales: cada una dice por qué, qué se resigna, cuándo conviene otra cosa y cuánta confianza hay. Las piezas con enlace explican el concepto sin sacarte de acá.</p></section>
+${complexityView(res.complexity)}
 <section aria-labelledby="h-calidad"><h2 id="h-calidad" class="ar-h2">Qué pesa más en este proyecto</h2><p class="ar-sub">No todos los atributos de calidad pesan igual. Pasá el mouse o el foco por un nivel para ver por qué.</p><ul class="ar-quality">${calidad}</ul></section>
 <section aria-labelledby="h-dec"><h2 id="h-dec" class="ar-h2">Decisiones</h2><div class="ar-decs">${cards}</div></section>
 <section aria-labelledby="h-riesgos"><h2 id="h-riesgos" class="ar-h2">Riesgos a tener presentes</h2>${res.risks.length ? `<ul class="ar-list">${res.risks.map(r => `<li>${esc(r)}</li>`).join('')}</ul>` : '<p class="ar-sub">Con lo que respondiste no se detectaron riesgos específicos; igual revisá la lista de seguridad del Project Pack.</p>'}</section>

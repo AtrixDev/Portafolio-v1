@@ -70,7 +70,8 @@
       "owasp-top10"
     ],
     "evidence_type": "standard",
-    "adoption": "default",
+    "justification": "baseline",
+    "practical_level": 2,
     "library_refs": [
       "clerk"
     ]
@@ -121,7 +122,8 @@
       "owasp-top10"
     ],
     "evidence_type": "industry_practice",
-    "adoption": "default",
+    "justification": "baseline",
+    "practical_level": 1,
     "library_refs": []
   },
   {
@@ -168,7 +170,8 @@
       "owasp-asvs"
     ],
     "evidence_type": "standard",
-    "adoption": "when_needed",
+    "justification": "by_need",
+    "practical_level": 3,
     "library_refs": []
   },
   {
@@ -217,7 +220,8 @@
       "fowler-test-pyramid"
     ],
     "evidence_type": "expert_source",
-    "adoption": "default",
+    "justification": "baseline",
+    "practical_level": 1,
     "library_refs": []
   },
   {
@@ -266,7 +270,8 @@
       "fowler-test-pyramid"
     ],
     "evidence_type": "expert_source",
-    "adoption": "default",
+    "justification": "baseline",
+    "practical_level": 2,
     "library_refs": []
   },
   {
@@ -312,7 +317,8 @@
       "fowler-test-pyramid"
     ],
     "evidence_type": "official_documentation",
-    "adoption": "when_needed",
+    "justification": "by_need",
+    "practical_level": 2,
     "library_refs": []
   },
   {
@@ -355,7 +361,8 @@
       "otel-observability"
     ],
     "evidence_type": "official_documentation",
-    "adoption": "default",
+    "justification": "baseline",
+    "practical_level": 2,
     "library_refs": []
   }
 ]

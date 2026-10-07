@@ -304,21 +304,21 @@ test('lo que se decide antes condiciona lo posterior (comunicación depende del 
 });
 
 // ═══ Universo teórico vs. aplicación práctica ═══
-import { ADOPTION_IDS, NO_ADOPTION_TYPES, FIT, NECESSITY } from '../../frontend/js/architect/model.js';
+import { JUSTIFICATION_IDS, NO_JUSTIFICATION_TYPES, FIT, NECESSITY } from '../../frontend/js/architect/model.js';
 {
   const E = K.entities, R2 = JSON.parse(readFileSync(new URL('../../frontend/data/architect/rules.json', import.meta.url), 'utf8'));
   const dec2 = a => { let st = B.emptyState(); for (const [q, v] of Object.entries(a)) st = B.setAnswer(M, st, q, v).state; return decide(R2, K, B.resolve(M, st)); };
   const d = (res, id) => res.decisions.find(x => x.id === id);
 
-  test('todo concepto de práctica declara su «adoption» y los tipos de producto y calidad no', () => {
-    for (const e of E) NO_ADOPTION_TYPES.includes(e.type) ? assert.equal(e.adoption, undefined, e.id) : assert.ok(ADOPTION_IDS.includes(e.adoption), `${e.id}: ${e.adoption}`);
-    assert.equal(K.get('microservices').adoption, 'specialized');
-    assert.equal(K.get('monolith').adoption, 'default');
+  test('todo concepto de práctica declara su «justification» y los tipos de producto y calidad no', () => {
+    for (const e of E) NO_JUSTIFICATION_TYPES.includes(e.type) ? assert.equal(e.justification, undefined, e.id) : assert.ok(JUSTIFICATION_IDS.includes(e.justification), `${e.id}: ${e.justification}`);
+    assert.equal(K.get('microservices').justification, 'strong_reason');
+    assert.equal(K.get('monolith').justification, 'baseline');
   });
-  test('lo especializado existe en la base pero no puede recomendarse sin una condición de justificación (lo valida el esquema de reglas)', () => {
-    for (const dd of R2.decisions) for (const c of dd.candidates) if (!c.pseudo && K.get(c.id).adoption === 'specialized') assert.ok(c.justified_when && c.unjustified, `${dd.id}/${c.id}`);
+  test('lo que requiere razón fuerte existe en la base pero no puede recomendarse sin una condición de justificación (lo valida el esquema de reglas)', () => {
+    for (const dd of R2.decisions) for (const c of dd.candidates) if (!c.pseudo && K.get(c.id).justification === 'strong_reason') assert.ok(c.justified_when && c.unjustified, `${dd.id}/${c.id}`);
     const roto = structuredClone(R2); delete roto.decisions.find(x => x.id === 'architecture').candidates.find(c => c.id === 'microservices').justified_when;
-    assert.match(validateRules(roto, M.signals, K).join(' | '), /microservices: es una opción especializada: necesita justified_when/);
+    assert.match(validateRules(roto, M.signals, K).join(' | '), /microservices: es una opción que requiere razón fuerte: necesita justified_when/);
   });
   test('microservicios están explicados en la base pero un proyecto chico o mediano recibe un monolito (modular si hace falta) y se le dice que no se necesita todavía', () => {
     for (const a of [{ product: 'saas', team: 'small', scale: 'medium' }, { product: 'ecommerce', team: 'solo', scale: 'small' }, { product: 'saas', team: 'large', scale: 'small' }]) {
@@ -357,5 +357,66 @@ import { ADOPTION_IDS, NO_ADOPTION_TYPES, FIT, NECESSITY } from '../../frontend/
   });
   test('el criterio es el proyecto, no la capacidad de quien lo construye: ninguna regla ni riesgo habla de «práctica», «experiencia» o «nivel» de la persona', () => {
     assert.doesNotMatch(JSON.stringify(R2), /exige práctica|tu nivel|sin experiencia|principiante/i);
+  });
+}
+
+// ═══ Complejidad práctica (niveles 1–4) ═══
+import { PRACTICAL_LEVELS, PRACTICAL_ZONE_MAX } from '../../frontend/js/architect/model.js';
+import { validateComplexity } from '../../frontend/js/architect/complexity.js';
+{
+  const RX = JSON.parse(readFileSync(new URL('../../frontend/data/architect/rules.json', import.meta.url), 'utf8'));
+  const run2 = (a, rules = RX) => { let st = B.emptyState(); for (const [q, v] of Object.entries(a)) st = B.setAnswer(M, st, q, v).state; return decide(rules, K, B.resolve(M, st)); };
+  const nivel = a => run2(a).complexity.level;
+
+  test('la clasificación 1–4 existe con sus ejemplos y todo concepto de práctica declara su nivel práctico (los atributos de calidad no)', () => {
+    assert.deepEqual(Object.keys(PRACTICAL_LEVELS), ['1', '2', '3', '4']);
+    assert.equal(PRACTICAL_ZONE_MAX, 3);
+    for (const e of K.entities) e.type === 'quality_attribute' ? assert.equal(e.practical_level, undefined, e.id) : assert.ok([1, 2, 3, 4].includes(e.practical_level), `${e.id}: ${e.practical_level}`);
+    assert.equal(K.get('microservices').practical_level, 4, 'la teoría cubre el nivel 4: la ficha existe y lo declara');
+    assert.ok(K.get('microservices').explanation.length >= 2);
+  });
+  test('cada tipo de proyecto cae en su nivel: landing e institucional 1 · e-commerce y reservas 2 · gestión, dashboard y SaaS 3 · distribuido o de alta criticidad 4', () => {
+    assert.equal(nivel({ product: 'landing' }), 1);
+    assert.equal(nivel({ product: 'institutional-site' }), 1);
+    assert.equal(nivel({ product: 'institutional-site', capture: 'bookings' }), 2, 'reservas');
+    assert.equal(nivel({ product: 'institutional-site', content_edit: 'often' }), 2, 'CMS');
+    assert.equal(nivel({ product: 'ecommerce', team: 'solo', scale: 'small' }), 2);
+    for (const product of ['management-system', 'dashboard', 'saas']) assert.equal(nivel({ product, team: 'small', scale: 'small' }), 3, product);
+    assert.equal(nivel({ product: 'saas', team: 'large', scale: 'large', background: 'heavy', realtime: 'core', integrations: 'many' }), 4);
+    assert.equal(nivel({ product: 'management-system', sensitive_data: 'regulated' }), 4, 'alta criticidad');
+    assert.equal(nivel({ product: 'marketplace', payments: 'split', scale: 'medium', team: 'large' }), 4);
+  });
+  test('un proyecto de nivel 4 no se bloquea: se recomienda igual, queda fuera de la zona habitual y pide supervisión cercana', () => {
+    const r = run2({ product: 'saas', team: 'large', scale: 'large', background: 'heavy', realtime: 'core', integrations: 'many' });
+    assert.equal(r.complexity.within_zone, false); assert.equal(r.complexity.supervision, 'close');
+    assert.ok(r.decisions.every(d => d.picks.length || d.alternatives.length) && r.decisions.find(d => d.id === 'architecture').picks.length === 1);
+    assert.ok(r.complexity.parts.length && r.complexity.simpler.length, 'muestra qué partes pesan y qué alternativa más simple las reduciría');
+  });
+  test('el nivel contextualiza pero NO cambia lo que se recomienda: con o sin el bloque de complejidad las decisiones son idénticas', () => {
+    const sin = structuredClone(RX); delete sin.complexity;
+    for (const a of [{ product: 'saas', team: 'large', scale: 'large' }, { product: 'ecommerce' }, { product: 'landing' }]) {
+      assert.deepEqual(run2(a, sin).decided, run2(a).decided);
+      assert.equal(run2(a, sin).complexity, null);
+    }
+  });
+  test('lo que sube el nivel viene con su explicación y su alternativa más simple; las partes avanzadas indican qué opción más simple hay', () => {
+    const c = run2({ product: 'ecommerce', payments: 'split', scale: 'medium', team: 'large' }).complexity;
+    assert.ok(c.drivers.length >= 2 && c.drivers.every(d => d.reason));
+    assert.ok(c.simpler.every(s => s.simpler && s.reason));
+    const saas = run2({ product: 'saas', team: 'large', scale: 'large' }).complexity.parts;
+    assert.ok(saas.some(p => p.simpler_option || p.simpler_text), 'alguna parte avanzada ofrece una opción más simple');
+    assert.ok(saas.every(p => p.level >= 3));
+  });
+  test('producto sin definir: nivel estimado y marcado como incierto', () => {
+    const c = run2({ product: 'other' }).complexity; assert.equal(c.uncertain, true); assert.equal(c.level, 2);
+  });
+  test('el validador de complejidad detecta reglas rotas', () => {
+    const rompe = fn => { const x = structuredClone(RX.complexity); fn(x); return validateComplexity(x, M.signals, RX.decisions.map(d => d.id)).join(' | '); };
+    assert.match(rompe(x => { x.bumps[0].to = 1; }), /to debe ser 2, 3 o 4/);
+    assert.match(rompe(x => { delete x.bumps[0].reason; }), /falta reason/);
+    assert.match(rompe(x => { x.bumps[0].when = { s: 'zzz', is: 'a' }; }), /señal desconocida/);
+    assert.match(rompe(x => { x.bumps.find(b => b.to === 4).simpler = ''; }), /necesita «simpler»/);
+    assert.match(rompe(x => { x.unknown_product_base = 9; }), /unknown_product_base/);
+    assert.deepEqual(validateComplexity(RX.complexity, M.signals, RX.decisions.map(d => d.id)), []);
   });
 }

@@ -81,7 +81,8 @@
       "mdn-http-caching"
     ],
     "evidence_type": "standard",
-    "adoption": "default",
+    "justification": "baseline",
+    "practical_level": 1,
     "library_refs": [],
     "diagram": {
       "purpose": "concept",
@@ -201,7 +202,8 @@
       "rfc-9110"
     ],
     "evidence_type": "expert_source",
-    "adoption": "default",
+    "justification": "baseline",
+    "practical_level": 2,
     "library_refs": [
       "spa-api"
     ]
@@ -288,7 +290,8 @@
       "mdn-websockets"
     ],
     "evidence_type": "standard",
-    "adoption": "when_needed",
+    "justification": "by_need",
+    "practical_level": 3,
     "library_refs": [],
     "diagram": {
       "purpose": "concept",
@@ -414,7 +417,8 @@
       "azure-queue-load-leveling"
     ],
     "evidence_type": "official_documentation",
-    "adoption": "when_needed",
+    "justification": "by_need",
+    "practical_level": 3,
     "library_refs": [],
     "diagram": {
       "purpose": "concept",
@@ -544,7 +548,8 @@
       "gcp-pubsub"
     ],
     "evidence_type": "official_framework",
-    "adoption": "specialized",
+    "justification": "strong_reason",
+    "practical_level": 4,
     "library_refs": [],
     "diagram": {
       "purpose": "concept",

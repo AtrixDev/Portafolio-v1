@@ -1,6 +1,7 @@
 [
   {
     "id": "landing", "slug": "landing", "name": "Landing page", "type": "product_type", "category": "Producto web", "depth": "full", "level": "beginner",
+    "practical_level": 1,
     "summary": "Una página (o muy pocas) con un único objetivo de conversión: que la persona haga una cosa, como escribir, reservar o comprar.",
     "problem_solved": "Convertir visitas de una campaña o de una búsqueda en una acción concreta, sin distraer con navegación ni secciones que no ayudan a decidir.",
     "explanation": [
@@ -31,6 +32,7 @@
   },
   {
     "id": "institutional-site", "slug": "institutional-site", "name": "Sitio institucional", "type": "product_type", "category": "Producto web", "depth": "full", "level": "beginner",
+    "practical_level": 1,
     "summary": "El sitio de una empresa, estudio u organización: quiénes son, qué hacen, cómo contactarlos. Contenido relativamente estable con varias secciones.",
     "problem_solved": "Dar presencia y credibilidad online a una organización y hacer que la encuentren cuando la buscan.",
     "explanation": [
@@ -61,6 +63,7 @@
   },
   {
     "id": "ecommerce", "slug": "ecommerce", "name": "E-commerce", "type": "product_type", "category": "Producto web", "depth": "full", "level": "intermediate",
+    "practical_level": 2,
     "summary": "Una tienda online: catálogo, carrito, pago, stock y pedidos. Combina contenido público (que debe posicionar) con transacciones que no pueden fallar.",
     "problem_solved": "Vender productos o servicios por internet de forma que el catálogo se encuentre, el pago funcione y los pedidos se gestionen.",
     "explanation": [
@@ -94,6 +97,7 @@
   },
   {
     "id": "saas", "slug": "saas", "name": "SaaS", "type": "product_type", "category": "Producto web", "depth": "full", "level": "advanced",
+    "practical_level": 3,
     "summary": "Un software ofrecido como servicio por suscripción: cuentas, planes, datos por cliente y mejoras continuas.",
     "problem_solved": "Entregar una herramienta a muchos clientes sin que cada uno instale ni mantenga nada, y cobrar de forma recurrente.",
     "explanation": [
@@ -126,6 +130,7 @@
   },
   {
     "id": "dashboard", "slug": "dashboard", "name": "Dashboard", "type": "product_type", "category": "Producto web", "depth": "full", "level": "intermediate",
+    "practical_level": 3,
     "summary": "Una interfaz para ver y entender datos: indicadores, gráficos y filtros que ayudan a tomar decisiones.",
     "problem_solved": "Convertir datos dispersos en información que una persona puede leer rápido y sobre la cual decidir.",
     "explanation": [
@@ -155,6 +160,7 @@
   },
   {
     "id": "management-system", "slug": "management-system", "name": "Sistema de gestión", "type": "product_type", "category": "Producto web", "depth": "full", "level": "intermediate",
+    "practical_level": 3,
     "summary": "Un sistema interno para operar un negocio: cargar datos, aplicar reglas, aprobar, reportar. Pocos usuarios, procesos complejos.",
     "problem_solved": "Reemplazar planillas y mensajes sueltos por un lugar único donde los procesos del negocio se registran y se controlan.",
     "explanation": [
@@ -185,6 +191,7 @@
   },
   {
     "id": "marketplace", "slug": "marketplace", "name": "Marketplace", "type": "product_type", "category": "Producto web", "depth": "full", "level": "advanced",
+    "practical_level": 3,
     "summary": "Una plataforma que conecta a vendedores y compradores. El negocio depende de la confianza, la liquidez y de dividir pagos entre las partes.",
     "problem_solved": "Reunir oferta y demanda en un mismo lugar y facilitar la transacción entre partes que no se conocen.",
     "explanation": [

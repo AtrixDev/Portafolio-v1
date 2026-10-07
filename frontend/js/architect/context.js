@@ -2,6 +2,7 @@
 import { summarize, resolve } from './builder.js';
 import { EVIDENCE_TYPES } from './model.js';
 import { evalCond } from './conditions.js';
+import { complexityLine, complexityMarkdown } from './complexity.js';
 
 export const NIVEL = { 1: 'bajo', 2: 'medio', 3: 'alto' };
 const bullets = (items, empty = '- (ninguno por ahora)') => items.length ? items.map(x => `- ${x}`).join('\n') : empty;
@@ -16,7 +17,7 @@ export function buildContext(M, state, res, K, pack, adrs = []) {
   const productId = res.signals.product, productName = productId === 'unknown' ? 'Proyecto web (tipo todavía no definido)' : PRODUCT_NAME(M, productId);
   const sigRows = rows.filter(r => r.kind !== 'text' && r.signal !== 'product');   // el producto ya figura arriba
   const signalsMd = sigRows.map(r => `- ${r.label}: ${r.value}${r.kind === 'assumed' ? ' _(supuesto)_' : r.kind === 'unknown' ? ' _(abierto)_' : ''}`).join('\n');
-  const summary = [`- **Qué se quiere construir:** ${idea || '(no definido)'}`, `- **Usuarios y problema:** ${users || '(no definido)'}`, `- **Tipo de producto:** ${productName}`, '', signalsMd].join('\n');
+  const summary = [`- **Qué se quiere construir:** ${idea || '(no definido)'}`, `- **Usuarios y problema:** ${users || '(no definido)'}`, `- **Tipo de producto:** ${productName}`, ...(res.complexity ? [`- **Complejidad práctica:** ${complexityLine(res.complexity)}`] : []), '', signalsMd].join('\n');
   const decisions = res.decisions.filter(d => d.picks.length).map(d => `- **${d.title}:** ${d.picks.map(p => p.name).join(', ')}${d.confidence.level === 'baja' ? ' _(confianza baja)_' : ''}`).join('\n');
   const risks = bullets(res.risks);
   const open = bullets(res.open.map(o => `${M.signals[o.signal]?.label || o.signal}: ${o.why}`));
@@ -35,7 +36,7 @@ export function buildContext(M, state, res, K, pack, adrs = []) {
   return {
     idea: idea || '(no definido)', users: users || '(no definido)', product: productName, summary, decisions: decisions || '- (todavía no hay decisiones)',
     adrs: bullets(adrs.map(a => `${a.id} · ${a.title} (${a.status.toLowerCase()})`)), risks, open_questions: open, quality, constraints, data_model: dataModel, structure, roadmap,
-    testing, security, definition_of_done: dod, ai_strategy: ai,
+    testing, security, definition_of_done: dod, ai_strategy: ai, complexity_md: complexityMarkdown(res.complexity),
     _entities: entities, _structure: struct,
   };
 }

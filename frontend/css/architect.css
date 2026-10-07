@@ -233,5 +233,17 @@
 .ar-actions .ar-link, .ar-foot .ar-link, .ar-count .ar-link { min-height: var(--tap); padding-inline: var(--sp-2); }
 
 /* Universo vs. práctica: cuánta justificación pide un concepto antes de recomendarlo */
-.ar-adopt { max-width: 62ch; font-size: var(--fs-sm); color: var(--text-2); margin: var(--sp-3) 0 0; }
-.ar-adopt em { font-style: normal; color: var(--text); }
+.ar-just { max-width: 62ch; font-size: var(--fs-sm); color: var(--text-2); margin: var(--sp-3) 0 0; }
+.ar-just em { font-style: normal; color: var(--text); }
+
+/* Complejidad práctica (niveles 1–4): contextualiza, no bloquea */
+.ar-cx { display: grid; gap: var(--sp-3); }
+.ar-h3 { font: var(--fw-title) var(--fs-md, 1.05rem)/1.3 var(--font-display); margin: var(--sp-4) 0 0; }
+.ar-cx-meter { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-2); }
+.ar-cx-step { display: grid; gap: 2px; padding: var(--sp-3); border: 1px solid var(--line); border-radius: var(--radius-sm, 8px); color: var(--text-2); font-size: var(--fs-sm); }
+.ar-cx-step b { font: var(--fw-title) 1.1rem/1 var(--font-display); }
+.ar-cx-step.is-on { border-color: var(--text); color: var(--text); background: var(--surface-2, transparent); }
+.ar-cx-step.is-out { border-style: dashed; }
+.ar-cx-step[aria-current="step"] { box-shadow: inset 0 -3px 0 var(--accent, currentColor); }
+.ar-cx-lead { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3); margin: 0; }
+@media (max-width: 560px) { .ar-cx-meter { grid-template-columns: repeat(2, 1fr); } }

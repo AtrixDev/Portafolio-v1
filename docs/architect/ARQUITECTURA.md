@@ -65,7 +65,7 @@ backend/test/architect-*.test.mjs
 | 7 Prompt Generator | hecha | `prompts.js`, `prompts.json` |
 | 8 Project Pack | hecha | `pack.js`, `pack.json`, `views-project.js` |
 
-Verificación: `node --test backend/test/` → 258/258 (84 del Architect, incluido un barrido de 1500 proyectos aleatorios); `python3 tools/qa-architect.py` → 115/115 en Chromium (con `node tools/dev-server.mjs`).
+Verificación: `node --test backend/test/` → 266/266 (92 del Architect, incluido un barrido de 1500 proyectos aleatorios); `python3 tools/qa-architect.py` → 122/122 en Chromium (con `node tools/dev-server.mjs`).
 
 ## 7. Pendiente / límites declarados
 
@@ -83,12 +83,29 @@ La base cubre todo lo que existe, aunque sea avanzado; la recomendación es prop
 | Pregunta | Dónde vive | Valores |
 |---|---|---|
 | ¿Existe? | Figura en la base (ficha completa o de apoyo) | — |
-| ¿Cuánta justificación pide? | `adoption` de cada concepto | `default` Punto de partida habitual · `when_needed` Según necesidad · `specialized` Especializado |
+| ¿Cuánta justificación pide? | `justification` de cada concepto | `baseline` Punto de partida habitual · `by_need` Según necesidad · `strong_reason` Requiere razón fuerte |
 | ¿Se necesita? | `necessity` de cada propuesta | `required` (lo exige el proyecto, regla con `required: true`) · `justified` (opción avanzada con su condición cumplida) · `proportional` (la opción simple que alcanza) |
 | ¿Es apropiado para ESTE proyecto? | `fit` de cada opción | `appropriate` (propuesta) · `viable` Puede servir · `not_needed` No se necesita todavía · `not_fit` No es apropiado hoy |
 
-Reglas del motor: (1) una opción con `justified_when` solo puede proponerse si esa condición se cumple; con datos desconocidos no se cumple (ante la duda, lo más simple); (2) todo concepto `specialized` debe tener `justified_when` y `unjustified` (lo valida `validateRules`); (3) el criterio es el proyecto (alcance, escala, equipo como carga de operación, tiempo, criticidad vía datos sensibles y pagos), nunca la capacidad de quien lo construye. Aún no hay señales de presupuesto ni de criticidad propias: son una ampliación futura del Project Builder.
+Reglas del motor: (1) una opción con `justified_when` solo puede proponerse si esa condición se cumple; con datos desconocidos no se cumple (ante la duda, lo más simple); (2) todo concepto `strong_reason` debe tener `justified_when` y `unjustified` (lo valida `validateRules`); (3) el criterio es el proyecto (alcance, escala, equipo como carga de operación, tiempo, criticidad vía datos sensibles y pagos), nunca la capacidad de quien lo construye. Aún no hay señales de presupuesto ni de criticidad propias: son una ampliación futura del Project Builder.
+
+### Complejidad práctica (niveles 1–4)
+
+Contextualiza la aplicación; **no limita la teoría** ni cambia qué se recomienda (hay un test que lo comprueba). Un proyecto de nivel 4 no se bloquea: se hace visible su complejidad y su riesgo.
+
+| Nivel | Qué es | Ejemplos |
+|---|---|---|
+| 1 | Informativo | landing, institucional, portfolio, sitio profesional informativo |
+| 2 | Con backend y persistencia | e-commerce, reservas/turnos, formularios avanzados, CMS, integraciones con APIs |
+| 3 | Aplicación o sistema | sistema de gestión, dashboard, portal, aplicación web, SaaS chico o mediano |
+| 4 | Distribuido o de alta criticidad | sistemas distribuidos, multi-tenant complejo, tiempo real avanzado, microservicios, alta criticidad o escala |
+
+- **Zona práctica habitual:** niveles 1 a 3 (`PRACTICAL_ZONE_MAX`). Fuera de ella se avisa y se pide supervisión cercana; no se bloquea.
+- **En un concepto:** `practical_level` (desde qué nivel de proyecto entra en juego y cuánto cuidado pide). No es `level` (dificultad de aprenderlo). Los atributos de calidad no lo llevan.
+- **En un proyecto:** nivel = el mayor entre el del tipo de producto (su `practical_level`) y los saltos de `complexity.bumps` en `rules.json` (señales o decisiones tomadas; cada salto trae su razón y, si sube a 3 o 4, la alternativa más simple). Producto sin definir: se estima en 2 y se marca incierto.
+- **Qué muestra** (`res.complexity`): nivel, dentro/fuera de la zona, supervisión (`none` · `review` · `close`), por qué ese nivel, partes de la propuesta de nivel 3–4 con su opción más simple (en una elección, la alternativa de menor nivel; en un conjunto, el texto `simpler` de la regla) y qué lo simplificaría. Aparece en la pestaña Decisiones, en el resumen del Project Pack y como línea del contexto de todos los prompts.
+- **Nombre del campo de justificación:** `justification` (antes `adoption`, que sugería popularidad): `baseline` · `by_need` · `strong_reason`.
 
 ## 9. QA profundo (07/10/2026)
 
-Encontrado y corregido: SSR con cualquier producto lanzaba una excepción al armar el blueprint (etiqueta de 45 caracteres); el producto «otro» sin datos proponía sitio estático con base relacional; el sitio estático podía proponerse para productos con lógica propia; la cola de mensajes sugería operar un broker aunque el proyecto fuera chico; tres fuentes (ADR, C4) no se mostraban en ninguna parte; un hash mal formado lanzaba un error en `main.js`. Prueba nueva: `backend/test/architect-barrido.test.mjs`.
+Encontrado y corregido: SSR con cualquier producto lanzaba una excepción al armar el blueprint (etiqueta de 45 caracteres); el producto «otro» sin datos proponía sitio estático con base relacional; el sitio estático podía proponerse para productos con lógica propia; la cola de mensajes sugería operar un broker aunque el proyecto fuera chico; tres fuentes (ADR, C4) no se mostraban en ninguna parte; un hash mal formado lanzaba un error en `main.js`. Prueba nueva: `backend/test/architect-barrido.test.mjs`. Después se descubrió que ese barrido nunca respondía las preguntas de afinado (tiempo real, búsqueda, IA), por lo que no pasaba por WebSocket: una etiqueta de conexión de 35 caracteres rompía el blueprint con tiempo real. Corregido, y el barrido ahora exige haber recorrido las opciones principales y fuerza las raras (microservicios, eventos, pub/sub, agentes).

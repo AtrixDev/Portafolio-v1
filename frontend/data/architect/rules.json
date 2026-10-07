@@ -1169,7 +1169,8 @@
        }
       ]
      },
-     "unjustified": "Todavía no hay evidencia de un problema de rendimiento: conviene medir antes de sumar una caché."
+     "unjustified": "Todavía no hay evidencia de un problema de rendimiento: conviene medir antes de sumar una caché.",
+     "simpler": "Medir primero y mejorar consultas e índices antes de sumar una caché."
     },
     {
      "id": "object-storage",
@@ -1263,7 +1264,8 @@
        }
       ]
      },
-     "unjustified": "Existe y se explica en la base, pero la búsqueda de texto de la base de datos cubre la necesidad actual con una pieza menos que operar."
+     "unjustified": "Existe y se explica en la base, pero la búsqueda de texto de la base de datos cubre la necesidad actual con una pieza menos que operar.",
+     "simpler": "Usar la búsqueda de texto de la base de datos."
     }
    ]
   },
@@ -1337,7 +1339,8 @@
      "revisit": [
       "Planificar la reconexión y el escalado de conexiones abiertas."
      ],
-     "not_needed": "Con actualizaciones ocasionales o sin tiempo real, alcanza con consultar cada pocos segundos: es más simple de operar."
+     "not_needed": "Con actualizaciones ocasionales o sin tiempo real, alcanza con consultar cada pocos segundos: es más simple de operar.",
+     "simpler": "Consultar cada pocos segundos en lugar de mantener conexiones abiertas."
     },
     {
      "id": "message-queue",
@@ -1373,7 +1376,8 @@
      "revisit": [
       "Diseñar para mensajes duplicados y limitar los reintentos."
      ],
-     "not_needed": "No hay tareas que justifiquen una cola."
+     "not_needed": "No hay tareas que justifiquen una cola.",
+     "simpler": "Ejecutar la tarea dentro de la petición, o con una tabla de tareas en la misma base, mientras el volumen sea chico."
     },
     {
      "id": "pub-sub",
@@ -1429,7 +1433,8 @@
        }
       ]
      },
-     "unjustified": "Existe y se explica en la base, pero no hay varios consumidores que reaccionen a los mismos hechos."
+     "unjustified": "Existe y se explica en la base, pero no hay varios consumidores que reaccionen a los mismos hechos.",
+     "simpler": "Una cola simple, o llamadas directas, mientras haya un solo consumidor."
     }
    ]
   },
@@ -1514,7 +1519,8 @@
      "revisit": [
       "Ajustar el nivel de verificación al riesgo real del proyecto."
      ],
-     "not_needed": "El nivel de riesgo no justifica todavía un proceso de verificación formal: alcanza con la lista de riesgos y buenas prácticas."
+     "not_needed": "El nivel de riesgo no justifica todavía un proceso de verificación formal: alcanza con la lista de riesgos y buenas prácticas.",
+     "simpler": "Aplicar el OWASP Top 10 como lista de verificación y reservar ASVS para las partes más críticas."
     }
    ]
   },
@@ -2191,5 +2197,302 @@
    },
    "text": "El código generado por IA puede parecer correcto y no serlo: exigí tests y revisión humana antes de integrar."
   }
- ]
+ ],
+ "complexity": {
+  "unknown_product_base": 2,
+  "bumps": [
+   {
+    "to": 2,
+    "when": {
+     "s": "capture",
+     "is": "bookings"
+    },
+    "reason": "Reservas o turnos: hacen falta backend y datos propios.",
+    "simpler": "Empezar con un servicio de reservas externo embebido y migrar solo si el volumen o el negocio lo piden."
+   },
+   {
+    "to": 2,
+    "when": {
+     "s": "content_edit",
+     "is": "often"
+    },
+    "reason": "El contenido cambia seguido: hace falta un CMS o un panel de edición.",
+    "simpler": "Un CMS administrado (headless) en lugar de construir el panel propio."
+   },
+   {
+    "to": 2,
+    "when": {
+     "s": "auth",
+     "is": "users"
+    },
+    "reason": "Hay cuentas de usuario: aparecen sesiones, recuperación de acceso y datos por persona.",
+    "simpler": "Un proveedor de identidad administrado en lugar de implementar el acceso desde cero."
+   },
+   {
+    "to": 3,
+    "when": {
+     "s": "auth",
+     "is": "roles"
+    },
+    "reason": "Roles y permisos: los errores de autorización son sutiles y graves.",
+    "simpler": "Empezar con un único rol administrador y sumar roles cuando haga falta."
+   },
+   {
+    "to": 3,
+    "when": {
+     "s": "auth",
+     "is": "multi_tenant"
+    },
+    "reason": "Varias organizaciones con datos separados: el aislamiento hay que diseñarlo y probarlo.",
+    "simpler": "Lanzar con una sola organización y separar los datos por organización recién cuando haya más de una."
+   },
+   {
+    "to": 4,
+    "when": {
+     "all": [
+      {
+       "s": "auth",
+       "is": "multi_tenant"
+      },
+      {
+       "any": [
+        {
+         "s": "scale",
+         "is": "large"
+        },
+        {
+         "s": "sensitive_data",
+         "in": [
+          "financial",
+          "regulated"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "reason": "Multi-tenant con mucha escala o datos de alto riesgo: el aislamiento y la operación son críticos.",
+    "simpler": "Empezar single-tenant o con pocos clientes y endurecer el aislamiento antes de crecer."
+   },
+   {
+    "to": 2,
+    "when": {
+     "s": "payments",
+     "is": "simple"
+    },
+    "reason": "Cobros con un proveedor: hay que manejar pagos duplicados, fallidos y reembolsos.",
+    "simpler": "Un enlace de pago o un checkout alojado del proveedor, sin carrito propio."
+   },
+   {
+    "to": 3,
+    "when": {
+     "s": "payments",
+     "is": "split"
+    },
+    "reason": "Pagos divididos entre partes: conciliación, reembolsos y obligaciones legales.",
+    "simpler": "Cobrar con un solo flujo simple y liquidar a las partes de forma manual hasta validar el modelo (revisando la normativa aplicable)."
+   },
+   {
+    "to": 4,
+    "when": {
+     "all": [
+      {
+       "s": "payments",
+       "is": "split"
+      },
+      {
+       "s": "scale",
+       "in": [
+        "medium",
+        "large"
+       ]
+      }
+     ]
+    },
+    "reason": "Pagos divididos con volumen: el dinero de terceros exige conciliación y controles de alta criticidad.",
+    "simpler": "Limitar el volumen y las partes al inicio, o usar un servicio de pagos para plataformas que absorba esa carga."
+   },
+   {
+    "to": 2,
+    "when": {
+     "s": "realtime",
+     "is": "occasional"
+    },
+    "reason": "Actualizaciones de vez en cuando: hay que decidir cómo se enteran los clientes.",
+    "simpler": "Consultar cada pocos segundos en lugar de mantener conexiones abiertas."
+   },
+   {
+    "to": 3,
+    "when": {
+     "s": "realtime",
+     "is": "core"
+    },
+    "reason": "El tiempo real es central: conexiones persistentes y estado compartido.",
+    "simpler": "Consultas periódicas cada pocos segundos mientras la necesidad real no exija inmediatez."
+   },
+   {
+    "to": 4,
+    "when": {
+     "all": [
+      {
+       "s": "realtime",
+       "is": "core"
+      },
+      {
+       "s": "scale",
+       "is": "large"
+      }
+     ]
+    },
+    "reason": "Tiempo real con mucha escala: repartir conexiones y eventos entre servidores.",
+    "simpler": "Acotar el tiempo real a la parte que de verdad lo necesita y resolver el resto con consultas."
+   },
+   {
+    "to": 3,
+    "when": {
+     "s": "background",
+     "is": "heavy"
+    },
+    "reason": "Tareas largas o pesadas en segundo plano: colas, reintentos y trabajadores.",
+    "simpler": "Delegar el trabajo pesado en un servicio administrado (colas o funciones del proveedor) con trabajos acotados."
+   },
+   {
+    "to": 3,
+    "when": {
+     "s": "scale",
+     "is": "large"
+    },
+    "reason": "Escala grande: el rendimiento y los costos dejan de ser un detalle.",
+    "simpler": "Lanzar acotado, medir y escalar por etapas en lugar de diseñar para el máximo desde el inicio."
+   },
+   {
+    "to": 3,
+    "when": {
+     "s": "integrations",
+     "is": "many"
+    },
+    "reason": "Muchas integraciones: cada una es un punto de falla con su propio contrato.",
+    "simpler": "Integrar primero la más importante y dejar el resto para después."
+   },
+   {
+    "to": 3,
+    "when": {
+     "s": "files",
+     "is": "media_heavy"
+    },
+    "reason": "Mucho contenido multimedia: almacenamiento, procesamiento y entrega pesan.",
+    "simpler": "Un servicio administrado de imágenes y video en lugar de procesarlos en la aplicación."
+   },
+   {
+    "to": 3,
+    "when": {
+     "s": "search",
+     "is": "central"
+    },
+    "reason": "La búsqueda es central: relevancia, filtros y sincronización del índice.",
+    "simpler": "Empezar con la búsqueda de texto de la base de datos y medir antes de sumar un motor dedicado."
+   },
+   {
+    "to": 3,
+    "when": {
+     "s": "sensitive_data",
+     "is": "financial"
+    },
+    "reason": "Datos financieros: el costo de una falla de seguridad es alto.",
+    "simpler": "Guardar lo mínimo y delegar los datos más sensibles en un proveedor especializado."
+   },
+   {
+    "to": 4,
+    "when": {
+     "s": "sensitive_data",
+     "is": "regulated"
+    },
+    "reason": "Datos regulados (salud, legales…): hay obligaciones legales y una criticidad alta.",
+    "simpler": "Reducir el alcance a los datos estrictamente necesarios y validar los requisitos legales antes de construir."
+   },
+   {
+    "to": 2,
+    "when": {
+     "s": "ai",
+     "is": "assist"
+    },
+    "reason": "Un asistente de IA dentro del producto: integración con un proveedor y control de costos."
+   },
+   {
+    "to": 3,
+    "when": {
+     "s": "ai",
+     "in": [
+      "automate",
+      "open_ended"
+     ]
+    },
+    "reason": "IA que automatiza procesos o resuelve tareas abiertas: hay que verificar, limitar y supervisar sus resultados.",
+    "simpler": "Empezar con un flujo de pasos fijos y un asistente, y dejar los agentes para cuando se compruebe que no alcanza."
+   },
+   {
+    "to": 4,
+    "when": {
+     "all": [
+      {
+       "s": "ai",
+       "is": "open_ended"
+      },
+      {
+       "s": "scale",
+       "is": "large"
+      }
+     ]
+    },
+    "reason": "Agentes de IA con mucho uso: costos, límites y supervisión son críticos.",
+    "simpler": "Acotar las tareas del agente y mantener una revisión humana mientras no haya evidencia de confiabilidad."
+   },
+   {
+    "to": 3,
+    "when": {
+     "d": "architecture",
+     "is": "web-queue-worker"
+    },
+    "reason": "La arquitectura propuesta separa un frente web y un trabajador."
+   },
+   {
+    "to": 4,
+    "when": {
+     "d": "architecture",
+     "in": [
+      "microservices",
+      "event-driven"
+     ]
+    },
+    "reason": "La arquitectura propuesta reparte el sistema en piezas que se comunican por red o por eventos.",
+    "simpler": "Un monolito modular con límites claros da el orden sin el costo de operar piezas distribuidas."
+   },
+   {
+    "to": 4,
+    "when": {
+     "d": "communication",
+     "is": "pub-sub"
+    },
+    "reason": "Hay publicación y suscripción entre varios consumidores: entrega duplicada, orden y contratos de mensajes.",
+    "simpler": "Una cola simple, o llamadas directas, mientras haya un solo consumidor."
+   },
+   {
+    "to": 4,
+    "when": {
+     "any": [
+      {
+       "d": "ai_product",
+       "is": "multi-agent"
+      },
+      {
+       "d": "ai_dev",
+       "is": "multi-agent"
+      }
+     ]
+    },
+    "reason": "Varios agentes de IA coordinados: costos, permisos y supervisión se multiplican.",
+    "simpler": "Un solo agente con tareas acotadas y revisión humana; sumar más solo si se comprueba que no alcanza."
+   }
+  ]
+ }
 }

@@ -47,7 +47,7 @@ export function buildPack({ M, state, res, K, packData, promptsData, date = '' }
     : 'Las decisiones propuestas no dependen de una tecnología concreta todavía.';
 
   const sections = [
-    ['summary', ctx.summary],
+    ['summary', ctx.summary + (ctx.complexity_md ? `\n\n### Complejidad práctica\n${ctx.complexity_md}` : '')],
     ['requirements', `### Funcionales (punto de partida por tipo de producto: revisalos y completalos)\n${bullets(func)}\n\n### No funcionales (según el peso de cada atributo de calidad en este proyecto)\n${bullets(nonFunc)}\n\n### Restricciones\n${ctx.constraints}`],
     ['architecture', arch || 'Todavía no hay decisiones.'],
     ['blueprint', bp],

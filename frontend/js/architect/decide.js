@@ -3,6 +3,7 @@
 // por qué no son la primera opción, los trade-offs, los riesgos, cuándo reconsiderar y cuánta confianza hay (con lo que falta saber).
 import { evalCond, validateCond } from './conditions.js';
 import { UNKNOWN } from './builder.js';
+import { assessComplexity, validateComplexity } from './complexity.js';
 
 const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 
@@ -25,8 +26,8 @@ export function validateRules(rules, signals, K) {
       if (c.pseudo) { if (!c.name || !c.summary) err.push(`${cat}: una opción sin ficha necesita name y summary`); }
       else if (!K.get(c.id)) err.push(`${cat}: la entidad no existe`);
       if (!c.better_when) err.push(`${cat}: falta better_when (cuándo sería mejor)`);
-      // Proporcionalidad: lo «especializado» nunca se recomienda por puntaje: necesita una condición de justificación explícita.
-      if (!c.pseudo && K.get(c.id)?.adoption === 'specialized' && !c.justified_when) err.push(`${cat}: es una opción especializada: necesita justified_when (la condición que la justifica)`);
+      // Proporcionalidad: lo que «requiere razón fuerte» nunca se recomienda por puntaje: necesita una condición de justificación explícita.
+      if (!c.pseudo && K.get(c.id)?.justification === 'strong_reason' && !c.justified_when) err.push(`${cat}: es una opción que requiere razón fuerte: necesita justified_when (la condición que la justifica)`);
       if (c.justified_when) { err.push(...validateCond(c.justified_when, signals, before, `${cat}: justified_when: `)); if (!c.unjustified) err.push(`${cat}: justified_when necesita «unjustified» (por qué no se necesita cuando no se cumple)`); }
       if (!Array.isArray(c.revisit)) err.push(`${cat}: revisit debe ser una lista`);
       if (d.kind === 'set' && c.base < (d.threshold ?? rules.threshold_default) && !c.not_needed) err.push(`${cat}: una opción de un conjunto que puede quedar afuera necesita not_needed`);
@@ -39,6 +40,7 @@ export function validateRules(rules, signals, K) {
     }
     if (d.kind === 'choice' && d.candidates.length < 2) err.push(`${at}: una elección necesita al menos 2 opciones`);
   }
+  if (rules.complexity !== undefined) err.push(...validateComplexity(rules.complexity, signals, dims));
   for (const q of rules.quality) { if (!K.get(q.id)) err.push(`calidad «${q.id}»: la entidad no existe`); for (const r of q.rules) err.push(...validateCond(r.when, signals, dims, `calidad «${q.id}»: `)); }
   for (const r of rules.risks) { err.push(...validateCond(r.when, signals, dims, 'riesgo: ')); if (!r.text) err.push('riesgo sin text'); }
   return err;
@@ -86,13 +88,13 @@ export function decide(rules, K, { signals, source, askable }) {
         against: top.neg,
         tradeoffs: top.c.pseudo ? [] : (K.get(top.c.id).tradeoffs || []).slice(0, 2),
         revisit: top.c.revisit,
-        fit: 'appropriate', necessity: necessityOf(top.c, top),
+        fit: 'appropriate', necessity: necessityOf(top.c, top), simpler: top.c.simpler,
       }];
       alternatives = scored.slice(1).map(s => ({ ...entry(s), better_when: s.c.better_when, fit: fitOf(s, s.justified && top.total - s.total <= 2), why_not: !s.justified ? [s.c.unjustified, ...s.neg] : s.neg.length ? s.neg : (s.total < top.total ? [top.pos.length ? `Con lo que se sabe del proyecto, la elegida responde mejor: ${top.pos[0].charAt(0).toLowerCase()}${top.pos[0].slice(1)}` : 'Tiene menos respaldo que la opción elegida con lo que se sabe del proyecto.'] : []), close: s.justified && top.total - s.total <= 2 }));
     } else {
       const th = d.threshold ?? rules.threshold_default;
       const inc = scored.filter(s => s.total >= th && s.justified).sort((a, b) => b.total - a.total || a.i - b.i);
-      picks = inc.map(s => ({ ...entry(s), reasons: s.pos.length ? s.pos : [s.c.default_reason || 'Aplica a todo proyecto de este tipo.'], against: s.neg, tradeoffs: s.c.pseudo ? [] : (K.get(s.c.id).tradeoffs || []).slice(0, 2), revisit: s.c.revisit, fit: 'appropriate', necessity: necessityOf(s.c, s) }));
+      picks = inc.map(s => ({ ...entry(s), reasons: s.pos.length ? s.pos : [s.c.default_reason || 'Aplica a todo proyecto de este tipo.'], against: s.neg, tradeoffs: s.c.pseudo ? [] : (K.get(s.c.id).tradeoffs || []).slice(0, 2), revisit: s.c.revisit, fit: 'appropriate', necessity: necessityOf(s.c, s), simpler: s.c.simpler }));
       alternatives = scored.filter(s => !(s.total >= th && s.justified)).map(s => ({ ...entry(s), better_when: s.c.better_when, fit: fitOf(s, s.justified && th - s.total <= 1), why_not: [!s.justified && s.total >= th ? s.c.unjustified : s.c.not_needed].filter(Boolean), close: s.justified && th - s.total <= 1 }));
     }
     decided[d.id] = picks.map(p => p.id);
@@ -118,5 +120,6 @@ export function decide(rules, K, { signals, source, askable }) {
   const openQuestions = [];
   for (const d of out) for (const m of d.confidence.missing) openQuestions.push({ signal: m, why: `Cambia la decisión «${d.title}».` });
   const merged = new Map(); for (const o of openQuestions) merged.set(o.signal, merged.has(o.signal) ? { ...o, why: merged.get(o.signal).why + ' ' + o.why } : o);
-  return { signals, source, decisions: out, quality, risks, open: [...merged.values()], decided };
+  const complexity = assessComplexity(rules.complexity, K, { signals, decided, decisions: out });
+  return { signals, source, decisions: out, quality, risks, open: [...merged.values()], decided, complexity };
 }
