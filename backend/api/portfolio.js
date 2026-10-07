@@ -11,11 +11,7 @@ import { verifyToken } from './login.js';
 import { ObjectId } from 'mongodb';
 import { extraerPublicacion, guardarFuentes, CLASES } from '../lib/portfolio-ml.js';
 
-const CORS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-};
+import { cors } from '../lib/cors.js';
 
 const SECRET = process.env.ADMIN_TOKEN || null   // sin ADMIN_TOKEN no se aceptan sesiones;
 
@@ -50,7 +46,7 @@ function limpiar(body) {
 function oid(id) { try { return new ObjectId(String(id)); } catch { return null; } }
 
 export default async function handler(req, res) {
-  Object.entries(CORS).forEach(([k, v]) => res.setHeader(k, v));
+  cors(res, 'GET, POST, PATCH, DELETE, OPTIONS', req, { publicRead: true });  // GET es público; el resto exige token
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const db  = await getDB();

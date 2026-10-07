@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://portafolio-v1-dun-ten.vercel.app/sitemap.xml

@@ -10,7 +10,7 @@ import { manejar } from '../lib/herramientas.js';
 
 // Envoltorio fino: CORS + conexión a la base. Toda la lógica vive en lib/herramientas.js.
 export default async function handler(req, res) {
-  cors(res, 'GET, POST, OPTIONS');
+  cors(res, 'GET, POST, OPTIONS', req);
   if (req.method === 'OPTIONS') return res.status(200).end();
   let db;
   try { db = await getDB(); } catch { return res.status(503).json({ error: 'Servicio no disponible', code: 'no_db' }); }

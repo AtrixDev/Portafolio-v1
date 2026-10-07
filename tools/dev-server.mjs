@@ -28,7 +28,8 @@ if (existsSync(envFile)) {
 process.env.NODE_ENV ||= 'development';
 
 const TYPES = { '.html':'text/html; charset=utf-8', '.css':'text/css', '.js':'text/javascript', '.json':'application/json',
-  '.svg':'image/svg+xml', '.png':'image/png', '.jpg':'image/jpeg', '.webp':'image/webp', '.pdf':'application/pdf', '.ico':'image/x-icon' };
+  '.svg':'image/svg+xml', '.png':'image/png', '.jpg':'image/jpeg', '.webp':'image/webp', '.pdf':'application/pdf', '.ico':'image/x-icon',
+  '.xml':'application/xml', '.txt':'text/plain; charset=utf-8' };
 
 function vercelRes(res) {
   res.status = code => { res.statusCode = code; return res; };

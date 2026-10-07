@@ -32,7 +32,7 @@ async function notificar(msg) {
 }
 
 export default async function handler(req, res) {
-  cors(res, 'GET, POST, PATCH, DELETE, OPTIONS');
+  cors(res, 'GET, POST, PATCH, DELETE, OPTIONS', req);
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   let db;

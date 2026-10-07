@@ -3,15 +3,24 @@ import { verifyToken } from '../api/login.js';
 
 export const ADMIN_SECRET = process.env.ADMIN_TOKEN || null   // sin ADMIN_TOKEN no se aceptan sesiones;
 
-export function cors(res, methods = 'GET, POST, OPTIONS') {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', methods);
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+export { cors } from './cors.js';
+
+// Sesión de administración: SOLO por el header Authorization: Bearer. Antes también se aceptaba `?t=` en cualquier
+// endpoint, lo que dejaba el token de 30 días en URLs (historial, logs, Referer). Ver adminTicketDeUrl() para el único caso que lo necesita.
+export function isAdmin(req) {
+  const token = (req.headers.authorization || '').replace('Bearer ', '');
+  return verifyToken(token, ADMIN_SECRET);
 }
 
-export function isAdmin(req) {
-  const token = (req.headers.authorization || '').replace('Bearer ', '') || req.query?.t || '';
-  return verifyToken(token, ADMIN_SECRET);
+// Excepción: el login de Mercado Libre es una NAVEGACIÓN (302), no un fetch, y no puede mandar headers.
+// Acepta (1) un ticket de 2 minutos con alcance «ml-login» (lo pide el admin con POST /api/ml?action=ticket) y
+// (2) por compatibilidad, el token de sesión completo en `?t=`. (2) se apaga con ADMIN_QUERY_TOKEN=off; ver docs/seguridad.md.
+export function adminDesdeUrl(req) {
+  if (isAdmin(req)) return true;
+  const t = req.query?.t || '';
+  if (!t) return false;
+  if (verifyToken(t, ADMIN_SECRET, 'ml-login')) return true;
+  return process.env.ADMIN_QUERY_TOKEN !== 'off' && verifyToken(t, ADMIN_SECRET);
 }
 
 export function clientIp(req) {

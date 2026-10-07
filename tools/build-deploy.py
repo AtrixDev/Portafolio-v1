@@ -36,9 +36,21 @@ pkg = json.loads((ROOT / "backend" / "package.json").read_text())
 pkg.pop("scripts", None)
 (OUT / "package.json").write_text(json.dumps(pkg, indent=2) + "\n")
 NO_STORE = [{"key": "Cache-Control", "value": "no-store"}]
+# Cabeceras de seguridad para todo el sitio. Elegidas para NO cambiar el comportamiento actual: no restringen scripts ni estilos
+# (el sitio usa scripts y estilos en línea y Google Fonts); eso queda para una fase aparte con inventario previo (docs/seguridad.md).
+#  · frame-ancestors/X-Frame-Options: nadie ajeno puede embeber el sitio (los iframes de la Biblioteca son del mismo origen).
+#  · base-uri/object-src/form-action: cierran vectores de inyección sin efecto en las páginas actuales (los formularios se envían con JS).
+SEGURIDAD = [
+    {"key": "X-Content-Type-Options", "value": "nosniff"},
+    {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"},
+    {"key": "X-Frame-Options", "value": "SAMEORIGIN"},
+    {"key": "Content-Security-Policy", "value": "base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'"},
+    {"key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=()"},
+]
 (OUT / "vercel.json").write_text(json.dumps({
     "framework": None, "cleanUrls": False, "trailingSlash": False,
     "headers": [
+        {"source": "/(.*)", "headers": SEGURIDAD},
         {"source": "/admin.html", "headers": NO_STORE},
         {"source": "/(css|js)/(admin|tracker-app).(.*)", "headers": NO_STORE},
     ],

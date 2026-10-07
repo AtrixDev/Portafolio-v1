@@ -1,36 +1,37 @@
 // api/login.js — valida credenciales y devuelve token HMAC-SHA256
 import { createHmac, timingSafeEqual } from 'crypto';
 
-const CORS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
+import { cors } from '../lib/cors.js';
 
-export function makeToken(secret) {
+// Sin `scope` es la sesión normal (30 días). Con `scope` es un ticket de uso único-propósito y vida corta (p. ej. 'ml-login').
+export function makeToken(secret, { scope = null, ttlSec = 60 * 60 * 24 * 30 } = {}) {
+  const now = Math.floor(Date.now() / 1000);
   const payload = Buffer.from(JSON.stringify({
     user: 'admin',
-    iat:  Math.floor(Date.now() / 1000),
-    exp:  Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30, // 30 días
+    iat:  now,
+    exp:  now + ttlSec,
+    ...(scope ? { scope } : {}),
   })).toString('base64url');
   const sig = createHmac('sha256', secret).update(payload).digest('base64url');
   return `${payload}.${sig}`;
 }
 
-export function verifyToken(token, secret) {
+// `scope` pedido debe coincidir con el del token: un ticket con alcance NO sirve como sesión, y la sesión normal no tiene alcance.
+export function verifyToken(token, secret, scope = null) {
   if (!token || !secret) return false;
   const [payload, sig] = (token || '').split('.');
   if (!payload || !sig) return false;
   const expected = createHmac('sha256', secret).update(payload).digest('base64url');
   if (expected !== sig) return false;
   try {
-    const { exp } = JSON.parse(Buffer.from(payload, 'base64url').toString());
+    const { exp, scope: sc } = JSON.parse(Buffer.from(payload, 'base64url').toString());
+    if ((sc || null) !== (scope || null)) return false;
     return Date.now() / 1000 < exp;
   } catch { return false; }
 }
 
 export default async function handler(req, res) {
-  Object.entries(CORS).forEach(([k, v]) => res.setHeader(k, v));
+  cors(res, 'POST, OPTIONS', req, { headers: 'Content-Type' });
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST')   return res.status(405).json({ error: 'Method not allowed' });
 

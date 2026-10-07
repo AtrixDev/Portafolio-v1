@@ -260,7 +260,7 @@
     const body = $('ac-body');
     body.addEventListener('click', e => {
       const c = e.target.closest('[data-n]'), t = e.target.closest('[data-tipo-n]'), m = e.target.closest('[data-mover]');
-      if (c) { S.selN = c.dataset.n; render(); setTimeout(() => $('ac-ndet')?.scrollIntoView({ block: 'start', behavior: 'smooth' }), 30); return; }
+      if (c) { S.selN = c.dataset.n; render(); setTimeout(() => $('ac-ndet')?.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }), 30); return; }
       if (t) { S.tipoN = t.dataset.tipoN; render(); return; }
       if (m && sel) { const i = ETAPAS.findIndex(([k]) => k === sel.etapa) + Number(m.dataset.mover); if (ETAPAS[i]) { sel.etapa = ETAPAS[i][0]; guardar(); render(); } return; }
       if (e.target.closest('[data-cerrar-n]')) { S.selN = null; render(); return; }

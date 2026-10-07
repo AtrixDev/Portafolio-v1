@@ -69,7 +69,7 @@ function limpiarPerfil(p) {
 }
 
 export default async function handler(req, res) {
-  cors(res, 'GET, POST, OPTIONS');
+  cors(res, 'GET, POST, OPTIONS', req);
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   let db;

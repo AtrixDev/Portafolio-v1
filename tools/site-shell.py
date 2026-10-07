@@ -9,6 +9,7 @@ Unifica el "cascarón" de todas las páginas: menú, botón de tema, script anti
 - Páginas existentes: reemplaza el bloque entre <!-- NAV:start --> y <!-- NAV:end -->
   (o el <nav> + menú móvil viejo la primera vez).
 
+Canonical/og:url, robots.txt y sitemap.xml NO los pone este script: los maneja tools/seo-tecnico.py (correrlo después de crear una página).
 Uso:  python3 tools/site-shell.py
 Para agregar una sección al menú, editá NAV (y GRUPO_POR_PAGINA) y volvé a correrlo.
 """
@@ -254,6 +255,12 @@ def process(path):
     # Las subpáginas del Lab no tienen <main id="contenido">: el primer bloque de contenido recibe el ancla
     if 'id="contenido"' not in s:
         s = re.sub(r'<(section|div) class="(ph|lab-hero)"', r'<\1 id="contenido" class="\2"', s, count=1)
+    # Landmark <main>: las páginas que arrancaron con el bloque de contenido «suelto» lo envuelven hasta el pie.
+    # Idempotente: si ya hay <main>, no hace nada. El ancla #contenido se conserva donde estaba (el enlace «Saltar al contenido» sigue igual).
+    if "<main" not in s and not path.name.startswith("admin"):
+        s = re.sub(r'(<div id="contenido" class="ph[^"]*">)', r'<main>\n\1', s, count=1)
+        if "<main>" in s:
+            s = s.replace("<footer>", "</main>\n<footer>", 1)
     if s != orig:
         path.write_text(s, encoding="utf-8")
         return True

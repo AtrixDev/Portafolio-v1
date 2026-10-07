@@ -4,14 +4,10 @@
 import { getDB } from './db.js';
 import { verifyToken } from './login.js';
 
-const CORS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-};
+import { cors } from '../lib/cors.js';
 
 export default async function handler(req, res) {
-  Object.entries(CORS).forEach(([k, v]) => res.setHeader(k, v));
+  cors(res, 'GET, POST, OPTIONS', req, { publicRead: true });  // GET es público; POST exige token
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   // ── GET: público ──

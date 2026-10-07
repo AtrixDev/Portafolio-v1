@@ -360,7 +360,13 @@
     } catch (e) { if (e.message !== '401') box.textContent = 'No se pudo consultar el estado.'; }
   }
   async function refreshMLDot() { try { const st = await (await api('/api/ml?action=status')).json(); $('ml-dot').hidden = !!st.linked; } catch (e) {} }
-  $('ml-link').addEventListener('click', () => { location.href = '/api/ml?action=login&t=' + encodeURIComponent(TOKEN); });
+  // La navegación al login de ML no puede llevar headers: se pide un ticket de 2 minutos en vez de poner la sesión (30 días) en la URL.
+  // Si el ticket falla se usa el token de sesión, que el servidor sigue aceptando por compatibilidad (ver docs/seguridad.md).
+  $('ml-link').addEventListener('click', async () => {
+    let t = TOKEN;
+    try { const r = await api('/api/ml?action=ticket', { method: 'POST' }); const d = await r.json(); if (d.ticket) t = d.ticket; } catch (e) { /* queda el token de sesión */ }
+    location.href = '/api/ml?action=login&t=' + encodeURIComponent(t);
+  });
   $('ml-unlink').addEventListener('click', async () => {
     if (!confirm('¿Desvincular tu cuenta? Se borran también sus datos guardados en ML Tracker.')) return;
     try { await api('/api/ml?action=unlink', { method: 'POST' }); loadML(); } catch (e) {}

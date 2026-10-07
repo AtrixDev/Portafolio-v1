@@ -107,7 +107,7 @@
   }
   function abrirDemo(id) {
     dmSel = id; if (!DM) return;
-    demo(); $('dm-det').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    demo(); $('dm-det').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
   }
   $('dm').addEventListener('click', e => { const b = e.target.closest('[data-dm]'); if (b) abrirDemo(b.dataset.dm); });
 
