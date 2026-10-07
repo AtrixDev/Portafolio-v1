@@ -27,6 +27,9 @@ OUT.mkdir(parents=True)
 (BASE / ".vercelignore").write_text(".env*\n")
 
 shutil.copytree(ROOT / "frontend", OUT / "public", ignore=shutil.ignore_patterns("package-lock.json"))
+# Motor económico: UNA sola fuente (backend/lib/motor). En el servidor ya viaja dentro de lib/; acá se copia al sitio público
+# para que el navegador lo cargue como /js/motor/*.js. No se mantiene ninguna copia en el repo.
+shutil.copytree(ROOT / "backend" / "lib" / "motor", OUT / "public" / "js" / "motor", ignore=shutil.ignore_patterns("*.md"))
 shutil.copytree(ROOT / "backend" / "api", OUT / "api")
 shutil.copytree(ROOT / "backend" / "lib", OUT / "lib")
 pkg = json.loads((ROOT / "backend" / "package.json").read_text())

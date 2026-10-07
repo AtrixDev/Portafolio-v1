@@ -10,6 +10,7 @@
 // GET  /api/audit?action=estado&id=…  → sincroniza por tandas y, al terminar, devuelve el resumen de la auditoría
 // Mercado Libre no deja leer publicaciones de otros vendedores: el puntaje real solo sale con la cuenta conectada.
 import { getDB } from './db.js';
+import { guardarResultado, resumenChequeo, limpiarResumen } from '../lib/resultados.js';
 import { randomBytes } from 'node:crypto';
 import { cors, clientIp, rateLimit, isAdmin, ADMIN_SECRET } from '../lib/http.js';
 import { fetchPublicacion, MLNotLinked, MLForbidden, ML, makeState, authorizeUrl } from '../lib/ml.js';
@@ -17,7 +18,14 @@ import { sincronizar, datosCuenta } from '../lib/tracker-sync.js';
 import { analizarCuenta } from '../lib/tracker.js';
 import { resumenAuditoria } from '../lib/auditoria-cuenta.js';
 import { diagnosticarWeb, velocidadWeb, WebError } from '../lib/diagnostico-web.js';
-import { parseMlaId, esUrlCatalogo, esUrlUserProduct, tituloDesdeUrl, scorePublicacion, planDeAccion, tituloConIA } from '../lib/audit.js';
+import { parseMlaId, esUrlCatalogo, esUrlUserProduct, tituloDesdeUrl, scorePublicacion, planDeAccion, noVerificables, tituloConIA } from '../lib/audit.js';
+
+// F0: cada chequeo público queda guardado (link compartible). Si falla, el chequeo igual responde.
+const conResultado = async (db, rapido, mlaId) => {
+  const resumen = limpiarResumen(resumenChequeo(rapido));   // el mismo resumen se muestra en vivo y se guarda: no hay dos versiones
+  const g = await guardarResultado(db, { herramienta: 'chequeo', entrada: mlaId, resumen, datos: rapido }).catch(() => null);
+  return { ...rapido, resumen, ...(g ? { resultadoId: g.id } : {}) };
+};
 
 export default async function handler(req, res) {
   cors(res, 'GET, POST, OPTIONS');
@@ -54,7 +62,7 @@ export default async function handler(req, res) {
       return res.status(429).json({ code: 'limite_persona', error: '¡Ya auditaste 5 publicaciones hoy! Mañana tenés 5 más. Y si querés que mire tu cuenta entera, escribime: ahí es donde aparecen las ventas grandes.' });
     }
     const guardado = await cache.findOne({ _id: mlaId });
-    if (guardado) return res.status(200).json({ ...guardado.res, memoria: true });
+    if (guardado?.res?.v === 2) return res.status(200).json({ ...(await conResultado(db, guardado.res, mlaId)), memoria: true });   // v:2 = con cobertura; las anteriores se recalculan
     if (!(await rateLimit(db, 'auditpub:global', 100, 86400))) {
       return res.status(429).json({ code: 'limite_global', error: 'Hoy ya 100 vendedores auditaron sus publicaciones y se llevaron sus mejoras. Por hoy llegamos al tope: volvé mañana o escribime y la reviso yo personalmente.' });
     }
@@ -67,28 +75,29 @@ export default async function handler(req, res) {
     const item = await fetchPublicacion(db, mlaId, esCatalogo, { titulo: tituloDesdeUrl(url) });
     if (!item) return res.status(404).json({ error: 'No encontré esa publicación. Revisá que el link esté completo y que siga activa, y probamos de nuevo.' });
 
-    const { score, problemas, mejoras, checks } = scorePublicacion(item);
-    const ai = planDeAccion(item, score, problemas, mejoras);
-    if (item._faltan) {
+    const { score, problemas, mejoras, checks, cobertura } = scorePublicacion(item);
+    const ai = planDeAccion(item, score, problemas, mejoras, cobertura);
+    if (item._faltan && score !== null) {
       const ok = Object.values(checks).filter(v => v !== null).length;
       ai.resumen = `Auditoría parcial: de 8 controles se pudieron verificar ${ok}, y sobre esos da ${score}/100. ${(problemas[0] || mejoras[0]) ? `Lo de mayor impacto: ${(problemas[0] || mejoras[0]).toLowerCase()}.` : 'No hay problemas en lo verificable.'} Si la publicación es tuya, escribime y la audito completa.`;
     }
     if (!admin) {
       // Chequeo rápido: solo lo que Mercado Libre muestra de una publicación ajena, sin puntaje
       const fotos = item._faltan?.includes('fotos') ? null : item.pictures?.length ?? null;
-      const atributos = item._faltan?.includes('atributos') ? null : item.attributes?.length ?? null;
+      const atributos = item._faltan?.includes('atributos') || item._datos_parciales ? null : item.attributes?.length ?? null;   // en un catálogo sin ganador son del producto, no de la publicación
       const desc = (item.descripcion || '').length;
       const rapido = {
-        rapido: true, catalogo: esCatalogo,
+        rapido: true, v: 2, catalogo: esCatalogo,
+        cobertura: { verificados: cobertura.verificados, total: cobertura.total }, noVerificado: noVerificables(item),
         item: { title: item.title || null, permalink: item.permalink || null, foto: item.pictures?.[0]?.secure_url || null },
         datos: {
           fotos, atributos,
           descripcion: esCatalogo ? null : desc,
-          opiniones: item._extras?.opiniones ?? null, preguntas: item._extras?.preguntas ?? null,
+          opiniones: item._extras?.opiniones ?? null, preguntas: item._extras?.preguntas ?? null, visitas: item._extras?.visitas ?? null,
         },
       };
       await cache.updateOne({ _id: mlaId }, { $set: { res: rapido, at: new Date() } }, { upsert: true }).catch(() => {});
-      return res.status(200).json(rapido);
+      return res.status(200).json(await conResultado(db, rapido, mlaId));
     }
     const ia = await tituloConIA(item, score, problemas);
     if (ia) {
@@ -116,7 +125,7 @@ export default async function handler(req, res) {
         attributes_count: item._datos_parciales || item._faltan ? null : item.attributes.length,
         warranty: item.warranty, permalink: item.permalink,
       },
-      score, problemas, mejoras, checks, ai,
+      score, problemas, mejoras, checks, cobertura, ai,
       fuente_datos: item._source,
       analizado_en: new Date().toISOString(),
     });

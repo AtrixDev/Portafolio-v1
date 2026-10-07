@@ -1,6 +1,7 @@
 // js/herr.js — Herramientas: vitrina por estado. Cada herramienta trae una demo chica que se prueba ahí mismo
 // y un botón a la versión completa, a una muestra o a "avisame cuando esté".
 import { esc } from './exp-data.js';
+import { mostrarSalida, vistaResultado } from './salida.js';
 
 // "pausa": funcionaba, pero Mercado Libre cortó el dato del que depende (se aclara en la nota de cada una)
 const ETAPAS = { funciona: 'Funcionando', pausa: 'En pausa', prueba: 'Probando', diseno: 'Diseñando', idea: 'En idea' };
@@ -10,15 +11,16 @@ const contacto = a => `contacto.html?asunto=${a}`;
 
 const H = [
   { id: 'tracker', q: '¿Por qué cayeron tus ventas?', imp: ['10 tipos de problema', 'API oficial de Mercado Libre', 'Se actualiza todos los días'], e: 'funciona', n: 'ML Tracker', v: 'Te dice qué publicación se cae, por qué y qué hacer', p: 'Vendedores y empresas', cta: [['Abrir la demo completa', 'sistema.html#demo']] },
+  { id: 'rentabilidad', q: '¿Ganás plata con este producto?', imp: ['Precio mínimo para no perder', 'IVA, comisión, envío y publicidad', 'Escenarios y link para compartir'], e: 'funciona', n: 'Rentabilidad y precio mínimo', v: 'Cuánto te queda por unidad y a qué precio mínimo dejás de perder', p: 'Vendedores', cta: [['Calcular mi rentabilidad', 'rentabilidad.html'], ['Calculadora de importación', 'importar.html']], nota: 'Un motor de cálculo determinístico, sin IA: no usa ningún valor que no cargues, salvo los supuestos que te marca.' },
   { id: 'auditoria', q: '¿Dónde se te escapa la plata?', imp: ['Gratis', 'En minutos', 'Salud en 6 áreas'], e: 'funciona', n: 'Auditoría de cuenta', v: 'La salud de tu cuenta por área y lo que más plata te cuesta', p: 'Vendedores', cta: [['Auditar mi cuenta gratis', 'sistema.html#auditar']] },
   { id: 'chequeo', q: '¿Tu publicación está bien armada?', imp: ['Completo con links de catálogo', 'Sin conectar la cuenta', '5 por día'], e: 'funciona', n: 'Chequeo de publicación', v: 'Pegás un link y ves lo que le falta a la publicación', p: 'Vendedores', cta: [['Auditoría completa de la cuenta', 'sistema.html#auditar']] },
-  { id: 'simulador', q: '¿Qué le falta a tu publicación?', imp: ['7 criterios', 'Al instante'], e: 'funciona', n: 'Simulador de puntaje', v: 'El criterio con el que reviso una publicación, para mover', p: 'Vendedores', cta: [['Revisar mi publicación real', 'sistema.html#auditar']] },
+  { id: 'simulador', q: '¿Qué le falta a tu publicación?', imp: ['7 criterios', 'Al instante'], e: 'funciona', n: 'Simulador de puntaje', v: 'El criterio con el que reviso una publicación, para mover', p: 'Vendedores', cta: [['Chequear mi publicación real', 'herramientas.html#chequeo']] },
   { id: 'diagnostico', q: '¿Qué le pasa a tu cuenta?', imp: ['10 problemas típicos', 'Cómo se detecta', 'Qué hacer'], e: 'funciona', n: 'Catálogo de diagnóstico', v: 'Cómo se detecta cada problema típico y qué hacer', p: 'Vendedores y empresas', cta: [['Ver los 10 problemas', 'sistema.html#diagnostico']] },
-  { id: 'opiniones', q: '¿Qué odian los compradores de tu rubro?', imp: ['Hasta 200 opiniones', 'De tus publicaciones'], e: 'funciona', n: 'Minero de opiniones', v: 'Qué critican y qué elogian los compradores, en segundos', p: 'Vendedores', cta: [['Analizar mi producto', contacto('opiniones')]], nota: 'Es de uso interno y corre con tu cuenta conectada. Mercado Libre cerró las opiniones de otras cuentas: las de la competencia las reviso a mano.' },
+  { id: 'opiniones', q: '¿Qué odian los compradores de tu rubro?', imp: ['Pegás las opiniones que quieras', 'Con tu cuenta, hasta 200'], e: 'funciona', n: 'Minero de opiniones', v: 'Qué critican y qué elogian los compradores, en segundos', p: 'Vendedores', cta: [['Analizar mi producto', contacto('opiniones')]], nota: 'Mercado Libre no deja leer las opiniones de otras cuentas, pero copiadas y pegadas las analizo igual. Con tu cuenta conectada las trae solas.' },
   { id: 'tendencias', q: '¿Qué está por venderse?', imp: ['Por categoría', 'Datos de Mercado Libre'], e: 'pausa', n: 'Buscador de tendencias', v: 'Las búsquedas que más crecen en cada categoría', p: 'Vendedores', cta: [['Pedime las de mi rubro', contacto('tendencias')], ['Ver cómo funciona', 'sistema.html#tendencias']], nota: 'Mercado Libre dejó de publicar sus tendencias en la API (30/09/2026). Mientras vuelven, las saco a mano del buscador.' },
   { id: 'importacion', q: '¿Te conviene importarlo?', imp: ['Costo por unidad', 'Margen y precio mínimo'], e: 'funciona', n: 'Calculadora de importación', v: 'Cuánto te cuesta un producto importado puesto en tu depósito', p: 'Vendedores', cta: [['Abrir la calculadora completa', 'importar.html'], ['Analizarlo con vos', contacto('importacion')]] },
-  { id: 'competencia', q: '¿Qué está haciendo tu competencia?', imp: ['Saltos de vendidos', 'Cambios de precio', 'Ventas estimadas con rango'], e: 'diseno', n: 'Alertas de competencia', v: 'Te avisa cuando un competidor salta de ventas o cambia el precio', p: 'Vendedores', cta: [['Avisame cuando esté', contacto('competencia')]] },
-  { id: 'radar', q: '¿Qué va a pegar antes que el resto?', imp: ['Mercado Libre y afuera'], e: 'diseno', n: 'Radar de demanda', v: 'Productos que empiezan a crecer, antes que el resto', p: 'Vendedores', cta: [['Avisame cuando esté', contacto('radar')]] },
+  { id: 'competencia', q: '¿Qué está haciendo tu competencia?', imp: ['Saltos de vendidos', 'Cambios de precio', 'Ventas estimadas con rango'], e: 'idea', n: 'Alertas de competencia', v: 'Te avisa cuando un competidor salta de ventas o cambia el precio', p: 'Vendedores', cta: [['Avisame cuando esté', contacto('competencia')]] },
+  { id: 'radar', q: '¿Qué va a pegar antes que el resto?', imp: ['Mercado Libre y afuera'], e: 'idea', n: 'Radar de demanda', v: 'Productos que empiezan a crecer, antes que el resto', p: 'Vendedores', cta: [['Avisame cuando esté', contacto('radar')]] },
   { id: 'informe', q: '¿Qué recibís con la auditoría?', imp: ['10 problemas ordenados', 'Plan de acción'], e: 'funciona', n: 'Informe de muestra', v: 'Así se ve la auditoría completa que te entrego', p: 'Vendedores', cta: [['Ver el informe de muestra', 'informe-muestra.html'], ['Quiero el mío', 'sistema.html#auditar']] },
   { id: 'perdida', q: '¿Cuánto gastás de más en publicidad?', imp: ['En pesos por mes', 'Caso real: ACOS 30% → 12%'], e: 'funciona', n: '¿Cuánta plata estás perdiendo?', v: 'Lo que se va en publicidad de más, en pesos por mes', p: 'Vendedores', cta: [['Abrir la calculadora completa', 'perdida.html'], ['Quiero bajarlo', contacto('acos')]] },
   { id: 'desarmes', q: '¿Por qué no vende esa publicación?', imp: ['Casos reales', 'Antes y después'], e: 'idea', n: 'Desarmes de publicaciones', v: 'Una publicación real, desarmada: qué falla y cómo lo arreglo', p: 'Vendedores y empresas', cta: [['Desarmá la mía', contacto('desarme')]] },
@@ -26,6 +28,7 @@ const H = [
 ];
 
 const ICON = {
+  rentabilidad: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/>',
   tracker: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
   auditoria: '<path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
   chequeo: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
@@ -52,6 +55,8 @@ const ic = e => ({
   pausa: '<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="3.5" width="2.6" height="9" rx="1" fill="currentColor"/><rect x="9.4" y="3.5" width="2.6" height="9" rx="1" fill="currentColor"/></svg>',
   idea: '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="2.6 2.2"/></svg>',
 }[e]);
+const idea = ([hace, falta, destraba]) => `<dl class="hd-idea"><div><dt>Qué haría</dt><dd>${esc(hace)}</dd></div><div><dt>Qué le falta</dt><dd>${esc(falta)}</dd></div><div><dt>Cómo se destraba</dt><dd>${esc(destraba)}</dd></div></dl>`;
+const corto = t => t.length <= 42 ? t : t.slice(0, 42).replace(/\s+\S*$/, '') + '…';
 const ejemplo = t => `<p class="hd-tag">${esc(t)}</p>`;
 
 // ── Demos: cada una devuelve su HTML y, si hace falta, engancha su lógica ──
@@ -60,9 +65,30 @@ const pDemo = fetch('/api/tracker?action=demo').then(r => r.ok ? r.json() : null
 const pDiag = fetch('data/ia-meli.json').then(r => r.json()).then(d => (DIAG = d.diagnostico)).catch(() => null);
 
 const RESEÑAS = ['La canasta es muy chica, entran papas para una sola persona.', 'A los dos meses se empezó a pelar el antiadherente. Mala calidad.', 'Muy ruidosa y el olor a plástico no se va.', 'Cocina bien pero es chica para una familia.', 'Dejó de funcionar al mes y la garantía no respondió.', 'Buen precio, cumple.', 'Difícil de limpiar, la grasa queda pegada.', 'Llegó rápido y funciona bien.', 'Chica, para dos personas no alcanza. El antiadherente se raya.', 'El panel es confuso y el manual viene en inglés.', 'Buena por el precio.', 'Se peló el recubrimiento, no la recomiendo.'];
-const TEMAS = [['Tamaño', /chic|alcanza|entran/i, -1], ['Antiadherente', /antiadherente|pel|recubrimiento|raya/i, -1], ['Ruido y olor', /ruidos|olor/i, -1], ['Limpieza', /limpiar|grasa/i, -1], ['Garantía y durabilidad', /garant|dejó de funcionar/i, -1], ['Instrucciones', /manual|confuso/i, -1], ['Precio', /precio/i, 1], ['Envío', /llegó rápido/i, 1]];
+const TEMAS = [
+  ['Tamaño y capacidad', /chic[oa]|grande|tamañ|capacidad|\bentra|espacio|medida|litro|alcanza/i],
+  ['Calidad y durabilidad', /calidad|se romp|rompi|se pel|pel[óo]|raya|durabl|dur[óo]|fr[áa]gil|resistent|recubrim/i],
+  ['Funcionamiento y fallas', /dej[óo] de funcionar|no funciona|no anda|falla|defect|funciona|anda bien|cumple/i],
+  ['Batería y autonomía', /bater|autonom|\bcarga|horas de/i],
+  ['Ruido', /ruid|silenc/i],
+  ['Limpieza', /limpi|grasa/i],
+  ['Facilidad de uso', /f[áa]cil|dif[íi]cil|pr[áa]ctic|intuitiv|confus|manual|panel/i],
+  ['Olor y materiales', /olor|pl[áa]stic|material|acero/i],
+  ['Envío y embalaje', /lleg[óo]|env[íi]o|entrega|embal|paquete/i],
+  ['Precio y valor', /precio|barat|caro|vale la pena|relaci[óo]n/i],
+  ['Garantía y atención', /garant|atenci[óo]n|respond|vendedor/i],
+];
+const NEG = /\bmal[oa]?\b|no (funciona|anda|sirve|recomiendo|respond|alcanza|entra)|nunca|dej[óo] de|se (rompi|pel|ray)|pel[óo]|rot[oa]\b|chic[oa]|ruidos|dif[íi]cil|confus|horrible|p[ée]sim|defect|falla|decepc|olor|pegad|fr[áa]gil/i;
+const POS = /excelente|muy bien|buen[oa]?s?\b|perfect|recomiendo|r[áa]pid|f[áa]cil|cumple|funciona bien|genial|content|grande/i;
 
 const DEMOS = {
+  rentabilidad: {
+    html: () => `<p class="hd-soft">Cargás el precio, lo que te cuesta y lo que te cobra el canal de venta. Te devuelve:</p>
+      <ul class="hd-rows"><li><b>Cuánto ganás por unidad</b><span>Con el margen y el markup bien rotulados.</span></li>
+      <li><b>El precio mínimo para no perder</b><span>Y el precio para llegar al margen o a la ganancia que querés.</span></li>
+      <li><b>Qué pasa si algo cambia</b><span>El precio, el costo o la publicidad, un cambio por vez.</span></li></ul>
+      <p class="hd-soft">Lo que no cargás no se inventa: si falta algo que importa, te lo marca. Todo queda en un link que podés compartir.</p>`,
+  },
   tracker: {
     html: () => {
       if (!DEMO) return '<div class="hd-load" aria-busy="true"><span></span><span></span><span></span></div>';
@@ -81,15 +107,19 @@ const DEMOS = {
     }),
   },
   auditoria: {
-    html: () => `${ejemplo('Resultado de una cuenta de ejemplo')}
-      <div class="hd-health"><div class="hd-gauge"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="50" class="tr"/><circle cx="60" cy="60" r="50" class="ar" pathLength="100" style="stroke-dashoffset:24"/></svg><p><b>76</b><span>/100</span></p></div>
-      <div><p class="hd-strong">Salud de la cuenta</p><p class="hd-soft">Lo que más plata le cuesta:</p>
-      <ol class="hd-find">${(DEMO?.alertas || []).slice(0, 3).map(x => `<li>${esc(x.txt)}</li>`).join('') || '<li>Publicaciones que perdieron el catálogo</li><li>Stock por agotarse</li><li>Productos que venden a pérdida</li>'}</ol></div></div>
-      <p class="hd-soft">Con tu cuenta conectada, esto sale con tus datos reales en unos minutos.</p>`,
+    html: () => {
+      if (!DEMO) return '<div class="hd-load" aria-busy="true"><span></span><span></span><span></span></div>';
+      const q = Math.round(DEMO.resumen.calidadPromedio);
+      return `${ejemplo('Resultado de una cuenta de ejemplo')}
+      <div class="hd-health"><div class="hd-gauge"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="50" class="tr"/><circle cx="60" cy="60" r="50" class="ar" pathLength="100" style="stroke-dashoffset:${100 - q}"/></svg><p><b>${q}</b><span>/100</span></p></div>
+      <div><p class="hd-strong">Calidad promedio de las publicaciones</p><p class="hd-soft">Lo que más plata le cuesta:</p>
+      <ol class="hd-find">${DEMO.alertas.slice(0, 3).map(x => `<li>${esc(x.txt)}</li>`).join('')}</ol></div></div>
+      <p class="hd-soft">Con tu cuenta conectada, esto sale con tus datos reales en unos minutos.</p>`;
+    },
   },
   chequeo: {
-    html: () => `<form class="hd-form" id="hd-chk"><label for="hd-url">Link de una publicación de Mercado Libre</label>
-      <div><input id="hd-url" type="url" inputmode="url" placeholder="https://www.mercadolibre.com.ar/…" required><button type="submit" class="btn-primary">Mirar</button></div></form>
+    html: () => `<form class="hd-form ui-field" id="hd-chk"><label class="ui-label" for="hd-url">Link de una publicación de Mercado Libre</label>
+      <div><input class="ui-input" id="hd-url" type="url" inputmode="url" placeholder="https://www.mercadolibre.com.ar/…" required><button type="submit" class="btn-primary">Chequear</button></div></form>
       <div class="hd-out" id="hd-chk-out" aria-live="polite"><p class="hd-soft">Probalo con una publicación tuya o de la competencia. Son 5 chequeos por día.</p></div>`,
     init: el => $('hd-chk').addEventListener('submit', async e => {
       e.preventDefault(); const out = $('hd-chk-out'), b = e.submitter; b.disabled = true;
@@ -99,12 +129,8 @@ const DEMOS = {
         const d = await r.json().catch(() => ({}));
         if (!r.ok || !d.rapido) { out.innerHTML = `<p class="hd-soft">${esc(d.error || 'No pude leer esa publicación. Revisá el link.')}</p>`; }
         else {
-          const x = d.datos, f = [];
-          if (x.fotos != null) f.push([x.fotos >= 7, `${x.fotos} fotos`, x.fotos >= 7 ? 'Buena secuencia' : 'Lo ideal son 7 o más']);
-          if (x.atributos != null) f.push([x.atributos >= 10, `${x.atributos} atributos`, x.atributos >= 10 ? 'Aparece en los filtros' : 'Cada atributo que falta te saca de un filtro']);
-          if (x.descripcion != null) f.push([x.descripcion > 300, x.descripcion ? `Descripción de ${num(x.descripcion)} caracteres` : 'Sin descripción', x.descripcion > 300 ? 'Tiene contenido' : 'No está ayudando a vender']);
-          if (x.opiniones != null) f.push([true, `${num(x.opiniones)} opiniones`, 'Con el minero te digo qué critican']);
-          out.innerHTML = `<p class="hd-strong">${esc(d.item?.title || 'Publicación')}</p><ul class="hd-rows">${f.map(([ok, t, s]) => `<li class="${ok ? 'ok' : 'bad'}"><b>${esc(t)}</b><span>${esc(s)}</span></li>`).join('')}</ul>`;
+          out.innerHTML = vistaResultado(d);   // mismo renderizador que el link compartido
+          if (d.resultadoId) mostrarSalida(out, { resultadoId: d.resultadoId, herramienta: 'chequeo' });
         }
       } catch { out.innerHTML = '<p class="hd-soft">Se cortó la conexión. Probá de nuevo.</p>'; }
       b.disabled = false;
@@ -138,54 +164,60 @@ const DEMOS = {
     },
   },
   opiniones: {
-    html: () => `${ejemplo('Ejemplo: 12 opiniones de una freidora de la competencia')}
-      <ul class="hd-quotes">${RESEÑAS.slice(0, 3).map(r => `<li>«${esc(r)}»</li>`).join('')}<li class="hd-more">y 9 más…</li></ul>
-      <button type="button" class="btn-primary" id="hd-mine">Analizar las 12 opiniones</button><div class="hd-out" id="hd-mine-out" aria-live="polite"></div>`,
-    init: () => $('hd-mine').addEventListener('click', () => {
-      const r = TEMAS.map(([t, re, s]) => [t, RESEÑAS.filter(x => re.test(x)).length, s]).filter(x => x[1]).sort((a, b) => b[1] - a[1]);
-      const barra = ([t, n]) => `<li><span>${esc(t)}</span><i style="--v:${n / 12}"></i><b>${n}</b></li>`;
-      $('hd-mine-out').innerHTML = `<p class="hd-strong">Qué critican</p><ul class="hd-bars bad">${r.filter(x => x[2] < 0).map(barra).join('')}</ul><p class="hd-strong">Qué elogian</p><ul class="hd-bars ok">${r.filter(x => x[2] > 0).map(barra).join('')}</ul><p class="hd-soft">Oportunidad: una freidora más grande y con antiadherente que dure, dicho en el título y en la primera foto.</p>`;
-    }),
+    html: () => `${ejemplo('Ejemplo precargado: 12 opiniones de una freidora de la competencia')}
+      <form class="hd-form" id="hd-ops-f"><label class="ui-label" for="hd-ops">Pegá opiniones de cualquier publicación, una por línea</label>
+      <textarea class="ui-textarea" id="hd-ops" rows="7" spellcheck="false">${esc(RESEÑAS.join('\n'))}</textarea>
+      <button type="submit" class="btn-primary">Analizar las opiniones</button></form>
+      <div class="hd-out" id="hd-mine-out" aria-live="polite"></div>`,
+    init: () => {
+      const run = () => {
+        const ls = $('hd-ops').value.split('\n').map(x => x.trim()).filter(x => x.length > 3), out = $('hd-mine-out');
+        if (!ls.length) { out.innerHTML = '<p class="hd-soft">Pegá al menos una opinión para analizarla.</p>'; return; }
+        const neg = ls.filter(x => NEG.test(x)), pos = ls.filter(x => !NEG.test(x) && POS.test(x));
+        const cuenta = arr => TEMAS.map(([t, re]) => [t, arr.filter(x => re.test(x)).length]).filter(x => x[1]).sort((a, b) => b[1] - a[1]).slice(0, 5);
+        const barra = ([t, n]) => `<li><span>${esc(t)}</span><i style="--v:${n / ls.length}"></i><b>${n}</b></li>`;
+        const lista = (arr, cls) => arr.length ? `<ul class="hd-bars ${cls}">${arr.map(barra).join('')}</ul>` : '<p class="hd-soft">No encontré temas repetidos.</p>';
+        out.innerHTML = `<p class="hd-soft">${ls.length} opiniones leídas: ${neg.length} críticas, ${pos.length} elogios.</p><p class="hd-strong">Qué critican</p>${lista(cuenta(neg), 'bad')}<p class="hd-strong">Qué elogian</p>${lista(cuenta(pos), 'ok')}`;
+      };
+      $('hd-ops-f').addEventListener('submit', e => { e.preventDefault(); run(); }); run();
+    },
   },
   tendencias: {
-    html: () => `${ejemplo('Así se ve · ejemplo: Mercado Libre pausó los datos reales')}
-      <ol class="hd-trend">${['organizador de cajones', 'dispenser de detergente', 'lámpara de escritorio led'].map((t, i) => `<li><span>${i + 1}</span><b>${t}</b><em>creciendo</em></li>`).join('')}
-      ${[4, 5, 6, 7, 8].map(i => `<li class="is-blur" aria-hidden="true"><span>${i}</span><b>${'█'.repeat(8 + (i * 3) % 7)}</b><em>creciendo</em></li>`).join('')}</ol>
-      <p class="hd-soft">Los 3 primeros de cada categoría se ven completos. La lista entera, con las que valen la pena, te la paso yo.</p>`,
+    html: () => `${ejemplo('En pausa desde el 30/09/2026')}${idea(['Mostraba las búsquedas que más crecen en cada categoría de Mercado Libre.', 'Mercado Libre responde «Not found public trends» en todas las categorías. Se reintenta cada hora.', 'Cuando el dato vuelve, se reactiva sola. Mientras tanto, la web muestra la última copia real guardada y yo armo la lista de tu rubro a mano.'])}`,
   },
   importacion: {
-    html: () => `<div class="hd-calc"><label>Costo FOB por unidad (USD)<input type="number" id="hi-fob" value="4.2" min="0" step="0.1"></label>
-      <label>Flete y seguro por unidad (USD)<input type="number" id="hi-flete" value="0.9" min="0" step="0.1"></label>
-      <label>Derechos y tasas (%)<input type="number" id="hi-der" value="23" min="0" step="1"></label>
-      <label>Dólar ($)<input type="number" id="hi-usd" value="1450" min="0" step="10"></label></div>
+    html: () => `<div class="hd-calc"><label>Costo FOB por unidad (USD)<input class="ui-input" type="number" id="hi-fob" value="4.2" min="0" step="0.1"></label>
+      <label>Flete y seguro por unidad (USD)<input class="ui-input" type="number" id="hi-flete" value="0.9" min="0" step="0.1"></label>
+      <label>Derechos y tasas (%)<input class="ui-input" type="number" id="hi-der" value="23" min="0" step="1"></label>
+      <label>Dólar ($)<input class="ui-input" type="number" id="hi-usd" value="1450" min="0" step="10"></label></div>
       <p class="hd-big" id="hi-out" aria-live="polite"></p><p class="hd-soft">Estimación rápida, sin IVA (recuperable si sos responsable inscripto) y sin gastos locales. La versión completa desglosa todo y te da el precio mínimo para vender en Mercado Libre.</p>`,
     init: el => { const run = () => { const v = id => +$(id).value || 0; const cif = v('hi-fob') + v('hi-flete'); const u = cif * (1 + v('hi-der') / 100) * v('hi-usd');
       $('hi-out').innerHTML = `<span>Costo puesto en Argentina</span><b>${plata(u)}</b><small>por unidad</small>`; }; el.addEventListener('input', run); run(); },
   },
   competencia: {
-    html: () => `${ejemplo('Así se vería una alerta')}
-      <ol class="hd-time"><li><em>1 de agosto</em><b>Competidor A pasó de +100 a +500 vendidos</b></li><li><em>10 de agosto</em><b>Bajó el precio 8%</b></li><li class="is-now"><em>Hoy</em><b>Vende entre 30 y 55 unidades por día</b><span>Estimado con los saltos de vendidos y sus opiniones</span></li></ol>
-      <p class="hd-soft">La diseñé con lo que la API de Mercado Libre permite leer, sin trucos: por eso da un rango y no un número inventado.</p>`,
+    html: () => `${ejemplo('Idea · todavía no existe')}${idea(['Mira cada día a los vendedores de un producto de catálogo y te avisa cuando uno cambia el precio o salta de vendidos.', 'Guardar el historial. Mercado Libre solo deja ver precio y vendedor de cada oferta del catálogo, no las ventas por día.', 'Sobre productos de catálogo (/p/) se arma el historial de precios y las ventas se estiman con un rango, nunca con un número exacto.'])}`,
   },
   radar: {
-    html: () => `${ejemplo('Así se vería el radar')}
-      <ul class="hd-radar">${[['Creciendo en Mercado Libre', 'b'], ['Viral afuera, todavía no llegó', 'b'], ['Ya saturado', 'b']].map(([t]) => `<li><p class="hd-strong">${t}</p><span class="is-blur" aria-hidden="true">████████ ██████</span><span class="is-blur" aria-hidden="true">██████ ████████ ███</span></li>`).join('')}</ul>
-      <p class="hd-soft">Cruza lo que crece en las búsquedas de Mercado Libre con lo que empieza a moverse afuera.</p>`,
+    html: () => `${ejemplo('Idea · todavía no existe')}${idea(['Detectar productos que empiezan a crecer antes de que se saturen.', 'Una fuente de demanda confiable. Las tendencias de Mercado Libre se cortaron y todavía no elegí qué las reemplaza.', 'Cruzar fuentes públicas (búsquedas, catálogo nuevo) y mostrar solo lo que se pueda respaldar con un dato.'])}`,
   },
   perdida: {
-    html: () => `<div class="hd-calc"><label>Ventas por Product Ads al mes ($)<input type="number" id="hp-v" value="3000000" min="0" step="100000"></label>
-      <label>Tu ACOS actual (%)<input type="number" id="hp-a" value="30" min="0" max="100" step="1"></label>
-      <label>ACOS al que se puede llegar (%)<input type="number" id="hp-o" value="15" min="0" max="100" step="1"></label></div>
+    html: () => `<div class="hd-calc"><label>Ventas por Product Ads al mes ($)<input class="ui-input" type="number" id="hp-v" value="3000000" min="0" step="100000"></label>
+      <label>Tu ACOS actual (%)<input class="ui-input" type="number" id="hp-a" value="30" min="0" max="100" step="1"></label>
+      <label>ACOS al que se puede llegar (%)<input class="ui-input" type="number" id="hp-o" value="15" min="0" max="100" step="1"></label></div>
       <p class="hd-big" id="hp-out" aria-live="polite"></p><p class="hd-soft">Es la diferencia entre lo que gastás y lo que gastarías con el ACOS objetivo, vendiendo lo mismo. En Vení a la Cocina lo bajé de 30% a 12%. La versión completa suma tu margen y la comisión: te dice hasta qué ACOS ganás plata.</p>`,
     init: el => { const run = () => { const v = id => +$(id).value || 0; const x = v('hp-v') * Math.max(0, v('hp-a') - v('hp-o')) / 100;
       $('hp-out').innerHTML = `<span>Estás gastando de más</span><b>${plata(x)}</b><small>por mes · ${plata(x * 12)} por año</small>`; }; el.addEventListener('input', run); run(); },
   },
   informe: {
-    html: () => `<div class="hd-doc" aria-label="Vista previa del informe"><p class="hd-doc-t">Informe de auditoría · cuenta de ejemplo</p>
-      <p class="hd-doc-h">1. Salud por área</p><span class="is-blur" aria-hidden="true">████████ ████ ██████████ ███</span>
-      <p class="hd-doc-h">2. Los 10 problemas que más plata cuestan</p><span class="is-blur" aria-hidden="true">██████ ███████████ ████ █████</span><span class="is-blur" aria-hidden="true">████████████ ████████</span>
-      <p class="hd-doc-h">3. Plan de acción en orden</p><span class="is-blur" aria-hidden="true">███████ ██████ ████████████</span></div>
-      <p class="hd-soft">La muestra entera, armada con la cuenta de ejemplo, se abre con el botón de abajo. El tuyo sale con los datos de tu cuenta: te lo mando después de la auditoría gratis.</p>`,
+    html: () => {
+      if (!DEMO) return '<div class="hd-load" aria-busy="true"><span></span><span></span><span></span></div>';
+      const r = DEMO.resumen, plan = DEMO.items.filter(i => ['perdiendo', 'visitas_sin_ventas'].includes(i.clase) && i.diagnostico?.[0]).slice(0, 3);
+      return `<div class="hd-doc" aria-label="Vista previa del informe"><p class="hd-doc-t">Informe de auditoría · cuenta de ejemplo</p>
+      <p class="hd-doc-h">1. La cuenta de un vistazo</p><p>${num(r.publicaciones)} publicaciones, calidad promedio ${Math.round(r.calidadPromedio)}/100, ${r.conteo.perdiendo || 0} perdiendo ventas.</p>
+      <p class="hd-doc-h">2. Lo que más pesa</p><ul>${DEMO.alertas.slice(0, 3).map(x => `<li>${esc(x.txt)}</li>`).join('')}</ul>
+      <p class="hd-doc-h">3. Plan de acción</p><ol>${plan.map(i => `<li>${esc(corto(i.title))}: ${esc(i.diagnostico[0].titulo)}</li>`).join('')}</ol></div>
+      <p class="hd-soft">Es un recorte del informe de la cuenta de ejemplo. El completo se abre con el botón de abajo. El tuyo sale con los datos de tu cuenta, después de la auditoría gratis.</p>`;
+    },
   },
   desarmes: {
     html: () => `${ejemplo('Desarme: Mandolina Borner V5')}
@@ -194,16 +226,15 @@ const DEMOS = {
       <p class="hd-is">Mandolina Cortadora Borner V5 Multibox | Profesional Alemán | 5 Placas | Cuchilla Inox | Apto Lavavajillas</p>`,
   },
   mail: {
-    html: () => `<div class="hd-mailp"><p class="hd-strong">Lunes, 8:00 · Radar semanal</p><ol class="hd-trend"><li><span>1</span><b>organizador de cajones</b><em>creciendo</em></li><li class="is-blur" aria-hidden="true"><span>2</span><b>████████████</b><em>creciendo</em></li><li class="is-blur" aria-hidden="true"><span>3</span><b>██████████████</b><em>creciendo</em></li></ol></div>
-      <p class="hd-soft">Un mail corto por semana con lo que más creció. Todavía no sale: dejame tu contacto y te aviso.</p>`,
+    html: () => `${ejemplo('Idea · todavía no existe')}${idea(['Un mail corto cada lunes con lo que más creció en tu rubro.', 'Depende del radar de demanda: sin una fuente confiable no tiene qué mandar.', 'Sale cuando el radar tenga datos. Dejame tu contacto y sos de los primeros en recibirlo.'])}`,
   },
 };
 
 // ── Vitrina ──
 function muelle() {
-  $('hr-dock').innerHTML = Object.entries(ETAPAS).map(([e, t]) => {
+  $('hr-dock').innerHTML = Object.entries(ETAPAS).filter(([e]) => H.some(h => h.e === e)).map(([e, t]) => {
     const l = H.filter(h => h.e === e);
-    return `<section class="hr-grp" data-e="${e}"><h3><span class="hr-ic">${ic(e)}</span>${t}<span class="hr-n">${l.length}</span></h3>
+    return `<section class="hr-grp" data-e="${e}"><h2><span class="hr-ic">${ic(e)}</span>${t}<span class="hr-n">${l.length}</span></h2>
       <ul>${l.map(h => `<li><button type="button" class="hr-item" data-id="${h.id}" aria-pressed="false"><span class="hr-iico">${svg(h.id)}</span><b>${esc(h.n)}</b><span class="hr-iq">${esc(h.q)}</span></button></li>`).join('')}</ul></section>`;
   }).join('');
 }
@@ -213,11 +244,11 @@ function abrir(id, desplazar) {
   document.querySelectorAll('.hr-item').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === id));
   const nivel = NIVEL[h.e], d = DEMOS[id];
   $('hr-stage').innerHTML = `<div class="hr-stage-in">
-    <header class="hr-sh" data-e="${h.e}"><div class="hr-sh-top"><span class="hr-bigic">${svg(h.id)}</span><div><p class="hr-state" data-e="${h.e}"><span class="hr-ic">${ic(h.e)}</span>${ETAPAS[h.e]}</p><h3>${esc(h.n)}</h3></div></div>
+    <header class="hr-sh" data-e="${h.e}"><div class="hr-sh-top"><span class="hr-bigic">${svg(h.id)}</span><div><p class="hr-state" data-e="${h.e}"><span class="hr-ic">${ic(h.e)}</span>${ETAPAS[h.e]}</p><h2>${esc(h.n)}</h2></div></div>
       <p class="hr-q">${esc(h.q)}</p><p class="hr-v">${esc(h.v)}.</p>
-      <ul class="hr-imp">${h.imp.map(x => `<li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>${esc(x)}</li>`).join('')}</ul>
+      <ul class="hr-imp">${h.imp.map(x => `<li class="ui-badge"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>${esc(x)}</li>`).join('')}</ul>
       <ol class="hr-steps" aria-label="Etapa: ${ETAPAS[h.e]}">${PASOS.map((p, i) => `<li class="${i < nivel ? 'done' : i === nivel ? 'now' : ''}">${p}</li>`).join('')}</ol></header>
-    <div class="hr-demo" id="hr-demo"><p class="hr-demo-k">Probalo acá</p>${d.html()}</div>
+    <div class="hr-demo" id="hr-demo"><p class="hr-demo-k">${h.e === 'idea' || h.e === 'pausa' ? 'De qué se trata' : 'Probalo acá'}</p>${d.html()}</div>
     <footer class="hr-sf">${h.cta.map(([t, u], i) => `<a class="${i ? 'btn-secondary' : 'btn-primary'}" href="${u}">${esc(t)}</a>`).join('')}<span>Para: ${esc(h.p)}${h.nota ? ' · ' + esc(h.nota) : ''}</span></footer>
   </div>`;
   d.init?.($('hr-demo'));
@@ -226,9 +257,27 @@ function abrir(id, desplazar) {
 }
 
 muelle();
-abrir(H.some(h => h.id === location.hash.slice(1)) ? location.hash.slice(1) : 'tracker');
+const rid = new URLSearchParams(location.search).get('r');
+// Con ?r= no se abre ninguna ficha hasta saber de qué herramienta es el resultado (antes se abría siempre «Chequeo»)
+if (rid) $('hr-stage').innerHTML = '<div class="hd-load" aria-busy="true"><span></span><span></span><span></span></div>';
+else abrir(H.some(h => h.id === location.hash.slice(1)) ? location.hash.slice(1) : 'tracker');
+// El menú global enlaza a herramientas.html#chequeo (y otras fichas): estando ya acá, el cambio de ancla abre la ficha
+addEventListener('hashchange', () => { const id = location.hash.slice(1); if (H.some(h => h.id === id) && id !== actual) abrir(id, true); });
 $('hr-dock').addEventListener('click', e => { const b = e.target.closest('.hr-item'); if (b) abrir(b.dataset.id, true); });
-Promise.all([pDemo, pDiag]).then(() => { if (['tracker', 'auditoria', 'diagnostico'].includes(actual)) abrir(actual); });
+Promise.all([pDemo, pDiag]).then(() => { if (['tracker', 'auditoria', 'diagnostico', 'informe'].includes(actual)) abrir(actual); });
 const cnt = e => H.filter(h => h.e === e).length;
 const hay = Object.keys(ETAPAS).filter(e => cnt(e));
 $('hr-count').innerHTML = `<span class="hr-seg" aria-hidden="true">${hay.map(e => `<i data-e="${e}" style="--n:${cnt(e)}"></i>`).join('')}</span><span class="hr-leg">${hay.map(e => `<span data-e="${e}">${cnt(e)} ${ETAPAS[e].toLowerCase()}</span>`).join('')}</span>`;
+
+// Link compartido (?r=id): muestra el resultado guardado por el servidor, sin pedir nada a cambio.
+// Un resultado de rentabilidad se abre en su propia página; los de chequeo se dibujan acá, como siempre.
+if (rid) {
+  fetch('/api/herramientas?action=resultado&id=' + encodeURIComponent(rid)).then(async r => ({ ok: r.ok, d: await r.json().catch(() => ({})) })).then(({ ok, d }) => {
+    if (ok && d.herramienta === 'rentabilidad') { location.replace('rentabilidad.html?r=' + encodeURIComponent(rid)); return; }
+    abrir('chequeo');
+    const out = $('hd-chk-out'); if (!out) return;
+    if (!ok) { out.innerHTML = `<p class="hd-soft">${esc(d.error || 'No pude abrir ese resultado.')}</p>`; return; }
+    out.innerHTML = vistaResultado(d);
+    mostrarSalida(out, { resultadoId: d.id, herramienta: d.herramienta });
+  }).catch(() => { abrir('chequeo'); });
+}

@@ -1,0 +1,610 @@
+[
+  {
+    "id": "static-site",
+    "slug": "static-site",
+    "name": "Sitio estático",
+    "type": "rendering_strategy",
+    "category": "Renderizado",
+    "depth": "full",
+    "level": "beginner",
+    "summary": "Archivos HTML, CSS y JavaScript escritos y publicados tal cual. El servidor solo los entrega; no calcula nada por visita.",
+    "problem_solved": "Publicar contenido con el menor costo, la mayor velocidad y la menor superficie de ataque posibles.",
+    "explanation": [
+      "En un sitio estático, cada página es un archivo que ya existe cuando llega la visita. El hosting (o un CDN) lo entrega directamente al navegador. No hay base de datos, ni código del servidor que se ejecute por cada petición.",
+      "Esto lo hace muy rápido, muy barato y muy difícil de atacar: no hay nada que ejecutar del lado del servidor. Su límite es evidente: todo lo dinámico (formularios, cuentas, contenido por usuario) tiene que resolverse con servicios externos o con JavaScript que consuma una API.",
+      "No hay que confundirlo con «sitio simple»: un sitio estático puede ser grande y rico, siempre que su contenido sea el mismo para todos hasta la próxima publicación."
+    ],
+    "how_it_works": [
+      "Se escriben los archivos a mano, o se generan una vez fuera del servidor.",
+      "Se suben a un hosting estático o a un CDN.",
+      "Cada visita recibe el mismo archivo; cualquier comportamiento dinámico lo hace JavaScript en el navegador o un servicio externo."
+    ],
+    "when_to_use": [
+      "Contenido que cambia poco y es igual para todos.",
+      "Landings, portfolios, documentación, sitios institucionales pequeños.",
+      "Cuando velocidad, costo y seguridad son prioridad."
+    ],
+    "when_not_to_use": [
+      "El contenido depende de quién visita o cambia a cada minuto.",
+      "Hay cientos de páginas que se editan seguido sin un proceso de generación (ver SSG)."
+    ],
+    "pros": [
+      "Muy rápido: sin cómputo por visita.",
+      "Costo de hosting casi nulo.",
+      "Superficie de ataque mínima.",
+      "Muy fácil de desplegar y de cachear."
+    ],
+    "cons": [
+      "Lo dinámico depende de servicios externos o de JavaScript.",
+      "Sin un generador, repetir estructura en muchas páginas se vuelve tedioso."
+    ],
+    "tradeoffs": [
+      "Se gana velocidad y simplicidad a cambio de no tener lógica propia en el servidor."
+    ],
+    "alternatives": [
+      {
+        "id": "ssg",
+        "note": "Genera los archivos estáticos desde contenido y plantillas en tiempo de construcción: mismo resultado para el visitante, mucho más cómodo con muchas páginas."
+      },
+      {
+        "id": "ssr",
+        "note": "Calcula cada página en el servidor al recibir la petición: permite contenido por visita a cambio de más cómputo."
+      },
+      {
+        "id": "csr",
+        "note": "Arma la página en el navegador a partir de datos de una API."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Portfolio personal",
+        "text": "Un conjunto de archivos HTML y CSS publicados en un CDN, con un formulario de contacto que llama a un servicio externo."
+      }
+    ],
+    "common_mistakes": [
+      "Elegir un framework pesado para un sitio que podría ser estático.",
+      "Intentar resolver login o carrito solo con archivos estáticos."
+    ],
+    "decision_questions": [
+      "¿El contenido es el mismo para todos los visitantes?",
+      "¿Con qué frecuencia cambia y quién lo cambia?"
+    ],
+    "related_entities": [
+      {
+        "id": "ssg",
+        "rel": "contrasts_with"
+      },
+      {
+        "id": "quality-performance",
+        "rel": "addresses"
+      },
+      {
+        "id": "quality-cost",
+        "rel": "addresses"
+      }
+    ],
+    "sources": [
+      "webdev-rendering",
+      "mdn-http-caching"
+    ],
+    "evidence_type": "expert_source",
+    "library_refs": [
+      "estatico"
+    ]
+  },
+  {
+    "id": "ssg",
+    "slug": "ssg",
+    "name": "SSG (generación estática)",
+    "type": "rendering_strategy",
+    "category": "Renderizado",
+    "depth": "full",
+    "level": "beginner",
+    "summary": "Las páginas se generan una vez, al construir el sitio, a partir de contenido y plantillas. El resultado se publica como archivos estáticos.",
+    "problem_solved": "Tener el rendimiento y la seguridad de un sitio estático sin escribir cada página a mano, aun con mucho contenido.",
+    "explanation": [
+      "SSG significa «static site generation». Un proceso de construcción toma el contenido (archivos, un CMS, una API) y las plantillas, y produce HTML final para cada página. Esa construcción ocurre antes de publicar, no en cada visita.",
+      "Para el visitante es idéntico a un sitio estático; para quien mantiene el contenido es mucho más cómodo. El costo es que un cambio de contenido requiere volver a construir y publicar, algo que se automatiza con un webhook o un pipeline.",
+      "Es una gran opción cuando el contenido cambia a ritmo moderado. Deja de ser cómoda cuando hay muchísimas páginas que cambian constantemente, o cuando el contenido depende de cada usuario."
+    ],
+    "how_it_works": [
+      "En tiempo de construcción, el generador lee contenido y plantillas y produce un archivo HTML por página.",
+      "Los archivos se publican en un CDN.",
+      "Cuando cambia el contenido, se dispara una nueva construcción."
+    ],
+    "when_to_use": [
+      "Sitios de contenido: institucionales, blogs, documentación, catálogos que cambian a ritmo moderado.",
+      "Cuando el SEO y la velocidad pesan.",
+      "Cuando el contenido se edita en un CMS externo."
+    ],
+    "when_not_to_use": [
+      "El contenido depende de la sesión o cambia casi en tiempo real.",
+      "Miles de páginas con cambios constantes que harían las construcciones lentas."
+    ],
+    "pros": [
+      "Rendimiento y SEO excelentes.",
+      "Costo y riesgo operativo mínimos.",
+      "Se integra bien con un CMS."
+    ],
+    "cons": [
+      "Un cambio de contenido requiere reconstruir y publicar.",
+      "Los tiempos de construcción crecen con la cantidad de páginas.",
+      "Lo personalizado necesita JavaScript en el cliente o funciones aparte."
+    ],
+    "tradeoffs": [
+      "Se gana velocidad de entrega a cambio de frescura inmediata del contenido."
+    ],
+    "alternatives": [
+      {
+        "id": "static-site",
+        "note": "Archivos escritos a mano: más simple, pero incómodo con mucho contenido."
+      },
+      {
+        "id": "ssr",
+        "note": "Genera cada página al recibir la petición: contenido siempre fresco o personalizado, con más cómputo."
+      },
+      {
+        "id": "hybrid-rendering",
+        "note": "Combina páginas generadas en la construcción con otras en el servidor o actualizadas bajo demanda."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Blog técnico",
+        "text": "Artículos en archivos de texto que un generador convierte en HTML; cada vez que se publica un artículo, se reconstruye el sitio."
+      }
+    ],
+    "common_mistakes": [
+      "Usar SSG para contenido que cambia por usuario o por minuto.",
+      "No automatizar la reconstrucción y depender de hacerlo a mano."
+    ],
+    "decision_questions": [
+      "¿Cuántas páginas hay y cuánto tarda reconstruir?",
+      "¿Cuán rápido tiene que reflejarse un cambio de contenido?"
+    ],
+    "related_entities": [
+      {
+        "id": "static-site",
+        "rel": "contrasts_with"
+      },
+      {
+        "id": "hybrid-rendering",
+        "rel": "contrasts_with"
+      },
+      {
+        "id": "quality-seo",
+        "rel": "addresses"
+      },
+      {
+        "id": "quality-performance",
+        "rel": "addresses"
+      }
+    ],
+    "sources": [
+      "webdev-rendering",
+      "nextjs-rendering",
+      "astro-why"
+    ],
+    "evidence_type": "expert_source",
+    "library_refs": [
+      "jamstack"
+    ],
+    "diagram": {
+      "purpose": "concept",
+      "title": "SSG: las páginas se generan al construir y se publican como archivos",
+      "nodes": [
+        {
+          "id": "cms",
+          "label": "Contenido (archivos o CMS)",
+          "kind": "external",
+          "layer": 0
+        },
+        {
+          "id": "build",
+          "label": "Construcción con plantillas",
+          "kind": "infra",
+          "layer": 0
+        },
+        {
+          "id": "cdn",
+          "label": "Archivos HTML en un CDN",
+          "kind": "infra",
+          "layer": 1
+        },
+        {
+          "id": "nav",
+          "label": "Navegador",
+          "kind": "actor",
+          "layer": 2
+        }
+      ],
+      "edges": [
+        {
+          "from": "cms",
+          "to": "build",
+          "label": "lee"
+        },
+        {
+          "from": "build",
+          "to": "cdn",
+          "label": "publica"
+        },
+        {
+          "from": "cdn",
+          "to": "nav",
+          "label": "entrega el archivo"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ssr",
+    "slug": "ssr",
+    "name": "SSR (renderizado en el servidor)",
+    "type": "rendering_strategy",
+    "category": "Renderizado",
+    "depth": "full",
+    "level": "intermediate",
+    "summary": "El servidor arma el HTML de cada página al recibir la petición, y lo entrega ya renderizado al navegador.",
+    "problem_solved": "Entregar contenido listo para leer y para indexar que además puede ser distinto por visita o estar siempre actualizado.",
+    "explanation": [
+      "En SSR, cada petición ejecuta código en el servidor que consulta datos y produce el HTML final. El navegador lo muestra enseguida, sin esperar a ejecutar JavaScript para ver el contenido.",
+      "Esto ayuda al SEO y a la percepción de velocidad inicial, y permite que cada visita reciba contenido personalizado o muy actualizado. A cambio, el servidor trabaja en cada visita: hay más latencia que con archivos pregenerados, más costo y más que operar y escalar.",
+      "SSR no es una tecnología sino una estrategia: la implementan muchos frameworks y también se puede hacer con un servidor tradicional que arma páginas. Que un framework lo soporte no implica que haya que usarlo en todas las páginas."
+    ],
+    "how_it_works": [
+      "Llega la petición al servidor.",
+      "El servidor consulta los datos necesarios y renderiza el HTML.",
+      "Responde con la página completa; el navegador la muestra y, si corresponde, «hidrata» la interactividad con JavaScript."
+    ],
+    "when_to_use": [
+      "Contenido personalizado o que debe estar siempre al día y a la vez indexable.",
+      "Cuando se necesita un buen tiempo de primera visualización en dispositivos lentos."
+    ],
+    "when_not_to_use": [
+      "El contenido es el mismo para todos y cambia poco (SSG o estático son más baratos y rápidos).",
+      "No hay capacidad de operar servidores o funciones que escalen."
+    ],
+    "pros": [
+      "Contenido listo para indexar y para mostrar enseguida.",
+      "Permite personalizar y mostrar datos frescos por petición."
+    ],
+    "cons": [
+      "Más costo y latencia por petición que servir archivos.",
+      "Más complejidad: hay que operar y escalar el servidor.",
+      "Mezclar lógica de servidor y de cliente puede confundir."
+    ],
+    "tradeoffs": [
+      "Se gana frescura y personalización a cambio de cómputo y latencia por visita."
+    ],
+    "alternatives": [
+      {
+        "id": "ssg",
+        "note": "Pregenera las páginas: más rápido y barato, pero menos fresco."
+      },
+      {
+        "id": "csr",
+        "note": "Arma la página en el navegador: más simple de servir, peor para la primera carga y el SEO si no se cuida."
+      },
+      {
+        "id": "hybrid-rendering",
+        "note": "Elige la estrategia por página, en lugar de una sola para todo el sitio."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Página de producto con precio y stock actuales",
+        "text": "Cada visita consulta el precio y el stock actuales y devuelve el HTML ya armado, que también puede indexarse."
+      }
+    ],
+    "common_mistakes": [
+      "Usar SSR para todo por costumbre, incluso para páginas que podrían ser estáticas.",
+      "Olvidar que SSR no es sinónimo de un framework en particular."
+    ],
+    "decision_questions": [
+      "¿El contenido cambia por visitante o por minuto?",
+      "¿Importa que se indexe y que cargue rápido la primera vez?",
+      "¿Hay capacidad de operar el servidor?"
+    ],
+    "related_entities": [
+      {
+        "id": "csr",
+        "rel": "contrasts_with"
+      },
+      {
+        "id": "ssg",
+        "rel": "contrasts_with"
+      },
+      {
+        "id": "hybrid-rendering",
+        "rel": "often_with"
+      },
+      {
+        "id": "quality-seo",
+        "rel": "addresses"
+      }
+    ],
+    "sources": [
+      "mdn-ssr",
+      "webdev-rendering",
+      "nextjs-rendering"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": [
+      "ssr"
+    ],
+    "diagram": {
+      "purpose": "concept",
+      "title": "SSR: el servidor arma el HTML de cada petición",
+      "nodes": [
+        {
+          "id": "nav",
+          "label": "Navegador",
+          "kind": "actor",
+          "layer": 0
+        },
+        {
+          "id": "srv",
+          "label": "Servidor: consulta datos y arma el HTML",
+          "kind": "backend",
+          "layer": 1
+        },
+        {
+          "id": "db",
+          "label": "Datos",
+          "kind": "data",
+          "layer": 2
+        }
+      ],
+      "edges": [
+        {
+          "from": "nav",
+          "to": "srv",
+          "label": "petición"
+        },
+        {
+          "from": "srv",
+          "to": "db",
+          "label": "consulta"
+        },
+        {
+          "from": "srv",
+          "to": "nav",
+          "label": "HTML completo"
+        }
+      ]
+    }
+  },
+  {
+    "id": "csr",
+    "slug": "csr",
+    "name": "CSR (renderizado en el cliente)",
+    "type": "rendering_strategy",
+    "category": "Renderizado",
+    "depth": "full",
+    "level": "intermediate",
+    "summary": "El navegador recibe una página casi vacía y JavaScript que consulta datos a una API y arma la interfaz.",
+    "problem_solved": "Ofrecer interfaces muy interactivas, tipo aplicación, con transiciones rápidas una vez cargadas, sin recargar la página.",
+    "explanation": [
+      "En CSR, el servidor entrega un HTML mínimo y un paquete de JavaScript. El navegador ejecuta ese código, pide los datos a una API y construye la interfaz. Las navegaciones siguientes suelen ser instantáneas porque no se recarga la página entera.",
+      "Es una buena opción para aplicaciones detrás de un login (paneles, herramientas) donde el SEO no importa y la interactividad sí. Es una opción débil para contenido público que debe indexarse y cargar rápido: la primera visualización espera a que se descargue y ejecute el JavaScript.",
+      "No es «moderno» frente a «viejo»: es una compensación. Sus costos reales son el peso del JavaScript, la dependencia de la capacidad del dispositivo y el cuidado extra para accesibilidad y SEO."
+    ],
+    "how_it_works": [
+      "El servidor entrega un HTML casi vacío y el paquete de JavaScript.",
+      "El código se ejecuta en el navegador, consulta una API y dibuja la interfaz.",
+      "Las acciones siguientes actualizan partes de la pantalla sin recargar."
+    ],
+    "when_to_use": [
+      "Aplicaciones con mucha interactividad, detrás de un login.",
+      "Cuando el SEO no es un requisito.",
+      "Cuando ya existe una API y se quiere separar frontend de backend."
+    ],
+    "when_not_to_use": [
+      "Contenido público que debe indexarse y cargar muy rápido.",
+      "Público con dispositivos o redes lentas y poco margen para JavaScript pesado."
+    ],
+    "pros": [
+      "Interfaces fluidas tras la primera carga.",
+      "Separación clara entre frontend y API.",
+      "Hosting estático para el frontend."
+    ],
+    "cons": [
+      "Primera visualización más lenta: hay que descargar y ejecutar JavaScript.",
+      "SEO y accesibilidad requieren cuidado extra.",
+      "Dependiente de la potencia del dispositivo."
+    ],
+    "tradeoffs": [
+      "Se gana interactividad a cambio de la velocidad de la primera carga y de complejidad del frontend."
+    ],
+    "alternatives": [
+      {
+        "id": "ssr",
+        "note": "Entrega HTML ya armado: mejor primera visualización y SEO, con más trabajo del servidor."
+      },
+      {
+        "id": "ssg",
+        "note": "Contenido pregenerado: ideal para páginas públicas que no son una aplicación."
+      },
+      {
+        "id": "hybrid-rendering",
+        "note": "Usa renderizado en el servidor o pregenerado donde conviene y cliente donde hay interacción."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Panel de administración",
+        "text": "Una aplicación detrás de un login que muestra tablas y gráficos, sin necesidad de indexarse."
+      }
+    ],
+    "common_mistakes": [
+      "Usar CSR para un sitio de contenido público y sorprenderse con el SEO.",
+      "Ignorar el peso del paquete de JavaScript."
+    ],
+    "decision_questions": [
+      "¿Es una aplicación detrás de un login o contenido público?",
+      "¿Qué tan importante es la primera carga?",
+      "¿Hay una API que sirva los datos?"
+    ],
+    "related_entities": [
+      {
+        "id": "ssr",
+        "rel": "contrasts_with"
+      },
+      {
+        "id": "rest-api",
+        "rel": "requires"
+      },
+      {
+        "id": "quality-performance",
+        "rel": "addresses"
+      }
+    ],
+    "sources": [
+      "mdn-csr",
+      "webdev-rendering"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": [
+      "spa-api"
+    ],
+    "diagram": {
+      "purpose": "concept",
+      "title": "CSR: el navegador arma la interfaz con datos de una API",
+      "nodes": [
+        {
+          "id": "nav",
+          "label": "Navegador (ejecuta JavaScript)",
+          "kind": "actor",
+          "layer": 0
+        },
+        {
+          "id": "host",
+          "label": "Hosting: HTML casi vacío y JS",
+          "kind": "infra",
+          "layer": 1
+        },
+        {
+          "id": "api",
+          "label": "API de datos",
+          "kind": "backend",
+          "layer": 1
+        },
+        {
+          "id": "db",
+          "label": "Base de datos",
+          "kind": "data",
+          "layer": 2
+        }
+      ],
+      "edges": [
+        {
+          "from": "nav",
+          "to": "host",
+          "label": "1. descarga la app"
+        },
+        {
+          "from": "nav",
+          "to": "api",
+          "label": "2. pide datos (JSON)"
+        },
+        {
+          "from": "api",
+          "to": "db",
+          "label": "consulta"
+        }
+      ]
+    }
+  },
+  {
+    "id": "hybrid-rendering",
+    "slug": "hybrid-rendering",
+    "name": "Renderizado híbrido",
+    "type": "rendering_strategy",
+    "category": "Renderizado",
+    "depth": "full",
+    "level": "advanced",
+    "summary": "En un mismo sitio, cada página usa la estrategia que le conviene: estática, generada, en el servidor o en el cliente.",
+    "problem_solved": "Evitar elegir una sola estrategia para todo, cuando distintas partes del producto tienen necesidades distintas.",
+    "explanation": [
+      "Un e-commerce, por ejemplo, tiene páginas de catálogo (públicas, indexables, que cambian poco), un carrito (muy interactivo) y una cuenta de usuario (personalizada). Forzar la misma estrategia para todo desperdicia rendimiento o complica el desarrollo.",
+      "El renderizado híbrido permite decidir por ruta: generar en la construcción lo estable, renderizar en el servidor lo personalizado y resolver en el cliente lo muy interactivo. Muchos frameworks actuales lo soportan, a veces con mecanismos de actualización incremental.",
+      "El costo es conceptual: hay más opciones para entender y más lugares donde equivocarse. Conviene definir una regla clara de qué estrategia usa cada tipo de página, en lugar de decidirlo caso por caso."
+    ],
+    "how_it_works": [
+      "Se define, por página o por sección, cómo se renderiza.",
+      "Lo estable se genera en la construcción (y se puede actualizar de forma incremental).",
+      "Lo personalizado se renderiza en el servidor y lo muy interactivo en el cliente."
+    ],
+    "when_to_use": [
+      "Sitios con partes de naturaleza distinta: contenido público y áreas personalizadas.",
+      "Cuando se necesita buen SEO y buena interactividad a la vez."
+    ],
+    "when_not_to_use": [
+      "Un sitio simple donde una sola estrategia alcanza.",
+      "Un equipo sin práctica con el framework que lo permite."
+    ],
+    "pros": [
+      "Cada página recibe la estrategia más adecuada.",
+      "Combina SEO, velocidad e interactividad."
+    ],
+    "cons": [
+      "Más conceptos y más combinaciones que entender y probar.",
+      "Fácil de usar de forma inconsistente sin una regla."
+    ],
+    "tradeoffs": [
+      "Se gana ajuste fino por página a cambio de mayor complejidad conceptual."
+    ],
+    "alternatives": [
+      {
+        "id": "ssg",
+        "note": "Una sola estrategia pregenerada: más simple si todo el contenido lo permite."
+      },
+      {
+        "id": "ssr",
+        "note": "Todo en el servidor: uniforme, pero costoso para páginas que serían estáticas."
+      },
+      {
+        "id": "csr",
+        "note": "Todo en el cliente: simple para una aplicación, débil para contenido público."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Tienda online",
+        "text": "Catálogo pregenerado y actualizado de forma incremental, carrito en el cliente y cuenta de usuario renderizada en el servidor."
+      }
+    ],
+    "common_mistakes": [
+      "Mezclar estrategias sin una regla y terminar con comportamientos impredecibles.",
+      "Elegir híbrido por defecto cuando no hay partes de naturaleza distinta."
+    ],
+    "decision_questions": [
+      "¿Qué partes son públicas e indexables y cuáles personalizadas?",
+      "¿Qué tan seguido cambia cada tipo de página?"
+    ],
+    "related_entities": [
+      {
+        "id": "ssg",
+        "rel": "contrasts_with"
+      },
+      {
+        "id": "ssr",
+        "rel": "often_with"
+      }
+    ],
+    "sources": [
+      "nextjs-rendering",
+      "webdev-rendering"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": [
+      "hibrida"
+    ]
+  }
+]

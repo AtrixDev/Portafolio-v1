@@ -1,0 +1,761 @@
+[
+  {
+    "id": "postgresql",
+    "slug": "postgresql",
+    "name": "PostgreSQL",
+    "type": "technology",
+    "category": "Bases de datos",
+    "depth": "brief",
+    "level": "intermediate",
+    "summary": "Un sistema de bases de datos relacional de código abierto, muy completo y con décadas de desarrollo.",
+    "problem_solved": "Es una implementación concreta del patrón de base de datos relacional.",
+    "explanation": [
+      "PostgreSQL implementa el modelo relacional con SQL, transacciones y un sistema de tipos y extensiones amplio. Su documentación oficial lo presenta como un sistema de gestión de bases de datos relacionales y de objetos. Incluye también búsqueda de texto completo, lo que permite resolver búsquedas simples sin sumar un motor aparte.",
+      "Está disponible como servicio administrado en muchos proveedores. Elegirlo es una decisión de tecnología; que el proyecto necesite una base relacional es una decisión de patrón, que se toma antes."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Como opción por defecto cuando se necesita una base relacional."
+    ],
+    "when_not_to_use": [
+      "Cuando el patrón de acceso pide otro tipo de almacén."
+    ],
+    "pros": [
+      "Muy completo y con ecosistema maduro.",
+      "Soporte de búsqueda de texto completo."
+    ],
+    "cons": [
+      "Operarlo bien exige conocimiento si no se usa un servicio administrado."
+    ],
+    "tradeoffs": [],
+    "common_mistakes": [],
+    "decision_questions": [],
+    "alternatives": [
+      {
+        "id": "mongodb",
+        "note": "Base de documentos: otro modelo, no un reemplazo directo."
+      }
+    ],
+    "examples": [],
+    "related_entities": [
+      {
+        "id": "relational-database",
+        "rel": "implements"
+      }
+    ],
+    "sources": [
+      "postgres-docs",
+      "postgres-fts"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": [
+      "supabase"
+    ],
+    "profile": {
+      "complexity": {
+        "level": "medio",
+        "text": "Operarlo bien exige conocimiento (índices, copias, versiones); un servicio administrado lo reduce mucho."
+      },
+      "cost": {
+        "level": "bajo",
+        "text": "Código abierto: se paga el hosting o el servicio administrado."
+      },
+      "ecosystem": {
+        "level": "alto",
+        "text": "Amplio soporte en lenguajes, ORMs, herramientas y proveedores."
+      },
+      "scalability": {
+        "level": "alto",
+        "text": "Escala muy bien en vertical y en lecturas; el escalado horizontal de escrituras exige más diseño."
+      },
+      "maintenance": {
+        "level": "medio",
+        "text": "Actualizaciones de versión y mantenimiento de índices y migraciones."
+      },
+      "lock_in": {
+        "level": "bajo",
+        "text": "Basado en SQL y código abierto, con muchos proveedores compatibles."
+      }
+    }
+  },
+  {
+    "id": "mongodb",
+    "slug": "mongodb",
+    "name": "MongoDB",
+    "type": "technology",
+    "category": "Bases de datos",
+    "depth": "brief",
+    "level": "intermediate",
+    "summary": "Una base de datos de documentos que guarda objetos con estructura flexible, similares a JSON.",
+    "problem_solved": "Es una implementación concreta del patrón de base de datos NoSQL de documentos.",
+    "explanation": [
+      "MongoDB almacena documentos en colecciones, sin un esquema fijo obligatorio, y los consulta con su propio lenguaje de consultas. Es una opción cuando los datos tienen estructuras variables o se leen naturalmente como un documento completo.",
+      "Como con cualquier base NoSQL, el modelo de datos se diseña alrededor de cómo se van a leer los datos."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Datos con estructura variable que se leen como documentos completos."
+    ],
+    "when_not_to_use": [
+      "Muchas relaciones entre entidades y consultas imprevistas."
+    ],
+    "pros": [
+      "Esquema flexible.",
+      "Mapeo natural a objetos."
+    ],
+    "cons": [
+      "Las consultas entre colecciones son más trabajosas que los joins de SQL."
+    ],
+    "tradeoffs": [],
+    "common_mistakes": [],
+    "decision_questions": [],
+    "alternatives": [
+      {
+        "id": "postgresql",
+        "note": "Base relacional: más estructura y consultas flexibles."
+      }
+    ],
+    "examples": [],
+    "related_entities": [
+      {
+        "id": "nosql-database",
+        "rel": "implements"
+      }
+    ],
+    "sources": [
+      "mongodb-docs"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": [
+      "mongodb-atlas"
+    ],
+    "profile": {
+      "complexity": {
+        "level": "medio",
+        "text": "Modelar según las consultas es una habilidad distinta a la de SQL."
+      },
+      "cost": {
+        "level": "medio",
+        "text": "Hay edición comunitaria y servicios administrados de pago; el costo depende del volumen."
+      },
+      "ecosystem": {
+        "level": "alto",
+        "text": "Controladores para los lenguajes habituales y servicio administrado propio."
+      },
+      "scalability": {
+        "level": "alto",
+        "text": "Pensada para distribuir datos entre nodos."
+      },
+      "maintenance": {
+        "level": "medio",
+        "text": "Diseño de índices y de esquema lógico a lo largo del tiempo."
+      },
+      "lock_in": {
+        "level": "medio",
+        "text": "Su lenguaje de consultas es propio; migrar a otro motor implica rehacer el acceso a datos."
+      }
+    }
+  },
+  {
+    "id": "redis",
+    "slug": "redis",
+    "name": "Redis",
+    "type": "technology",
+    "category": "Caché y mensajería",
+    "depth": "brief",
+    "level": "intermediate",
+    "summary": "Un almacén de datos en memoria, muy rápido, usado habitualmente como caché y para estructuras de datos de acceso rápido.",
+    "problem_solved": "Es una implementación concreta del patrón de caché (y de otros usos de datos en memoria).",
+    "explanation": [
+      "Redis guarda los datos en memoria y ofrece estructuras como cadenas, listas, conjuntos y tablas hash. Se usa mucho para cachear resultados, almacenar sesiones y contadores.",
+      "Como los datos viven en memoria, conviene tratarlos como reemplazables salvo que se configure su persistencia y se acepten sus compromisos."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Caché compartida entre varios servidores.",
+      "Sesiones y contadores de acceso rápido."
+    ],
+    "when_not_to_use": [
+      "Como única fuente de verdad de datos críticos sin una estrategia de persistencia."
+    ],
+    "pros": [
+      "Muy rápido.",
+      "Estructuras de datos útiles."
+    ],
+    "cons": [
+      "Los datos están en memoria: costo y límites de capacidad."
+    ],
+    "tradeoffs": [],
+    "common_mistakes": [],
+    "decision_questions": [],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [
+      {
+        "id": "cache",
+        "rel": "implements"
+      }
+    ],
+    "sources": [
+      "redis-docs"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": [],
+    "profile": {
+      "complexity": {
+        "level": "bajo",
+        "text": "Fácil de empezar; la invalidación y la persistencia requieren decisiones de diseño."
+      },
+      "cost": {
+        "level": "medio",
+        "text": "Los datos viven en memoria: el costo crece con el volumen que se retiene."
+      },
+      "ecosystem": {
+        "level": "alto",
+        "text": "Amplio soporte en lenguajes y servicios administrados."
+      },
+      "scalability": {
+        "level": "alto",
+        "text": "Muy rápido; el límite práctico suele ser la memoria."
+      },
+      "maintenance": {
+        "level": "medio",
+        "text": "Hay que definir expiración, límites de memoria y qué pasa si se pierden los datos."
+      },
+      "lock_in": {
+        "level": "bajo",
+        "text": "Existe un protocolo ampliamente compatible entre implementaciones."
+      }
+    }
+  },
+  {
+    "id": "nextjs",
+    "slug": "nextjs",
+    "name": "Next.js",
+    "type": "technology",
+    "category": "Frameworks web",
+    "depth": "brief",
+    "level": "intermediate",
+    "summary": "Un framework de React que permite elegir la estrategia de renderizado por página: estática, en el servidor o en el cliente.",
+    "problem_solved": "Es una implementación concreta de las estrategias de renderizado SSR, SSG e híbrida.",
+    "explanation": [
+      "Next.js documenta distintas formas de renderizar: en el servidor, de forma estática y en el cliente, combinables dentro de una misma aplicación. Es una de las opciones para implementar renderizado híbrido.",
+      "Usar un framework así tiene sentido cuando la aplicación realmente necesita esa flexibilidad; para un sitio puramente estático puede ser más de lo que hace falta."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Aplicaciones con React que mezclan contenido público y partes personalizadas."
+    ],
+    "when_not_to_use": [
+      "Sitios simples y estáticos donde un generador más liviano alcanza."
+    ],
+    "pros": [
+      "Flexibilidad de renderizado por ruta.",
+      "Gran ecosistema."
+    ],
+    "cons": [
+      "Más complejidad y más conceptos que un sitio estático simple."
+    ],
+    "tradeoffs": [],
+    "common_mistakes": [],
+    "decision_questions": [],
+    "alternatives": [
+      {
+        "id": "astro",
+        "note": "Más orientado a contenido, con menos JavaScript enviado al cliente por defecto."
+      }
+    ],
+    "examples": [],
+    "related_entities": [
+      {
+        "id": "hybrid-rendering",
+        "rel": "implements"
+      },
+      {
+        "id": "ssr",
+        "rel": "implements"
+      },
+      {
+        "id": "ssg",
+        "rel": "implements"
+      }
+    ],
+    "sources": [
+      "nextjs-rendering"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": [
+      "nextjs"
+    ],
+    "profile": {
+      "complexity": {
+        "level": "alto",
+        "text": "Muchos conceptos (estrategias de renderizado, componentes de servidor y cliente, caché) que hay que entender."
+      },
+      "cost": {
+        "level": "bajo",
+        "text": "Código abierto: el costo está en el hosting y en el tiempo de aprendizaje."
+      },
+      "ecosystem": {
+        "level": "alto",
+        "text": "Gran comunidad y librerías compatibles con React."
+      },
+      "scalability": {
+        "level": "alto",
+        "text": "Depende de cómo y dónde se despliegue; permite elegir la estrategia por página."
+      },
+      "maintenance": {
+        "level": "medio",
+        "text": "Evoluciona rápido: las actualizaciones mayores requieren trabajo."
+      },
+      "lock_in": {
+        "level": "medio",
+        "text": "Usar funciones propias de un proveedor de hosting aumenta el acople."
+      }
+    }
+  },
+  {
+    "id": "astro",
+    "slug": "astro",
+    "name": "Astro",
+    "type": "technology",
+    "category": "Frameworks web",
+    "depth": "brief",
+    "level": "intermediate",
+    "summary": "Un framework pensado para sitios de contenido, que genera HTML y envía poco JavaScript al navegador.",
+    "problem_solved": "Es una implementación concreta de la generación estática (SSG) para sitios basados en contenido.",
+    "explanation": [
+      "Astro se presenta en su documentación como un framework para sitios orientados a contenido, que prioriza el HTML generado en el servidor o en la construcción y envía JavaScript solo para los componentes interactivos.",
+      "Encaja bien en blogs, documentación, sitios institucionales y catálogos de contenido."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Sitios de contenido donde la velocidad y el SEO son prioridad."
+    ],
+    "when_not_to_use": [
+      "Aplicaciones muy interactivas donde casi todo vive en el cliente."
+    ],
+    "pros": [
+      "Poco JavaScript por defecto.",
+      "Muy buen rendimiento en sitios de contenido."
+    ],
+    "cons": [
+      "Menos natural para aplicaciones con mucho estado en el cliente."
+    ],
+    "tradeoffs": [],
+    "common_mistakes": [],
+    "decision_questions": [],
+    "alternatives": [
+      {
+        "id": "nextjs",
+        "note": "Más orientado a aplicaciones con React y a renderizado flexible."
+      }
+    ],
+    "examples": [],
+    "related_entities": [
+      {
+        "id": "ssg",
+        "rel": "implements"
+      },
+      {
+        "id": "static-site",
+        "rel": "implements"
+      }
+    ],
+    "sources": [
+      "astro-why"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": [
+      "astro"
+    ],
+    "profile": {
+      "complexity": {
+        "level": "bajo",
+        "text": "Modelo simple para sitios de contenido."
+      },
+      "cost": {
+        "level": "bajo",
+        "text": "Código abierto y hosting estático económico."
+      },
+      "ecosystem": {
+        "level": "medio",
+        "text": "Ecosistema en crecimiento, con integraciones para los frameworks de interfaz habituales."
+      },
+      "scalability": {
+        "level": "alto",
+        "text": "Los sitios generados se sirven desde un CDN."
+      },
+      "maintenance": {
+        "level": "bajo",
+        "text": "Pocas piezas móviles en un sitio de contenido."
+      },
+      "lock_in": {
+        "level": "bajo",
+        "text": "El resultado es HTML estándar."
+      }
+    }
+  },
+  {
+    "id": "amazon-s3",
+    "slug": "amazon-s3",
+    "name": "Amazon S3",
+    "type": "technology",
+    "category": "Almacenamiento",
+    "depth": "brief",
+    "level": "intermediate",
+    "summary": "El servicio de almacenamiento de objetos de Amazon Web Services.",
+    "problem_solved": "Es una implementación concreta del patrón de almacenamiento de objetos.",
+    "explanation": [
+      "S3 guarda objetos en buckets y los expone por HTTP, con control de acceso configurable. Es el ejemplo de referencia de este patrón, y otros proveedores ofrecen servicios con interfaces compatibles.",
+      "Vale la misma advertencia que para el patrón: conviene revisar la configuración de acceso para no dejar datos expuestos."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Archivos de usuarios, imágenes, copias de seguridad."
+    ],
+    "when_not_to_use": [
+      "Datos pequeños y estructurados que se consultan por contenido."
+    ],
+    "pros": [
+      "Escala y durabilidad.",
+      "Amplio ecosistema."
+    ],
+    "cons": [
+      "Dependencia de un proveedor y su modelo de costos por transferencia."
+    ],
+    "tradeoffs": [],
+    "common_mistakes": [],
+    "decision_questions": [],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [
+      {
+        "id": "object-storage",
+        "rel": "implements"
+      }
+    ],
+    "sources": [
+      "aws-s3"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": [],
+    "profile": {
+      "complexity": {
+        "level": "bajo",
+        "text": "Concepto simple; la complejidad está en los permisos y las políticas de acceso."
+      },
+      "cost": {
+        "level": "medio",
+        "text": "Se paga por almacenamiento y por transferencia, que puede sorprender."
+      },
+      "ecosystem": {
+        "level": "alto",
+        "text": "Es el estándar de hecho: muchas herramientas y servicios compatibles."
+      },
+      "scalability": {
+        "level": "alto",
+        "text": "Prácticamente sin límite para este uso."
+      },
+      "maintenance": {
+        "level": "bajo",
+        "text": "Servicio administrado."
+      },
+      "lock_in": {
+        "level": "medio",
+        "text": "Su API es muy imitada, pero las funciones propias de AWS atan al proveedor."
+      }
+    }
+  },
+  {
+    "id": "elasticsearch",
+    "slug": "elasticsearch",
+    "name": "Elasticsearch",
+    "type": "technology",
+    "category": "Búsqueda",
+    "depth": "brief",
+    "level": "advanced",
+    "summary": "Un motor de búsqueda y análisis distribuido, orientado a búsqueda de texto con relevancia.",
+    "problem_solved": "Es una implementación concreta del patrón de motor de búsqueda.",
+    "explanation": [
+      "Elasticsearch indexa documentos y permite consultas de texto con relevancia, filtros y agregaciones. Elastic documenta distintas soluciones de búsqueda sobre él.",
+      "Es una pieza adicional que operar y mantener sincronizada con la base de datos de origen; conviene confirmar antes que la búsqueda integrada de la base de datos no alcance."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Búsqueda como función central con relevancia y facetas."
+    ],
+    "when_not_to_use": [
+      "Búsquedas simples sobre pocos datos."
+    ],
+    "pros": [
+      "Búsqueda potente y rápida."
+    ],
+    "cons": [
+      "Operación y sincronización de datos."
+    ],
+    "tradeoffs": [],
+    "common_mistakes": [],
+    "decision_questions": [],
+    "alternatives": [
+      {
+        "id": "postgresql",
+        "note": "Su búsqueda de texto completo evita sumar otra pieza si las necesidades son moderadas."
+      }
+    ],
+    "examples": [],
+    "related_entities": [
+      {
+        "id": "search-engine",
+        "rel": "implements"
+      }
+    ],
+    "sources": [
+      "elastic-search-docs"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": [],
+    "profile": {
+      "complexity": {
+        "level": "alto",
+        "text": "Modelado de índices, análisis de texto y operación de un clúster."
+      },
+      "cost": {
+        "level": "alto",
+        "text": "Consume recursos significativos; hay servicios administrados de pago."
+      },
+      "ecosystem": {
+        "level": "alto",
+        "text": "Amplia documentación y herramientas."
+      },
+      "scalability": {
+        "level": "alto",
+        "text": "Pensado para distribuir índices en varios nodos."
+      },
+      "maintenance": {
+        "level": "alto",
+        "text": "Sincronizar el índice con la fuente de datos y gestionar el clúster."
+      },
+      "lock_in": {
+        "level": "medio",
+        "text": "Su lenguaje de consultas es propio."
+      }
+    }
+  },
+  {
+    "id": "rabbitmq",
+    "slug": "rabbitmq",
+    "name": "RabbitMQ",
+    "type": "technology",
+    "category": "Caché y mensajería",
+    "depth": "brief",
+    "level": "advanced",
+    "summary": "Un intermediario de mensajes (message broker) de código abierto, usado para colas y para patrones de publicación y suscripción.",
+    "problem_solved": "Es una implementación concreta de colas de mensajes y de pub/sub.",
+    "explanation": [
+      "RabbitMQ recibe mensajes de los productores y los enruta a colas de las que leen los consumidores; con distintos tipos de intercambio (exchanges) permite repartir trabajo entre consumidores o difundir un mensaje a varios.",
+      "Es una pieza más que operar. Muchos proveedores de nube ofrecen colas administradas que simplifican esa operación."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Colas de trabajo y mensajería entre servicios que se operan por cuenta propia."
+    ],
+    "when_not_to_use": [
+      "Cuando una cola administrada del proveedor de nube alcanza."
+    ],
+    "pros": [
+      "Flexible en el enrutamiento de mensajes.",
+      "Madurez y documentación."
+    ],
+    "cons": [
+      "Operación propia si no es administrado."
+    ],
+    "tradeoffs": [],
+    "common_mistakes": [],
+    "decision_questions": [],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [
+      {
+        "id": "message-queue",
+        "rel": "implements"
+      },
+      {
+        "id": "pub-sub",
+        "rel": "implements"
+      }
+    ],
+    "sources": [
+      "rabbitmq-docs"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": [],
+    "profile": {
+      "complexity": {
+        "level": "medio",
+        "text": "Intercambios, colas y confirmaciones requieren entender el modelo."
+      },
+      "cost": {
+        "level": "bajo",
+        "text": "Código abierto; se paga la infraestructura o un servicio administrado."
+      },
+      "ecosystem": {
+        "level": "alto",
+        "text": "Clientes para casi todos los lenguajes."
+      },
+      "scalability": {
+        "level": "alto",
+        "text": "Buen rendimiento y opciones de clúster, con sus compromisos."
+      },
+      "maintenance": {
+        "level": "medio",
+        "text": "Operación del broker, monitoreo de colas y de mensajes muertos."
+      },
+      "lock_in": {
+        "level": "bajo",
+        "text": "Usa protocolos abiertos como AMQP."
+      }
+    }
+  },
+  {
+    "id": "claude-code",
+    "slug": "claude-code",
+    "name": "Claude Code",
+    "type": "tool",
+    "category": "IA para desarrollo",
+    "depth": "brief",
+    "level": "intermediate",
+    "summary": "Una herramienta de Anthropic para desarrollo asistido por IA que trabaja sobre el repositorio desde la línea de comandos.",
+    "problem_solved": "Es una herramienta concreta de desarrollo asistido por IA.",
+    "explanation": [
+      "Según su documentación oficial, Claude Code lee y edita archivos del proyecto, ejecuta comandos y trabaja con el contexto del código. Permite definir permisos sobre lo que puede hacer y trabajar con subagentes especializados.",
+      "Es una herramienta, no una metodología: sus resultados dependen de la calidad de las especificaciones, de los tests que verifican el trabajo y de la revisión humana."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Tareas de desarrollo bien especificadas, con tests que permitan verificar el resultado."
+    ],
+    "when_not_to_use": [
+      "Cambios sin forma de verificarlos ni a nadie que los revise."
+    ],
+    "pros": [
+      "Trabaja sobre el contexto real del código."
+    ],
+    "cons": [
+      "Requiere revisar lo que genera."
+    ],
+    "tradeoffs": [],
+    "common_mistakes": [],
+    "decision_questions": [],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [
+      {
+        "id": "ai-assisted-coding",
+        "rel": "implements"
+      }
+    ],
+    "sources": [
+      "claude-code-docs",
+      "claude-code-subagents"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": [],
+    "profile": {
+      "complexity": {
+        "level": "bajo",
+        "text": "Se usa desde la línea de comandos; lo difícil es especificar bien y verificar."
+      },
+      "cost": {
+        "level": "medio",
+        "text": "Es un servicio de pago (suscripción o uso)."
+      },
+      "ecosystem": {
+        "level": "medio",
+        "text": "Soporta extensiones y subagentes; el ecosistema está en crecimiento."
+      },
+      "scalability": {
+        "level": "medio",
+        "text": "Escala con la cantidad de tareas bien delimitadas, no con la autonomía."
+      },
+      "maintenance": {
+        "level": "bajo",
+        "text": "Depende de mantener el archivo de contexto y las pruebas del proyecto."
+      },
+      "lock_in": {
+        "level": "medio",
+        "text": "Los flujos y configuraciones propios no se trasladan tal cual a otras herramientas."
+      }
+    }
+  },
+  {
+    "id": "playwright",
+    "slug": "playwright",
+    "name": "Playwright",
+    "type": "tool",
+    "category": "Testing",
+    "depth": "brief",
+    "level": "intermediate",
+    "summary": "Un framework de pruebas end-to-end que automatiza navegadores reales para verificar flujos completos.",
+    "problem_solved": "Es una herramienta concreta de testing end-to-end.",
+    "explanation": [
+      "Playwright controla navegadores como Chromium, Firefox y WebKit para ejecutar flujos de usuario y comprobar lo que se ve. Su documentación lo presenta como un framework de pruebas end-to-end para aplicaciones web modernas.",
+      "Sirve también para capturar pantallas y para validar el comportamiento en distintos navegadores y tamaños de pantalla."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Flujos críticos de negocio y regresiones visibles."
+    ],
+    "when_not_to_use": [
+      "Lógica que se puede probar de forma aislada."
+    ],
+    "pros": [
+      "Prueba en navegadores reales."
+    ],
+    "cons": [
+      "Las pruebas E2E son más lentas y requieren mantenimiento."
+    ],
+    "tradeoffs": [],
+    "common_mistakes": [],
+    "decision_questions": [],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [
+      {
+        "id": "e2e-testing",
+        "rel": "implements"
+      }
+    ],
+    "sources": [
+      "playwright-docs"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": [],
+    "profile": {
+      "complexity": {
+        "level": "medio",
+        "text": "Las pruebas de punta a punta requieren manejar esperas y datos de prueba."
+      },
+      "cost": {
+        "level": "bajo",
+        "text": "Código abierto."
+      },
+      "ecosystem": {
+        "level": "alto",
+        "text": "Soporta varios navegadores y lenguajes."
+      },
+      "scalability": {
+        "level": "medio",
+        "text": "Las pruebas E2E son lentas: conviene limitarlas a los flujos críticos."
+      },
+      "maintenance": {
+        "level": "medio",
+        "text": "Los cambios de interfaz obligan a mantener las pruebas."
+      },
+      "lock_in": {
+        "level": "bajo",
+        "text": "Las pruebas son código; se puede cambiar de herramienta con esfuerzo moderado."
+      }
+    }
+  }
+]

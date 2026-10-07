@@ -1,0 +1,1940 @@
+{
+ "version": 1,
+ "threshold_default": 3,
+ "decisions": [
+  {
+   "id": "rendering",
+   "kind": "choice",
+   "title": "Cómo se renderiza la interfaz",
+   "needs": [
+    "public_seo",
+    "auth",
+    "payments",
+    "content_edit",
+    "interactive"
+   ],
+   "candidates": [
+    {
+     "id": "static-site",
+     "base": 2,
+     "rules": [
+      {
+       "when": {
+        "all": [
+         {
+          "s": "content_edit",
+          "is": "never"
+         },
+         {
+          "s": "auth",
+          "is": "none"
+         },
+         {
+          "s": "payments",
+          "is": "none"
+         }
+        ]
+       },
+       "delta": 4,
+       "reason": "El contenido casi no cambia y no hay cuentas ni pagos: archivos estáticos alcanzan y son lo más barato, rápido y seguro."
+      },
+      {
+       "when": {
+        "s": "auth",
+        "not": "none"
+       },
+       "delta": -10,
+       "reason": "Hay cuentas de usuario: un sitio solo estático no puede mostrar contenido distinto por persona."
+      },
+      {
+       "when": {
+        "s": "payments",
+        "not": "none"
+       },
+       "delta": -8,
+       "reason": "Hay pagos: hace falta lógica en el servidor."
+      },
+      {
+       "when": {
+        "s": "content_edit",
+        "is": "often"
+       },
+       "delta": -3,
+       "reason": "El contenido cambia seguido: sin un proceso de generación sería incómodo mantenerlo."
+      },
+      {
+       "when": {
+        "s": "realtime",
+        "is": "core"
+       },
+       "delta": -10,
+       "reason": "El tiempo real necesita conexiones y lógica de servidor."
+      }
+     ],
+     "better_when": "El contenido casi no cambia, no hay cuentas ni pagos y se busca el menor costo posible.",
+     "revisit": [
+      "Si aparecen cuentas, pagos o contenido por persona, pasar a otra estrategia.",
+      "Si el contenido empieza a cambiar seguido, sumar un generador (SSG)."
+     ]
+    },
+    {
+     "id": "ssg",
+     "base": 2,
+     "rules": [
+      {
+       "when": {
+        "all": [
+         {
+          "s": "auth",
+          "is": "none"
+         },
+         {
+          "s": "payments",
+          "is": "none"
+         },
+         {
+          "s": "product",
+          "in": [
+           "landing",
+           "institutional-site"
+          ]
+         },
+         {
+          "s": "content_edit",
+          "in": [
+           "sometimes",
+           "often"
+          ]
+         }
+        ]
+       },
+       "delta": 5,
+       "reason": "Es un sitio de contenido sin cuentas ni pagos que se va actualizando: se genera una vez y se publica como archivos, con rendimiento y SEO excelentes."
+      },
+      {
+       "when": {
+        "all": [
+         {
+          "s": "public_seo",
+          "is": "yes"
+         },
+         {
+          "s": "auth",
+          "is": "none"
+         }
+        ]
+       },
+       "delta": 2,
+       "reason": "Hace falta aparecer en buscadores y cargar rápido: el contenido pregenerado lo logra."
+      },
+      {
+       "when": {
+        "s": "auth",
+        "not": "none"
+       },
+       "delta": -8,
+       "reason": "Con cuentas de usuario no alcanza solo contenido pregenerado."
+      },
+      {
+       "when": {
+        "s": "payments",
+        "not": "none"
+       },
+       "delta": -6,
+       "reason": "Con pagos hace falta lógica en el servidor."
+      },
+      {
+       "when": {
+        "s": "realtime",
+        "is": "core"
+       },
+       "delta": -10,
+       "reason": "El tiempo real no se resuelve con páginas pregeneradas."
+      }
+     ],
+     "better_when": "El contenido es público, cambia a ritmo moderado y no depende de quién lo visita.",
+     "revisit": [
+      "Si las construcciones se vuelven lentas por la cantidad de páginas, evaluar renderizado híbrido.",
+      "Si hace falta contenido distinto por visita, sumar renderizado en el servidor."
+     ]
+    },
+    {
+     "id": "ssr",
+     "base": 1,
+     "rules": [
+      {
+       "when": {
+        "all": [
+         {
+          "s": "public_seo",
+          "is": "yes"
+         },
+         {
+          "s": "auth",
+          "in": [
+           "users",
+           "roles",
+           "multi_tenant"
+          ]
+         }
+        ]
+       },
+       "delta": 4,
+       "reason": "Hay contenido que debe indexarse y también contenido por persona: el servidor arma cada página con datos actuales."
+      },
+      {
+       "when": {
+        "s": "catalog",
+        "is": "large"
+       },
+       "delta": 2,
+       "reason": "Un catálogo grande y cambiante no se regenera entero ante cada cambio."
+      },
+      {
+       "when": {
+        "s": "public_seo",
+        "is": "no"
+       },
+       "delta": -3,
+       "reason": "No hace falta indexar: renderizar en el servidor agrega costo sin el beneficio de SEO."
+      },
+      {
+       "when": {
+        "s": "time",
+        "is": "urgent"
+       },
+       "delta": -2,
+       "reason": "Hay que salir rápido: operar renderizado en el servidor es más trabajo que servir archivos."
+      }
+     ],
+     "better_when": "Hay contenido público e indexable que además depende de datos actuales o de la persona.",
+     "revisit": [
+      "Si una parte de las páginas cambia poco, pasarla a generación estática (híbrido)."
+     ]
+    },
+    {
+     "id": "csr",
+     "base": 1,
+     "rules": [
+      {
+       "when": {
+        "all": [
+         {
+          "s": "public_seo",
+          "is": "no"
+         },
+         {
+          "s": "interactive",
+          "in": [
+           "medium",
+           "high"
+          ]
+         }
+        ]
+       },
+       "delta": 5,
+       "reason": "Es una aplicación interactiva que no necesita indexarse: el navegador arma la interfaz con datos de una API."
+      },
+      {
+       "when": {
+        "all": [
+         {
+          "s": "public_seo",
+          "is": "no"
+         },
+         {
+          "s": "auth",
+          "not": "none"
+         }
+        ]
+       },
+       "delta": 2,
+       "reason": "Detrás de un inicio de sesión el SEO no importa."
+      },
+      {
+       "when": {
+        "s": "public_seo",
+        "is": "yes"
+       },
+       "delta": -6,
+       "reason": "Hay contenido que debe indexarse y cargar rápido: armarlo todo en el navegador es riesgoso para el SEO."
+      },
+      {
+       "when": {
+        "s": "interactive",
+        "is": "low"
+       },
+       "delta": -4,
+       "reason": "La interfaz casi no es interactiva: un cliente pesado no se justifica."
+      }
+     ],
+     "better_when": "Es una aplicación detrás de un inicio de sesión, muy interactiva y sin necesidad de SEO.",
+     "revisit": [
+      "Si aparece una parte pública que deba indexarse, usar renderizado en el servidor o pregenerado para esa parte."
+     ]
+    },
+    {
+     "id": "hybrid-rendering",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "all": [
+         {
+          "s": "public_seo",
+          "is": "yes"
+         },
+         {
+          "any": [
+           {
+            "s": "auth",
+            "not": "none"
+           },
+           {
+            "s": "payments",
+            "not": "none"
+           }
+          ]
+         }
+        ]
+       },
+       "delta": 6,
+       "reason": "Hay una parte pública que debe indexarse y otra personalizada o transaccional: elegir la estrategia por página evita ceder en una de las dos."
+      },
+      {
+       "when": {
+        "all": [
+         {
+          "s": "public_seo",
+          "is": "yes"
+         },
+         {
+          "s": "interactive",
+          "is": "high"
+         }
+        ]
+       },
+       "delta": 2,
+       "reason": "Hay una interfaz muy interactiva y también contenido público indexable."
+      },
+      {
+       "when": {
+        "s": "team",
+        "is": "solo"
+       },
+       "delta": -3,
+       "reason": "Hay más opciones para entender y mantener: para una sola persona conviene una regla simple."
+      },
+      {
+       "when": {
+        "all": [
+         {
+          "s": "auth",
+          "is": "none"
+         },
+         {
+          "s": "payments",
+          "is": "none"
+         }
+        ]
+       },
+       "delta": -3,
+       "reason": "Sin cuentas ni pagos no hay partes de naturaleza distinta que lo justifiquen."
+      }
+     ],
+     "better_when": "Hay partes públicas indexables y partes personalizadas o muy interactivas en el mismo producto.",
+     "revisit": [
+      "Definir por escrito qué estrategia usa cada tipo de página, para no mezclar sin regla."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "architecture",
+   "kind": "choice",
+   "title": "Cómo se organiza el sistema",
+   "needs": [
+    "team",
+    "scale",
+    "background",
+    "time"
+   ],
+   "candidates": [
+    {
+     "id": "no-backend",
+     "base": 0,
+     "pseudo": true,
+     "name": "Sin backend propio",
+     "summary": "El sitio se publica como archivos y lo dinámico (formularios, analítica) lo resuelven servicios externos: no hay un servidor propio que mantener.",
+     "rules": [
+      {
+       "when": {
+        "all": [
+         {
+          "s": "product",
+          "in": [
+           "landing",
+           "institutional-site"
+          ]
+         },
+         {
+          "s": "auth",
+          "is": "none"
+         },
+         {
+          "s": "payments",
+          "is": "none"
+         },
+         {
+          "s": "capture",
+          "not": "bookings"
+         }
+        ]
+       },
+       "delta": 14,
+       "reason": "No hay cuentas, pagos ni datos propios: un servidor propio no aporta y sí agrega costo y superficie de ataque."
+      },
+      {
+       "when": {
+        "all": [
+         {
+          "s": "product",
+          "in": [
+           "ecommerce",
+           "saas",
+           "dashboard",
+           "management-system",
+           "marketplace"
+          ]
+         }
+        ]
+       },
+       "delta": -14,
+       "reason": "Este tipo de producto necesita lógica y datos propios."
+      },
+      {
+       "when": {
+        "any": [
+         {
+          "s": "auth",
+          "not": "none"
+         },
+         {
+          "s": "payments",
+          "not": "none"
+         },
+         {
+          "s": "capture",
+          "is": "bookings"
+         }
+        ]
+       },
+       "delta": -14,
+       "reason": "Hay cuentas, pagos o reservas propias: hace falta un backend."
+      }
+     ],
+     "better_when": "Todo el contenido es público y lo dinámico se resuelve con servicios externos.",
+     "revisit": [
+      "Si aparecen cuentas, pagos o reservas propias, sumar un backend (empezar por un monolito)."
+     ]
+    },
+    {
+     "id": "monolith",
+     "base": 5,
+     "rules": [
+      {
+       "when": {
+        "s": "team",
+        "in": [
+         "solo",
+         "small"
+        ]
+       },
+       "delta": 3,
+       "reason": "El equipo es chico: un solo despliegue y una sola base de código minimizan la coordinación."
+      },
+      {
+       "when": {
+        "s": "scale",
+        "in": [
+         "small",
+         "medium"
+        ]
+       },
+       "delta": 2,
+       "reason": "La escala esperada no exige repartir el sistema: un monolito escala bien con copias."
+      },
+      {
+       "when": {
+        "s": "time",
+        "is": "urgent"
+       },
+       "delta": 1,
+       "reason": "Hay que salir rápido: lo más simple es lo más rápido de construir y desplegar."
+      },
+      {
+       "when": {
+        "s": "product",
+        "in": [
+         "landing",
+         "institutional-site",
+         "dashboard",
+         "management-system"
+        ]
+       },
+       "delta": 1,
+       "reason": "Es un producto de dominio acotado, donde un solo bloque bien ordenado alcanza."
+      },
+      {
+       "when": {
+        "s": "team",
+        "is": "large"
+       },
+       "delta": -3,
+       "reason": "Con varios equipos, un único despliegue se vuelve un cuello de botella."
+      },
+      {
+       "when": {
+        "s": "scale",
+        "is": "large"
+       },
+       "delta": -2,
+       "reason": "Con escala muy grande, partes distintas pueden necesitar escalar por separado."
+      },
+      {
+       "when": {
+        "s": "background",
+        "is": "heavy"
+       },
+       "delta": -3,
+       "reason": "Con tareas pesadas, hacerlas en el mismo proceso web degrada la respuesta: conviene separar un trabajador."
+      }
+     ],
+     "better_when": "El producto es nuevo, el equipo es chico y los límites del dominio todavía se están descubriendo.",
+     "revisit": [
+      "Si varios equipos se pisan en el despliegue, pasar a un monolito modular y luego evaluar separar partes.",
+      "Si una parte necesita escalar o desplegarse de forma muy distinta, extraerla por un límite ya definido."
+     ]
+    },
+    {
+     "id": "modular-monolith",
+     "base": 4,
+     "rules": [
+      {
+       "when": {
+        "all": [
+         {
+          "s": "product",
+          "in": [
+           "saas",
+           "ecommerce",
+           "marketplace",
+           "management-system"
+          ]
+         },
+         {
+          "s": "team",
+          "in": [
+           "small",
+           "large"
+          ]
+         }
+        ]
+       },
+       "delta": 3,
+       "reason": "Es un producto con varias capacidades de negocio que va a crecer: límites claros por módulo mantienen el código ordenado sin sumar costo operativo."
+      },
+      {
+       "when": {
+        "s": "team",
+        "is": "large"
+       },
+       "delta": 2,
+       "reason": "Varios equipos necesitan áreas propias sin separar el despliegue."
+      },
+      {
+       "when": {
+        "s": "scale",
+        "in": [
+         "medium",
+         "large"
+        ]
+       },
+       "delta": 2,
+       "reason": "Con más escala, el orden interno pesa más y deja abierta la opción de separar partes."
+      },
+      {
+       "when": {
+        "s": "auth",
+        "is": "multi_tenant"
+       },
+       "delta": 1,
+       "reason": "Con varias organizaciones, separar capacidades con límites explícitos reduce errores de aislamiento."
+      },
+      {
+       "when": {
+        "s": "product",
+        "in": [
+         "landing",
+         "institutional-site"
+        ]
+       },
+       "delta": -3,
+       "reason": "Para un producto tan simple, la estructura extra no se justifica."
+      },
+      {
+       "when": {
+        "s": "background",
+        "is": "heavy"
+       },
+       "delta": -2,
+       "reason": "Con tareas pesadas hace falta además un proceso trabajador."
+      }
+     ],
+     "better_when": "El producto va a crecer en capacidades y conviene mantener límites claros sin separar el despliegue.",
+     "revisit": [
+      "Verificar con herramientas que los módulos no accedan a datos ajenos: si los límites se erosionan, el beneficio se pierde."
+     ]
+    },
+    {
+     "id": "web-queue-worker",
+     "base": 3,
+     "rules": [
+      {
+       "when": {
+        "s": "background",
+        "is": "heavy"
+       },
+       "delta": 5,
+       "reason": "Hay tareas largas o pesadas fuera de la petición: un trabajador conectado por una cola evita que bloqueen al usuario."
+      },
+      {
+       "when": {
+        "s": "background",
+        "is": "some"
+       },
+       "delta": 2,
+       "reason": "Hay tareas diferidas (correos, avisos): conviene sacarlas del camino de la petición."
+      },
+      {
+       "when": {
+        "s": "team",
+        "in": [
+         "solo",
+         "small"
+        ]
+       },
+       "delta": 1,
+       "reason": "Sigue siendo una arquitectura simple de entender y de operar para un equipo chico."
+      },
+      {
+       "when": {
+        "s": "background",
+        "is": "none"
+       },
+       "delta": -5,
+       "reason": "Sin tareas diferidas, un trabajador no aporta nada."
+      }
+     ],
+     "better_when": "Hay trabajo largo o por lotes que no debe bloquear la respuesta, y el dominio sigue siendo simple.",
+     "revisit": [
+      "Evitar que el frente y el trabajador compartan modelos de datos sin un contrato.",
+      "Diseñar el caso de «escribió en la base pero no llegó a encolar» (outbox)."
+     ]
+    },
+    {
+     "id": "microservices",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "all": [
+         {
+          "s": "team",
+          "is": "large"
+         },
+         {
+          "s": "scale",
+          "is": "large"
+         }
+        ]
+       },
+       "delta": 4,
+       "reason": "Varios equipos y mucha escala pueden justificar servicios que se desplieguen por separado."
+      },
+      {
+       "when": {
+        "s": "integrations",
+        "is": "many"
+       },
+       "delta": 1,
+       "reason": "Con muchas integraciones, aislar cada una puede ayudar."
+      },
+      {
+       "when": {
+        "s": "team",
+        "in": [
+         "solo",
+         "small"
+        ]
+       },
+       "delta": -4,
+       "reason": "Con un equipo chico, el costo de operar varios servicios supera lo que aportan."
+      },
+      {
+       "when": {
+        "s": "time",
+        "is": "urgent"
+       },
+       "delta": -3,
+       "reason": "Hay que salir rápido: los servicios distribuidos retrasan la primera versión."
+      },
+      {
+       "when": {
+        "s": "scale",
+        "in": [
+         "small",
+         "medium"
+        ]
+       },
+       "delta": -2,
+       "reason": "No hay una necesidad de escala que lo justifique."
+      }
+     ],
+     "better_when": "Hay varios equipos que necesitan desplegar de forma independiente y partes con necesidades de escala muy distintas.",
+     "revisit": [
+      "Antes de separar, pasar por un monolito modular y comprobar que los límites del dominio son estables.",
+      "Exige automatización de despliegue, pruebas y monitoreo distribuido."
+     ]
+    },
+    {
+     "id": "event-driven",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "all": [
+         {
+          "s": "integrations",
+          "is": "many"
+         },
+         {
+          "s": "background",
+          "is": "heavy"
+         }
+        ]
+       },
+       "delta": 4,
+       "reason": "Muchas integraciones y mucho trabajo asíncrono: reaccionar a eventos desacopla las partes."
+      },
+      {
+       "when": {
+        "s": "realtime",
+        "is": "core"
+       },
+       "delta": 2,
+       "reason": "Con actualizaciones en vivo, los eventos reparten los cambios a quienes los necesitan."
+      },
+      {
+       "when": {
+        "s": "product",
+        "is": "marketplace"
+       },
+       "delta": 1,
+       "reason": "Un marketplace tiene muchas reacciones a un mismo hecho (pedido, pago, entrega)."
+      },
+      {
+       "when": {
+        "s": "team",
+        "in": [
+         "solo",
+         "small"
+        ]
+       },
+       "delta": -4,
+       "reason": "Exige práctica con duplicados, orden y consistencia eventual: demasiado para un equipo chico."
+      },
+      {
+       "when": {
+        "s": "time",
+        "is": "urgent"
+       },
+       "delta": -2,
+       "reason": "Hay que salir rápido: un diseño por eventos retrasa la primera versión."
+      }
+     ],
+     "better_when": "Muchas partes deben reaccionar a los mismos hechos y se acepta consistencia eventual.",
+     "revisit": [
+      "Definir el formato y la versión de los eventos como un contrato antes de crecer."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "data_store",
+   "kind": "choice",
+   "title": "Dónde se guardan los datos principales",
+   "needs": [
+    "data_shape",
+    "payments",
+    "auth"
+   ],
+   "candidates": [
+    {
+     "id": "relational-database",
+     "base": 5,
+     "rules": [
+      {
+       "when": {
+        "s": "payments",
+        "not": "none"
+       },
+       "delta": 3,
+       "reason": "Hay pagos: las transacciones y la integridad de una base relacional evitan inconsistencias con el dinero."
+      },
+      {
+       "when": {
+        "s": "auth",
+        "in": [
+         "roles",
+         "multi_tenant"
+        ]
+       },
+       "delta": 2,
+       "reason": "Los permisos y la pertenencia a organizaciones son relaciones entre datos: se modelan naturalmente."
+      },
+      {
+       "when": {
+        "s": "sensitive_data",
+        "in": [
+         "financial",
+         "regulated"
+        ]
+       },
+       "delta": 2,
+       "reason": "Con datos sensibles, la integridad y los controles de una base madura pesan."
+      },
+      {
+       "when": {
+        "s": "data_shape",
+        "is": "relational"
+       },
+       "delta": 2,
+       "reason": "Los datos tienen relaciones claras (usuarios, pedidos, productos)."
+      },
+      {
+       "when": {
+        "s": "data_shape",
+        "is": "flexible"
+       },
+       "delta": -3,
+       "reason": "Los datos son muy variables: el esquema fijo puede estorbar."
+      }
+     ],
+     "better_when": "Hay datos con relaciones claras o la consistencia es crítica.",
+     "revisit": [
+      "Si aparece un patrón de acceso específico o de escala distinta, sumar un almacén para esa parte sin reemplazar el principal."
+     ]
+    },
+    {
+     "id": "nosql-database",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "all": [
+         {
+          "s": "data_shape",
+          "is": "flexible"
+         },
+         {
+          "s": "payments",
+          "is": "none"
+         }
+        ]
+       },
+       "delta": 4,
+       "reason": "Los datos son variables y se leen como documentos completos, sin transacciones de dinero."
+      },
+      {
+       "when": {
+        "all": [
+         {
+          "s": "data_shape",
+          "is": "flexible"
+         },
+         {
+          "s": "scale",
+          "is": "large"
+         }
+        ]
+       },
+       "delta": 2,
+       "reason": "Con mucha escala y datos tipo documento, escalar horizontalmente es más directo."
+      },
+      {
+       "when": {
+        "s": "payments",
+        "not": "none"
+       },
+       "delta": -3,
+       "reason": "Con pagos conviene que la consistencia transaccional sea simple."
+      }
+     ],
+     "better_when": "Los datos son documentos de estructura variable y el patrón de acceso es simple.",
+     "revisit": [
+      "Diseñar el modelo según las consultas; si aparecen relaciones y consultas imprevistas, considerar una base relacional."
+     ]
+    },
+    {
+     "id": "none",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "all": [
+         {
+          "s": "product",
+          "in": [
+           "landing",
+           "institutional-site"
+          ]
+         },
+         {
+          "s": "auth",
+          "is": "none"
+         },
+         {
+          "s": "payments",
+          "is": "none"
+         },
+         {
+          "s": "capture",
+          "not": "bookings"
+         }
+        ]
+       },
+       "delta": 9,
+       "reason": "No hay cuentas, pagos ni datos propios que guardar: un servicio externo para el formulario alcanza."
+      },
+      {
+       "when": {
+        "any": [
+         {
+          "s": "auth",
+          "not": "none"
+         },
+         {
+          "s": "payments",
+          "not": "none"
+         },
+         {
+          "s": "capture",
+          "is": "bookings"
+         }
+        ]
+       },
+       "delta": -9,
+       "reason": "Hay datos propios que guardar."
+      }
+     ],
+     "better_when": "Casi todo es contenido que se publica y lo dinámico se resuelve con servicios externos.",
+     "revisit": [
+      "Si aparecen reservas, cuentas o pedidos, sumar una base de datos relacional."
+     ],
+     "name": "Sin base de datos propia",
+     "pseudo": true,
+     "summary": "El contenido se publica como archivos y lo dinámico (formularios, analítica) lo resuelven servicios externos."
+    }
+   ]
+  },
+  {
+   "id": "data_layers",
+   "kind": "set",
+   "title": "Piezas de datos adicionales",
+   "threshold": 3,
+   "needs": [
+    "scale",
+    "files",
+    "search"
+   ],
+   "candidates": [
+    {
+     "id": "cache",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "s": "scale",
+        "is": "large"
+       },
+       "delta": 3,
+       "reason": "Con mucha escala, una caché reduce la carga sobre la base de datos."
+      },
+      {
+       "when": {
+        "s": "scale",
+        "is": "medium"
+       },
+       "delta": 2,
+       "reason": "Con escala media, una caché ayuda si hay lecturas repetidas."
+      },
+      {
+       "when": {
+        "s": "product",
+        "is": "dashboard"
+       },
+       "delta": 2,
+       "reason": "Un tablero repite consultas costosas: cachear sus resultados reduce la carga."
+      }
+     ],
+     "better_when": "Hay lecturas repetidas y costosas, o la base de datos empieza a sufrir.",
+     "revisit": [
+      "Cachear solo lo que se midió como problema, y definir cómo y cuándo se invalida."
+     ],
+     "not_needed": "Todavía no hay evidencia de un problema de rendimiento: conviene medir antes de sumar una caché."
+    },
+    {
+     "id": "object-storage",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "s": "files",
+        "in": [
+         "uploads",
+         "media_heavy"
+        ]
+       },
+       "delta": 5,
+       "reason": "Se suben o sirven archivos: van a un almacenamiento de objetos, no a la base de datos ni al servidor de la aplicación."
+      },
+      {
+       "when": {
+        "all": [
+         {
+          "s": "product",
+          "in": [
+           "ecommerce",
+           "marketplace"
+          ]
+         },
+         {
+          "s": "catalog",
+          "in": [
+           "medium",
+           "large"
+          ]
+         }
+        ]
+       },
+       "delta": 2,
+       "reason": "Un catálogo con imágenes de productos pesa mucho para servirlo desde la aplicación."
+      }
+     ],
+     "better_when": "La aplicación recibe o sirve archivos de cierto volumen.",
+     "revisit": [
+      "Revisar el acceso: lo que suben las personas no debe ser público por defecto."
+     ],
+     "not_needed": "No hay archivos de usuarios que justifiquen un almacenamiento aparte."
+    },
+    {
+     "id": "search-engine",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "s": "search",
+        "is": "central"
+       },
+       "delta": 5,
+       "reason": "La búsqueda es central en el producto: relevancia, filtros y tolerancia a errores justifican un motor dedicado."
+      },
+      {
+       "when": {
+        "all": [
+         {
+          "s": "search",
+          "is": "basic"
+         },
+         {
+          "s": "catalog",
+          "is": "large"
+         }
+        ]
+       },
+       "delta": 2,
+       "reason": "Con un catálogo grande, una búsqueda simple empieza a quedarse corta."
+      }
+     ],
+     "better_when": "La búsqueda es una función central o el catálogo es muy grande.",
+     "revisit": [
+      "Mantener el índice sincronizado con la base de datos, que sigue siendo la fuente de verdad."
+     ],
+     "not_needed": "Una búsqueda simple se resuelve con la búsqueda de texto de la base de datos; un motor dedicado agrega una pieza que operar."
+    }
+   ]
+  },
+  {
+   "id": "communication",
+   "kind": "set",
+   "title": "Cómo se comunican las partes",
+   "threshold": 3,
+   "needs": [
+    "realtime",
+    "background",
+    "integrations"
+   ],
+   "candidates": [
+    {
+     "id": "rest-api",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "d": "rendering",
+        "is": "csr"
+       },
+       "delta": 4,
+       "reason": "El navegador arma la interfaz y necesita una API de datos."
+      },
+      {
+       "when": {
+        "s": "integrations",
+        "is": "many"
+       },
+       "delta": 3,
+       "reason": "Otros sistemas van a consumir o aportar datos: una API bien definida ordena la integración."
+      },
+      {
+       "when": {
+        "s": "product",
+        "in": [
+         "saas",
+         "dashboard",
+         "management-system",
+         "marketplace"
+        ]
+       },
+       "delta": 1,
+       "reason": "El producto expone sus datos y operaciones a una interfaz que los consume."
+      }
+     ],
+     "better_when": "El frontend o terceros consumen los datos del backend.",
+     "revisit": [
+      "Definir desde el inicio el formato de errores y el versionado."
+     ],
+     "not_needed": "No hay un cliente separado que consuma una API."
+    },
+    {
+     "id": "websocket",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "s": "realtime",
+        "is": "core"
+       },
+       "delta": 6,
+       "reason": "Las actualizaciones en vivo son centrales: una conexión abierta evita repetir peticiones."
+      }
+     ],
+     "better_when": "Las actualizaciones deben llegar al instante y las inicia el servidor.",
+     "revisit": [
+      "Planificar la reconexión y el escalado de conexiones abiertas."
+     ],
+     "not_needed": "Con actualizaciones ocasionales o sin tiempo real, alcanza con consultar cada pocos segundos: es más simple de operar."
+    },
+    {
+     "id": "message-queue",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "s": "background",
+        "is": "heavy"
+       },
+       "delta": 5,
+       "reason": "Hay tareas largas o pesadas: una cola las saca de la petición, absorbe picos y permite reintentos."
+      },
+      {
+       "when": {
+        "s": "background",
+        "is": "some"
+       },
+       "delta": 4,
+       "reason": "Hay tareas diferidas (correos, avisos): una cola simple las procesa fuera de la petición."
+      },
+      {
+       "when": {
+        "d": "architecture",
+        "is": "web-queue-worker"
+       },
+       "delta": 4,
+       "reason": "El estilo elegido separa un frente web de un trabajador conectado por una cola."
+      }
+     ],
+     "better_when": "Hay trabajo que no debe bloquear la respuesta y que tiene que reintentarse ante fallos.",
+     "revisit": [
+      "Diseñar para mensajes duplicados y limitar los reintentos."
+     ],
+     "not_needed": "No hay tareas que justifiquen una cola."
+    },
+    {
+     "id": "pub-sub",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "d": "architecture",
+        "is": "event-driven"
+       },
+       "delta": 4,
+       "reason": "El estilo elegido reparte eventos a varios consumidores."
+      },
+      {
+       "when": {
+        "all": [
+         {
+          "s": "realtime",
+          "is": "core"
+         },
+         {
+          "s": "scale",
+          "is": "large"
+         }
+        ]
+       },
+       "delta": 2,
+       "reason": "Con muchas conexiones en vivo, repartir los eventos entre servidores suele requerir publicación y suscripción."
+      }
+     ],
+     "better_when": "Un mismo hecho debe disparar varias reacciones independientes.",
+     "revisit": [
+      "Documentar los temas y el formato de los mensajes como un contrato."
+     ],
+     "not_needed": "No hay varios consumidores que reaccionen a los mismos hechos."
+    }
+   ]
+  },
+  {
+   "id": "identity_security",
+   "kind": "set",
+   "title": "Identidad y seguridad",
+   "threshold": 3,
+   "needs": [
+    "auth",
+    "sensitive_data",
+    "payments"
+   ],
+   "candidates": [
+    {
+     "id": "authentication-and-authorization",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "s": "auth",
+        "not": "none"
+       },
+       "delta": 5,
+       "reason": "Hay cuentas de usuario: hay que resolver quién es cada persona y qué puede hacer, por separado."
+      }
+     ],
+     "better_when": "Hay cuentas o funciones restringidas.",
+     "revisit": [
+      "Delegar la autenticación en un proveedor reduce errores propios; la autorización sigue siendo específica del negocio."
+     ],
+     "not_needed": "No hay cuentas ni funciones restringidas."
+    },
+    {
+     "id": "owasp-top-10",
+     "base": 4,
+     "rules": [],
+     "better_when": "Siempre: es la lista de riesgos de partida para cualquier aplicación web.",
+     "revisit": [
+      "Tomarlo como punto de partida, no como lista de verificación completa."
+     ],
+     "default_reason": "Es la lista de riesgos de partida para cualquier aplicación web."
+    },
+    {
+     "id": "owasp-asvs",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "any": [
+         {
+          "s": "sensitive_data",
+          "in": [
+           "financial",
+           "regulated"
+          ]
+         },
+         {
+          "s": "payments",
+          "not": "none"
+         },
+         {
+          "s": "auth",
+          "is": "multi_tenant"
+         }
+        ]
+       },
+       "delta": 4,
+       "reason": "Con pagos, datos sensibles o varias organizaciones conviene verificar la seguridad con requisitos concretos."
+      },
+      {
+       "when": {
+        "s": "sensitive_data",
+        "is": "personal"
+       },
+       "delta": 2,
+       "reason": "Hay datos personales: los requisitos de seguridad ayudan a no dejar huecos."
+      }
+     ],
+     "better_when": "Hay datos sensibles, pagos o aislamiento entre organizaciones.",
+     "revisit": [
+      "Ajustar el nivel de verificación al riesgo real del proyecto."
+     ],
+     "not_needed": "El nivel de riesgo no justifica todavía un proceso de verificación formal: alcanza con la lista de riesgos y buenas prácticas."
+    }
+   ]
+  },
+  {
+   "id": "testing",
+   "kind": "set",
+   "title": "Estrategia de pruebas",
+   "threshold": 3,
+   "needs": [
+    "payments",
+    "auth"
+   ],
+   "candidates": [
+    {
+     "id": "unit-testing",
+     "base": 4,
+     "rules": [],
+     "better_when": "Siempre que haya lógica de negocio.",
+     "revisit": [
+      "Revisar qué reglas de negocio quedaron sin prueba cada vez que un error llega a producción."
+     ],
+     "default_reason": "Protege la lógica de negocio y permite cambiar el código con confianza."
+    },
+    {
+     "id": "integration-testing",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "any": [
+         {
+          "d": "data_store",
+          "in": [
+           "relational-database",
+           "nosql-database"
+          ]
+         },
+         {
+          "s": "integrations",
+          "is": "many"
+         }
+        ]
+       },
+       "delta": 4,
+       "reason": "Hay una base de datos propia o muchas integraciones: los fallos aparecen en las uniones entre piezas."
+      }
+     ],
+     "better_when": "Hay varias piezas reales que tienen que funcionar juntas.",
+     "revisit": [],
+     "not_needed": "Sin base de datos ni integraciones, las pruebas unitarias cubren casi todo."
+    },
+    {
+     "id": "e2e-testing",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "any": [
+         {
+          "s": "payments",
+          "not": "none"
+         },
+         {
+          "s": "auth",
+          "not": "none"
+         },
+         {
+          "s": "capture",
+          "is": "bookings"
+         }
+        ]
+       },
+       "delta": 4,
+       "reason": "Hay flujos críticos (cuentas, pagos o reservas) que no pueden romperse: conviene probarlos de punta a punta."
+      }
+     ],
+     "better_when": "Hay pocos flujos críticos que verificar como los usa una persona.",
+     "revisit": [
+      "Limitarlos a los flujos esenciales: son lentos y frágiles."
+     ],
+     "not_needed": "Sin flujos críticos, unas pocas verificaciones manuales alcanzan."
+    }
+   ]
+  },
+  {
+   "id": "operations",
+   "kind": "set",
+   "title": "Operación y observabilidad",
+   "threshold": 3,
+   "needs": [],
+   "candidates": [
+    {
+     "id": "logs-metrics-traces",
+     "base": 4,
+     "rules": [
+      {
+       "when": {
+        "d": "architecture",
+        "in": [
+         "microservices",
+         "event-driven",
+         "web-queue-worker"
+        ]
+       },
+       "delta": 2,
+       "reason": "Con varias piezas que se comunican, seguir una petición de punta a punta requiere trazas, no solo registros."
+      }
+     ],
+     "better_when": "Todo sistema en producción.",
+     "revisit": [
+      "Escalar la inversión con la cantidad de piezas distribuidas."
+     ],
+     "default_reason": "Todo sistema en producción necesita enterarse de que falla y encontrar la causa."
+    }
+   ]
+  },
+  {
+   "id": "ai_product",
+   "kind": "choice",
+   "title": "Cómo se usa la IA dentro del producto",
+   "applies_if": {
+    "s": "ai",
+    "not": "none"
+   },
+   "needs": [
+    "ai"
+   ],
+   "candidates": [
+    {
+     "id": "ai-assistant",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "s": "ai",
+        "is": "assist"
+       },
+       "delta": 6,
+       "reason": "Quien lo usa conversa con un asistente y decide qué hacer con la respuesta: es el enfoque más simple y seguro."
+      }
+     ],
+     "better_when": "Quien usa el producto necesita ayuda para pensar o redactar, y decide por su cuenta.",
+     "revisit": [
+      "Si el asistente empieza a tener que actuar sobre sistemas, evaluar primero un workflow con pasos fijos antes que un agente.",
+      "Medir si las respuestas se usan y se verifican; si no, el asistente no está aportando."
+     ]
+    },
+    {
+     "id": "ai-workflow",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "s": "ai",
+        "is": "automate"
+       },
+       "delta": 6,
+       "reason": "El proceso tiene pasos conocidos: un workflow en código con pasos de modelo es más previsible, barato y verificable que un agente."
+      }
+     ],
+     "better_when": "El proceso tiene pasos conocidos y se necesita previsibilidad.",
+     "revisit": [
+      "Validar la salida del modelo antes de actuar."
+     ]
+    },
+    {
+     "id": "ai-agent",
+     "base": -1,
+     "rules": [
+      {
+       "when": {
+        "s": "ai",
+        "is": "open_ended"
+       },
+       "delta": 7,
+       "reason": "Los pasos no se pueden prever: un agente puede ser apropiado, con límites claros, permisos mínimos y supervisión."
+      }
+     ],
+     "better_when": "La tarea es abierta y no se pueden fijar los pasos de antemano.",
+     "revisit": [
+      "Medir primero si un workflow o una sola llamada resuelven el caso.",
+      "Limitar pasos, costo, tiempo y permisos; una persona aprueba las acciones irreversibles."
+     ]
+    },
+    {
+     "id": "multi-agent",
+     "base": -4,
+     "rules": [
+      {
+       "when": {
+        "all": [
+         {
+          "s": "ai",
+          "is": "open_ended"
+         },
+         {
+          "s": "scale",
+          "is": "large"
+         }
+        ]
+       },
+       "delta": 2,
+       "reason": "A gran escala, repartir subtareas independientes podría justificar varios agentes."
+      }
+     ],
+     "better_when": "Un solo agente no alcanza y las subtareas son independientes.",
+     "revisit": [
+      "Comprobar con mediciones que un solo agente no alcanza antes de sumar más."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ai_dev",
+   "kind": "choice",
+   "title": "Cómo usar IA para construirlo",
+   "needs": [
+    "dev_ai"
+   ],
+   "candidates": [
+    {
+     "id": "ai-assisted-coding",
+     "base": 3,
+     "rules": [
+      {
+       "when": {
+        "s": "dev_ai",
+        "is": "coding"
+       },
+       "delta": 4,
+       "reason": "Elegiste desarrollo asistido por IA: rinde más con tareas acotadas, criterios de aceptación claros y tests que verifiquen."
+      },
+      {
+       "when": {
+        "all": [
+         {
+          "s": "team",
+          "in": [
+           "solo",
+           "small"
+          ]
+         },
+         {
+          "s": "time",
+          "is": "urgent"
+         }
+        ]
+       },
+       "delta": 1,
+       "reason": "Un equipo chico con plazo corto se beneficia de acelerar tareas bien especificadas."
+      },
+      {
+       "when": {
+        "s": "dev_ai",
+        "is": "none"
+       },
+       "delta": -4,
+       "reason": "Elegiste no usar IA para construir."
+      }
+     ],
+     "better_when": "Hay tareas bien especificadas y tests que permitan verificar el resultado.",
+     "revisit": [
+      "Exigir tests y revisión humana antes de integrar lo que genera."
+     ]
+    },
+    {
+     "id": "ai-assistant",
+     "base": 2,
+     "rules": [
+      {
+       "when": {
+        "s": "dev_ai",
+        "is": "assistant"
+       },
+       "delta": 4,
+       "reason": "Elegiste usar un asistente para consultar: es seguro y simple, y la persona aplica lo que decide."
+      },
+      {
+       "when": {
+        "s": "dev_ai",
+        "is": "none"
+       },
+       "delta": -2,
+       "reason": "Elegiste no usar IA para construir."
+      }
+     ],
+     "better_when": "Se quiere apoyo para pensar y decidir, sin dar acceso al código.",
+     "revisit": [
+      "Si se quiere que la herramienta trabaje sobre el código, pasar a desarrollo asistido por IA, con tests que verifiquen."
+     ]
+    },
+    {
+     "id": "none",
+     "base": 0,
+     "rules": [
+      {
+       "when": {
+        "s": "dev_ai",
+        "is": "none"
+       },
+       "delta": 6,
+       "reason": "Elegiste no usar IA para construir: es una decisión válida y se puede reconsiderar más adelante."
+      }
+     ],
+     "better_when": "No se quiere o no se puede usar IA durante el desarrollo.",
+     "revisit": [],
+     "name": "Sin IA para construir",
+     "pseudo": true,
+     "summary": "El desarrollo se hace sin herramientas de IA."
+    },
+    {
+     "id": "multi-agent",
+     "base": -4,
+     "rules": [
+      {
+       "when": {
+        "all": [
+         {
+          "s": "team",
+          "is": "large"
+         },
+         {
+          "s": "scale",
+          "is": "large"
+         }
+        ]
+       },
+       "delta": 1,
+       "reason": "Con muchas tareas independientes en paralelo podría ayudar."
+      }
+     ],
+     "better_when": "Un solo agente no alcanza y las tareas son independientes.",
+     "revisit": [
+      "Empezar con una sola herramienta y medir antes de sumar más agentes."
+     ]
+    }
+   ]
+  }
+ ],
+ "quality": [
+  {
+   "id": "quality-security",
+   "base": 1,
+   "max": 3,
+   "rules": [
+    {
+     "when": {
+      "s": "auth",
+      "not": "none"
+     },
+     "delta": 1,
+     "reason": "Hay cuentas de usuario."
+    },
+    {
+     "when": {
+      "s": "payments",
+      "not": "none"
+     },
+     "delta": 1,
+     "reason": "Hay pagos."
+    },
+    {
+     "when": {
+      "s": "sensitive_data",
+      "in": [
+       "financial",
+       "regulated"
+      ]
+     },
+     "delta": 1,
+     "reason": "Se manejan datos financieros o regulados."
+    }
+   ]
+  },
+  {
+   "id": "quality-reliability",
+   "base": 1,
+   "max": 3,
+   "rules": [
+    {
+     "when": {
+      "s": "payments",
+      "not": "none"
+     },
+     "delta": 1,
+     "reason": "Una caída o un dato inconsistente afecta dinero."
+    },
+    {
+     "when": {
+      "s": "scale",
+      "is": "large"
+     },
+     "delta": 1,
+     "reason": "Con mucha escala, las caídas afectan a mucha gente."
+    },
+    {
+     "when": {
+      "s": "product",
+      "in": [
+       "saas",
+       "marketplace"
+      ]
+     },
+     "delta": 1,
+     "reason": "Quienes lo usan dependen de él para trabajar o vender."
+    }
+   ]
+  },
+  {
+   "id": "quality-performance",
+   "base": 1,
+   "max": 3,
+   "rules": [
+    {
+     "when": {
+      "s": "public_seo",
+      "is": "yes"
+     },
+     "delta": 1,
+     "reason": "La velocidad influye en la visibilidad y en la conversión."
+    },
+    {
+     "when": {
+      "s": "product",
+      "in": [
+       "landing",
+       "ecommerce",
+       "institutional-site"
+      ]
+     },
+     "delta": 1,
+     "reason": "Es un producto donde cada segundo de espera cuesta visitas."
+    }
+   ]
+  },
+  {
+   "id": "quality-cost",
+   "base": 1,
+   "max": 3,
+   "rules": [
+    {
+     "when": {
+      "s": "time",
+      "is": "urgent"
+     },
+     "delta": 1,
+     "reason": "El plazo corto empuja a lo ya resuelto."
+    },
+    {
+     "when": {
+      "s": "team",
+      "is": "solo"
+     },
+     "delta": 1,
+     "reason": "Una persona sola no puede sostener mucha infraestructura."
+    }
+   ]
+  },
+  {
+   "id": "quality-maintainability",
+   "base": 1,
+   "max": 3,
+   "rules": [
+    {
+     "when": {
+      "s": "time",
+      "is": "normal"
+     },
+     "delta": 1,
+     "reason": "Sin apuro, conviene invertir en orden."
+    },
+    {
+     "when": {
+      "s": "team",
+      "in": [
+       "small",
+       "large"
+      ]
+     },
+     "delta": 1,
+     "reason": "Varias personas necesitan entender y cambiar el código."
+    }
+   ]
+  },
+  {
+   "id": "quality-scalability",
+   "base": 1,
+   "max": 3,
+   "rules": [
+    {
+     "when": {
+      "s": "scale",
+      "is": "medium"
+     },
+     "delta": 1,
+     "reason": "Se esperan miles de usuarios."
+    },
+    {
+     "when": {
+      "s": "scale",
+      "is": "large"
+     },
+     "delta": 2,
+     "reason": "Se esperan decenas de miles de usuarios o más."
+    }
+   ]
+  },
+  {
+   "id": "quality-accessibility",
+   "base": 2,
+   "max": 3,
+   "rules": [
+    {
+     "when": {
+      "s": "public_seo",
+      "is": "yes"
+     },
+     "delta": 1,
+     "reason": "Es un producto público: más personas y más exposición normativa."
+    }
+   ]
+  },
+  {
+   "id": "quality-seo",
+   "base": 1,
+   "max": 3,
+   "rules": [
+    {
+     "when": {
+      "s": "public_seo",
+      "is": "yes"
+     },
+     "delta": 2,
+     "reason": "Hay contenido público que depende de aparecer en buscadores."
+    }
+   ]
+  },
+  {
+   "id": "quality-observability",
+   "base": 1,
+   "max": 3,
+   "rules": [
+    {
+     "when": {
+      "s": "background",
+      "is": "heavy"
+     },
+     "delta": 1,
+     "reason": "Hay procesos asíncronos que fallan sin que nadie se entere."
+    },
+    {
+     "when": {
+      "d": "architecture",
+      "in": [
+       "microservices",
+       "event-driven",
+       "web-queue-worker"
+      ]
+     },
+     "delta": 1,
+     "reason": "Hay varias piezas que se comunican."
+    }
+   ]
+  }
+ ],
+ "risks": [
+  {
+   "when": {
+    "s": "payments",
+    "not": "none"
+   },
+   "text": "No guardes datos de tarjetas: delegá el cobro en un proveedor de pagos y diseñá para pagos duplicados y fallidos."
+  },
+  {
+   "when": {
+    "s": "auth",
+    "not": "none"
+   },
+   "text": "Los errores de autorización son sutiles y graves: validá los permisos en el servidor, en cada petición."
+  },
+  {
+   "when": {
+    "s": "auth",
+    "is": "multi_tenant"
+   },
+   "text": "Aislamiento entre organizaciones: cada consulta debe filtrar por organización, y conviene probarlo de forma explícita."
+  },
+  {
+   "when": {
+    "s": "sensitive_data",
+    "in": [
+     "financial",
+     "regulated"
+    ]
+   },
+   "text": "Consultá los requisitos legales y de cumplimiento antes de definir cómo y dónde se guardan los datos."
+  },
+  {
+   "when": {
+    "s": "files",
+    "in": [
+     "uploads",
+     "media_heavy"
+    ]
+   },
+   "text": "Validá tipo y tamaño de los archivos que suben las personas, y no los dejes públicos por defecto."
+  },
+  {
+   "when": {
+    "s": "ai",
+    "not": "none"
+   },
+   "text": "La IA puede equivocarse con seguridad: validá su salida antes de actuar y definí qué pasa si falla o no está disponible."
+  },
+  {
+   "when": {
+    "d": "architecture",
+    "in": [
+     "microservices",
+     "event-driven"
+    ]
+   },
+   "text": "Operar piezas distribuidas exige automatización de despliegue, monitoreo y práctica con consistencia eventual."
+  },
+  {
+   "when": {
+    "s": "time",
+    "is": "urgent"
+   },
+   "text": "Con plazo corto, recortá alcance antes de sumar piezas: lo que no existe no se rompe."
+  },
+  {
+   "when": {
+    "s": "dev_ai",
+    "is": "coding"
+   },
+   "text": "El código generado por IA puede parecer correcto y no serlo: exigí tests y revisión humana antes de integrar."
+  }
+ ]
+}

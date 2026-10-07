@@ -1,0 +1,75 @@
+# Web Project Architect — auditoría operativa y arquitectura
+
+Decisiones tomadas el 07/10/2026. Lo que no figura acá no se decidió.
+
+## 1. Auditoría operativa (qué había y qué se reutiliza)
+
+| Tema | Hallazgo | Consecuencia |
+|---|---|---|
+| Stack | HTML/CSS/JS vanilla + funciones Node en Vercel (10 de 12 usadas) + MongoDB. Sin framework ni bundler. | La herramienta es **solo frontend**: no suma funciones serverless ni persistencia en servidor. |
+| Build | `tools/build-deploy.py` copia `frontend/` entero a `public/`. | Los JSON nuevos se publican sin tocar el build. |
+| Navegación | `tools/site-shell.py` es la fuente única de header, menú móvil y pie. | El recurso se integra agregando UNA entrada al grupo «Desarrollo web»; todas las páginas se regeneran. |
+| Biblioteca web | `programacion.html` + `programacion-v2.js` + `data/weblab/*.json` (466 fichas): catálogo de **soluciones y piezas** con ejemplos para abrir. Rutas `#/f/<id>`. | Modelo distinto (catálogo vs. grafo conceptual + decisiones). **No se extiende ni se reemplaza.** Se enlaza por `library_refs`. |
+| Sistema visual | Tokens V1 (`--fs-*`, `--sp-*`, `--radius-*`) y componentes `ui-*` ya existen, probados en Herramientas. | La UI nueva los usa; no inventa estilos globales. |
+| Tests | `backend/test/*.mjs` con `node --test` (174 al empezar). Los módulos puros del motor viven en `backend/lib` (ESM). | Los módulos nuevos son **ESM puros** en `frontend/js/architect/` con su propio `package.json {"type":"module"}` para que Node los importe sin tocar el resto. |
+| Zonas sensibles | `?r=`, `?asunto=`, `?pub=`, OAuth, motor económico, `salida.js`, anchors de `sistema.html`. | No se toca nada de eso. |
+| Duplicaciones relevantes | «Tipos de web», «Arquitecturas», «Stacks» y «Servicios» de la Biblioteca se superponen en tema con el nuevo contenido. | No se copian: el grafo nuevo es conceptual y referencia las fichas de la Biblioteca. |
+
+## 2. Ubicación
+
+**Recurso independiente dentro de Desarrollo web**, en `arquitecto.html` (nombre público provisional: *Web Project Architect*; en el menú, «Project Architect»). Comparte con la Biblioteca web: navegación (grupo Desarrollo web), sistema visual y datos por referencia (`library_refs`). No comparte modelo de datos.
+
+Por qué no dentro de Programación: la Biblioteca responde «¿qué piezas existen y cómo se ven?»; Architect responde «¿qué conviene y por qué?». Mezclarlos ensucia los dos.
+
+## 3. Capas (todo puro y testeable salvo la UI)
+
+```
+data/architect/*.json        contenido: entidades, fuentes (y luego preguntas, reglas, prompts)
+js/architect/model.js        dimensiones, enums, validación (entidad, fuente, conocimiento)
+js/architect/search.js       normalización y búsqueda con pesos
+js/architect/content.js      índices, relaciones con inversas, alternativas, tecnologías derivadas
+js/architect/diagram.js      especificación declarativa → SVG (compartido por conceptos y blueprints)
+js/architect/builder.js …    Project Builder, Decision Engine, Blueprint, ADR, Prompts, Pack
+js/architect/app.js, views.js  UI (hash router) — única parte con DOM
+backend/test/architect-*.test.mjs
+```
+
+## 4. Modelo de contenido (resumen)
+
+- **Entidad**: 23 dimensiones (`product_type`, `architecture_style`, `rendering_strategy`, `data_pattern`, `communication_pattern`, `ai_workflow`, `ai_agent_pattern`, `quality_attribute`, `technology`, `tool`…). Cada una es una cosa distinta: *PostgreSQL ≠ base relacional*.
+- `depth`: `full` (ficha completa) o `brief` (apoyo: tecnologías, atributos de calidad).
+- **Relaciones tipadas** (`requires`, `enables`, `often_with`, `contrasts_with`, `implements`, `addresses`, `part_of`, `alternative_to`) con lectura inversa. Las tecnologías **no** se escriben a mano en cada concepto: se derivan de `implements`.
+- **Alternativas** solo dentro de la misma familia, siempre con una nota «en qué se diferencia».
+- **Evidencia**: `standard · official_documentation · official_framework · expert_source · industry_practice · recommendation · example · opinion`. Reglas validadas: lo respaldado por una fuente necesita una fuente **de ese tipo**; una opinión no se muestra con fuentes; una fuente solo puede ser de los cinco primeros tipos; los tipos de producto son siempre `recommendation`.
+- **Ejemplos**: `real_project` exige URL; el contenido inicial no declara ninguno (no se infiere experiencia).
+- **Fuentes**: nombre, organización, URL https, tipo, tema, evidencia, `checked` (fecha) y `verification` (`ok` | `blocked`). 52 fuentes; 51 verificadas el 07/10/2026 (ISO bloquea bots).
+
+## 5. Qué se decidió sin pedir permiso (reversible)
+
+- Persistencia del proyecto: **URL (hash) + localStorage**, sin servidor. Un proyecto se comparte con un enlace.
+- Nombres de ids en inglés (estables), textos en español.
+- Los textos del contenido son nuestros, escritos a partir de las fuentes citadas; ninguna cita textual extensa. Donde la fuente define algo (p. ej. workflow vs. agente de Anthropic, OWASP Top 10:2025) se verificó el texto de la fuente antes de afirmarlo.
+- El motor de decisión es **determinista y explicable** (reglas en JSON con puntajes y razones), no un LLM.
+
+## 6. Estado por fase (verificado el 07/10/2026)
+
+| Fase | Estado | Dónde |
+|---|---|---|
+| 0 Base técnica (modelo, validaciones, fuentes) | hecha | `model.js`, `content.js`, `data/architect/` |
+| 1 Explorer | hecha | `search.js`, `views.js` |
+| 2 Ficha de concepto (con diagrama en 15 entidades) | hecha | `views.js`, `diagram.js` |
+| 3 Project Builder (preguntas adaptativas) | hecha | `builder.js`, `questions.json` |
+| 4 Decision Engine | hecha | `decide.js`, `rules.json`, `conditions.js` |
+| 5 Blueprints | hecha | `blueprint.js` |
+| 6 ADR | hecha | `adr.js` |
+| 7 Prompt Generator | hecha | `prompts.js`, `prompts.json` |
+| 8 Project Pack | hecha | `pack.js`, `pack.json`, `views-project.js` |
+
+Verificación: `node --test backend/test/` → 248/248 (74 del Architect); `python3 tools/qa-architect.py` → 91/91 en Chromium (con `node tools/dev-server.mjs`).
+
+## 7. Pendiente / límites declarados
+
+- El contenido inicial es una muestra (58 entidades) para validar el modelo, no la base final.
+- Solo 15 entidades tienen diagrama propio.
+- Las fuentes se verifican a mano con `tools/architect-verificar-fuentes.mjs`; no hay chequeo automático en CI.
+- Sin commit ni deploy: el proyecto no está bajo git.

@@ -1,0 +1,450 @@
+[
+  {
+    "id": "relational-database",
+    "slug": "relational-database",
+    "name": "Base de datos relacional",
+    "type": "data_pattern",
+    "category": "Datos",
+    "depth": "full",
+    "level": "beginner",
+    "summary": "Guarda los datos en tablas con relaciones entre sí, un esquema definido y transacciones que mantienen la consistencia.",
+    "problem_solved": "Almacenar datos estructurados donde la integridad importa (pedidos, pagos, usuarios) y consultarlos de formas que no se conocen de antemano.",
+    "explanation": [
+      "Una base relacional organiza la información en tablas. Cada fila es un registro y las tablas se vinculan por claves: un pedido referencia a un cliente, y cada línea del pedido a un producto. El esquema define qué columnas existen y de qué tipo.",
+      "Sus dos grandes fortalezas son el lenguaje de consulta (SQL), con el que se pueden combinar y filtrar datos de formas imprevistas, y las transacciones, que garantizan que un conjunto de cambios se aplique completo o no se aplique. Eso la hace el punto de partida natural cuando hay dinero, stock o cualquier dato cuyo error es costoso.",
+      "Es un patrón, no un producto: PostgreSQL, MySQL y SQL Server son tecnologías que lo implementan. Que una aplicación necesite una base relacional no dice cuál elegir."
+    ],
+    "how_it_works": [
+      "Se define un esquema de tablas, columnas, tipos y relaciones.",
+      "Las aplicaciones leen y escriben con SQL; el motor garantiza integridad y consistencia con transacciones.",
+      "Los índices aceleran las búsquedas más frecuentes."
+    ],
+    "when_to_use": [
+      "Datos estructurados con relaciones claras.",
+      "Cuando la consistencia es crítica: pedidos, pagos, inventario, permisos.",
+      "Cuando las consultas futuras no se conocen del todo."
+    ],
+    "when_not_to_use": [
+      "Datos sin estructura fija y muy variables donde el esquema estorba.",
+      "Volúmenes de escritura masivos con distribución geográfica donde otras bases se adaptan mejor."
+    ],
+    "pros": [
+      "Integridad y transacciones sólidas.",
+      "Un lenguaje de consulta potente y estándar.",
+      "Un ecosistema maduro, con mucho conocimiento disponible."
+    ],
+    "cons": [
+      "Cambiar el esquema requiere migraciones planificadas.",
+      "Escalar escrituras horizontalmente es más difícil que escalar lecturas."
+    ],
+    "tradeoffs": [
+      "Se gana consistencia y flexibilidad de consulta a cambio de rigidez de esquema."
+    ],
+    "alternatives": [
+      {
+        "id": "nosql-database",
+        "note": "Modelos flexibles (documentos, clave-valor, columnas, grafos): sirven cuando el esquema varía o el patrón de acceso es muy específico, a cambio de menos garantías transversales."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Pedidos de una tienda",
+        "text": "Tablas de clientes, productos, pedidos y líneas de pedido; una transacción descuenta el stock y registra el pedido a la vez."
+      }
+    ],
+    "common_mistakes": [
+      "Elegir NoSQL «por escala» sin una necesidad concreta.",
+      "No crear índices para las consultas frecuentes.",
+      "Guardar datos que deberían estar relacionados como texto libre."
+    ],
+    "decision_questions": [
+      "¿Los datos tienen relaciones claras?",
+      "¿Es crítica la consistencia?",
+      "¿Se conocen las consultas que van a hacer falta?"
+    ],
+    "related_entities": [
+      {
+        "id": "nosql-database",
+        "rel": "contrasts_with"
+      },
+      {
+        "id": "quality-reliability",
+        "rel": "addresses"
+      }
+    ],
+    "sources": [
+      "postgres-docs"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": [
+      "supabase"
+    ]
+  },
+  {
+    "id": "nosql-database",
+    "slug": "nosql-database",
+    "name": "Base de datos NoSQL",
+    "type": "data_pattern",
+    "category": "Datos",
+    "depth": "full",
+    "level": "intermediate",
+    "summary": "Familia de bases no relacionales: documentos, clave-valor, columnas anchas o grafos, pensadas para modelos flexibles o patrones de acceso específicos.",
+    "problem_solved": "Guardar y consultar datos que no encajan bien en tablas, o que necesitan una escala o una forma de acceso que una base relacional ofrece con más esfuerzo.",
+    "explanation": [
+      "«NoSQL» no es una tecnología sino un conjunto de modelos distintos con una característica común: no son relacionales. Una base de documentos guarda objetos tipo JSON; una de clave-valor guarda pares; una de grafos modela relaciones como aristas; una de columnas anchas se orienta a grandes volúmenes.",
+      "Su principal atractivo es la flexibilidad del esquema y, en muchos casos, la facilidad para escalar horizontalmente. Su costo suele ser menos garantías transversales (como transacciones entre varios registros, según el producto) y menos flexibilidad para consultas imprevistas, por lo que el modelo de datos se diseña alrededor de cómo se va a consultar.",
+      "Elegirlo por moda es un error frecuente. La pregunta útil es qué patrón de acceso se necesita y si una base relacional lo resuelve sin esfuerzo, lo que suele ocurrir."
+    ],
+    "how_it_works": [
+      "Se modelan los datos según cómo se van a leer, por ejemplo documentos que contienen todo lo que una pantalla necesita.",
+      "Las lecturas por clave o por patrones previstos son muy rápidas.",
+      "Muchos motores distribuyen los datos entre nodos para escalar."
+    ],
+    "when_to_use": [
+      "Los datos son poco estructurados o muy variables.",
+      "El patrón de acceso es claro y simple (por clave, por documento).",
+      "Hay un requisito real de escala o distribución que la base relacional dificulta."
+    ],
+    "when_not_to_use": [
+      "Hay relaciones complejas y consultas imprevistas frecuentes.",
+      "La consistencia transaccional entre varios registros es esencial, salvo que el producto elegido la garantice.",
+      "Solo se quiere «ir sin esquema» sin una necesidad concreta."
+    ],
+    "pros": [
+      "Esquema flexible.",
+      "Buen ajuste a patrones de acceso específicos.",
+      "Puede escalar horizontalmente."
+    ],
+    "cons": [
+      "Consultas imprevistas más difíciles.",
+      "Garantías transaccionales variables según el producto.",
+      "Cada modelo NoSQL se comporta distinto: no es intercambiable."
+    ],
+    "tradeoffs": [
+      "Se gana flexibilidad de esquema y escala a cambio de menos facilidad de consulta y, a veces, de consistencia."
+    ],
+    "alternatives": [
+      {
+        "id": "relational-database",
+        "note": "Más estructura, transacciones y consultas flexibles; suele ser la opción segura cuando no hay un motivo claro para otra."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Perfiles de usuario con campos variables",
+        "text": "Cada perfil es un documento con atributos que cambian según el tipo de cuenta, leído siempre completo por su identificador."
+      }
+    ],
+    "common_mistakes": [
+      "Elegirlo porque «escala más» sin necesitar esa escala.",
+      "Modelar como en SQL y esperar que funcione bien.",
+      "Suponer que todas las bases NoSQL ofrecen las mismas garantías."
+    ],
+    "decision_questions": [
+      "¿Cuál es el patrón de acceso principal?",
+      "¿Qué tan variable es la estructura de los datos?",
+      "¿Qué garantías de consistencia se necesitan?"
+    ],
+    "related_entities": [
+      {
+        "id": "relational-database",
+        "rel": "contrasts_with"
+      },
+      {
+        "id": "cache",
+        "rel": "contrasts_with"
+      }
+    ],
+    "sources": [
+      "azure-nonrelational-data",
+      "mongodb-docs"
+    ],
+    "evidence_type": "official_framework",
+    "library_refs": [
+      "mongodb-atlas"
+    ]
+  },
+  {
+    "id": "cache",
+    "slug": "cache",
+    "name": "Caché",
+    "type": "data_pattern",
+    "category": "Datos",
+    "depth": "full",
+    "level": "intermediate",
+    "summary": "Una copia temporal de datos frecuentes, guardada en un lugar más rápido, para no recalcularlos o volver a pedirlos cada vez.",
+    "problem_solved": "Reducir la latencia y la carga sobre la base de datos o sobre un servicio externo cuando muchas peticiones piden lo mismo.",
+    "explanation": [
+      "Una caché guarda el resultado de una operación costosa para reutilizarlo. Puede estar en el navegador, en un CDN, en la aplicación o en un almacén en memoria compartido por varios servidores.",
+      "El patrón más común en aplicaciones es cache-aside: la aplicación mira primero en la caché; si no está, lo pide a la fuente, lo guarda y lo devuelve. Esto es simple pero obliga a decidir cuándo un dato guardado deja de ser válido.",
+      "El problema difícil de una caché no es agregarla sino invalidarla: servir un dato viejo puede ser un error grave (un precio, un permiso) o irrelevante (un contador). Antes de cachear conviene medir si hay un problema de rendimiento real."
+    ],
+    "how_it_works": [
+      "La aplicación consulta la caché con una clave.",
+      "Si hay un acierto, devuelve el dato; si no, lo obtiene de la fuente y lo guarda con un tiempo de vida.",
+      "Se invalida por vencimiento, o explícitamente cuando el dato cambia."
+    ],
+    "when_to_use": [
+      "Datos que se leen mucho y cambian poco.",
+      "Resultados costosos de calcular.",
+      "Se necesita reducir la carga sobre la base de datos o un servicio externo."
+    ],
+    "when_not_to_use": [
+      "Los datos cambian constantemente y deben ser exactos.",
+      "Todavía no hay evidencia de un problema de rendimiento: agrega complejidad sin beneficio medido."
+    ],
+    "pros": [
+      "Reduce la latencia percibida.",
+      "Disminuye la carga sobre la fuente.",
+      "Puede reducir costos."
+    ],
+    "cons": [
+      "El riesgo de mostrar datos desactualizados.",
+      "La invalidación es difícil de acertar.",
+      "Agrega otra pieza que operar y a veces que fallar."
+    ],
+    "tradeoffs": [
+      "Se gana velocidad a cambio de frescura de los datos y complejidad de invalidación."
+    ],
+    "alternatives": [
+      {
+        "id": "nosql-database",
+        "note": "Una base clave-valor puede cumplir un papel parecido, pero como almacén durable y no como copia temporal."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Listado de categorías",
+        "text": "Se guarda por unos minutos el resultado de consultar las categorías, que cambian poco y se piden en cada página."
+      }
+    ],
+    "common_mistakes": [
+      "Cachear sin definir cuándo se invalida.",
+      "Cachear datos personales en una caché compartida.",
+      "Agregar caché antes de medir."
+    ],
+    "decision_questions": [
+      "¿Qué datos se piden mucho y cambian poco?",
+      "¿Cuánta desactualización es tolerable?",
+      "¿Cómo y cuándo se invalida?"
+    ],
+    "related_entities": [
+      {
+        "id": "relational-database",
+        "rel": "often_with"
+      },
+      {
+        "id": "quality-performance",
+        "rel": "addresses"
+      }
+    ],
+    "sources": [
+      "azure-cache-aside",
+      "mdn-http-caching"
+    ],
+    "evidence_type": "official_framework",
+    "library_refs": [],
+    "diagram": {
+      "purpose": "concept",
+      "title": "Caché (cache-aside): primero la caché, si no está, la fuente",
+      "nodes": [
+        {
+          "id": "app",
+          "label": "Aplicación",
+          "kind": "backend",
+          "layer": 0
+        },
+        {
+          "id": "c",
+          "label": "Caché",
+          "kind": "data",
+          "layer": 1
+        },
+        {
+          "id": "db",
+          "label": "Base de datos",
+          "kind": "data",
+          "layer": 1
+        }
+      ],
+      "edges": [
+        {
+          "from": "app",
+          "to": "c",
+          "label": "1. busca"
+        },
+        {
+          "from": "app",
+          "to": "db",
+          "label": "2. si no está, consulta"
+        },
+        {
+          "from": "app",
+          "to": "c",
+          "label": "3. guarda el resultado"
+        }
+      ]
+    }
+  },
+  {
+    "id": "object-storage",
+    "slug": "object-storage",
+    "name": "Almacenamiento de objetos",
+    "type": "data_pattern",
+    "category": "Datos",
+    "depth": "full",
+    "level": "beginner",
+    "summary": "Guarda archivos (imágenes, documentos, videos, copias de seguridad) como objetos accesibles por un identificador, de forma económica y escalable.",
+    "problem_solved": "Almacenar y servir archivos grandes o numerosos sin cargar la base de datos ni los servidores de la aplicación.",
+    "explanation": [
+      "Los archivos no pertenecen a una base de datos relacional: son pesados, se leen enteros y no se consultan por contenido. Un almacenamiento de objetos los guarda en «buckets», cada archivo con una clave, y los sirve por HTTP.",
+      "Se pagan por almacenamiento y transferencia, escalan prácticamente sin límite y se combinan muy bien con un CDN. La base de datos guarda solo la referencia (la clave o URL) a cada archivo.",
+      "Un detalle clave de seguridad es el control de acceso: lo que sube un usuario no debería ser público por defecto, y conviene usar URLs temporales firmadas cuando el archivo es privado."
+    ],
+    "how_it_works": [
+      "El archivo se sube a un bucket con una clave.",
+      "La base de datos guarda la clave junto al registro que lo usa.",
+      "Se sirve directo desde el almacenamiento o a través de un CDN; para archivos privados se generan URLs firmadas y temporales."
+    ],
+    "when_to_use": [
+      "La aplicación recibe o sirve archivos (imágenes, documentos, videos).",
+      "Se necesitan copias de seguridad o archivos de gran volumen."
+    ],
+    "when_not_to_use": [
+      "Datos pequeños y estructurados que se consultan por contenido (van en la base de datos).",
+      "Se necesita modificar parte de un archivo con frecuencia, como en un sistema de archivos tradicional."
+    ],
+    "pros": [
+      "Escalabilidad y durabilidad altas.",
+      "Costo bajo por volumen almacenado.",
+      "Libera a la aplicación y a la base de datos del peso de los archivos."
+    ],
+    "cons": [
+      "Modelo de objetos, no de archivos con edición parcial.",
+      "Hay que cuidar la configuración de acceso para no exponer datos."
+    ],
+    "tradeoffs": [
+      "Se gana escala y costo bajo a cambio de un modelo de acceso más limitado que un sistema de archivos."
+    ],
+    "alternatives": [
+      {
+        "id": "relational-database",
+        "note": "Guardar archivos dentro de la base de datos funciona para casos mínimos pero encarece y complica la operación."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Fotos de productos",
+        "text": "Las imágenes se guardan en un bucket; la base de datos guarda la clave de cada una, y un CDN las sirve a los visitantes."
+      }
+    ],
+    "common_mistakes": [
+      "Dejar buckets públicos por defecto.",
+      "Guardar archivos grandes dentro de la base de datos.",
+      "No validar tipo y tamaño de lo que suben los usuarios."
+    ],
+    "decision_questions": [
+      "¿La aplicación recibe archivos de usuarios?",
+      "¿Qué archivos deben ser privados?",
+      "¿Qué volumen y tamaño se esperan?"
+    ],
+    "related_entities": [
+      {
+        "id": "relational-database",
+        "rel": "often_with"
+      },
+      {
+        "id": "quality-security",
+        "rel": "addresses"
+      }
+    ],
+    "sources": [
+      "aws-s3"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": []
+  },
+  {
+    "id": "search-engine",
+    "slug": "search-engine",
+    "name": "Motor de búsqueda",
+    "type": "data_pattern",
+    "category": "Datos",
+    "depth": "full",
+    "level": "advanced",
+    "summary": "Un índice especializado para buscar texto con relevancia, tolerancia a errores y filtros, mucho mejor que un simple «contiene» en la base de datos.",
+    "problem_solved": "Permitir que las personas encuentren lo que buscan en un catálogo o en un contenido grande, ordenado por relevancia y tolerante a errores de escritura.",
+    "explanation": [
+      "Buscar con un filtro «contiene» en una base de datos funciona hasta cierto volumen, pero no ordena por relevancia ni entiende variaciones de palabras. Un motor de búsqueda construye un índice invertido que apunta de cada palabra a los documentos que la contienen, y puntúa los resultados.",
+      "Hay dos caminos: usar la búsqueda de texto completo que ya trae la base de datos (suficiente para muchos casos) o sumar un motor dedicado, que da más funciones (sinónimos, filtros por facetas, tolerancia a errores) a cambio de otra pieza que operar y mantener sincronizada con los datos.",
+      "Antes de sumar un motor dedicado, conviene verificar que la búsqueda de la base de datos no alcance."
+    ],
+    "how_it_works": [
+      "Los documentos se indexan: se procesa el texto y se arma un índice invertido.",
+      "Una consulta se analiza igual, se buscan coincidencias y se puntúan por relevancia.",
+      "El índice debe mantenerse sincronizado con la fuente de verdad, que sigue siendo la base de datos."
+    ],
+    "when_to_use": [
+      "La búsqueda es una función central (catálogo, marketplace, documentación).",
+      "Se necesitan relevancia, filtros por facetas o tolerancia a errores."
+    ],
+    "when_not_to_use": [
+      "Hay pocos datos o búsquedas simples: alcanza con la base de datos.",
+      "No hay capacidad de operar y sincronizar otra pieza."
+    ],
+    "pros": [
+      "Resultados relevantes y rápidos.",
+      "Funciones avanzadas: facetas, sinónimos, tolerancia a errores."
+    ],
+    "cons": [
+      "Otra pieza que operar.",
+      "El índice debe sincronizarse y puede quedar desfasado.",
+      "Mayor complejidad y costo."
+    ],
+    "tradeoffs": [
+      "Se gana calidad de búsqueda a cambio de infraestructura adicional y de mantener datos duplicados sincronizados."
+    ],
+    "alternatives": [
+      {
+        "id": "relational-database",
+        "note": "La búsqueda de texto completo de la base de datos suele alcanzar al inicio y no agrega piezas."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Buscador de un catálogo",
+        "text": "Los productos se indexan con nombre, descripción y atributos; la búsqueda devuelve resultados por relevancia y permite filtrar por categoría y precio."
+      }
+    ],
+    "common_mistakes": [
+      "Sumar un motor dedicado sin haber probado la búsqueda de la base de datos.",
+      "No planificar cómo se sincroniza el índice."
+    ],
+    "decision_questions": [
+      "¿La búsqueda es central en el producto?",
+      "¿Cuántos documentos y qué tan complejas son las consultas?",
+      "¿Alcanza con la búsqueda integrada en la base de datos?"
+    ],
+    "related_entities": [
+      {
+        "id": "relational-database",
+        "rel": "often_with"
+      },
+      {
+        "id": "quality-performance",
+        "rel": "addresses"
+      }
+    ],
+    "sources": [
+      "postgres-fts",
+      "elastic-search-docs"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": []
+  }
+]

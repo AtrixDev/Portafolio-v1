@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "updated": "2026-10-07",
+  "entities": [
+    "entities/product-types.json",
+    "entities/architecture.json",
+    "entities/rendering.json",
+    "entities/data.json",
+    "entities/communication.json",
+    "entities/ai.json",
+    "entities/quality.json",
+    "entities/practices.json",
+    "entities/technologies.json"
+  ],
+  "sources": "sources.json"
+}

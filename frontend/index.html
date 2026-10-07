@@ -27,7 +27,7 @@
   <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
   <link rel="stylesheet" href="css/root.css">
   <link rel="stylesheet" href="css/shared.css">
-  <link rel="stylesheet" href="css/index.css?v=7">
+  <link rel="stylesheet" href="css/index.css?v=8">
   <link rel="stylesheet" href="css/port.css?v=2">
   <link rel="stylesheet" href="css/exp.css?v=1">
   <link rel="stylesheet" href="css/hab.css?v=1">
@@ -53,12 +53,17 @@
 <nav id="site-nav" aria-label="Principal">
   <a href="index.html" class="nav-logo" aria-label="Darío Colángelo, inicio"><span class="nav-mark" aria-hidden="true">DC</span><span class="nav-name">Darío Colángelo</span></a>
   <ul class="nav-links">
-    <li><a href="index.html" class="active" aria-current="page">CV</a></li>
-    <li><a href="herramientas.html">Herramientas</a></li>
-    <li><a href="lab.html">Lab ML</a></li>
-    <li><a href="sistema.html">Sistema</a></li>
-    <li><a href="programacion.html">Base de datos</a></li>
-    <li><a href="web.html">Revisá tu web</a></li>
+    <li><a href="index.html#experiencia" class="active" aria-current="page">Trayectoria</a></li>
+    <li class="nav-group" data-grupo="ml">
+      <a href="herramientas.html" class="nav-parent">Mercado Libre</a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-sub-ml" aria-label="Opciones de Mercado Libre"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+      <div class="nav-sub" id="nav-sub-ml" aria-label="Mercado Libre"><p class="nav-sub-h">Hacer</p><ul><li><a href="herramientas.html">Herramientas</a></li><li><a href="herramientas.html#chequeo">Chequeo de publicación</a></li><li><a href="rentabilidad.html">Rentabilidad</a></li><li><a href="importar.html">Importación</a></li><li><a href="perdida.html">Pérdida en publicidad</a></li><li><a href="sistema.html#auditar">Auditoría de cuenta</a></li><li><a href="informe-muestra.html">Informe de muestra</a></li></ul><p class="nav-sub-h">Aprender</p><ul><li><a href="lab.html">Guías</a></li></ul><p class="nav-sub-h">Entender</p><ul><li><a href="sistema.html">Cómo trabajo</a></li></ul></div>
+    </li>
+    <li class="nav-group" data-grupo="web">
+      <a href="web.html" class="nav-parent">Desarrollo web</a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-sub-web" aria-label="Opciones de Desarrollo web"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+      <div class="nav-sub" id="nav-sub-web" aria-label="Desarrollo web"><ul><li><a href="web.html">Revisá tu web</a></li><li><a href="armar.html">Armá tu web</a></li><li><a href="programacion.html">Biblioteca web</a></li><li><a href="arquitecto.html">Project Architect</a></li></ul></div>
+    </li>
     <li><a href="contacto.html" class="nav-cta">Contacto</a></li>
   </ul>
   <div class="nav-actions">
@@ -72,12 +77,17 @@
   </div>
 </nav>
 <div class="mobile-menu" id="mobileMenu" aria-label="Menú">
-  <a href="index.html" class="active" aria-current="page">CV</a>
-  <a href="herramientas.html">Herramientas</a>
-  <a href="lab.html">Lab ML</a>
-  <a href="sistema.html">Sistema</a>
-  <a href="programacion.html">Base de datos</a>
-  <a href="web.html">Revisá tu web</a>
+  <a href="index.html#experiencia" class="active" aria-current="page">Trayectoria</a>
+  <div class="mm-group" data-grupo="ml">
+    <a href="herramientas.html">Mercado Libre</a>
+    <button type="button" class="mm-toggle" aria-expanded="false" aria-controls="mm-sub-ml" aria-label="Opciones de Mercado Libre"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+    <div class="mm-sub" id="mm-sub-ml"><p class="mm-sub-h">Hacer</p><ul><li><a href="herramientas.html">Herramientas</a></li><li><a href="herramientas.html#chequeo">Chequeo de publicación</a></li><li><a href="rentabilidad.html">Rentabilidad</a></li><li><a href="importar.html">Importación</a></li><li><a href="perdida.html">Pérdida en publicidad</a></li><li><a href="sistema.html#auditar">Auditoría de cuenta</a></li><li><a href="informe-muestra.html">Informe de muestra</a></li></ul><p class="mm-sub-h">Aprender</p><ul><li><a href="lab.html">Guías</a></li></ul><p class="mm-sub-h">Entender</p><ul><li><a href="sistema.html">Cómo trabajo</a></li></ul></div>
+  </div>
+  <div class="mm-group" data-grupo="web">
+    <a href="web.html">Desarrollo web</a>
+    <button type="button" class="mm-toggle" aria-expanded="false" aria-controls="mm-sub-web" aria-label="Opciones de Desarrollo web"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+    <div class="mm-sub" id="mm-sub-web"><ul><li><a href="web.html">Revisá tu web</a></li><li><a href="armar.html">Armá tu web</a></li><li><a href="programacion.html">Biblioteca web</a></li><li><a href="arquitecto.html">Project Architect</a></li></ul></div>
+  </div>
   <a href="contacto.html">Contacto</a>
 </div>
 <!-- NAV:end -->
@@ -299,6 +309,17 @@
   </div>
 </section>
 
+<section id="construi" class="bu" aria-labelledby="t-bu">
+  <h2 class="section-title" id="t-bu">Lo que <span class="grad">construí</span>.</h2>
+  <p class="section-intro">Cuatro cosas que funcionan y se pueden abrir. Cada una lleva a su sección.</p>
+  <ul class="bu-list">
+    <li><a href="sistema.html#demo"><small class="mono">Mercado Libre · Cómo trabajo</small><h3>ML Tracker</h3><p>Analiza una cuenta con la API oficial de Mercado Libre y detecta 10 tipos de problema, validando las caídas con pruebas estadísticas. Se prueba con una cuenta de ejemplo.</p><span class="bu-go">Ver la demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a></li>
+    <li><a href="rentabilidad.html"><small class="mono">Mercado Libre · Herramientas</small><h3>Rentabilidad</h3><p>Cuánto te queda por unidad y a qué precio mínimo dejás de perder. Un motor de cálculo determinístico, sin IA y con pruebas automáticas; el resultado se comparte con un link.</p><span class="bu-go">Calcular <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a></li>
+    <li><a href="herramientas.html#chequeo"><small class="mono">Mercado Libre · Herramientas</small><h3>Chequeo de publicación</h3><p>Pegás el link de una publicación, tuya o de la competencia, y ves lo que le falta. No hace falta conectar la cuenta.</p><span class="bu-go">Chequear una publicación <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a></li>
+    <li><a href="programacion.html"><small class="mono">Desarrollo web</small><h3>Biblioteca web</h3><p>Qué soluciona cada herramienta o funcionalidad de una web y cuándo conviene, con ejemplos para abrir: proyectos reales, demos y experimentos, siempre etiquetados.</p><span class="bu-go">Explorar la biblioteca <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a></li>
+  </ul>
+</section>
+
 <section id="valor-prop" class="plan" aria-labelledby="t-valor">
   <h2 class="section-title" id="t-valor">Mis primeros <span class="grad">30 días</span> en tu equipo.</h2>
   <p class="section-intro">No son proyecciones: son acciones concretas, con fechas.</p>
@@ -432,12 +453,47 @@
 
 <footer>
   <p class="footer-name">Darío Colángelo<span>.</span></p>
-  <ul class="footer-links">
-    <li><a href="assets/Dario-Colangelo-CV.pdf" download><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-download"/></svg>CV en PDF</a></li>
-    <li><a href="https://www.linkedin.com/in/dariocolangelo/" target="_blank" rel="noopener">LinkedIn</a></li>
-    <li><a href="https://wa.me/541144474507" target="_blank" rel="noopener">WhatsApp</a></li>
-    <li><a href="mailto:daricolangelo@gmail.com">daricolangelo@gmail.com</a></li>
-  </ul>
+  <nav class="footer-index" aria-label="Mapa del sitio">
+    <div class="footer-col">
+      <h2>Darío Colángelo</h2>
+      <ul>
+        <li><a href="index.html#experiencia">Trayectoria</a></li>
+        <li><a href="index.html#caso-exito">Casos</a></li>
+        <li><a href="assets/Dario-Colangelo-CV.pdf" download><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-download"/></svg>CV en PDF</a></li>
+        <li><a href="https://www.linkedin.com/in/dariocolangelo/" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h2>Mercado Libre</h2>
+      <ul>
+        <li><a href="herramientas.html#chequeo">Chequeo de publicación</a></li>
+        <li><a href="rentabilidad.html">Rentabilidad</a></li>
+        <li><a href="importar.html">Importación</a></li>
+        <li><a href="perdida.html">Pérdida en publicidad</a></li>
+        <li><a href="sistema.html#auditar">Auditoría de cuenta</a></li>
+        <li><a href="informe-muestra.html">Informe de muestra</a></li>
+        <li><a href="lab.html">Guías</a></li>
+        <li><a href="sistema.html">Cómo trabajo</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h2>Desarrollo web</h2>
+      <ul>
+        <li><a href="web.html">Revisá tu web</a></li>
+        <li><a href="armar.html">Armá tu web</a></li>
+        <li><a href="programacion.html">Biblioteca web</a></li>
+        <li><a href="arquitecto.html">Project Architect</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h2>Contacto</h2>
+      <ul>
+        <li><a href="https://wa.me/541144474507" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="mailto:daricolangelo@gmail.com">Email</a></li>
+        <li><a href="contacto.html#formulario">Formulario</a></li>
+      </ul>
+    </div>
+  </nav>
   <div class="footer-note">
     <span>Analista de E-Commerce · CABA, Argentina</span>
     <a href="#contenido" class="footer-top"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-up"/></svg>Volver arriba</a>

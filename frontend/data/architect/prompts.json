@@ -1,0 +1,135 @@
+{
+ "version": 1,
+ "preamble": "Estás ayudándome a construir un proyecto web. Este es el contexto acordado. Si algo no está definido, preguntámelo en lugar de inventarlo.\n\n## Proyecto\n{{summary}}\n\n## Decisiones de arquitectura propuestas\n{{decisions}}",
+ "rules": "## Reglas de trabajo\n- No inventes requisitos, datos ni funcionalidades que no estén en el contexto. Si falta información, hacé preguntas antes de avanzar.\n- Marcá como «supuesto» todo lo que no esté confirmado.\n- Trabajá en pasos pequeños y verificables; si un cambio es grande, mostrame el plan antes de hacerlo.\n- No cambies lo que no te pedí.\n- Respondé en español, con claridad y sin relleno.",
+ "prompts": [
+  {
+   "id": "discovery",
+   "stage": "Descubrimiento",
+   "title": "Descubrimiento del problema",
+   "goal": "Aclarar qué problema se resuelve, para quién y cómo se sabe que funciona.",
+   "use_when": "Al inicio, antes de escribir requisitos.",
+   "template": "## Tarea\nActuá como analista de producto. Ayudame a descubrir el problema antes de pensar en soluciones.\n\n1. Hacé hasta 10 preguntas, de a una por vez y empezando por las más importantes, para entender: quién tiene el problema, cómo lo resuelve hoy, qué le cuesta, qué significaría éxito y qué no se va a hacer.\n2. Cuando tengas suficiente, devolveme: el problema en una frase, los usuarios, tres criterios de éxito medibles, el alcance de una primera versión (y lo que queda afuera) y las preguntas que siguen abiertas.\n\n## Preguntas que ya sé que están abiertas\n{{open_questions}}"
+  },
+  {
+   "id": "requirements",
+   "stage": "Requisitos",
+   "title": "Requisitos funcionales y no funcionales",
+   "goal": "Convertir la idea en requisitos verificables, con prioridades.",
+   "use_when": "Después del descubrimiento.",
+   "template": "## Tarea\nActuá como analista. Escribí los requisitos del proyecto.\n\n- Requisitos funcionales como historias de usuario con criterios de aceptación verificables («dado… cuando… entonces…»).\n- Requisitos no funcionales con un valor medible (por ejemplo, tiempos de respuesta, disponibilidad, accesibilidad).\n- Prioridad (imprescindible, importante, deseable) y qué entra en la primera versión.\n- Una lista de los supuestos que hiciste y de las preguntas abiertas.\n\n## Atributos de calidad y su peso en este proyecto\n{{quality}}\n\n## Restricciones\n{{constraints}}"
+  },
+  {
+   "id": "architecture",
+   "stage": "Arquitectura",
+   "title": "Revisión de la arquitectura propuesta",
+   "goal": "Cuestionar y afinar las decisiones de arquitectura antes de construir.",
+   "use_when": "Antes de implementar, para detectar huecos.",
+   "template": "## Tarea\nActuá como arquitecto de software con criterio crítico. Revisá las decisiones propuestas.\n\n1. Para cada decisión: ¿encaja con los requisitos y las restricciones? ¿Qué riesgo no está cubierto? ¿Cuándo convendría reconsiderarla?\n2. Señalá dónde la propuesta podría ser más compleja de lo necesario. Preferí siempre lo más simple que cumpla.\n3. Listá las decisiones que dependen de información que todavía no tengo.\n4. Proponé, si corresponde, un ADR nuevo o una corrección a uno existente.\n\n## ADR propuestos\n{{adrs}}\n\n## Riesgos identificados\n{{risks}}"
+  },
+  {
+   "id": "data-modeling",
+   "stage": "Datos",
+   "title": "Modelado de datos",
+   "goal": "Definir entidades, relaciones y reglas de integridad.",
+   "use_when": "Después de los requisitos y antes de implementar.",
+   "template": "## Tarea\nActuá como diseñador de bases de datos. Proponé el modelo de datos.\n\n- Entidades con sus campos, tipos, claves y restricciones.\n- Relaciones y su cardinalidad; índices que harán falta según las consultas previstas.\n- Reglas de integridad y qué datos son sensibles (y cómo se protegen).\n- Una estrategia de migraciones.\n- Los casos límite que el modelo debe soportar.\n\nPartí de este punto de partida y corregilo con lo que sabés del proyecto:\n{{data_model}}"
+  },
+  {
+   "id": "ux-spec",
+   "stage": "Diseño",
+   "title": "Especificación de experiencia de usuario",
+   "goal": "Definir pantallas, flujos y estados antes de construirlas.",
+   "use_when": "Antes de implementar la interfaz.",
+   "template": "## Tarea\nActuá como diseñador de producto. Especificá la experiencia de usuario de la primera versión.\n\n- Los flujos principales paso a paso, desde la perspectiva de la persona.\n- Las pantallas necesarias y qué contiene cada una.\n- Los estados de cada pantalla: carga, vacío, error, éxito y sin permisos.\n- Requisitos de accesibilidad (teclado, foco, contraste, etiquetas) y de uso en móvil.\n- Textos clave (títulos, botones, mensajes de error) en español.\n\nNo diseñes visualmente: describí estructura y comportamiento."
+  },
+  {
+   "id": "technical-spec",
+   "stage": "Especificación técnica",
+   "title": "Especificación técnica",
+   "goal": "Bajar las decisiones a un diseño implementable.",
+   "use_when": "Cuando la arquitectura y los datos están acordados.",
+   "template": "## Tarea\nActuá como líder técnico. Escribí la especificación técnica de la primera versión.\n\n- Estructura de módulos y responsabilidades de cada uno.\n- Contratos: endpoints (método, ruta, entrada, salida, errores) y eventos o mensajes si los hay.\n- Flujos críticos en pasos (incluyendo fallos y reintentos).\n- Manejo de errores, validación y seguridad.\n- Cómo se prueba cada pieza.\n\n## Estructura sugerida\n{{structure}}\n\n## Modelo de datos de partida\n{{data_model}}"
+  },
+  {
+   "id": "planning",
+   "stage": "Planificación",
+   "title": "Plan de implementación",
+   "goal": "Partir el trabajo en pasos pequeños, ordenados y verificables.",
+   "use_when": "Antes de empezar a construir.",
+   "template": "## Tarea\nActuá como líder técnico. Armá el plan de implementación en incrementos pequeños.\n\nPara cada incremento: objetivo, tareas, criterio de terminado verificable, riesgos y qué prueba lo valida. Ordenalos para tener lo antes posible un flujo funcionando de punta a punta, aunque sea mínimo. Marcá las dependencias y lo que se puede hacer en paralelo.\n\n## Hoja de ruta de partida\n{{roadmap}}\n\n## Definición de terminado\n{{definition_of_done}}"
+  },
+  {
+   "id": "implementation",
+   "stage": "Implementación",
+   "title": "Implementar un incremento",
+   "goal": "Construir un cambio acotado, con pruebas.",
+   "use_when": "Cada vez que se implementa una pieza.",
+   "template": "## Tarea\nImplementá el siguiente incremento: [DESCRIBÍ AQUÍ el incremento y su criterio de aceptación].\n\nProceso:\n1. Leé el código existente y las convenciones antes de tocar nada.\n2. Proponé un plan corto y esperá mi confirmación si el cambio es grande.\n3. Escribí primero las pruebas del comportamiento esperado y verificá que fallan.\n4. Implementá lo mínimo para que pasen. Mantené el estilo del código existente.\n5. Corré toda la suite de pruebas y mostrame el resultado.\n6. Resumí qué cambiaste, qué no y qué quedó pendiente.\n\n## Estructura del proyecto\n{{structure}}"
+  },
+  {
+   "id": "testing",
+   "stage": "Pruebas",
+   "title": "Estrategia y escritura de pruebas",
+   "goal": "Proteger el comportamiento real con pruebas útiles.",
+   "use_when": "Al empezar y al agregar funcionalidades.",
+   "template": "## Tarea\nActuá como ingeniero de calidad. Definí y escribí las pruebas del proyecto.\n\n- Qué se prueba en cada nivel y qué no. No escribas pruebas que solo repitan la implementación ni que existan para subir un porcentaje de cobertura.\n- Pruebas de los casos límite y de los errores, no solo del camino feliz.\n- Datos de prueba deterministas, sin depender del reloj ni de la red.\n- Qué flujos críticos se cubren de punta a punta.\n\n## Estrategia propuesta\n{{testing}}"
+  },
+  {
+   "id": "debugging",
+   "stage": "Depuración",
+   "title": "Depurar un fallo",
+   "goal": "Encontrar la causa raíz antes de arreglar.",
+   "use_when": "Cuando algo falla.",
+   "template": "## Tarea\nTengo este problema: [DESCRIBÍ AQUÍ el síntoma, cómo reproducirlo y el mensaje de error exacto].\n\nProcedé así:\n1. Reproducí el fallo y confirmá que entendés el síntoma.\n2. Formulá hipótesis ordenadas por probabilidad y explicá cómo descartar cada una.\n3. Encontrá la causa raíz con evidencia (registros, pruebas, lectura del código) antes de proponer un arreglo.\n4. Escribí una prueba que falle por esa causa, arreglá y verificá que pasa.\n5. Indicá qué otras partes podrían tener el mismo problema.\n\nNo arregles síntomas ni agregues parches sin entender la causa."
+  },
+  {
+   "id": "security-review",
+   "stage": "Seguridad",
+   "title": "Revisión de seguridad",
+   "goal": "Buscar y cerrar riesgos de seguridad aplicables.",
+   "use_when": "Antes de cada lanzamiento y al tocar acceso, pagos o datos.",
+   "template": "## Tarea\nActuá como revisor de seguridad de aplicaciones. Revisá el código y el diseño buscando los riesgos de esta lista.\n\nPara cada hallazgo: dónde está, por qué es un riesgo, cómo se explotaría, severidad y cómo corregirlo. Distinguí lo que verificaste en el código de lo que solo sospechás. Si algo no aplica, decilo.\n\n## Lista de verificación\n{{security}}\n\n## Riesgos específicos de este proyecto\n{{risks}}"
+  },
+  {
+   "id": "qa",
+   "stage": "Calidad",
+   "title": "Revisión de calidad antes de lanzar",
+   "goal": "Verificar el producto como lo usaría una persona.",
+   "use_when": "Antes de lanzar.",
+   "template": "## Tarea\nActuá como ingeniero de calidad. Armá y ejecutá un plan de verificación manual y automática de la primera versión.\n\nIncluí: los flujos críticos, los estados de error y vacío, el uso con teclado, el móvil, el rendimiento en condiciones modestas y los permisos. Reportá cada problema con pasos para reproducirlo, resultado esperado y obtenido.\n\n## Definición de terminado\n{{definition_of_done}}"
+  },
+  {
+   "id": "refactoring",
+   "stage": "Refactorización",
+   "title": "Refactorizar sin romper",
+   "goal": "Mejorar la estructura sin cambiar el comportamiento.",
+   "use_when": "Cuando el código se vuelve difícil de cambiar.",
+   "template": "## Tarea\nQuiero refactorizar: [DESCRIBÍ AQUÍ qué parte y por qué].\n\nProcedé así:\n1. Confirmá que hay pruebas que protegen el comportamiento actual; si no las hay, escribilas primero.\n2. Proponé el cambio en pasos pequeños, cada uno con las pruebas en verde.\n3. No mezcles refactorización con cambios de comportamiento.\n4. Respetá los límites entre módulos de la arquitectura propuesta.\n5. Al final mostrame el antes y el después y por qué es mejor.\n\n## Estructura del proyecto\n{{structure}}"
+  },
+  {
+   "id": "documentation",
+   "stage": "Documentación",
+   "title": "Documentación del proyecto",
+   "goal": "Dejar documentación útil y mantenible.",
+   "use_when": "Al cerrar un hito.",
+   "template": "## Tarea\nActuá como redactor técnico. Escribí o actualizá la documentación del proyecto: un README que explique qué es, cómo se ejecuta, cómo se prueba y cómo se despliega; las decisiones de arquitectura (ADR); y las convenciones de código.\n\nSolo documentá lo que existe y verificaste; no describas funcionalidades planeadas como si ya estuvieran. Hacelo corto, ordenado y con ejemplos ejecutables.\n\n## Decisiones registradas\n{{adrs}}"
+  },
+  {
+   "id": "code-review",
+   "stage": "Revisión de código",
+   "title": "Revisión de código",
+   "goal": "Revisar un cambio con criterio.",
+   "use_when": "Antes de integrar un cambio.",
+   "template": "## Tarea\nActuá como revisor de código exigente pero constructivo. Revisá este cambio: [PEGÁ AQUÍ el diff o indicá los archivos].\n\nBuscá, en este orden: errores de lógica y casos límite no cubiertos; seguridad; pérdida de datos o inconsistencias; legibilidad y duplicación; pruebas que faltan o que no protegen nada; incumplimiento de las decisiones de arquitectura. Para cada comentario: severidad, el problema concreto y una sugerencia. Si el cambio está bien, decilo sin inventar objeciones.\n\n## Riesgos del proyecto\n{{risks}}"
+  },
+  {
+   "id": "continuation",
+   "stage": "Continuidad",
+   "title": "Retomar el trabajo en una sesión nueva",
+   "goal": "Recuperar el contexto y seguir sin repetir ni romper.",
+   "use_when": "Al empezar una sesión nueva o después de una pausa.",
+   "template": "## Tarea\nVamos a retomar el trabajo. Antes de hacer cualquier cambio:\n\n1. Leé el estado del repositorio (cambios recientes, pruebas, README y decisiones) y resumime en pocas líneas dónde estamos.\n2. Listá lo que quedó pendiente y lo que depende de decisiones abiertas.\n3. Proponeme el siguiente paso más pequeño que aporte valor y esperá mi confirmación.\n\n## Preguntas abiertas conocidas\n{{open_questions}}\n\n## Estrategia de trabajo con IA acordada\n{{ai_strategy}}"
+  }
+ ]
+}

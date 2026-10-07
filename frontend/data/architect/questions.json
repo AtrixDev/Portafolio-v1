@@ -1,0 +1,929 @@
+{
+ "version": 1,
+ "signals": {
+  "product": {
+   "label": "Tipo de producto",
+   "values": [
+    {
+     "id": "landing",
+     "label": "Landing page"
+    },
+    {
+     "id": "institutional-site",
+     "label": "Sitio institucional"
+    },
+    {
+     "id": "ecommerce",
+     "label": "E-commerce"
+    },
+    {
+     "id": "saas",
+     "label": "SaaS"
+    },
+    {
+     "id": "dashboard",
+     "label": "Dashboard"
+    },
+    {
+     "id": "management-system",
+     "label": "Sistema de gestión"
+    },
+    {
+     "id": "marketplace",
+     "label": "Marketplace"
+    },
+    {
+     "id": "other",
+     "label": "Otro o todavía no lo sé"
+    }
+   ]
+  },
+  "content_edit": {
+   "label": "Frecuencia de cambio del contenido",
+   "values": [
+    {
+     "id": "never",
+     "label": "Casi nunca cambia"
+    },
+    {
+     "id": "sometimes",
+     "label": "Cambia a veces"
+    },
+    {
+     "id": "often",
+     "label": "Cambia seguido"
+    }
+   ]
+  },
+  "capture": {
+   "label": "Qué hace la persona además de leer",
+   "values": [
+    {
+     "id": "none",
+     "label": "Solo se informa"
+    },
+    {
+     "id": "contact",
+     "label": "Deja un contacto o escribe"
+    },
+    {
+     "id": "bookings",
+     "label": "Reserva o saca turnos"
+    }
+   ]
+  },
+  "catalog": {
+   "label": "Tamaño del catálogo",
+   "values": [
+    {
+     "id": "small",
+     "label": "Hasta unos 100 productos"
+    },
+    {
+     "id": "medium",
+     "label": "Entre 100 y 5.000"
+    },
+    {
+     "id": "large",
+     "label": "Más de 5.000"
+    }
+   ]
+  },
+  "payments": {
+   "label": "Pagos",
+   "values": [
+    {
+     "id": "none",
+     "label": "Sin pagos online"
+    },
+    {
+     "id": "simple",
+     "label": "Pagos con un proveedor"
+    },
+    {
+     "id": "split",
+     "label": "Pagos divididos entre partes"
+    }
+   ]
+  },
+  "auth": {
+   "label": "Cuentas y permisos",
+   "values": [
+    {
+     "id": "none",
+     "label": "Sin cuentas"
+    },
+    {
+     "id": "users",
+     "label": "Cuentas de usuario"
+    },
+    {
+     "id": "roles",
+     "label": "Cuentas con roles y permisos"
+    },
+    {
+     "id": "multi_tenant",
+     "label": "Varias organizaciones con datos separados"
+    }
+   ]
+  },
+  "sensitive_data": {
+   "label": "Datos sensibles",
+   "values": [
+    {
+     "id": "none",
+     "label": "Sin datos sensibles"
+    },
+    {
+     "id": "personal",
+     "label": "Datos personales"
+    },
+    {
+     "id": "financial",
+     "label": "Datos financieros"
+    },
+    {
+     "id": "regulated",
+     "label": "Datos regulados (salud, legales…)"
+    }
+   ]
+  },
+  "data_shape": {
+   "label": "Forma de los datos",
+   "values": [
+    {
+     "id": "relational",
+     "label": "Estructurados, con relaciones"
+    },
+    {
+     "id": "flexible",
+     "label": "Variables, tipo documentos"
+    }
+   ]
+  },
+  "interactive": {
+   "label": "Interactividad de la interfaz",
+   "values": [
+    {
+     "id": "low",
+     "label": "Se lee más de lo que se usa"
+    },
+    {
+     "id": "medium",
+     "label": "Interacción moderada"
+    },
+    {
+     "id": "high",
+     "label": "Interfaz de aplicación, muy interactiva"
+    }
+   ]
+  },
+  "public_seo": {
+   "label": "Visibilidad en buscadores",
+   "values": [
+    {
+     "id": "yes",
+     "label": "Hay contenido público que debe aparecer en buscadores"
+    },
+    {
+     "id": "no",
+     "label": "No hace falta que lo indexen"
+    }
+   ]
+  },
+  "realtime": {
+   "label": "Tiempo real",
+   "values": [
+    {
+     "id": "none",
+     "label": "No hace falta"
+    },
+    {
+     "id": "occasional",
+     "label": "Actualizaciones de vez en cuando"
+    },
+    {
+     "id": "core",
+     "label": "Es central"
+    }
+   ]
+  },
+  "background": {
+   "label": "Tareas en segundo plano",
+   "values": [
+    {
+     "id": "none",
+     "label": "Nada fuera de la petición"
+    },
+    {
+     "id": "some",
+     "label": "Algunas (correos, avisos)"
+    },
+    {
+     "id": "heavy",
+     "label": "Muchas o largas (archivos, informes)"
+    }
+   ]
+  },
+  "files": {
+   "label": "Archivos",
+   "values": [
+    {
+     "id": "none",
+     "label": "Sin archivos de usuarios"
+    },
+    {
+     "id": "uploads",
+     "label": "Se suben archivos"
+    },
+    {
+     "id": "media_heavy",
+     "label": "Mucho contenido multimedia"
+    }
+   ]
+  },
+  "search": {
+   "label": "Búsqueda",
+   "values": [
+    {
+     "id": "none",
+     "label": "Sin búsqueda"
+    },
+    {
+     "id": "basic",
+     "label": "Búsqueda simple"
+    },
+    {
+     "id": "central",
+     "label": "La búsqueda es central"
+    }
+   ]
+  },
+  "integrations": {
+   "label": "Integraciones",
+   "values": [
+    {
+     "id": "none",
+     "label": "Ninguna"
+    },
+    {
+     "id": "few",
+     "label": "Algunas (pagos, correo, analítica)"
+    },
+    {
+     "id": "many",
+     "label": "Muchas o complejas"
+    }
+   ]
+  },
+  "ai": {
+   "label": "IA dentro del producto",
+   "values": [
+    {
+     "id": "none",
+     "label": "Sin IA en el producto"
+    },
+    {
+     "id": "assist",
+     "label": "Un asistente para quien lo usa"
+    },
+    {
+     "id": "automate",
+     "label": "Automatizar un proceso con pasos conocidos"
+    },
+    {
+     "id": "open_ended",
+     "label": "Tareas abiertas, sin pasos fijos"
+    }
+   ]
+  },
+  "scale": {
+   "label": "Escala esperada",
+   "values": [
+    {
+     "id": "small",
+     "label": "Cientos de usuarios"
+    },
+    {
+     "id": "medium",
+     "label": "Miles de usuarios"
+    },
+    {
+     "id": "large",
+     "label": "Decenas de miles o más"
+    }
+   ]
+  },
+  "team": {
+   "label": "Equipo",
+   "values": [
+    {
+     "id": "solo",
+     "label": "Una persona"
+    },
+    {
+     "id": "small",
+     "label": "Equipo chico (2 a 5)"
+    },
+    {
+     "id": "large",
+     "label": "Varios equipos"
+    }
+   ]
+  },
+  "time": {
+   "label": "Plazo",
+   "values": [
+    {
+     "id": "urgent",
+     "label": "Hay que salir rápido"
+    },
+    {
+     "id": "normal",
+     "label": "Sin apuro particular"
+    }
+   ]
+  },
+  "dev_ai": {
+   "label": "IA para construirlo",
+   "values": [
+    {
+     "id": "none",
+     "label": "Sin IA para construir"
+    },
+    {
+     "id": "assistant",
+     "label": "Un asistente para consultar"
+    },
+    {
+     "id": "coding",
+     "label": "Desarrollo asistido por IA sobre el código"
+    }
+   ]
+  }
+ },
+ "product_defaults": {
+  "landing": {
+   "content_edit": "sometimes",
+   "capture": "contact",
+   "auth": "none",
+   "payments": "none",
+   "sensitive_data": "none",
+   "public_seo": "yes",
+   "interactive": "low",
+   "realtime": "none",
+   "background": "none",
+   "files": "none",
+   "search": "none",
+   "integrations": "few",
+   "data_shape": "relational"
+  },
+  "institutional-site": {
+   "content_edit": "sometimes",
+   "capture": "contact",
+   "auth": "none",
+   "payments": "none",
+   "sensitive_data": "none",
+   "public_seo": "yes",
+   "interactive": "low",
+   "realtime": "none",
+   "background": "none",
+   "files": "none",
+   "search": "none",
+   "integrations": "few",
+   "data_shape": "relational"
+  },
+  "ecommerce": {
+   "catalog": "medium",
+   "auth": "users",
+   "payments": "simple",
+   "sensitive_data": "personal",
+   "public_seo": "yes",
+   "interactive": "medium",
+   "realtime": "none",
+   "background": "some",
+   "files": "uploads",
+   "search": "basic",
+   "integrations": "few",
+   "data_shape": "relational"
+  },
+  "saas": {
+   "auth": "multi_tenant",
+   "payments": "simple",
+   "sensitive_data": "personal",
+   "public_seo": "yes",
+   "interactive": "high",
+   "realtime": "none",
+   "background": "some",
+   "files": "none",
+   "search": "none",
+   "integrations": "few",
+   "data_shape": "relational"
+  },
+  "dashboard": {
+   "auth": "users",
+   "payments": "none",
+   "sensitive_data": "personal",
+   "public_seo": "no",
+   "interactive": "high",
+   "realtime": "occasional",
+   "background": "some",
+   "files": "none",
+   "search": "none",
+   "integrations": "many",
+   "data_shape": "relational"
+  },
+  "management-system": {
+   "auth": "roles",
+   "payments": "none",
+   "sensitive_data": "personal",
+   "public_seo": "no",
+   "interactive": "medium",
+   "realtime": "none",
+   "background": "some",
+   "files": "uploads",
+   "search": "basic",
+   "integrations": "few",
+   "data_shape": "relational"
+  },
+  "marketplace": {
+   "catalog": "medium",
+   "auth": "multi_tenant",
+   "payments": "split",
+   "sensitive_data": "financial",
+   "public_seo": "yes",
+   "interactive": "medium",
+   "realtime": "occasional",
+   "background": "heavy",
+   "files": "uploads",
+   "search": "central",
+   "integrations": "few",
+   "data_shape": "relational"
+  },
+  "other": {}
+ },
+ "questions": [
+  {
+   "id": "idea",
+   "type": "text",
+   "text": "¿Qué querés construir? Contalo en una o dos frases.",
+   "why": "Es el punto de partida del resumen del proyecto. No cambia las recomendaciones: eso lo hacen las respuestas que siguen.",
+   "placeholder": "Por ejemplo: una tienda online para vender mis productos artesanales",
+   "max": 400,
+   "tier": "core"
+  },
+  {
+   "id": "users",
+   "type": "text",
+   "text": "¿Quiénes lo van a usar y qué problema les resuelve?",
+   "why": "Define el objetivo y los usuarios del proyecto. Sirve para el resumen y para los prompts que se generan después.",
+   "placeholder": "Por ejemplo: personas que compran regalos y hoy me escriben por mensajes",
+   "max": 400,
+   "tier": "core"
+  },
+  {
+   "id": "product",
+   "type": "single",
+   "signal": "product",
+   "text": "¿Qué se parece más a lo que querés construir?",
+   "why": "El tipo de producto decide qué preguntas siguen y qué suposiciones razonables se pueden hacer.",
+   "offer": [
+    "landing",
+    "institutional-site",
+    "ecommerce",
+    "saas",
+    "dashboard",
+    "management-system",
+    "marketplace",
+    "other"
+   ],
+   "help": {
+    "landing": "Una página con un solo objetivo: que alguien haga una cosa.",
+    "institutional-site": "La presencia online de una organización, con varias secciones.",
+    "ecommerce": "Una tienda con carrito y pagos.",
+    "saas": "Un software por suscripción, con cuentas y datos por cliente.",
+    "dashboard": "Una interfaz para ver y entender datos.",
+    "management-system": "Un sistema interno para operar un negocio.",
+    "marketplace": "Una plataforma que conecta vendedores y compradores.",
+    "other": "Si no encaja o no estás seguro, seguimos con más preguntas."
+   },
+   "tier": "core"
+  },
+  {
+   "id": "content_edit",
+   "type": "single",
+   "signal": "content_edit",
+   "text": "¿Cada cuánto va a cambiar el contenido?",
+   "why": "Si casi no cambia, alcanza con archivos estáticos. Si cambia seguido, conviene poder regenerarlo o editarlo sin tocar código.",
+   "offer": [
+    "never",
+    "sometimes",
+    "often"
+   ],
+   "show_if": {
+    "s": "product",
+    "in": [
+     "landing",
+     "institutional-site"
+    ]
+   },
+   "tier": "core"
+  },
+  {
+   "id": "capture",
+   "type": "single",
+   "signal": "capture",
+   "text": "Además de leer, ¿qué tiene que poder hacer la persona?",
+   "why": "Un formulario se resuelve con un servicio externo. Reservas propias ya necesitan datos y reglas propias.",
+   "offer": [
+    "none",
+    "contact",
+    "bookings"
+   ],
+   "show_if": {
+    "s": "product",
+    "in": [
+     "landing",
+     "institutional-site"
+    ]
+   },
+   "tier": "core"
+  },
+  {
+   "id": "catalog",
+   "type": "single",
+   "signal": "catalog",
+   "text": "¿Qué tamaño va a tener el catálogo?",
+   "why": "Un catálogo chico se puede pregenerar; uno grande o muy cambiante pide otras estrategias y búsqueda.",
+   "offer": [
+    "small",
+    "medium",
+    "large"
+   ],
+   "show_if": {
+    "s": "product",
+    "in": [
+     "ecommerce",
+     "marketplace"
+    ]
+   },
+   "tier": "core"
+  },
+  {
+   "id": "payments",
+   "type": "single",
+   "signal": "payments",
+   "text": "¿Se cobra dentro del producto?",
+   "why": "Los pagos suben mucho el nivel de exigencia en seguridad, consistencia de datos y confiabilidad.",
+   "offer": [
+    "none",
+    "simple",
+    "split"
+   ],
+   "show_if": {
+    "s": "product",
+    "in": [
+     "ecommerce",
+     "saas",
+     "marketplace",
+     "other"
+    ]
+   },
+   "help": {
+    "simple": "El pago lo gestiona un proveedor externo; el producto cobra a sus clientes.",
+    "split": "Hay que repartir el dinero entre varias partes (por ejemplo, vendedores y la plataforma)."
+   },
+   "tier": "core"
+  },
+  {
+   "id": "auth",
+   "type": "single",
+   "signal": "auth",
+   "text": "¿Hay cuentas de usuario y permisos?",
+   "why": "Con cuentas aparecen la autenticación, la autorización y los datos por persona: el origen de la mayoría de los riesgos serios.",
+   "offer": [
+    "none",
+    "users",
+    "roles",
+    "multi_tenant"
+   ],
+   "show_if": {
+    "any": [
+     {
+      "s": "product",
+      "in": [
+       "ecommerce",
+       "saas",
+       "dashboard",
+       "management-system",
+       "marketplace",
+       "other"
+      ]
+     },
+     {
+      "s": "capture",
+      "is": "bookings"
+     }
+    ]
+   },
+   "learn": "authentication-and-authorization",
+   "tier": "core"
+  },
+  {
+   "id": "sensitive_data",
+   "type": "single",
+   "signal": "sensitive_data",
+   "text": "¿Qué tipo de datos va a manejar?",
+   "why": "Define cuánto rigor de seguridad se justifica. No todo proyecto necesita el mismo nivel.",
+   "offer": [
+    "none",
+    "personal",
+    "financial",
+    "regulated"
+   ],
+   "show_if": {
+    "any": [
+     {
+      "s": "auth",
+      "not": "none"
+     },
+     {
+      "s": "payments",
+      "not": "none"
+     }
+    ]
+   },
+   "learn": "quality-security",
+   "tier": "core"
+  },
+  {
+   "id": "data_shape",
+   "type": "single",
+   "signal": "data_shape",
+   "text": "¿Cómo son los datos?",
+   "why": "Con relaciones claras (pedidos, clientes, productos), una base relacional es lo natural. Si la estructura es muy variable, otro modelo puede encajar.",
+   "offer": [
+    "relational",
+    "flexible"
+   ],
+   "show_if": {
+    "any": [
+     {
+      "s": "auth",
+      "not": "none"
+     },
+     {
+      "s": "payments",
+      "not": "none"
+     },
+     {
+      "s": "product",
+      "in": [
+       "dashboard",
+       "management-system",
+       "other"
+      ]
+     }
+    ]
+   },
+   "learn": "relational-database",
+   "tier": "fine"
+  },
+  {
+   "id": "public_seo",
+   "type": "single",
+   "signal": "public_seo",
+   "text": "¿Hay una parte pública que tenga que aparecer en buscadores?",
+   "why": "Lo que debe indexarse y cargar rápido pide renderizado en el servidor o pregenerado; una aplicación detrás de un login, no.",
+   "offer": [
+    "yes",
+    "no"
+   ],
+   "show_if": {
+    "s": "product",
+    "in": [
+     "ecommerce",
+     "saas",
+     "marketplace",
+     "other"
+    ]
+   },
+   "learn": "quality-seo",
+   "tier": "core"
+  },
+  {
+   "id": "interactive",
+   "type": "single",
+   "signal": "interactive",
+   "text": "¿Qué tan interactiva es la interfaz?",
+   "why": "Una interfaz tipo aplicación se arma distinto a una página que se lee.",
+   "offer": [
+    "low",
+    "medium",
+    "high"
+   ],
+   "show_if": {
+    "s": "product",
+    "in": [
+     "saas",
+     "dashboard",
+     "management-system",
+     "other"
+    ]
+   },
+   "tier": "fine"
+  },
+  {
+   "id": "realtime",
+   "type": "single",
+   "signal": "realtime",
+   "text": "¿Hace falta ver cambios en vivo, sin recargar?",
+   "why": "El tiempo real cuesta: conexiones abiertas y más complejidad de escala. A veces alcanza con consultar cada pocos segundos.",
+   "offer": [
+    "none",
+    "occasional",
+    "core"
+   ],
+   "show_if": {
+    "s": "product",
+    "in": [
+     "dashboard",
+     "saas",
+     "marketplace",
+     "management-system",
+     "other"
+    ]
+   },
+   "learn": "websocket",
+   "tier": "fine"
+  },
+  {
+   "id": "background",
+   "type": "single",
+   "signal": "background",
+   "text": "¿Hay tareas que no deban hacer esperar a la persona?",
+   "why": "Enviar correos, procesar archivos o generar informes fuera de la petición cambia la arquitectura.",
+   "offer": [
+    "none",
+    "some",
+    "heavy"
+   ],
+   "show_if": {
+    "any": [
+     {
+      "s": "auth",
+      "not": "none"
+     },
+     {
+      "s": "payments",
+      "not": "none"
+     },
+     {
+      "s": "product",
+      "is": "other"
+     }
+    ]
+   },
+   "learn": "message-queue",
+   "tier": "core"
+  },
+  {
+   "id": "files",
+   "type": "single",
+   "signal": "files",
+   "text": "¿Se suben o se sirven archivos?",
+   "why": "Los archivos van a un almacenamiento aparte, no a la base de datos ni al servidor de la aplicación.",
+   "offer": [
+    "none",
+    "uploads",
+    "media_heavy"
+   ],
+   "show_if": {
+    "s": "product",
+    "in": [
+     "ecommerce",
+     "saas",
+     "management-system",
+     "marketplace",
+     "other"
+    ]
+   },
+   "learn": "object-storage",
+   "tier": "fine"
+  },
+  {
+   "id": "search",
+   "type": "single",
+   "signal": "search",
+   "text": "¿Qué tan importante es la búsqueda?",
+   "why": "Una búsqueda simple se resuelve con la base de datos; si es central, un motor dedicado puede justificarse.",
+   "offer": [
+    "none",
+    "basic",
+    "central"
+   ],
+   "show_if": {
+    "s": "product",
+    "in": [
+     "ecommerce",
+     "saas",
+     "management-system",
+     "marketplace",
+     "other"
+    ]
+   },
+   "learn": "search-engine",
+   "tier": "fine"
+  },
+  {
+   "id": "integrations",
+   "type": "single",
+   "signal": "integrations",
+   "text": "¿Con cuántos sistemas externos tiene que hablar?",
+   "why": "Cada integración agrega puntos de fallo y trabajo de mantenimiento.",
+   "offer": [
+    "none",
+    "few",
+    "many"
+   ],
+   "show_if": {
+    "s": "product",
+    "not": "landing"
+   },
+   "tier": "fine"
+  },
+  {
+   "id": "ai",
+   "type": "single",
+   "signal": "ai",
+   "text": "¿Va a tener IA dentro del producto?",
+   "why": "No todo lo que usa IA necesita un agente: muchas veces alcanza un asistente o un flujo con pasos fijos.",
+   "offer": [
+    "none",
+    "assist",
+    "automate",
+    "open_ended"
+   ],
+   "help": {
+    "assist": "Algo con lo que la persona conversa y que la ayuda a decidir.",
+    "automate": "Un proceso con pasos conocidos donde un modelo resuelve algunos (clasificar, extraer, redactar).",
+    "open_ended": "Tareas cuyos pasos no se pueden prever de antemano."
+   },
+   "learn": "ai-workflow",
+   "tier": "fine"
+  },
+  {
+   "id": "scale",
+   "type": "single",
+   "signal": "scale",
+   "text": "¿Cuánta gente lo va a usar en un año?",
+   "why": "La mayoría de los proyectos no necesita escala masiva al inicio; diseñar para ella antes de tiempo agrega complejidad.",
+   "offer": [
+    "small",
+    "medium",
+    "large"
+   ],
+   "learn": "quality-scalability",
+   "tier": "core"
+  },
+  {
+   "id": "team",
+   "type": "single",
+   "signal": "team",
+   "text": "¿Quién lo va a construir y mantener?",
+   "why": "El tamaño del equipo pesa más que cualquier moda en la elección de arquitectura.",
+   "offer": [
+    "solo",
+    "small",
+    "large"
+   ],
+   "tier": "core"
+  },
+  {
+   "id": "time",
+   "type": "single",
+   "signal": "time",
+   "text": "¿Qué plazo hay?",
+   "why": "Salir rápido favorece lo simple y lo ya resuelto por servicios existentes.",
+   "offer": [
+    "urgent",
+    "normal"
+   ],
+   "tier": "fine"
+  },
+  {
+   "id": "dev_ai",
+   "type": "single",
+   "signal": "dev_ai",
+   "text": "¿Vas a usar IA para construirlo?",
+   "why": "Define cómo conviene trabajar con IA durante el desarrollo, que es una decisión distinta a si el producto tiene IA.",
+   "offer": [
+    "none",
+    "assistant",
+    "coding"
+   ],
+   "learn": "ai-assisted-coding",
+   "tier": "fine"
+  }
+ ]
+}

@@ -2,6 +2,8 @@
 // Portado de ML Tracker (server/utils/scoring.js + routes/audit.js)
 
 export const PESOS = { fotos: 25, titulo: 20, descripcion: 20, stock: 15, estado: 10, atributos: 5, garantia: 5 };
+// Debajo de este peso verificado (de 100) no se publica un puntaje: sería normalizar casi nada
+export const EVIDENCIA_MINIMA = 50;
 const U = { fotos_optimo: 7, fotos_bueno: 4, fotos_minimo: 1, titulo_optimo: 60, titulo_bueno: 40, titulo_minimo: 20, atributos_bueno: 5, stock_bajo: 3 };
 
 export function parseMlaId(raw) {
@@ -95,16 +97,29 @@ export function scorePublicacion(item) {
   checks.garantia = faltan.has('garantia') ? null : !!item.warranty;
   if (!item.warranty && !faltan.has('garantia')) { score -= PESOS.garantia; mejoras.push('Sin garantía: reduce la confianza del comprador'); }
 
+  // Peso de lo que sí se pudo verificar y cuántos controles se ejecutaron
+  const conocido = Object.entries(PESOS).filter(([k]) => !faltan.has(k) && !(k === 'stock' && qty === null)).reduce((a, [, w]) => a + w, 0);
+  const cobertura = { verificados: Object.values(checks).filter(v => v !== null).length, total: Object.keys(checks).length, peso: conocido };
   // Con datos que faltan, el score se escala sobre el peso de lo que sí se verificó
-  if (item._faltan) {
-    const conocido = Object.entries(PESOS).filter(([k]) => !faltan.has(k) && !(k === 'stock' && qty === null)).reduce((a, [, w]) => a + w, 0);
-    score = conocido ? 100 - (100 - score) * 100 / conocido : 100;
-  }
-  return { score: Math.round(Math.max(0, Math.min(100, score))), problemas, mejoras, checks };
+  if (item._faltan) score = conocido ? 100 - (100 - score) * 100 / conocido : 100;
+  // Con poca evidencia no hay puntaje: null es más honesto que un número normalizado
+  const suficiente = conocido >= EVIDENCIA_MINIMA;
+  return { score: suficiente ? Math.round(Math.max(0, Math.min(100, score))) : null, problemas, mejoras, checks, cobertura };
 }
 
 // ── Plan de acción basado en reglas ───────────────────────────
-export function planDeAccion(item, score, problemas, mejoras) {
+// Qué no se pudo consultar y por qué (se muestra tal cual al usuario)
+const SOLO_DUENO = 'Mercado Libre solo deja leer esto al dueño de la publicación.';
+const ROTULO = { fotos: 'Fotos', stock: 'Stock', estado: 'Estado (activa o pausada)', atributos: 'Atributos', garantia: 'Garantía', descripcion: 'Descripción', titulo: 'Título real' };
+export function noVerificables(item) {
+  const f = desconocidos(item), out = [];
+  const motivo = item._datos_parciales ? 'Es un producto de catálogo sin publicación ganadora: no tiene este dato.' : SOLO_DUENO;
+  for (const k of Object.keys(ROTULO)) if (f.has(k)) out.push({ t: ROTULO[k], s: k === 'titulo' ? 'Tomé el título del link, que viene recortado: no lo evalúo.' : motivo });
+  if (item._extras && item._extras.opiniones == null) out.push({ t: 'Opiniones de compradores', s: SOLO_DUENO });
+  return out;
+}
+
+export function planDeAccion(item, score, problemas, mejoras, cobertura = null) {
   const acciones = [];
   const fotos = item.pictures?.length || 0;
   const tituloL = item.title?.length || 0;
@@ -157,20 +172,26 @@ export function planDeAccion(item, score, problemas, mejoras) {
   acciones.sort((a, b) => b.impacto_pts - a.impacto_pts);
   acciones.forEach((a, i) => { a.prioridad = i + 1; });
 
-  const scorePotencial = Math.min(100, score + acciones.reduce((s, a) => s + a.impacto_pts, 0));
-  const estado = score < 40 ? 'crítico' : score < 60 ? 'mejorable' : score < 80 ? 'bueno' : 'óptimo';
+  const sinPuntaje = score === null;
+  const scorePotencial = sinPuntaje ? null : Math.min(100, score + acciones.reduce((s, a) => s + a.impacto_pts, 0));
+  const estado = sinPuntaje ? null : score < 40 ? 'crítico' : score < 60 ? 'mejorable' : score < 80 ? 'bueno' : 'óptimo';
   const nums = t => [...t.matchAll(/(\d+)/g)].map(m => +m[1]);
   const minT = acciones.reduce((s, a) => s + (nums(a.tiempo_estimado)[0] || 10), 0);
   const maxT = acciones.reduce((s, a) => { const n = nums(a.tiempo_estimado); return s + (n[1] || n[0] || 10); }, 0);
-  const tiempo = !acciones.length ? 'Sin acciones necesarias'
+  const parcial = !!cobertura && cobertura.verificados < cobertura.total;
+  const tiempo = !acciones.length ? (sinPuntaje ? 'Sin acciones con esta evidencia' : parcial ? 'Sin acciones para lo verificado' : 'Sin acciones necesarias')
     : maxT < 60 ? (minT === maxT ? `${minT} min` : `${minT}-${maxT} min`)
     : `${Math.round(minT / 6) / 10}-${Math.round(maxT / 6) / 10} horas`;
 
   const primero = (problemas[0] || mejoras[0] || '').toLowerCase();
-  return {
-    resumen: (primero
+  const verif = cobertura ? `verifiqué ${cobertura.verificados} de ${cobertura.total} controles` : 'verifiqué muy pocos controles';
+  const resumen = sinPuntaje
+    ? `No se puede calificar esta publicación: con los datos públicos ${verif} y un puntaje sobre tan poco sería engañoso.${acciones.length ? ` Lo que sí encontré: ${acciones[0].titulo.toLowerCase()}.` : ' No hay acciones para sugerir con esta evidencia.'}`
+    : (primero
       ? `El score de ${score}/100 indica que la publicación está ${({ 'crítico': 'en estado crítico', mejorable: 'mejorable', bueno: 'en buen estado', 'óptimo': 'en estado óptimo' })[estado]}. Lo de mayor impacto: ${primero}.`
-      : `El score de ${score}/100 indica que la publicación está en buen estado.`) + (scorePotencial > score ? ` Con estas acciones puede llegar a ${scorePotencial}/100.` : ''),
+      : `El score de ${score}/100 indica que la publicación está en buen estado.`) + (scorePotencial > score ? ` Con estas acciones puede llegar a ${scorePotencial}/100.` : '');
+  return {
+    resumen,
     titulo_optimizado: null,
     acciones,
     score_potencial: scorePotencial,

@@ -1,5 +1,5 @@
 /* ============================================================
-   SISTEMA.JS — Página pública "Sistema: IA aplicada a Mercado Libre" (sistema.html)
+   SISTEMA.JS — Página pública "Cómo trabajo" (sistema.html; la URL se mantiene)
    Demo en vivo del ML Tracker: /api/tracker?action=demo (cuenta simulada, sin datos reales).
    Contenido: data/ia-meli.json (el mismo que usa la Academia del panel).
    Estado de cada skill: /api/academia?action=publico (solo lo que marqué como visible).
@@ -185,52 +185,13 @@
     io.observe($('tendencias'));
   } else tendencias();
 
-  // ═══ Auditoría: conectar la cuenta (completa) o mirar una publicación (chequeo rápido) ═══
+  // ═══ Auditoría de cuenta (completa, con OAuth) ═══
+  // El Chequeo de publicación (una sola publicación, sin conectar cuenta) vive únicamente en herramientas.html#chequeo.
   // Mercado Libre no deja leer publicaciones ajenas: el puntaje real sale solo con la cuenta conectada.
   const out = $('au-out');
   const contactoAuditoria = link => `contacto.html?motivo=consulta&asunto=auditoria${link ? '&pub=' + encodeURIComponent(link) : ''}#formulario`;
   const tonoSalud = v => v == null ? 'muted' : v >= 80 ? 'ok' : v >= 60 ? 'warn' : 'bad';
   const plataAR = x => '$' + Math.round(x).toLocaleString('es-AR');
-  const irAlFormulario = () => { $('au-cform').scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => $('au-cform').elements.nombre.focus({ preventScroll: true }), 400); };
-
-  // Chequeo rápido: solo datos que Mercado Libre muestra de una publicación ajena, sin puntaje
-  function chequeoRapido(r) {
-    const d = r.datos, filas = [];
-    if (r.catalogo) filas.push(['info', 'Es una publicación de catálogo', 'El título y las fotos los define Mercado Libre. Ahí se compite por precio, envío, cuotas y reputación.']);
-    if (d.fotos != null) filas.push([d.fotos >= 7 ? 'check' : 'alert', `${d.fotos} ${d.fotos === 1 ? 'foto' : 'fotos'}`, d.fotos >= 7 ? 'Buena secuencia.' : 'Lo ideal son 7 o más: el comprador no puede tocar el producto, las fotos hacen ese trabajo.']);
-    if (d.atributos != null) filas.push([d.atributos >= 10 ? 'check' : 'alert', `${d.atributos} atributos cargados`, d.atributos >= 10 ? 'Bien completo para aparecer en los filtros.' : 'Cada atributo que falta te saca de un filtro de búsqueda.']);
-    if (d.descripcion != null) filas.push([d.descripcion > 300 ? 'check' : 'alert', d.descripcion ? `Descripción de ${d.descripcion.toLocaleString('es-AR')} caracteres` : 'Sin descripción', d.descripcion > 300 ? 'Tiene de dónde agarrarse el comprador.' : 'Es el último empujón antes de comprar: hoy no está ayudando.']);
-    if (d.opiniones != null) filas.push(['info', `${d.opiniones.toLocaleString('es-AR')} opiniones`, 'Con la cuenta conectada te digo qué critican y qué elogian, y cómo usarlo.']);
-    return `
-      <article class="au-res">
-        <header class="au-res-head">
-          ${r.item.foto ? `<img src="${esc(r.item.foto)}" alt="" width="64" height="64">` : ''}
-          <div><h3>${esc(r.item.title || 'Publicación')}</h3>${r.item.permalink ? `<a href="${esc(r.item.permalink)}" target="_blank" rel="noopener">Verla en Mercado Libre</a>` : ''}</div>
-        </header>
-        <ul class="au-datos">${filas.map(([i, t, x]) => `<li data-t="${i}">${ic(i === 'info' ? 'bulb' : i)}<div><b>${esc(t)}</b><span>${esc(x)}</span></div></li>`).join('')}</ul>
-        <div class="au-mas-cta">
-          <p><b>Esto es lo que se ve desde afuera.</b> Visitas, conversión, margen por venta, si estás ganando el catálogo y a qué precio lo recuperás: eso aparece cuando conectás tu cuenta.</p>
-          <button type="button" class="btn-primary" data-ir-conectar>Quiero la auditoría completa</button>
-        </div>
-      </article>`;
-  }
-  $('au-form').addEventListener('submit', async e => {
-    e.preventDefault();
-    const url = $('au-url').value.trim(), btn = $('au-go');
-    if (!url) { $('au-url').focus(); return; }
-    btn.disabled = true; btn.textContent = 'Mirando…';
-    out.innerHTML = '<div class="au-cargando" aria-busy="true"><span></span><span></span><span></span></div>';
-    try {
-      const r = await fetch('/api/audit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) });
-      const d = await r.json().catch(() => ({}));
-      out.innerHTML = r.ok && d.rapido ? chequeoRapido(d)
-        : `<div class="au-msg${r.status === 429 ? ' is-limite' : ''}"><p>${esc(d.error || 'Algo no salió bien. Probá de nuevo en un rato.')}</p>${r.status === 429 || d.code === 'ml_not_linked' ? `<a class="btn-secondary" href="${contactoAuditoria(url)}">Escribime</a>` : ''}</div>`;
-    } catch (err) {
-      out.innerHTML = '<div class="au-msg"><p>Se cortó la conexión. Revisá tu internet y probá de nuevo.</p></div>';
-    }
-    btn.disabled = false; btn.textContent = 'Mirar';
-  });
-  out.addEventListener('click', e => { if (e.target.closest('[data-ir-conectar]')) irAlFormulario(); });
 
   // Conectar la cuenta: valida acá, crea el pedido y lleva a Mercado Libre a autorizar
   $('au-cform').addEventListener('submit', async e => {
@@ -350,7 +311,7 @@
           <ul>${sk.conceptos.map(c => `<li>${esc(c)}</li>`).join('')}</ul>
           <p class="ia-kpis">${sk.kpis.map(k => `<span class="skill-tag">${esc(k)}</span>`).join('')}</p>
           ${l ? `<p class="ia-logro">${ic('award')}<span>${esc(l)}</span></p>` : ''}
-          ${sk.lab ? `<a class="link-arrow" href="${sk.lab}">Guía relacionada en el Lab ${ic('arrow-right')}</a>` : ''}
+          ${sk.lab ? `<a class="link-arrow" href="${sk.lab}">Guía relacionada ${ic('arrow-right')}</a>` : ''}
         </div>
       </details>`;
     }).join('');

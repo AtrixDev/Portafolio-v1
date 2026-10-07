@@ -1,0 +1,64 @@
+frontend/acos.html:139:    <a href="sistema.html#auditar" class="btn-primary">Auditá tu cuenta gratis <svg class="icon icon-end" aria-hidden="true"><use href="assets/ico
+frontend/anatomia.html:179:    <a href="sistema.html#auditar" class="btn-primary">Auditá tu cuenta gratis <svg class="icon icon-end" aria-hidden="true"><use href="assets
+frontend/metricas.html:102:    <p>Mi ML Tracker hace este cruce solo y valida las caídas con pruebas estadísticas para no confundir ruido con problema. Lo podés <a hre
+frontend/metricas.html:121:    <a href="sistema.html#auditar" class="btn-primary">Auditá tu cuenta gratis <svg class="icon icon-end" aria-hidden="true"><use href="assets
+frontend/importar.html:227:      <a href="contacto.html?asunto=importacion" class="btn-primary" id="im-cta">Escribime por tu producto <svg class="icon icon-end" aria-hidd
+frontend/importar.html:235:  <a href="contacto.html?asunto=importacion">Contacto →</a>
+frontend/perdida.html:176:      <a href="contacto.html?asunto=acos" class="btn-primary" id="pd-cta">Quiero bajar mi ACOS <svg class="icon icon-end" aria-hidden="true"><us
+frontend/perdida.html:185:  <a href="contacto.html?asunto=acos">Contacto →</a>
+frontend/excels.html:122:    <p>El ML Tracker, la herramienta que construí, se conecta a la API oficial de Mercado Libre y hace buena parte de este seguimiento solo. <a 
+frontend/excels.html:132:    <a href="sistema.html#auditar" class="btn-primary">Auditá tu cuenta gratis <svg class="icon icon-end" aria-hidden="true"><use href="assets/i
+frontend/index.html:107:        <a class="pt-door is-sell" href="sistema.html#auditar"><span class="pt-door-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+frontend/index.html:376:    <a href="sistema.html#auditar" class="link-arrow">¿Tenés una cuenta? Auditala gratis <svg class="icon" aria-hidden="true"><use href="assets/
+frontend/imagenes.html:139:    <a href="sistema.html#auditar" class="btn-primary">Auditá tu cuenta gratis <svg class="icon icon-end" aria-hidden="true"><use href="assets
+frontend/seo.html:145:    <a href="sistema.html#auditar" class="btn-primary">Auditá tu cuenta gratis <svg class="icon icon-end" aria-hidden="true"><use href="assets/icon
+frontend/lab.html:66:      <a href="sistema.html#auditar" class="btn-secondary">Auditá tu cuenta gratis</a>
+frontend/lab.html:161:      <a href="sistema.html#auditar" class="link-arrow">Auditá tu cuenta <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-r
+frontend/lab.html:170:    <a href="sistema.html#auditar" class="btn-primary">Auditá tu cuenta gratis <svg class="icon icon-end" aria-hidden="true"><use href="assets/icon
+frontend/lab.html:171:    <a href="sistema.html#demo" class="btn-secondary">Probá la demo del ML Tracker</a>
+frontend/pricing.html:120:    <a href="sistema.html#auditar" class="btn-primary">Auditá tu cuenta gratis <svg class="icon icon-end" aria-hidden="true"><use href="assets/
+frontend/rentabilidad.html:246:      <a href="contacto.html?asunto=rentabilidad" class="btn-primary" id="rt-cta">Escribime por tu producto <svg class="icon icon-end" aria
+frontend/reputacion.html:134:    <a href="sistema.html#auditar" class="btn-primary">Auditá tu cuenta gratis <svg class="icon icon-end" aria-hidden="true"><use href="asse
+frontend/informe-muestra.html:70:      <a href="sistema.html#auditar" class="btn-primary">Quiero el mío, con mi cuenta <svg class="icon icon-end" aria-hidden="true"><use
+frontend/informe-muestra.html:98:      <a href="sistema.html#auditar" class="btn-primary">Quiero el mío, con mi cuenta <svg class="icon icon-end" aria-hidden="true"><use
+frontend/informe-muestra.html:107:  <a href="sistema.html#auditar">Auditar mi cuenta →</a>
+frontend/js/hab-data.js:38:      tools: ['Apps Script', 'API de Mercado Libre'], prueba: ['Probar la demo del Tracker', '/sistema.html#demo'] },
+frontend/js/hab-data.js:44:      tools: ['Apps Script', 'Node.js', 'Python'], prueba: ['Auditar una cuenta', '/sistema.html#auditar'] },
+frontend/js/admin.js:324:        ${m.resultadoId ? `<p class="cp-msg-meta"><a href="herramientas.html?r=${encodeURIComponent(m.resultadoId)}" target="_blank" rel="noopene
+frontend/js/exp-data.js:94:    cta: [['Ver todas las herramientas', 'herramientas.html'], ['Auditar una cuenta', 'sistema.html#auditar']],
+frontend/js/informe.js:148:      <p>Datos de la cuenta de ejemplo del ML Tracker: 13 publicaciones simuladas que muestran casos típicos. En tu informe, los datos salen d
+frontend/js/informe.js:155:  $('if-body').innerHTML = `<div class="if-err" role="status">${ic('alert')}<p>Se cortó la conexión y no pude armar el informe. <button type=
+frontend/js/importar.js:304:    if (prod) e.currentTarget.href = `contacto.html?asunto=importacion&producto=${encodeURIComponent(prod.slice(0, 80))}`;
+frontend/js/herr.js:10:const contacto = a => `contacto.html?asunto=${a}`;
+frontend/js/herr.js:13:  { id: 'tracker', q: '¿Por qué cayeron tus ventas?', imp: ['10 tipos de problema', 'API oficial de Mercado Libre', 'Se actualiza todos los días
+frontend/js/herr.js:15:  { id: 'auditoria', q: '¿Dónde se te escapa la plata?', imp: ['Gratis', 'En minutos', 'Salud en 6 áreas'], e: 'funciona', n: 'Auditoría de cue
+frontend/js/herr.js:16:  { id: 'chequeo', q: '¿Tu publicación está bien armada?', imp: ['Completo con links de catálogo', 'Sin conectar la cuenta', '5 por día'], e: 
+frontend/js/herr.js:17:  { id: 'simulador', q: '¿Qué le falta a tu publicación?', imp: ['7 criterios', 'Al instante'], e: 'funciona', n: 'Simulador de puntaje', v: 'El
+frontend/js/herr.js:18:  { id: 'diagnostico', q: '¿Qué le pasa a tu cuenta?', imp: ['10 problemas típicos', 'Cómo se detecta', 'Qué hacer'], e: 'funciona', n: 'Catá
+frontend/js/herr.js:20:  { id: 'tendencias', q: '¿Qué está por venderse?', imp: ['Por categoría', 'Datos de Mercado Libre'], e: 'pausa', n: 'Buscador de tendencias', 
+frontend/js/herr.js:24:  { id: 'informe', q: '¿Qué recibís con la auditoría?', imp: ['10 problemas ordenados', 'Plan de acción'], e: 'funciona', n: 'Informe de muest
+frontend/js/herr.js:260:// Con ?r= no se abre ninguna ficha hasta saber de qué herramienta es el resultado (antes se abría siempre «Chequeo»)
+frontend/js/herr.js:269:// Link compartido (?r=id): muestra el resultado guardado por el servidor, sin pedir nada a cambio.
+frontend/js/herr.js:273:    if (ok && d.herramienta === 'rentabilidad') { location.replace('rentabilidad.html?r=' + encodeURIComponent(rid)); return; }
+frontend/js/port.js:32:  ['aud', 'Para vendedores', 'Auditoría gratis de tu cuenta', 'Conectás tu cuenta y en minutos ves la salud por área y lo que más plata te hace
+frontend/js/port.js:34:  ['trk', 'Para vendedores y empresas', 'ML Tracker, en vivo', 'Mi sistema de análisis funcionando con una cuenta de ejemplo.', 'Abrir la demo', '
+frontend/js/perdida.js:192:    if (Number.isFinite(a) && a > 0 && a < 1) e.currentTarget.href = `contacto.html?asunto=acos&acos=${Math.round(a * 1000) / 10}`;
+frontend/js/salida.js:8:export const linkResultado = id => `${location.origin}/herramientas.html?r=${encodeURIComponent(id)}`;
+frontend/js/salida.js:10:// ÚNICO renderizador de un resultado: el que se ve en vivo y el que abre el link compartido (?r=) pasan por acá.
+frontend/js/sistema.js:191:  const contactoAuditoria = link => `contacto.html?motivo=consulta&asunto=auditoria${link ? '&pub=' + encodeURIComponent(link) : ''}#formulario
+frontend/js/sistema.js:253:  // Vuelta desde Mercado Libre: ?auditoria=<pedido> sincroniza por tandas y muestra el resultado
+backend/api/ml-callback.js:12:const lead = lid => ({ ok: () => `/sistema.html?auditoria=${lid}#auditar`, error: '/sistema.html?auditoria=error#auditar', cancelado: '/sist
+frontend/js/rentabilidad.js:5://   «Guardar» → POST /api/herramientas?action=calcular { entrada } → el SERVIDOR recalcula, guarda y devuelve el link (?r=).
+frontend/js/rentabilidad.js:244:// ═══ resultado compartido (?r=) ═══
+frontend/js/rentabilidad.js:260:  if (d.herramienta !== 'rentabilidad') { location.replace('herramientas.html?r=' + encodeURIComponent(id)); return; }
+frontend/js/programacion-v2.js:514:    const cta = f.tipo === 'proyecto' ? '' : `<section class="lb-aplicar"><h2>¿Lo aplicamos a tu caso?</h2><p>Contame qué querés log
+frontend/js/programacion-v2.js:521:        <div class="lb-meta">${valChip(f.valor, f.valor_estado)}${nivChip(f.nivel)}<span class="lb-evs" style="margin:0">${evChips([...
+backend/lib/motor/LEEME.md:33:`POST /api/herramientas?action=calcular` con `{ entrada }` → `lib/rentabilidad.js › calcularYGuardar`: valida y **recalcula todo desde c
+backend/lib/herramientas.js:60:    const link = origen(req) +`/herramientas.html?r=${r.id}`;
+tools/mutar-ui.mjs:48:  [ORQ, `if (d.herramienta !== 'rentabilidad')`, `if (d.herramienta === 'rentabilidad')`, '?r= de otra herramienta no se redirige'],
+tools/mutar-ui.mjs:51:  [ORQ, `escribir(aValores(compartido.entradaDeclarada));`, `escribir(valoresVacios());`, '?r= no carga los datos'],
+tools/mutar-ui.mjs:53:  [ORQ, `const r = { ...datos.resultado, entrada: datos.entrada };       // lo guardado, tal cual: sin recalcular`, `const r = evaluar(datos.entrada
+tools/mutar-ui.mjs:57:  [ORQ, `bloquear(false); history.replaceState(null, '', location.pathname);`, `bloquear(false);`, '«usar datos» no limpia ?r='],
+tools/mutar-ui.mjs:58:  [ORQ, `if (res.status === 404) return errorCompartido(`, `if (res.status === 403) return errorCompartido(`, 'el 404 de ?r= no se reconoce'],
+tools/mutar-ui.mjs:59:  [ORQ, `if (!res) return errorCompartido(`, `if (res === 1) return errorCompartido(`, 'el error de red de ?r= no se reconoce'],
+backend/lib/resultados.js:45:  return { id: doc._id, url: `/herramientas.html?r=${doc._id}` };

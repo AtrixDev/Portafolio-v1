@@ -1,0 +1,218 @@
+[
+  {
+    "id": "landing", "slug": "landing", "name": "Landing page", "type": "product_type", "category": "Producto web", "depth": "full", "level": "beginner",
+    "summary": "Una página (o muy pocas) con un único objetivo de conversión: que la persona haga una cosa, como escribir, reservar o comprar.",
+    "problem_solved": "Convertir visitas de una campaña o de una búsqueda en una acción concreta, sin distraer con navegación ni secciones que no ayudan a decidir.",
+    "explanation": [
+      "Una landing se define por su objetivo, no por su tamaño. Tiene un mensaje principal, una prueba que lo respalda (resultados, opiniones, ejemplos) y un llamado a la acción repetido en los puntos donde la persona ya decidió.",
+      "Técnicamente es el producto web más simple: casi no hay datos que guardar ni usuarios que gestionar. Lo difícil no está en la arquitectura sino en el mensaje, la velocidad de carga y la medición de qué convierte.",
+      "Por eso suele resolverse con archivos estáticos y servicios externos para lo poco dinámico (formulario, calendario, analítica)."
+    ],
+    "how_it_works": ["Se arma con secciones fijas (propuesta, prueba, detalle, llamado a la acción) y se publica como archivos estáticos en un CDN.", "El formulario o el botón de contacto llama a un servicio externo o a una función serverless; el resto no necesita servidor propio."],
+    "when_to_use": ["Hay una campaña, un lanzamiento o un servicio con una acción clara que medir.", "Se necesita salir rápido y con costo de mantenimiento casi nulo.", "El tráfico viene de anuncios o de una búsqueda muy específica."],
+    "when_not_to_use": ["Hay mucho contenido que cambia seguido y necesita navegación (conviene un sitio institucional o un blog).", "Se necesita que cada persona vea contenido distinto según su cuenta."],
+    "pros": ["Es la opción más barata y rápida de construir y publicar.", "Rinde muy bien en velocidad porque casi no hay nada que procesar.", "Es fácil de probar variantes y medir qué convierte."],
+    "cons": ["Crece mal: agregar páginas y contenido sin un plan termina en un sitio desordenado.", "Depende de servicios externos para formularios y analítica."],
+    "tradeoffs": ["Se gana simplicidad y velocidad a cambio de no tener datos propios ni cuentas de usuario.", "Un solo objetivo mejora la conversión pero limita lo que se puede decir sobre el negocio."],
+    "alternatives": [
+      { "id": "institutional-site", "note": "Si hay que presentar varios servicios, un equipo o contenido que se actualiza, el sitio institucional da estructura a cambio de más mantenimiento." },
+      { "id": "ecommerce", "note": "Si lo que se quiere es vender varios productos con carrito y pagos, ya no alcanza una landing." }
+    ],
+    "examples": [{ "kind": "educational_example", "label": "Lanzamiento de un curso", "text": "Una página con la promesa del curso, el programa, opiniones de alumnos y un botón de inscripción que lleva a un servicio de pagos externo." }],
+    "common_mistakes": ["Poner navegación completa y distraer del objetivo.", "No medir: sin datos de conversión no se sabe qué cambiar.", "Cargar imágenes pesadas que arruinan la velocidad móvil."],
+    "decision_questions": ["¿Cuál es la ÚNICA acción que tiene que hacer la persona?", "¿De dónde viene el tráfico?", "¿El contenido va a cambiar seguido?"],
+    "related_entities": [
+      { "id": "static-site", "rel": "often_with", "note": "Casi siempre se publica como archivos estáticos." },
+      { "id": "ssg", "rel": "often_with" },
+      { "id": "quality-performance", "rel": "addresses", "note": "La velocidad de carga influye directamente en la conversión." },
+      { "id": "quality-seo", "rel": "addresses" }
+    ],
+    "sources": [], "evidence_type": "recommendation", "library_refs": ["landing"]
+  },
+  {
+    "id": "institutional-site", "slug": "institutional-site", "name": "Sitio institucional", "type": "product_type", "category": "Producto web", "depth": "full", "level": "beginner",
+    "summary": "El sitio de una empresa, estudio u organización: quiénes son, qué hacen, cómo contactarlos. Contenido relativamente estable con varias secciones.",
+    "problem_solved": "Dar presencia y credibilidad online a una organización y hacer que la encuentren cuando la buscan.",
+    "explanation": [
+      "Un sitio institucional es principalmente contenido: presentación, servicios, equipo, casos, contacto. Cambia a ritmo lento y lo suele editar alguien que no programa.",
+      "La decisión técnica central es quién edita el contenido y con qué frecuencia. Si casi nunca cambia, archivos estáticos. Si lo edita un equipo no técnico, un gestor de contenido (CMS) separa la edición del código.",
+      "El SEO local y la velocidad pesan más que cualquier funcionalidad avanzada."
+    ],
+    "how_it_works": ["Páginas de contenido generadas desde plantillas, con un formulario de contacto y, a veces, un blog o sección de noticias.", "Si hay edición frecuente, el contenido vive en un CMS y el sitio se regenera o se renderiza a partir de él."],
+    "when_to_use": ["Una organización necesita presencia y confianza online.", "El contenido es mayormente estable y público.", "El objetivo es que la encuentren y la contacten."],
+    "when_not_to_use": ["Se necesitan cuentas de usuario o datos por persona (es otro tipo de producto).", "Hay un solo objetivo de conversión y poco contenido (alcanza una landing)."],
+    "pros": ["Es de bajo riesgo técnico y de bajo costo operativo.", "Se beneficia mucho de SEO y de buena velocidad.", "Es fácil de entender y de mantener."],
+    "cons": ["Si el contenido se edita seguido sin un CMS, depender de un desarrollador se vuelve un cuello de botella.", "Sin contenido propio y actualizado, pierde valor rápido."],
+    "tradeoffs": ["Un CMS da autonomía de edición a cambio de otra pieza que mantener y asegurar.", "Más secciones dan más contenido que posicionar a cambio de más mantenimiento."],
+    "alternatives": [
+      { "id": "landing", "note": "Si hay un solo objetivo y poco contenido, una landing es más simple y convierte mejor." },
+      { "id": "saas", "note": "Si lo que se ofrece es un software con cuentas, ya no es un sitio de presentación." }
+    ],
+    "examples": [{ "kind": "educational_example", "label": "Estudio contable", "text": "Presentación del estudio, servicios, equipo, preguntas frecuentes y formulario de contacto, con contenido que se actualiza algunas veces al año." }],
+    "common_mistakes": ["Elegir una herramienta compleja para contenido que casi no cambia.", "Olvidar quién va a editar el contenido dentro de seis meses.", "Descuidar la accesibilidad y el rendimiento móvil."],
+    "decision_questions": ["¿Quién edita el contenido y cada cuánto?", "¿Cuánto del tráfico viene de buscadores?", "¿Hace falta algo más que mostrar información?"],
+    "related_entities": [
+      { "id": "ssg", "rel": "often_with" },
+      { "id": "static-site", "rel": "often_with" },
+      { "id": "quality-seo", "rel": "addresses" },
+      { "id": "quality-accessibility", "rel": "addresses" }
+    ],
+    "sources": [], "evidence_type": "recommendation", "library_refs": ["institucional"]
+  },
+  {
+    "id": "ecommerce", "slug": "ecommerce", "name": "E-commerce", "type": "product_type", "category": "Producto web", "depth": "full", "level": "intermediate",
+    "summary": "Una tienda online: catálogo, carrito, pago, stock y pedidos. Combina contenido público (que debe posicionar) con transacciones que no pueden fallar.",
+    "problem_solved": "Vender productos o servicios por internet de forma que el catálogo se encuentre, el pago funcione y los pedidos se gestionen.",
+    "explanation": [
+      "Un e-commerce junta dos mundos con necesidades distintas. El catálogo es contenido público que conviene servir rápido y optimizado para buscadores. El carrito, el pago y los pedidos son transacciones: tienen que ser correctas, seguras y recuperables ante un error.",
+      "Antes de construir hay que decidir si hace falta construir. Una plataforma de tienda ya hecha cubre catálogo, carrito, pagos e impuestos; construir a medida se justifica por reglas de negocio propias, integraciones específicas o una experiencia que la plataforma no permite.",
+      "Los puntos delicados casi nunca son técnicos de lujo: stock consistente, no cobrar dos veces, conciliar pagos, manejar impuestos y envíos."
+    ],
+    "how_it_works": ["El catálogo se sirve con renderizado optimizado para SEO; el carrito y el checkout manejan estado y consultan al backend.", "El backend guarda productos, stock y pedidos en una base de datos relacional, e integra un proveedor de pagos.", "Tareas como enviar correos, actualizar stock o sincronizar con un ERP suelen salir del flujo de la compra y correr en segundo plano."],
+    "when_to_use": ["Se venden productos o servicios con un proceso de compra completo.", "Se necesita controlar la experiencia, el stock o las reglas de precio.", "El catálogo es lo bastante grande como para que el posicionamiento importe."],
+    "when_not_to_use": ["Se venden pocos productos y una plataforma o un enlace de pago alcanza.", "No hay capacidad de mantener pagos, seguridad y cumplimiento (conviene una plataforma)."],
+    "pros": ["Control total de la experiencia y de las reglas de negocio.", "Los datos de clientes y ventas son propios.", "Se puede integrar con cualquier sistema."],
+    "cons": ["La superficie de riesgo es grande: pagos, datos personales y disponibilidad.", "Hay mucho trabajo no visible: impuestos, envíos, devoluciones, conciliación.", "Más costoso de mantener que usar una plataforma existente."],
+    "tradeoffs": ["Construir a medida da flexibilidad a cambio de asumir seguridad y mantenimiento de pagos.", "Servir el catálogo estático mejora velocidad y SEO a cambio de resolver cómo se actualiza el stock y el precio."],
+    "alternatives": [
+      { "id": "marketplace", "note": "Si hay varios vendedores en la misma plataforma, el modelo es otro: aparecen comisiones, confianza entre partes y pagos divididos." },
+      { "id": "landing", "note": "Para un solo producto con un enlace de pago, una landing alcanza." }
+    ],
+    "examples": [{ "kind": "educational_example", "label": "Tienda de indumentaria", "text": "Catálogo con filtros, carrito, pago con un proveedor externo, control de stock y correo de confirmación enviado en segundo plano." }],
+    "common_mistakes": ["Guardar datos de tarjetas en lugar de delegar en un proveedor de pagos.", "No manejar el caso de pagos duplicados o fallidos.", "Servir todo desde el cliente y perder el posicionamiento del catálogo."],
+    "decision_questions": ["¿Una plataforma existente cubre lo que necesito?", "¿Cuántos productos y qué tan seguido cambian precio y stock?", "¿Qué métodos de pago, impuestos y envíos hacen falta?", "¿Hay que integrar con otros sistemas (ERP, logística)?"],
+    "related_entities": [
+      { "id": "relational-database", "rel": "often_with", "note": "Pedidos, stock y pagos piden consistencia transaccional." },
+      { "id": "hybrid-rendering", "rel": "often_with" },
+      { "id": "message-queue", "rel": "often_with", "note": "Para correos, sincronizaciones y tareas fuera del flujo de compra." },
+      { "id": "search-engine", "rel": "often_with" },
+      { "id": "object-storage", "rel": "often_with" },
+      { "id": "quality-security", "rel": "addresses" },
+      { "id": "quality-reliability", "rel": "addresses" }
+    ],
+    "sources": [], "evidence_type": "recommendation", "library_refs": ["ecommerce", "ecommerce-saas"]
+  },
+  {
+    "id": "saas", "slug": "saas", "name": "SaaS", "type": "product_type", "category": "Producto web", "depth": "full", "level": "advanced",
+    "summary": "Un software ofrecido como servicio por suscripción: cuentas, planes, datos por cliente y mejoras continuas.",
+    "problem_solved": "Entregar una herramienta a muchos clientes sin que cada uno instale ni mantenga nada, y cobrar de forma recurrente.",
+    "explanation": [
+      "La diferencia con un sitio no es el tamaño: un SaaS tiene usuarios que entran, guardan datos propios y esperan que todo siga funcionando. Eso agrega autenticación, permisos, facturación y operación continua.",
+      "El concepto clave es la multi-tenencia: cómo conviven los datos de muchos clientes. Se puede separar por filas con un identificador de cliente, por esquema o por base. Cada opción cambia el aislamiento, el costo y la complejidad.",
+      "Casi siempre conviene empezar con una arquitectura simple y pagar la complejidad solo cuando hay una razón medida."
+    ],
+    "how_it_works": ["Una aplicación web con cuentas y roles, un backend con una base de datos y un modelo de datos que identifica a qué cliente pertenece cada dato.", "Un proveedor de pagos gestiona la suscripción; tareas en segundo plano manejan correos, informes y procesos largos."],
+    "when_to_use": ["El producto es un software que se usa de forma continua y se cobra por suscripción.", "Hay datos por cliente que deben estar aislados."],
+    "when_not_to_use": ["Es contenido o una presentación sin cuentas ni datos por usuario.", "Se trata de una herramienta interna de una sola organización (es un sistema de gestión)."],
+    "pros": ["Ingresos recurrentes y una única versión para mantener.", "Los clientes no instalan nada.", "Se puede mejorar el producto de forma continua."],
+    "cons": ["Mucha responsabilidad operativa: disponibilidad, seguridad y copias de seguridad.", "Complejidad de multi-tenencia, permisos y facturación.", "Los errores de aislamiento entre clientes son graves."],
+    "tradeoffs": ["Más aislamiento entre clientes da seguridad a cambio de costo y complejidad operativa.", "Empezar simple acelera el lanzamiento a cambio de refactorizar si el producto crece mucho."],
+    "alternatives": [
+      { "id": "management-system", "note": "Si lo usa una sola organización y no se vende como servicio, es un sistema de gestión, sin facturación ni multi-tenencia." },
+      { "id": "dashboard", "note": "Si solo se trata de visualizar datos existentes, un dashboard es más acotado." }
+    ],
+    "examples": [{ "kind": "educational_example", "label": "Herramienta de reservas para consultorios", "text": "Cada consultorio es un cliente con su agenda y sus pacientes; los datos están aislados y se cobra una suscripción mensual." }],
+    "common_mistakes": ["Mezclar los datos de clientes sin un identificador de tenant consistente en cada consulta.", "Construir microservicios antes de tener usuarios.", "Dejar la facturación y los permisos para el final."],
+    "decision_questions": ["¿Cuántos clientes y qué volumen de datos por cliente?", "¿Qué nivel de aislamiento exige la industria?", "¿Quién gestiona pagos, impuestos y facturas?", "¿Hay roles distintos dentro de cada cliente?"],
+    "related_entities": [
+      { "id": "modular-monolith", "rel": "often_with", "note": "Un buen punto de partida: simple de operar y con límites claros." },
+      { "id": "relational-database", "rel": "often_with" },
+      { "id": "authentication-and-authorization", "rel": "requires" },
+      { "id": "message-queue", "rel": "often_with" },
+      { "id": "quality-security", "rel": "addresses" },
+      { "id": "quality-scalability", "rel": "addresses" }
+    ],
+    "sources": [], "evidence_type": "recommendation", "library_refs": ["saas"]
+  },
+  {
+    "id": "dashboard", "slug": "dashboard", "name": "Dashboard", "type": "product_type", "category": "Producto web", "depth": "full", "level": "intermediate",
+    "summary": "Una interfaz para ver y entender datos: indicadores, gráficos y filtros que ayudan a tomar decisiones.",
+    "problem_solved": "Convertir datos dispersos en información que una persona puede leer rápido y sobre la cual decidir.",
+    "explanation": [
+      "El valor de un dashboard no está en los gráficos sino en qué decisión permite tomar. Un tablero con treinta indicadores que nadie usa es ruido. El diseño empieza por las preguntas que debe responder.",
+      "Técnicamente lo central son las fuentes de datos y su frescura: de dónde vienen, cada cuánto se actualizan y cuánto cuesta consultarlas. Calcular al vuelo sobre la base operativa puede degradar el sistema; precalcular agregados cambia el costo por frescura.",
+      "Si los datos son confidenciales, los permisos importan tanto como los gráficos."
+    ],
+    "how_it_works": ["Una capa de datos obtiene o precalcula métricas desde una o más fuentes.", "Una API las expone con filtros, y el cliente las muestra en gráficos y tablas.", "Si necesita datos casi en tiempo real, se agrega un canal de actualización."],
+    "when_to_use": ["Hay datos existentes y personas que necesitan decidir sobre ellos.", "Las preguntas a responder están claras."],
+    "when_not_to_use": ["No hay una decisión concreta que el tablero habilite.", "Los datos son pocos y una tabla o un informe periódico alcanza."],
+    "pros": ["Acelera decisiones al reunir la información en un solo lugar.", "Se puede construir de forma incremental, indicador por indicador."],
+    "cons": ["Fácil de sobrecargar con indicadores sin uso.", "Consultar datos operativos en vivo puede degradar el sistema de origen.", "La calidad de los datos limita su valor."],
+    "tradeoffs": ["Datos en tiempo real dan inmediatez a cambio de mayor costo y complejidad.", "Datos precalculados dan rapidez de consulta a cambio de cierta antigüedad."],
+    "alternatives": [
+      { "id": "management-system", "note": "Si además de ver datos hay que cargarlos y operar procesos, es un sistema de gestión." }
+    ],
+    "examples": [{ "kind": "educational_example", "label": "Tablero de ventas semanal", "text": "Ventas, conversión y margen por canal, con un comparativo semanal y alertas cuando un indicador cae fuera de su rango." }],
+    "common_mistakes": ["Mostrar todo lo que se puede medir en lugar de lo que sirve decidir.", "Consultar la base transaccional para cada gráfico sin pensar en el costo.", "No explicar cómo se calcula cada indicador."],
+    "decision_questions": ["¿Qué decisión ayuda a tomar cada indicador?", "¿Qué tan frescos tienen que ser los datos?", "¿Quién puede ver cada dato?"],
+    "related_entities": [
+      { "id": "relational-database", "rel": "often_with" },
+      { "id": "cache", "rel": "often_with" },
+      { "id": "websocket", "rel": "often_with", "note": "Solo si los datos deben actualizarse en vivo." },
+      { "id": "quality-performance", "rel": "addresses" }
+    ],
+    "sources": [], "evidence_type": "recommendation", "library_refs": ["dashboard"]
+  },
+  {
+    "id": "management-system", "slug": "management-system", "name": "Sistema de gestión", "type": "product_type", "category": "Producto web", "depth": "full", "level": "intermediate",
+    "summary": "Un sistema interno para operar un negocio: cargar datos, aplicar reglas, aprobar, reportar. Pocos usuarios, procesos complejos.",
+    "problem_solved": "Reemplazar planillas y mensajes sueltos por un lugar único donde los procesos del negocio se registran y se controlan.",
+    "explanation": [
+      "A diferencia de un SaaS, lo usa una sola organización y no necesita facturación ni multi-tenencia. A diferencia de un dashboard, no solo muestra: registra y hace cumplir reglas.",
+      "El riesgo mayor no es técnico sino de modelado: capturar bien los procesos reales, con sus excepciones. Un sistema que no refleja cómo se trabaja se abandona y vuelve la planilla.",
+      "Suele tener roles claros, historial de cambios y reportes. La usabilidad en tareas repetitivas pesa más que la estética."
+    ],
+    "how_it_works": ["Formularios y listados sobre un modelo de datos relacional, con reglas de validación y estados de cada proceso.", "Roles y permisos controlan quién ve y quién modifica; un registro de auditoría guarda quién cambió qué."],
+    "when_to_use": ["Una organización necesita ordenar procesos internos repetitivos.", "Hay reglas de negocio que deben cumplirse siempre."],
+    "when_not_to_use": ["Se quiere vender el sistema a muchas organizaciones (es un SaaS).", "Una planilla compartida ya resuelve bien el problema."],
+    "pros": ["Reduce errores y trabajo manual.", "Los procesos quedan documentados y auditables.", "Pocos usuarios simplifican la escala."],
+    "cons": ["Si el modelado de procesos es incorrecto, no se adopta.", "Cada excepción del negocio agrega complejidad."],
+    "tradeoffs": ["Más reglas en el sistema dan control a cambio de rigidez ante cambios del negocio."],
+    "alternatives": [
+      { "id": "saas", "note": "Si la intención es ofrecerlo a otras organizaciones como servicio, aparecen multi-tenencia y facturación." },
+      { "id": "dashboard", "note": "Si solo hace falta ver datos y no operar procesos." }
+    ],
+    "examples": [{ "kind": "educational_example", "label": "Control de pedidos y producción", "text": "Pedidos con estados, asignación a un responsable, historial de cambios y reporte semanal de atrasos." }],
+    "common_mistakes": ["Diseñar sin entender los procesos reales ni sus excepciones.", "No prever roles y permisos desde el inicio.", "Omitir el historial de cambios."],
+    "decision_questions": ["¿Qué procesos reemplaza y quién los hace hoy?", "¿Qué roles existen y qué puede hacer cada uno?", "¿Qué reportes se necesitan?"],
+    "related_entities": [
+      { "id": "monolith", "rel": "often_with" },
+      { "id": "relational-database", "rel": "often_with" },
+      { "id": "authentication-and-authorization", "rel": "requires" },
+      { "id": "quality-maintainability", "rel": "addresses" }
+    ],
+    "sources": [], "evidence_type": "recommendation", "library_refs": ["interna"]
+  },
+  {
+    "id": "marketplace", "slug": "marketplace", "name": "Marketplace", "type": "product_type", "category": "Producto web", "depth": "full", "level": "advanced",
+    "summary": "Una plataforma que conecta a vendedores y compradores. El negocio depende de la confianza, la liquidez y de dividir pagos entre las partes.",
+    "problem_solved": "Reunir oferta y demanda en un mismo lugar y facilitar la transacción entre partes que no se conocen.",
+    "explanation": [
+      "Un marketplace tiene dos lados con necesidades distintas: vendedores que publican y gestionan, compradores que buscan y compran. La plataforma es el intermediario y asume problemas que una tienda propia no tiene: reputación, disputas, comisiones y pagos divididos.",
+      "La dificultad central rara vez es la tecnología: es conseguir masa crítica de ambos lados. Técnicamente suma búsqueda potente, mensajería, perfiles, reseñas y un flujo de dinero que cumple normas financieras.",
+      "Conviene empezar muy acotado (un rubro, una región) y validar antes de construir toda la plataforma."
+    ],
+    "how_it_works": ["Perfiles y publicaciones de vendedores, búsqueda y filtros para compradores, y un flujo de compra que retiene el pago y lo libera según reglas.", "Un proveedor de pagos con soporte para pagos entre terceros evita manejar dinero directamente.", "Moderación, reseñas y gestión de disputas sostienen la confianza."],
+    "when_to_use": ["La propuesta de valor es conectar a dos partes y ya hay una forma de atraer a ambas.", "Se puede cobrar una comisión o suscripción que sostenga la operación."],
+    "when_not_to_use": ["Se vende un catálogo propio (es un e-commerce).", "No hay manera realista de conseguir oferta y demanda a la vez."],
+    "pros": ["Efectos de red: cada vendedor y comprador nuevo aumenta el valor para los demás.", "Escala sin tener inventario propio."],
+    "cons": ["Es el producto más complejo de los de esta lista: pagos divididos, confianza, moderación y disputas.", "El problema del huevo y la gallina: sin una parte, la otra no llega."],
+    "tradeoffs": ["Más herramientas para vendedores atraen oferta a cambio de más superficie a mantener.", "Retener pagos protege al comprador a cambio de complejidad financiera y legal."],
+    "alternatives": [
+      { "id": "ecommerce", "note": "Si hay un solo vendedor (uno mismo), un e-commerce es más simple y no necesita pagos divididos." },
+      { "id": "saas", "note": "Si se ofrece una herramienta y no se conecta a dos partes." }
+    ],
+    "examples": [{ "kind": "educational_example", "label": "Plataforma de servicios locales", "text": "Profesionales publican sus servicios, clientes los contratan por la plataforma, el pago se retiene hasta confirmar el trabajo y se cobra una comisión." }],
+    "common_mistakes": ["Construir toda la plataforma sin validar que ambas partes lleguen.", "Manejar dinero propio en lugar de usar un proveedor adecuado.", "Subestimar la moderación y las disputas."],
+    "decision_questions": ["¿Cómo se consigue la primera oferta y la primera demanda?", "¿Cómo se paga a los vendedores y cómo se cobra la comisión?", "¿Quién resuelve las disputas?"],
+    "related_entities": [
+      { "id": "search-engine", "rel": "often_with" },
+      { "id": "relational-database", "rel": "often_with" },
+      { "id": "message-queue", "rel": "often_with" },
+      { "id": "authentication-and-authorization", "rel": "requires" },
+      { "id": "quality-security", "rel": "addresses" },
+      { "id": "quality-reliability", "rel": "addresses" }
+    ],
+    "sources": [], "evidence_type": "recommendation", "library_refs": ["marketplace"]
+  }
+]

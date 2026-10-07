@@ -1,0 +1,614 @@
+[
+ [
+  "carga index.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga herramientas.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga rentabilidad.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga importar.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga perdida.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga informe-muestra.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga sistema.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga lab.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga acos.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga anatomia.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga excels.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga imagenes.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga metricas.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga pricing.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga reputacion.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga seo.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga web.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga armar.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga programacion.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga contacto.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga vinculado.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga 404.html",
+  true,
+  "200 []"
+ ],
+ [
+  "carga admin.html",
+  true,
+  "200 []"
+ ],
+ [
+  "header: 4 elementos principales",
+  true,
+  [
+   "Trayectoria",
+   "Mercado Libre",
+   "Desarrollo web",
+   "Contacto"
+  ]
+ ],
+ [
+  "header: padres son enlaces reales",
+  true,
+  [
+   "index.html#experiencia",
+   "herramientas.html",
+   "web.html",
+   "contacto.html"
+  ]
+ ],
+ [
+  "submenú cerrado al inicio",
+  true,
+  ""
+ ],
+ [
+  "hover abre ML",
+  true,
+  ""
+ ],
+ [
+  "ML: Hacer/Aprender/Entender completos",
+  true,
+  [
+   "Herramientas",
+   "Chequeo de publicación",
+   "Rentabilidad",
+   "Importación",
+   "Pérdida en publicidad",
+   "Auditoría de cuenta",
+   "Informe de muestra",
+   "Guías",
+   "Cómo trabajo"
+  ]
+ ],
+ [
+  "al salir el mouse se cierra",
+  true,
+  ""
+ ],
+ [
+  "teclado: Tab llega al botón ▾ de ML",
+  true,
+  "nav-toggle"
+ ],
+ [
+  "teclado: foco por teclado abre el submenú",
+  true,
+  ""
+ ],
+ [
+  "teclado: Tab entra al submenú",
+  true,
+  "Herramientas"
+ ],
+ [
+  "foco visible en enlaces del submenú",
+  true,
+  "solid"
+ ],
+ [
+  "Escape cierra y devuelve el foco al padre",
+  true,
+  ""
+ ],
+ [
+  "en una guía: «Guías» marcado actual",
+  true,
+  [
+   "Guías"
+  ]
+ ],
+ [
+  "en una guía: padre ML marcado (aria-current=true)",
+  true,
+  ""
+ ],
+ [
+  "clic en padre «Desarrollo web» navega a web.html",
+  true,
+  "http://localhost:4173/web.html"
+ ],
+ [
+  "herramientas: por defecto abre tracker",
+  true,
+  ""
+ ],
+ [
+  "desde el menú, #chequeo abre el Chequeo sin recargar",
+  true,
+  ""
+ ],
+ [
+  "botón del Chequeo ya no dice «Mirar»",
+  true,
+  ""
+ ],
+ [
+  "Chequeo: renderiza el resultado",
+  true,
+  ""
+ ],
+ [
+  "Chequeo: ofrece guardar/compartir (resultadoId)",
+  true,
+  ""
+ ],
+ [
+  "herramientas.html#chequeo abre el Chequeo",
+  true,
+  ""
+ ],
+ [
+  "?r= de rentabilidad redirige a rentabilidad.html?r=",
+  true,
+  "http://localhost:4173/rentabilidad.html?r=mockrent"
+ ],
+ [
+  "?r= de chequeo se dibuja en herramientas",
+  true,
+  ""
+ ],
+ [
+  "Rentabilidad: el ejemplo calcula un resultado",
+  true,
+  "Resultado\n\nCalculado en tu navegador\n\nGanás $ 3.635 por unidad\n\nMargen 24,2% sob"
+ ],
+ [
+  "sistema: orden de bloques",
+  true,
+  [
+   "demo",
+   "diagnostico",
+   "metodo",
+   "skills",
+   "sistemas",
+   "prompts",
+   "stack",
+   "auditar",
+   "tendencias"
+  ]
+ ],
+ [
+  "sistema: ancla #auditar existe",
+  true,
+  ""
+ ],
+ [
+  "sistema: ancla #demo existe",
+  true,
+  ""
+ ],
+ [
+  "sistema: ancla #diagnostico existe",
+  true,
+  ""
+ ],
+ [
+  "sistema: ancla #tendencias existe",
+  true,
+  ""
+ ],
+ [
+  "sistema: sin formulario de Chequeo duplicado",
+  true,
+  ""
+ ],
+ [
+  "sistema: CTA a herramientas.html#chequeo",
+  true,
+  ""
+ ],
+ [
+  "sistema: Auditoría intacta (au-cform, au-out, au-caminos)",
+  true,
+  ""
+ ],
+ [
+  "sistema: demo del Tracker cargó",
+  true,
+  "Visitas\n21.861\n▼ 3%\nVentas\n748\n▼ 8%\nFacturación\n$24.662.300\n"
+ ],
+ [
+  "sistema: título h1 «Cómo trabajo»",
+  true,
+  ""
+ ],
+ [
+  "retorno ?auditoria=cancelada muestra el mensaje",
+  true,
+  ""
+ ],
+ [
+  "retorno ?auditoria=error muestra el mensaje",
+  true,
+  ""
+ ],
+ [
+  "retorno ?auditoria=<id> consulta el estado y muestra la salud",
+  true,
+  "71\n/100\n\nAna, esta es la salud de TEST\n\n3 publicaciones activas analizadas. Enco"
+ ],
+ [
+  "la consulta fue a /api/audit?action=estado",
+  true,
+  ""
+ ],
+ [
+  "contacto ?asunto=rentabilidad precarga mensaje",
+  true,
+  "Hola Darío, vi tus herramientas y me interesa revisar la rentabilidad "
+ ],
+ [
+  "contacto ?asunto=importacion precarga mensaje",
+  true,
+  "Hola Darío, usé la calculadora de importación de tu web y quiero anali"
+ ],
+ [
+  "contacto ?asunto=acos precarga mensaje",
+  true,
+  "Hola Darío, usé la calculadora de Product Ads de tu web y quiero bajar"
+ ],
+ [
+  "contacto ?asunto=opiniones precarga mensaje",
+  true,
+  "Hola Darío, vi tus herramientas y me interesa el análisis de opiniones"
+ ],
+ [
+  "contacto ?asunto=auditoria&pub= incluye la publicación",
+  true,
+  "Hola Darío, usé la auditoría gratis de tu web y quiero la auditoría completa de mi cuenta de Mercado Libre.\nLa publicaci"
+ ],
+ [
+  "contacto «Quiero algo así» dice Biblioteca web",
+  true,
+  "Hola Darío, vi «Landing» en tu Biblioteca web y quiero algo así para mi negocio.\nMi caso: "
+ ],
+ [
+  "ia.html → sistema.html",
+  true,
+  "http://localhost:4173/sistema.html"
+ ],
+ [
+  "tracker.html → herramientas.html#tracker",
+  true,
+  "http://localhost:4173/herramientas.html#tracker"
+ ],
+ [
+  "ruta inexistente responde 404 (el dev-server no sirve 404.html; Vercel sí)",
+  true,
+  404
+ ],
+ [
+  "404.html: muestra el código",
+  true,
+  ""
+ ],
+ [
+  "404: enlaces actualizados",
+  true,
+  ""
+ ],
+ [
+  "vinculado: link «Ir al inicio»",
+  true,
+  ""
+ ],
+ [
+  "programacion: h1 «Biblioteca web»",
+  true,
+  "Biblioteca web"
+ ],
+ [
+  "programacion: title nuevo",
+  true,
+  "Biblioteca web: herramientas, funcionalidades y proyectos | Darío Colángelo"
+ ],
+ [
+  "home: sección «Lo que construí» con 4 enlaces",
+  true,
+  ""
+ ],
+ [
+  "home: ids administrables = los del baseline (solo el-csub; el resto ya no existía antes de esta fase)",
+  true,
+  [
+   "el-csub"
+  ]
+ ],
+ [
+  "home: orden — #construi entre #habilidades y #valor-prop",
+  true,
+  ""
+ ],
+ [
+  "sin «Lab ML»/«Base de datos»/«Lab de Programación» visibles en index",
+  true,
+  []
+ ],
+ [
+  "sin «Lab ML»/«Base de datos»/«Lab de Programación» visibles en lab",
+  true,
+  []
+ ],
+ [
+  "sin «Lab ML»/«Base de datos»/«Lab de Programación» visibles en sistema",
+  true,
+  []
+ ],
+ [
+  "sin «Lab ML»/«Base de datos»/«Lab de Programación» visibles en web",
+  true,
+  []
+ ],
+ [
+  "sin «Lab ML»/«Base de datos»/«Lab de Programación» visibles en contacto",
+  true,
+  []
+ ],
+ [
+  "sin «Lab ML»/«Base de datos»/«Lab de Programación» visibles en herramientas",
+  true,
+  []
+ ],
+ [
+  "footer: 4 columnas",
+  true,
+  [
+   [
+    "Darío Colángelo",
+    [
+     "Trayectoria",
+     "Casos",
+     "CV en PDF",
+     "LinkedIn"
+    ]
+   ],
+   [
+    "Mercado Libre",
+    [
+     "Chequeo de publicación",
+     "Rentabilidad",
+     "Importación",
+     "Pérdida en publicidad",
+     "Auditoría de cuenta",
+     "Informe de muestra",
+     "Guías",
+     "Cómo trabajo"
+    ]
+   ],
+   [
+    "Desarrollo web",
+    [
+     "Revisá tu web",
+     "Armá tu web",
+     "Biblioteca web"
+    ]
+   ],
+   [
+    "Contacto",
+    [
+     "WhatsApp",
+     "Email",
+     "Formulario"
+    ]
+   ]
+  ]
+ ],
+ [
+  "footer: contenido según spec",
+  true,
+  [
+   [
+    "Darío Colángelo",
+    [
+     "Trayectoria",
+     "Casos",
+     "CV en PDF",
+     "LinkedIn"
+    ]
+   ],
+   [
+    "Mercado Libre",
+    [
+     "Chequeo de publicación",
+     "Rentabilidad",
+     "Importación",
+     "Pérdida en publicidad",
+     "Auditoría de cuenta",
+     "Informe de muestra",
+     "Guías",
+     "Cómo trabajo"
+    ]
+   ],
+   [
+    "Desarrollo web",
+    [
+     "Revisá tu web",
+     "Armá tu web",
+     "Biblioteca web"
+    ]
+   ],
+   [
+    "Contacto",
+    [
+     "WhatsApp",
+     "Email",
+     "Formulario"
+    ]
+   ]
+  ]
+ ],
+ [
+  "menú+pie: 18 enlaces internos válidos",
+  true,
+  []
+ ],
+ [
+  "móvil: menú de escritorio oculto, hamburguesa visible",
+  true,
+  ""
+ ],
+ [
+  "móvil: hamburguesa abre el menú",
+  true,
+  ""
+ ],
+ [
+  "móvil: grupo de la página actual (ML) abierto, el otro cerrado",
+  true,
+  ""
+ ],
+ [
+  "móvil: ▾ abre «Desarrollo web»",
+  true,
+  ""
+ ],
+ [
+  "móvil: ▾ vuelve a cerrar",
+  true,
+  ""
+ ],
+ [
+  "móvil: sin scroll horizontal",
+  true,
+  ""
+ ],
+ [
+  "móvil: enlace del submenú navega",
+  true,
+  "http://localhost:4173/armar.html"
+ ],
+ [
+  "móvil: index sin scroll horizontal",
+  true,
+  390
+ ],
+ [
+  "móvil: herramientas sin scroll horizontal",
+  true,
+  390
+ ],
+ [
+  "móvil: sistema sin scroll horizontal",
+  true,
+  390
+ ],
+ [
+  "sin JS: hover abre el submenú (CSS)",
+  true,
+  ""
+ ],
+ [
+  "sin JS: el padre navega a herramientas.html",
+  true,
+  "http://localhost:4173/herramientas.html"
+ ],
+ [
+  "sin JS: foco por teclado abre el submenú (CSS)",
+  true,
+  ""
+ ],
+ [
+  "sin JS: el pie sigue entregando el índice completo",
+  true,
+  ""
+ ]
+]

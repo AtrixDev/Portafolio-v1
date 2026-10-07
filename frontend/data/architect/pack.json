@@ -1,0 +1,958 @@
+{
+ "version": 1,
+ "data_models": {
+  "landing": {
+   "entities": [
+    {
+     "name": "Contacto (mensaje)",
+     "fields": [
+      "nombre",
+      "email o teléfono",
+      "mensaje",
+      "fecha",
+      "origen (campaña)"
+     ],
+     "note": "Si el formulario lo maneja un servicio externo, esta entidad vive allá y no en una base propia."
+    }
+   ],
+   "relations": []
+  },
+  "institutional-site": {
+   "entities": [
+    {
+     "name": "Página",
+     "fields": [
+      "título",
+      "contenido",
+      "slug",
+      "estado de publicación"
+     ]
+    },
+    {
+     "name": "Entrada (opcional)",
+     "fields": [
+      "título",
+      "resumen",
+      "contenido",
+      "fecha"
+     ]
+    },
+    {
+     "name": "Contacto (mensaje)",
+     "fields": [
+      "nombre",
+      "email",
+      "mensaje",
+      "fecha"
+     ]
+    }
+   ],
+   "relations": []
+  },
+  "ecommerce": {
+   "entities": [
+    {
+     "name": "Cliente",
+     "fields": [
+      "nombre",
+      "email",
+      "dirección",
+      "teléfono"
+     ]
+    },
+    {
+     "name": "Producto",
+     "fields": [
+      "nombre",
+      "descripción",
+      "precio",
+      "stock",
+      "imágenes",
+      "categoría"
+     ]
+    },
+    {
+     "name": "Pedido",
+     "fields": [
+      "cliente",
+      "estado",
+      "total",
+      "fecha",
+      "dirección de envío"
+     ]
+    },
+    {
+     "name": "Línea de pedido",
+     "fields": [
+      "pedido",
+      "producto",
+      "cantidad",
+      "precio al momento de la compra"
+     ]
+    },
+    {
+     "name": "Pago",
+     "fields": [
+      "pedido",
+      "proveedor",
+      "identificador externo",
+      "estado",
+      "monto"
+     ]
+    }
+   ],
+   "relations": [
+    "Cliente 1—N Pedido",
+    "Pedido 1—N Línea de pedido",
+    "Producto 1—N Línea de pedido",
+    "Pedido 1—N Pago"
+   ]
+  },
+  "saas": {
+   "entities": [
+    {
+     "name": "Organización (tenant)",
+     "fields": [
+      "nombre",
+      "plan",
+      "estado",
+      "fecha de alta"
+     ]
+    },
+    {
+     "name": "Usuario",
+     "fields": [
+      "organización",
+      "email",
+      "rol",
+      "estado"
+     ]
+    },
+    {
+     "name": "Suscripción",
+     "fields": [
+      "organización",
+      "plan",
+      "estado",
+      "período actual",
+      "identificador del proveedor de pagos"
+     ]
+    },
+    {
+     "name": "Recurso principal del producto",
+     "fields": [
+      "organización",
+      "datos propios del dominio",
+      "creado por",
+      "fechas"
+     ],
+     "note": "El corazón del producto: se define con el dominio concreto."
+    }
+   ],
+   "relations": [
+    "Organización 1—N Usuario",
+    "Organización 1—N Suscripción",
+    "Organización 1—N Recurso principal"
+   ]
+  },
+  "dashboard": {
+   "entities": [
+    {
+     "name": "Fuente de datos",
+     "fields": [
+      "nombre",
+      "tipo",
+      "credenciales (guardadas de forma segura)",
+      "última sincronización"
+     ]
+    },
+    {
+     "name": "Métrica",
+     "fields": [
+      "nombre",
+      "definición o fórmula",
+      "unidad",
+      "fuente"
+     ]
+    },
+    {
+     "name": "Medición",
+     "fields": [
+      "métrica",
+      "valor",
+      "fecha",
+      "dimensiones (por ejemplo, canal)"
+     ]
+    },
+    {
+     "name": "Tablero",
+     "fields": [
+      "nombre",
+      "métricas incluidas",
+      "filtros",
+      "propietario"
+     ]
+    }
+   ],
+   "relations": [
+    "Fuente de datos 1—N Métrica",
+    "Métrica 1—N Medición",
+    "Tablero N—N Métrica"
+   ]
+  },
+  "management-system": {
+   "entities": [
+    {
+     "name": "Usuario",
+     "fields": [
+      "nombre",
+      "email",
+      "rol"
+     ]
+    },
+    {
+     "name": "Entidad de negocio principal",
+     "fields": [
+      "estado",
+      "responsable",
+      "datos del dominio",
+      "fechas"
+     ],
+     "note": "Por ejemplo: pedido, caso, orden de trabajo."
+    },
+    {
+     "name": "Historial de cambios",
+     "fields": [
+      "entidad",
+      "quién",
+      "qué cambió",
+      "cuándo"
+     ],
+     "note": "Permite auditar quién hizo qué."
+    },
+    {
+     "name": "Adjunto",
+     "fields": [
+      "entidad",
+      "archivo",
+      "tipo",
+      "tamaño"
+     ]
+    }
+   ],
+   "relations": [
+    "Usuario 1—N Entidad principal (responsable)",
+    "Entidad principal 1—N Historial",
+    "Entidad principal 1—N Adjunto"
+   ]
+  },
+  "marketplace": {
+   "entities": [
+    {
+     "name": "Usuario",
+     "fields": [
+      "email",
+      "rol (comprador, vendedor o ambos)",
+      "estado"
+     ]
+    },
+    {
+     "name": "Vendedor (perfil)",
+     "fields": [
+      "usuario",
+      "nombre comercial",
+      "datos de cobro (en el proveedor de pagos)",
+      "reputación"
+     ]
+    },
+    {
+     "name": "Publicación",
+     "fields": [
+      "vendedor",
+      "título",
+      "descripción",
+      "precio",
+      "estado"
+     ]
+    },
+    {
+     "name": "Pedido",
+     "fields": [
+      "comprador",
+      "publicación",
+      "estado",
+      "monto",
+      "comisión"
+     ]
+    },
+    {
+     "name": "Pago dividido",
+     "fields": [
+      "pedido",
+      "vendedor",
+      "monto",
+      "comisión",
+      "estado de liberación"
+     ]
+    },
+    {
+     "name": "Reseña",
+     "fields": [
+      "pedido",
+      "autor",
+      "puntaje",
+      "comentario"
+     ]
+    },
+    {
+     "name": "Disputa",
+     "fields": [
+      "pedido",
+      "motivo",
+      "estado",
+      "resolución"
+     ]
+    }
+   ],
+   "relations": [
+    "Vendedor 1—N Publicación",
+    "Pedido N—1 Publicación",
+    "Pedido 1—N Pago dividido",
+    "Pedido 1—N Reseña",
+    "Pedido 1—N Disputa"
+   ]
+  },
+  "other": {
+   "entities": [
+    {
+     "name": "Usuario",
+     "fields": [
+      "identificador",
+      "datos de acceso (si hay cuentas)"
+     ]
+    },
+    {
+     "name": "Entidades del dominio",
+     "fields": [
+      "a definir con las preguntas de abajo"
+     ],
+     "note": "Definí primero los sustantivos del problema: qué cosas existen y cómo se relacionan."
+    }
+   ],
+   "relations": []
+  }
+ },
+ "extra_entities": [
+  {
+   "when": {
+    "s": "auth",
+    "in": [
+     "roles",
+     "multi_tenant"
+    ]
+   },
+   "entity": {
+    "name": "Rol y permisos",
+    "fields": [
+     "rol",
+     "permisos",
+     "asignado a"
+    ],
+    "note": "La autorización se modela con datos: no la dejes dispersa en el código."
+   }
+  },
+  {
+   "when": {
+    "s": "auth",
+    "is": "multi_tenant"
+   },
+   "entity": {
+    "name": "Organización (tenant)",
+    "fields": [
+     "nombre",
+     "configuración"
+    ],
+    "note": "Cada dato del dominio debe identificar a qué organización pertenece."
+   }
+  },
+  {
+   "when": {
+    "s": "files",
+    "in": [
+     "uploads",
+     "media_heavy"
+    ]
+   },
+   "entity": {
+    "name": "Archivo",
+    "fields": [
+     "propietario",
+     "clave en el almacenamiento",
+     "tipo",
+     "tamaño",
+     "visibilidad"
+    ],
+    "note": "La base guarda solo la referencia; el archivo vive en el almacenamiento de objetos."
+   }
+  }
+ ],
+ "structures": [
+  {
+   "when": {
+    "d": "architecture",
+    "is": "no-backend"
+   },
+   "title": "Sitio estático",
+   "tree": "/\n├─ src/            contenido y plantillas (o los HTML)\n├─ assets/         imágenes, fuentes, estilos\n├─ public/         archivos que se publican tal cual\n├─ tests/          verificaciones de enlaces y accesibilidad\n└─ README.md       cómo construir y publicar"
+  },
+  {
+   "when": {
+    "d": "architecture",
+    "is": "modular-monolith"
+   },
+   "title": "Monolito modular",
+   "tree": "/\n├─ src/\n│  ├─ modules/\n│  │  ├─ <capacidad-a>/    interfaz pública, lógica y datos propios\n│  │  ├─ <capacidad-b>/\n│  │  └─ shared/           solo lo realmente común (tipos, utilidades)\n│  ├─ web/                 rutas, controladores y vistas\n│  └─ main                 arranque y configuración\n├─ tests/                  unitarias por módulo + integración + E2E\n├─ docs/decisions/         ADR\n└─ README.md"
+  },
+  {
+   "when": {
+    "d": "architecture",
+    "is": "web-queue-worker"
+   },
+   "title": "Frontend web + trabajador",
+   "tree": "/\n├─ src/\n│  ├─ web/                 API y vistas\n│  ├─ worker/              procesadores de tareas de la cola\n│  ├─ domain/              reglas de negocio compartidas, con contrato\n│  └─ infra/               base de datos, cola, almacenamiento\n├─ tests/\n├─ docs/decisions/\n└─ README.md"
+  },
+  {
+   "when": {
+    "d": "architecture",
+    "is": "microservices"
+   },
+   "title": "Servicios independientes",
+   "tree": "/\n├─ services/\n│  ├─ <servicio-a>/        código, datos y despliegue propios\n│  └─ <servicio-b>/\n├─ gateway/                punto de entrada\n├─ contracts/              esquemas de API y de eventos versionados\n├─ platform/               despliegue, observabilidad, CI/CD\n├─ docs/decisions/\n└─ README.md"
+  },
+  {
+   "when": {
+    "d": "architecture",
+    "is": "event-driven"
+   },
+   "title": "Orientado a eventos",
+   "tree": "/\n├─ services/               productores y consumidores\n├─ events/                 catálogo y versiones de los eventos (contrato)\n├─ platform/               broker, observabilidad, despliegue\n├─ docs/decisions/\n└─ README.md"
+  },
+  {
+   "when": null,
+   "title": "Monolito",
+   "tree": "/\n├─ src/\n│  ├─ routes/ o pages/     entrada HTTP\n│  ├─ services/            reglas de negocio\n│  ├─ data/                acceso a la base de datos y migraciones\n│  └─ lib/                 utilidades\n├─ tests/                  unitarias + integración + E2E de flujos críticos\n├─ docs/decisions/         ADR\n└─ README.md"
+  }
+ ],
+ "roadmap": [
+  {
+   "id": "descubrimiento",
+   "title": "Fase 0 · Descubrimiento",
+   "goal": "Acordar qué se construye y para quién, antes de escribir código.",
+   "tasks": [
+    {
+     "text": "Escribir el problema, los usuarios y el criterio de éxito en una página."
+    },
+    {
+     "text": "Listar las funcionalidades y marcar cuáles son imprescindibles para una primera versión."
+    },
+    {
+     "text": "Confirmar los supuestos del Project Builder y responder las preguntas abiertas.",
+     "when": {
+      "known": "product"
+     }
+    },
+    {
+     "text": "Definir el plazo y qué se recorta si el plazo aprieta.",
+     "when": {
+      "s": "time",
+      "is": "urgent"
+     }
+    }
+   ],
+   "exit": [
+    "Hay un alcance de primera versión que cabe en el plazo.",
+    "Las preguntas abiertas críticas tienen respuesta o un responsable."
+   ]
+  },
+  {
+   "id": "fundaciones",
+   "title": "Fase 1 · Fundaciones",
+   "goal": "Dejar listo el esqueleto: repositorio, entorno, despliegue y pruebas.",
+   "tasks": [
+    {
+     "text": "Crear el repositorio, la estructura de carpetas sugerida y el README."
+    },
+    {
+     "text": "Configurar la integración continua: correr las pruebas en cada cambio."
+    },
+    {
+     "text": "Configurar el despliegue de un «hola mundo» de punta a punta."
+    },
+    {
+     "text": "Crear la base de datos, el esquema inicial y el mecanismo de migraciones.",
+     "when": {
+      "d": "data_store",
+      "in": [
+       "relational-database",
+       "nosql-database"
+      ]
+     }
+    },
+    {
+     "text": "Configurar el almacenamiento de archivos con acceso privado por defecto.",
+     "when": {
+      "d": "data_layers",
+      "is": "object-storage"
+     }
+    },
+    {
+     "text": "Elegir el proveedor de identidad o el módulo de acceso, y resolver el alta y el ingreso.",
+     "when": {
+      "d": "identity_security",
+      "is": "authentication-and-authorization"
+     }
+    },
+    {
+     "text": "Registrar las decisiones de arquitectura como ADR en el repositorio."
+    },
+    {
+     "text": "Configurar registros estructurados y una alerta sobre los errores del flujo principal.",
+     "when": {
+      "d": "operations",
+      "is": "logs-metrics-traces"
+     }
+    }
+   ],
+   "exit": [
+    "Un cambio pequeño recorre commit, pruebas y despliegue sin pasos manuales.",
+    "Las decisiones iniciales están escritas."
+   ]
+  },
+  {
+   "id": "nucleo",
+   "title": "Fase 2 · Funcionalidad central",
+   "goal": "Construir el flujo principal que da valor, de punta a punta, y nada más.",
+   "tasks": [
+    {
+     "text": "Implementar el flujo principal con pruebas unitarias de las reglas de negocio."
+    },
+    {
+     "text": "Integrar el proveedor de pagos y diseñar para pagos duplicados, fallidos y reembolsos.",
+     "when": {
+      "s": "payments",
+      "not": "none"
+     }
+    },
+    {
+     "text": "Modelar el aislamiento entre organizaciones y probarlo de forma explícita.",
+     "when": {
+      "s": "auth",
+      "is": "multi_tenant"
+     }
+    },
+    {
+     "text": "Implementar la cola y el trabajador, con reintentos limitados e idempotencia.",
+     "when": {
+      "d": "communication",
+      "is": "message-queue"
+     }
+    },
+    {
+     "text": "Implementar las actualizaciones en vivo, con reconexión.",
+     "when": {
+      "d": "communication",
+      "is": "websocket"
+     }
+    },
+    {
+     "text": "Implementar el catálogo y la búsqueda.",
+     "when": {
+      "s": "product",
+      "in": [
+       "ecommerce",
+       "marketplace"
+      ]
+     }
+    },
+    {
+     "text": "Implementar la funcionalidad de IA con validación de salida y límites.",
+     "when": {
+      "s": "ai",
+      "not": "none"
+     }
+    }
+   ],
+   "exit": [
+    "Una persona real puede completar el flujo principal.",
+    "Las pruebas del flujo principal pasan en integración continua."
+   ]
+  },
+  {
+   "id": "endurecimiento",
+   "title": "Fase 3 · Endurecimiento",
+   "goal": "Hacerlo confiable: seguridad, pruebas, rendimiento y accesibilidad.",
+   "tasks": [
+    {
+     "text": "Revisar la lista de riesgos de seguridad de abajo y cerrar los que apliquen."
+    },
+    {
+     "text": "Agregar pruebas de punta a punta de los flujos críticos.",
+     "when": {
+      "d": "testing",
+      "is": "e2e-testing"
+     }
+    },
+    {
+     "text": "Medir el rendimiento de las páginas principales en un dispositivo y una red modestos."
+    },
+    {
+     "text": "Revisar la accesibilidad: teclado, foco visible, contraste, etiquetas de formularios."
+    },
+    {
+     "text": "Verificar con requisitos concretos de seguridad (ASVS) los controles de acceso y de datos.",
+     "when": {
+      "d": "identity_security",
+      "is": "owasp-asvs"
+     }
+    },
+    {
+     "text": "Probar la restauración de las copias de seguridad.",
+     "when": {
+      "any": [
+       {
+        "s": "payments",
+        "not": "none"
+       },
+       {
+        "s": "auth",
+        "not": "none"
+       }
+      ]
+     }
+    }
+   ],
+   "exit": [
+    "No quedan riesgos de seguridad críticos abiertos.",
+    "Los flujos críticos tienen pruebas y alertas."
+   ]
+  },
+  {
+   "id": "lanzamiento",
+   "title": "Fase 4 · Lanzamiento y aprendizaje",
+   "goal": "Salir a producción con un grupo acotado, medir y corregir.",
+   "tasks": [
+    {
+     "text": "Lanzar a un grupo reducido y observar el uso real."
+    },
+    {
+     "text": "Definir los indicadores que dicen si funciona y dónde se miran."
+    },
+    {
+     "text": "Revisar cada decisión de arquitectura contra lo que se aprendió (condiciones para reconsiderar)."
+    },
+    {
+     "text": "Planificar la siguiente iteración con lo medido, no con lo supuesto."
+    }
+   ],
+   "exit": [
+    "Hay datos reales de uso.",
+    "La siguiente iteración está priorizada."
+   ]
+  }
+ ],
+ "definition_of_done": [
+  {
+   "text": "El flujo principal funciona de punta a punta y está cubierto por pruebas automáticas."
+  },
+  {
+   "text": "Las pruebas pasan en integración continua y el despliegue es automático."
+  },
+  {
+   "text": "Los riesgos de seguridad aplicables de la lista están cerrados o tienen un responsable y una fecha."
+  },
+  {
+   "text": "Los permisos se verifican en el servidor para cada acción protegida.",
+   "when": {
+    "s": "auth",
+    "not": "none"
+   }
+  },
+  {
+   "text": "Los pagos duplicados, fallidos y reembolsos están probados.",
+   "when": {
+    "s": "payments",
+    "not": "none"
+   }
+  },
+  {
+   "text": "La accesibilidad básica está verificada (teclado, foco, contraste, etiquetas)."
+  },
+  {
+   "text": "La velocidad de carga de las páginas principales está medida y es aceptable.",
+   "when": {
+    "s": "public_seo",
+    "is": "yes"
+   }
+  },
+  {
+   "text": "Las decisiones de arquitectura están registradas como ADR y revisadas."
+  },
+  {
+   "text": "Hay registros y alertas sobre los síntomas que importan."
+  },
+  {
+   "text": "El README explica cómo ejecutar, probar y desplegar."
+  }
+ ],
+ "security_checklist": [
+  {
+   "text": "Control de acceso: cada recurso verifica en el servidor que la persona tenga permiso; nunca confiar en lo que oculta la interfaz.",
+   "when": {
+    "s": "auth",
+    "not": "none"
+   },
+   "ref": "A01:2025 Broken Access Control"
+  },
+  {
+   "text": "Configuración: sin credenciales por defecto, sin información de depuración en producción, cabeceras de seguridad y permisos mínimos.",
+   "ref": "A02:2025 Security Misconfiguration"
+  },
+  {
+   "text": "Cadena de suministro: dependencias fijadas y auditadas, y la integración continua con permisos mínimos.",
+   "ref": "A03:2025 Software Supply Chain Failures"
+  },
+  {
+   "text": "Criptografía: contraseñas con un hash adecuado (o delegadas), datos sensibles cifrados en tránsito y en reposo, secretos fuera del código.",
+   "when": {
+    "s": "auth",
+    "not": "none"
+   },
+   "ref": "A04:2025 Cryptographic Failures"
+  },
+  {
+   "text": "Inyección: consultas parametrizadas y validación de toda entrada; nunca armar consultas concatenando datos del usuario.",
+   "when": {
+    "not": {
+     "d": "architecture",
+     "is": "no-backend"
+    }
+   },
+   "ref": "A05:2025 Injection"
+  },
+  {
+   "text": "Diseño: modelar amenazas del flujo principal antes de implementarlo (qué podría hacer alguien malicioso).",
+   "ref": "A06:2025 Insecure Design"
+  },
+  {
+   "text": "Autenticación: límite de intentos, recuperación de acceso segura y, si corresponde, segundo factor.",
+   "when": {
+    "s": "auth",
+    "not": "none"
+   },
+   "ref": "A07:2025 Authentication Failures"
+  },
+  {
+   "text": "Integridad: verificar la integridad de lo que se actualiza y deserializa, y validar las firmas de los avisos del proveedor de pagos.",
+   "when": {
+    "s": "payments",
+    "not": "none"
+   },
+   "ref": "A08:2025 Software or Data Integrity Failures"
+  },
+  {
+   "text": "Registro y alertas: registrar los eventos de seguridad (ingresos fallidos, cambios de permisos) sin guardar datos personales ni secretos.",
+   "when": {
+    "s": "auth",
+    "not": "none"
+   },
+   "ref": "A09:2025 Security Logging and Alerting Failures"
+  },
+  {
+   "text": "Manejo de errores: los errores no exponen detalles internos y el sistema falla de forma segura.",
+   "ref": "A10:2025 Mishandling of Exceptional Conditions"
+  },
+  {
+   "text": "Archivos subidos: validar tipo y tamaño, no ejecutarlos y no hacerlos públicos por defecto.",
+   "when": {
+    "s": "files",
+    "in": [
+     "uploads",
+     "media_heavy"
+    ]
+   }
+  },
+  {
+   "text": "Aislamiento entre organizaciones: toda consulta filtra por organización y hay pruebas que intentan cruzar datos.",
+   "when": {
+    "s": "auth",
+    "is": "multi_tenant"
+   }
+  },
+  {
+   "text": "Salida de la IA: tratar lo que devuelve el modelo como entrada no confiable; limitar permisos y acciones.",
+   "when": {
+    "s": "ai",
+    "not": "none"
+   }
+  }
+ ],
+ "qa_checklist": [
+  {
+   "text": "Recorrer el flujo principal con teclado solamente: el foco es visible y el orden es lógico."
+  },
+  {
+   "text": "Verificar contraste y tamaños táctiles (mínimo 44 px) en móvil."
+  },
+  {
+   "text": "Probar en un dispositivo y una red lentos: ¿cuánto tarda en mostrarse lo principal?",
+   "when": {
+    "s": "public_seo",
+    "is": "yes"
+   }
+  },
+  {
+   "text": "Probar en navegadores de escritorio y móvil, en modo claro y oscuro si existe."
+  },
+  {
+   "text": "Probar los estados de error, vacío y carga de cada pantalla."
+  },
+  {
+   "text": "Verificar títulos, descripciones y que las páginas públicas se puedan indexar.",
+   "when": {
+    "s": "public_seo",
+    "is": "yes"
+   }
+  },
+  {
+   "text": "Probar el pago de punta a punta con tarjetas de prueba, incluyendo un fallo.",
+   "when": {
+    "s": "payments",
+    "not": "none"
+   }
+  },
+  {
+   "text": "Probar que una persona no puede ver ni modificar lo de otra.",
+   "when": {
+    "s": "auth",
+    "not": "none"
+   }
+  },
+  {
+   "text": "Probar la cola: mensaje duplicado, fallo del trabajador y reintentos.",
+   "when": {
+    "d": "communication",
+    "is": "message-queue"
+   }
+  },
+  {
+   "text": "Verificar la reconexión cuando se corta la conexión en vivo.",
+   "when": {
+    "d": "communication",
+    "is": "websocket"
+   }
+  }
+ ],
+ "ai_dev": [
+  {
+   "text": "Trabajá con tareas pequeñas y bien especificadas: un cambio por vez, con criterio de aceptación verificable.",
+   "when": {
+    "d": "ai_dev",
+    "is": "ai-assisted-coding"
+   }
+  },
+  {
+   "text": "Pedí primero un plan y revisalo antes de aceptar cambios; pedí que explique las decisiones.",
+   "when": {
+    "d": "ai_dev",
+    "is": "ai-assisted-coding"
+   }
+  },
+  {
+   "text": "Escribí (o pedí) las pruebas antes o junto con el código y exigí que pasen antes de integrar.",
+   "when": {
+    "d": "ai_dev",
+    "is": "ai-assisted-coding"
+   }
+  },
+  {
+   "text": "Mantené un archivo de contexto del proyecto (convenciones, comandos, decisiones) para que cada sesión arranque informada.",
+   "when": {
+    "d": "ai_dev",
+    "is": "ai-assisted-coding"
+   }
+  },
+  {
+   "text": "Revisá todo lo que se genera como si lo hubiera escrito una persona nueva: seguridad, casos límite y duplicación.",
+   "when": {
+    "d": "ai_dev",
+    "is": "ai-assisted-coding"
+   }
+  },
+  {
+   "text": "Usá el asistente para pensar, comparar alternativas y revisar; las decisiones y la verificación son tuyas.",
+   "when": {
+    "d": "ai_dev",
+    "is": "ai-assistant"
+   }
+  },
+  {
+   "text": "Un solo agente o herramienta primero. Sumá más solo si medís que uno no alcanza: más agentes no es mejor por defecto."
+  },
+  {
+   "text": "No pegues secretos, credenciales ni datos personales de clientes en herramientas de IA."
+  }
+ ],
+ "functional": {
+  "landing": [
+   "Presentar con claridad qué se ofrece y por qué conviene.",
+   "Mostrar pruebas que respalden la propuesta (resultados, opiniones, ejemplos).",
+   "Permitir la acción principal (contactar, reservar, comprar) desde varios puntos de la página.",
+   "Medir cuántas visitas llegan a la acción principal."
+  ],
+  "institutional-site": [
+   "Presentar la organización, sus servicios y su equipo.",
+   "Permitir contactar de varias formas.",
+   "Publicar y actualizar contenido sin depender de un desarrollador.",
+   "Ser encontrable en buscadores."
+  ],
+  "ecommerce": [
+   "Navegar y buscar productos con filtros.",
+   "Ver el detalle de un producto con precio, imágenes y disponibilidad.",
+   "Armar un carrito y completar la compra con pago.",
+   "Recibir confirmación del pedido y poder seguirlo.",
+   "Gestionar productos, stock y pedidos desde un panel."
+  ],
+  "saas": [
+   "Registrarse, iniciar sesión y administrar la cuenta de la organización.",
+   "Invitar usuarios y asignarles roles.",
+   "Usar la funcionalidad principal del producto con datos propios.",
+   "Elegir un plan, pagar y administrar la suscripción.",
+   "Mantener los datos de cada organización aislados de las demás."
+  ],
+  "dashboard": [
+   "Conectar o cargar las fuentes de datos.",
+   "Ver indicadores con filtros por período y dimensiones.",
+   "Comparar contra períodos anteriores y detectar cambios.",
+   "Compartir o exportar lo que se ve.",
+   "Restringir quién ve cada dato."
+  ],
+  "management-system": [
+   "Registrar y consultar las entidades principales del negocio.",
+   "Seguir el estado de cada proceso y asignar responsables.",
+   "Aplicar reglas de negocio y validaciones.",
+   "Ver el historial de cambios de cada registro.",
+   "Generar reportes."
+  ],
+  "marketplace": [
+   "Que los vendedores publiquen y gestionen sus ofertas.",
+   "Que los compradores busquen, comparen y compren.",
+   "Cobrar y repartir el dinero entre las partes según las reglas.",
+   "Dejar reseñas y resolver disputas.",
+   "Moderar contenido y usuarios."
+  ],
+  "other": [
+   "Definir el flujo principal que da valor a las personas que lo usan.",
+   "Definir qué datos se guardan y quién puede verlos o modificarlos."
+  ]
+ }
+}

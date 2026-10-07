@@ -1,5 +1,5 @@
 /* ============================================================
-   PROGRAMACION-V2.JS — Base de datos de herramientas, funcionalidades e información útil
+   PROGRAMACION-V2.JS — Biblioteca web (herramientas, funcionalidades e información útil
    Datos: data/lab/ (generados por tools/weblab_migrar.py). Rutas por hash:
      #/                base (vista guardada)       #/v/<vista>   problema · aprender · hace · todo
      #/f/<id>          ficha a pantalla completa   #/r/<rubro>   recomendador de rubros
@@ -247,7 +247,7 @@
   const PERFILES = [
     { id: 'reclutador', n: 'Reclutador', ic: IC.problema, tip: 'Si buscás a alguien para Mercado Libre: herramientas que analizan cuentas y publicaciones.',
       why: 'Lo que más sirve para evaluar mi trabajo en Mercado Libre.', items: [['ml-tracker', 'Seguimiento de cuentas de Mercado Libre'], ['herramienta-auditoria', 'Auditoría de cuenta'], ['herramienta-chequeo', 'Chequeo de publicación'], ['herramienta-simulador', 'Simulador de puntaje']],
-      href: ['lab.html', 'Ver el Lab de Mercado Libre'] },
+      href: ['lab.html', 'Ver las Guías de Mercado Libre'] },
     { id: 'cliente', n: 'Cliente', ic: '<path d="M3 4h2l2.4 11h11L21 7H6M9 20h.01M17 20h.01"/>', tip: 'Si vendés en Mercado Libre o querés una web: tienda propia, revisión de tu cuenta y qué tipo de web te sirve.',
       why: 'Para vender más en Mercado Libre o tener una web propia.', items: [['tienda', 'Si vendés en Mercado Libre: tu propia tienda'], ['herramienta-auditoria', 'Revisá tu cuenta de Mercado Libre'], ['ecommerce', 'Tu tienda propia'], ['landing', 'Una web que consigue consultas']],
       mas: ['problema', 'Ver qué le sirve a mi rubro'] },
@@ -584,7 +584,7 @@
     if (a === 'r' && b) { ensureBase(); return showRubro(decodeURIComponent([b, ...rest].join('/'))); }
     if (a === 'v' && b && VISTAS.some(v => v[0] === b)) { S.vista = b; store.set('dc-lab-vista', b); }
     else if (a && b && S.legacy[`${a}/${decodeURIComponent([b, ...rest].join('/'))}`]) { const n = S.legacy[`${a}/${decodeURIComponent([b, ...rest].join('/'))}`]; history.replaceState(null, '', n.startsWith('rubro:') ? `#/r/${encodeURIComponent(n)}` : `#/f/${encodeURIComponent(n)}`); return route(); }
-    const venia = abierto; setView('base'); document.title = 'Base de datos de herramientas, funcionalidades y proyectos | Darío Colángelo';
+    const venia = abierto; setView('base'); document.title = 'Biblioteca web: herramientas, funcionalidades y proyectos | Darío Colángelo';
     if (!(venia && baseListo)) renderBase();
   }
   let baseListo = false;

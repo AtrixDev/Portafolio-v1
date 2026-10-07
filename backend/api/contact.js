@@ -48,6 +48,7 @@ export default async function handler(req, res) {
       company: clean(b.company, 100),
       reason:  MOTIVOS.includes(b.reason) ? b.reason : 'otro',
       message: clean(b.message, 3000),
+      asunto:  /^[a-z0-9-]{1,30}$/.test(String(b.asunto || '')) ? String(b.asunto) : '',
     };
     const errors = {};
     if (msg.name.length < 2) errors.name = 'Decime tu nombre.';

@@ -1,0 +1,345 @@
+[
+  {
+    "id": "quality-security",
+    "slug": "quality-security",
+    "name": "Seguridad",
+    "type": "quality_attribute",
+    "category": "Calidad",
+    "depth": "brief",
+    "level": "intermediate",
+    "summary": "Que el sistema proteja los datos y las funciones frente a usos no autorizados, y que un error o un ataque no cause daño grave.",
+    "problem_solved": "Evitar fugas de datos, accesos indebidos, fraude e interrupciones provocadas por ataques o por fallos de configuración.",
+    "explanation": [
+      "La seguridad no es una etapa final sino una dimensión que aparece en los requisitos (qué datos son sensibles), en la arquitectura (dónde se confía y dónde no), en la implementación, en las pruebas y en la operación. ISO/IEC 25010 la incluye entre las características de calidad de un producto de software, junto a confidencialidad, integridad y autenticidad como subcaracterísticas.",
+      "No todos los proyectos necesitan el mismo nivel: una landing sin datos personales no es lo mismo que un sistema de pagos. Conviene definir el nivel de rigor según el riesgo, y usar guías reconocidas (OWASP Top 10 para concientizar y ASVS para verificar) en lugar de inventar criterios."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Siempre, con rigor proporcional a los datos y a las funciones que se protegen."
+    ],
+    "when_not_to_use": [],
+    "pros": [],
+    "cons": [],
+    "tradeoffs": [],
+    "common_mistakes": [
+      "Dejar la seguridad para el final del proyecto."
+    ],
+    "decision_questions": [
+      "¿Qué datos personales, financieros o sensibles maneja el sistema?",
+      "¿Qué pasaría si se filtraran o se alteraran?"
+    ],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [],
+    "sources": [
+      "iso-25010",
+      "owasp-top10",
+      "owasp-asvs"
+    ],
+    "evidence_type": "standard",
+    "library_refs": []
+  },
+  {
+    "id": "quality-reliability",
+    "slug": "quality-reliability",
+    "name": "Confiabilidad",
+    "type": "quality_attribute",
+    "category": "Calidad",
+    "depth": "brief",
+    "level": "intermediate",
+    "summary": "Que el sistema funcione de forma correcta y sostenida, que se recupere de los fallos y que no pierda datos.",
+    "problem_solved": "Reducir las caídas y los datos perdidos o inconsistentes, y limitar el impacto cuando algo falla.",
+    "explanation": [
+      "Confiabilidad no es «que nunca falle» sino qué pasa cuando falla: cuánto tarda en detectarse, cuánto en recuperarse y qué datos se pierden. Se discute en términos de objetivos de disponibilidad y de recuperación, no de perfección.",
+      "Los datos críticos (pedidos, pagos) piden transacciones y copias de seguridad probadas; las tareas asíncronas piden reintentos e idempotencia. El libro de Ingeniería de Confiabilidad de Sitios de Google es una referencia ampliamente usada."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Cuando una caída o una pérdida de datos tiene un costo alto para el negocio."
+    ],
+    "when_not_to_use": [],
+    "pros": [],
+    "cons": [],
+    "tradeoffs": [],
+    "common_mistakes": [
+      "No probar nunca la restauración de las copias de seguridad."
+    ],
+    "decision_questions": [
+      "¿Cuánto cuesta una hora de caída?",
+      "¿Cuántos datos se pueden perder como máximo?"
+    ],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [],
+    "sources": [
+      "google-sre-book",
+      "iso-25010"
+    ],
+    "evidence_type": "expert_source",
+    "library_refs": []
+  },
+  {
+    "id": "quality-performance",
+    "slug": "quality-performance",
+    "name": "Rendimiento",
+    "type": "quality_attribute",
+    "category": "Calidad",
+    "depth": "brief",
+    "level": "beginner",
+    "summary": "Qué tan rápido responde y se siente el sistema para quien lo usa, y cuántos recursos consume para lograrlo.",
+    "problem_solved": "Evitar que la lentitud haga perder usuarios, conversiones o productividad.",
+    "explanation": [
+      "En web, el rendimiento percibido se mide con indicadores como los Core Web Vitals (carga del contenido principal, interactividad y estabilidad visual). Son una referencia práctica, y no lo único que importa.",
+      "Antes de optimizar hay que medir: la causa de un problema de rendimiento rara vez es la que se supone. Las mejoras típicas son reducir el peso de lo que se descarga, usar caché y servir contenido desde un CDN."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Siempre, con más peso en sitios públicos y en flujos de conversión."
+    ],
+    "when_not_to_use": [],
+    "pros": [],
+    "cons": [],
+    "tradeoffs": [],
+    "common_mistakes": [
+      "Optimizar sin medir."
+    ],
+    "decision_questions": [
+      "¿Qué tan rápido necesita sentirse el flujo principal?",
+      "¿Desde qué dispositivos y redes se usa?"
+    ],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [],
+    "sources": [
+      "webdev-vitals"
+    ],
+    "evidence_type": "expert_source",
+    "library_refs": []
+  },
+  {
+    "id": "quality-cost",
+    "slug": "quality-cost",
+    "name": "Costo",
+    "type": "quality_attribute",
+    "category": "Calidad",
+    "depth": "brief",
+    "level": "beginner",
+    "summary": "Cuánto cuesta construir, operar y mantener el sistema, no solo la factura de hosting.",
+    "problem_solved": "Evitar decisiones que parecen baratas al inicio y resultan caras de operar o de cambiar.",
+    "explanation": [
+      "El costo total incluye el desarrollo, la infraestructura, el mantenimiento y el tiempo de las personas. Una arquitectura sofisticada puede costar mucho más en operación que el beneficio que da.",
+      "El marco de buenas prácticas de AWS incluye la optimización de costos como un pilar: entender el gasto, elegir recursos adecuados y revisar periódicamente."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Siempre, y más en proyectos con presupuesto acotado."
+    ],
+    "when_not_to_use": [],
+    "pros": [],
+    "cons": [],
+    "tradeoffs": [],
+    "common_mistakes": [
+      "Comparar solo el costo de hosting y olvidar el de mantenimiento."
+    ],
+    "decision_questions": [
+      "¿Cuál es el presupuesto de construcción y de operación?"
+    ],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [],
+    "sources": [
+      "aws-well-architected"
+    ],
+    "evidence_type": "official_framework",
+    "library_refs": []
+  },
+  {
+    "id": "quality-maintainability",
+    "slug": "quality-maintainability",
+    "name": "Mantenibilidad",
+    "type": "quality_attribute",
+    "category": "Calidad",
+    "depth": "brief",
+    "level": "intermediate",
+    "summary": "Qué tan fácil es entender, cambiar y probar el sistema a lo largo del tiempo.",
+    "problem_solved": "Evitar que cada cambio sea lento, riesgoso y caro a medida que el sistema crece.",
+    "explanation": [
+      "La mantenibilidad es una de las características de calidad de ISO/IEC 25010. Se apoya en límites claros entre módulos, nombres consistentes, pruebas automáticas y documentación de decisiones.",
+      "Se pierde de a poco, por acumulación de atajos, y por eso conviene protegerla desde el diseño: un monolito modular o un conjunto de pruebas automáticas valen más que una arquitectura distribuida mal sostenida."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "En cualquier sistema que vaya a vivir más de unos meses."
+    ],
+    "when_not_to_use": [],
+    "pros": [],
+    "cons": [],
+    "tradeoffs": [],
+    "common_mistakes": [
+      "Postergar pruebas y documentación «para después»."
+    ],
+    "decision_questions": [
+      "¿Cuánto tiempo va a vivir el sistema y quién lo va a mantener?"
+    ],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [],
+    "sources": [
+      "iso-25010"
+    ],
+    "evidence_type": "standard",
+    "library_refs": []
+  },
+  {
+    "id": "quality-scalability",
+    "slug": "quality-scalability",
+    "name": "Escalabilidad",
+    "type": "quality_attribute",
+    "category": "Calidad",
+    "depth": "brief",
+    "level": "intermediate",
+    "summary": "La capacidad de atender más carga (usuarios, datos, peticiones) agregando recursos, sin rediseñar el sistema.",
+    "problem_solved": "Soportar el crecimiento sin que el rendimiento o el costo se descontrolen.",
+    "explanation": [
+      "Escalar puede ser vertical (una máquina más grande) u horizontal (más copias). Que los componentes no guarden estado local facilita el escalado horizontal.",
+      "Es un atributo que se suele sobreestimar: la mayoría de los proyectos no necesita escala masiva al inicio, y diseñar para ella antes de tiempo agrega complejidad sin beneficio. Conviene fijar un objetivo realista y medir."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Cuando se espera un crecimiento sostenido o picos de carga previsibles."
+    ],
+    "when_not_to_use": [],
+    "pros": [],
+    "cons": [],
+    "tradeoffs": [],
+    "common_mistakes": [
+      "Diseñar para millones de usuarios cuando se tienen cien."
+    ],
+    "decision_questions": [
+      "¿Cuánta carga se espera en 12 meses y cuánta en picos?"
+    ],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [],
+    "sources": [
+      "aws-well-architected",
+      "twelve-factor"
+    ],
+    "evidence_type": "official_framework",
+    "library_refs": []
+  },
+  {
+    "id": "quality-accessibility",
+    "slug": "quality-accessibility",
+    "name": "Accesibilidad",
+    "type": "quality_attribute",
+    "category": "Calidad",
+    "depth": "brief",
+    "level": "beginner",
+    "summary": "Que el producto pueda ser usado por personas con distintas capacidades y en distintos contextos: teclado, lectores de pantalla, baja visión.",
+    "problem_solved": "Evitar excluir a quienes no pueden usar una interfaz diseñada solo para un tipo de usuario y cumplir con normativas.",
+    "explanation": [
+      "Las Pautas de Accesibilidad para el Contenido Web (WCAG) 2.2 del W3C son el estándar de referencia: se organizan en perceptible, operable, comprensible y robusto, con niveles de conformidad A, AA y AAA.",
+      "Gran parte se resuelve con HTML semántico, contraste suficiente, foco visible, etiquetas en los formularios y navegación por teclado. Es mucho más barato diseñarla desde el inicio que corregirla al final."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "En todo producto con interfaz, con prioridad en servicios públicos y de atención al cliente."
+    ],
+    "when_not_to_use": [],
+    "pros": [],
+    "cons": [],
+    "tradeoffs": [],
+    "common_mistakes": [
+      "Dejar la accesibilidad para una auditoría final."
+    ],
+    "decision_questions": [
+      "¿Qué nivel de conformidad se exige?"
+    ],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [],
+    "sources": [
+      "wcag-22"
+    ],
+    "evidence_type": "standard",
+    "library_refs": []
+  },
+  {
+    "id": "quality-seo",
+    "slug": "quality-seo",
+    "name": "SEO (visibilidad en buscadores)",
+    "type": "quality_attribute",
+    "category": "Calidad",
+    "depth": "brief",
+    "level": "beginner",
+    "summary": "Que los buscadores puedan encontrar, entender e indexar el contenido, de modo que aparezca cuando se lo busca.",
+    "problem_solved": "Conseguir tráfico orgánico a un sitio público, sin depender solo de publicidad.",
+    "explanation": [
+      "Importa en sitios públicos que dependen de que los encuentren (institucionales, catálogos, blogs) y casi nada en aplicaciones detrás de un login. Depende de que el contenido llegue ya renderizado, de títulos y descripciones claros, de URLs estables, de velocidad y de datos estructurados.",
+      "La estrategia de renderizado influye directamente: generar o renderizar el contenido en el servidor suele ser más seguro para la indexación que dejarlo todo en el cliente."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Sitios públicos cuyo tráfico viene de buscadores."
+    ],
+    "when_not_to_use": [
+      "Aplicaciones internas o detrás de un login."
+    ],
+    "pros": [],
+    "cons": [],
+    "tradeoffs": [],
+    "common_mistakes": [
+      "Servir todo el contenido solo con JavaScript en el cliente."
+    ],
+    "decision_questions": [
+      "¿Qué parte del tráfico viene de buscadores?"
+    ],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [],
+    "sources": [
+      "schema-org-start",
+      "webdev-rendering"
+    ],
+    "evidence_type": "recommendation",
+    "library_refs": []
+  },
+  {
+    "id": "quality-observability",
+    "slug": "quality-observability",
+    "name": "Observabilidad",
+    "type": "quality_attribute",
+    "category": "Calidad",
+    "depth": "brief",
+    "level": "intermediate",
+    "summary": "Poder entender qué está pasando dentro del sistema a partir de lo que emite: registros, métricas y trazas.",
+    "problem_solved": "Detectar y diagnosticar fallos y degradaciones sin tener que adivinar ni reproducirlos a ciegas.",
+    "explanation": [
+      "Un sistema es observable cuando se pueden hacer preguntas nuevas sobre su comportamiento a partir de los datos que genera. Los pilares habituales son los registros (qué pasó), las métricas (cuánto y con qué frecuencia) y las trazas (el recorrido de una petición).",
+      "Cuanto más distribuido es el sistema, más necesaria es: depurar microservicios sin trazas es muy costoso. Para una aplicación simple, registros claros y alertas sobre los síntomas que importan suelen ser suficientes."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "En cualquier sistema en producción, con mayor inversión cuanto más distribuido."
+    ],
+    "when_not_to_use": [],
+    "pros": [],
+    "cons": [],
+    "tradeoffs": [],
+    "common_mistakes": [
+      "Registrar datos personales o secretos en los logs."
+    ],
+    "decision_questions": [
+      "¿Cómo me entero de que algo falló y cómo encuentro la causa?"
+    ],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [],
+    "sources": [
+      "otel-observability"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": []
+  }
+]

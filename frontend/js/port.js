@@ -35,8 +35,8 @@ const TILES = [
   ['tra', 'Para empresas', 'Trayectoria completa', 'Seis puestos, de la escuela a mis propias herramientas: qué hice en cada uno y cómo se comprueba.', 'Ver la trayectoria', '#experiencia'],
   ['hab', 'Para empresas', 'Habilidades medidas', 'Once habilidades con los años de práctica de cada una, dónde las usé y qué resultados dieron.', 'Ver las habilidades', '#habilidades'],
   ['dias', 'Para empresas', 'Mis primeros 30 días', 'Qué haría en tu equipo, semana por semana.', 'Ver el plan', '#valor-prop'],
-  ['lab', 'Para aprender', 'Lab ML: 8 guías', 'ACOS, SEO, fotos, precios y reputación, explicados con casos para estudiantes y apasionados del e-commerce.', 'Abrir el Lab', 'lab.html'],
-  ['prog', 'Base de datos y ejemplos', 'Programación', 'Mi base de conocimiento para construir una web.', 'Explorar', 'programacion.html'],
+  ['lab', 'Para aprender', 'Guías de Mercado Libre: 8 guías', 'ACOS, SEO, fotos, precios y reputación, explicados con casos para estudiantes y apasionados del e-commerce.', 'Ver las guías', 'lab.html'],
+  ['prog', 'Desarrollo web', 'Biblioteca web', 'Mi base de conocimiento para construir una web, con ejemplos para abrir.', 'Explorar', 'programacion.html'],
   ['web', 'Para negocios con web', 'Revisá tu web', 'Pegás la dirección y ves qué le falta para traerte clientes.', 'Revisar gratis', 'web.html'],
 ];
 $('pt-map').innerHTML = TILES.map(([id, k, t, d, c, u]) => `<a class="pt-tile t-${id}" href="${u}">

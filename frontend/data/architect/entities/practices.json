@@ -1,0 +1,354 @@
+[
+  {
+    "id": "authentication-and-authorization",
+    "slug": "authentication-and-authorization",
+    "name": "Autenticación y autorización",
+    "type": "authn_authz",
+    "category": "Seguridad",
+    "depth": "full",
+    "level": "intermediate",
+    "summary": "Autenticación: comprobar quién es alguien. Autorización: decidir qué puede hacer. Son dos preguntas distintas y se resuelven por separado.",
+    "problem_solved": "Garantizar que cada persona o sistema acceda solo a lo que le corresponde.",
+    "explanation": [
+      "La autenticación verifica la identidad (usuario y contraseña, un enlace por correo, un proveedor de identidad externo, un segundo factor). La autorización decide, ya conocida la identidad, qué recursos y acciones están permitidos. Confundirlas es una fuente frecuente de fallos: estar autenticado no implica poder ver los datos de otro usuario.",
+      "Para la mayoría de los productos conviene no construir la autenticación desde cero: delegar en un proveedor de identidad o en la solución del framework reduce errores. La autorización, en cambio, es específica del negocio y debe diseñarse con él: roles, permisos, pertenencia a una organización y reglas sobre cada recurso.",
+      "Dos prácticas básicas: comprobar el permiso en el servidor en cada petición (nunca confiar solo en lo que oculta la interfaz) y aplicar el menor privilegio posible. En el OWASP Top 10:2025, el control de acceso roto figura como el primer riesgo."
+    ],
+    "how_it_works": [
+      "El usuario se identifica y el sistema emite una sesión o un token.",
+      "En cada petición, el servidor valida esa sesión y verifica que la acción esté permitida para ese usuario sobre ese recurso.",
+      "Los permisos se modelan por roles, por propiedad del recurso o por reglas más finas."
+    ],
+    "when_to_use": [
+      "Cuando existan cuentas de usuario, datos por persona o funciones restringidas.",
+      "Cuando hay funciones de administración o datos que no todas las personas deben ver."
+    ],
+    "when_not_to_use": [
+      "Un sitio público sin datos por usuario: no hace falta."
+    ],
+    "pros": [
+      "Protege datos y funciones sensibles.",
+      "Permite personalizar y auditar quién hizo qué."
+    ],
+    "cons": [
+      "Agrega complejidad y superficie de ataque.",
+      "Los errores de autorización son sutiles y graves."
+    ],
+    "tradeoffs": [
+      "Delegar en un proveedor externo reduce el riesgo de errores propios a cambio de una dependencia."
+    ],
+    "alternatives": [],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Panel de pedidos",
+        "text": "Cada cliente ve solo sus pedidos; un empleado de soporte puede ver los de cualquier cliente pero no modificarlos; un administrador puede cambiar estados."
+      }
+    ],
+    "common_mistakes": [
+      "Validar permisos solo en la interfaz y no en el servidor.",
+      "Guardar contraseñas sin un hash adecuado, o implementar la autenticación a mano sin necesidad.",
+      "No limitar los intentos de acceso."
+    ],
+    "decision_questions": [
+      "¿Qué roles existen y qué puede hacer cada uno?",
+      "¿Se delega la autenticación en un proveedor?",
+      "¿Qué datos pertenecen a cada usuario u organización?"
+    ],
+    "related_entities": [
+      {
+        "id": "quality-security",
+        "rel": "addresses"
+      },
+      {
+        "id": "rest-api",
+        "rel": "often_with"
+      }
+    ],
+    "sources": [
+      "owasp-asvs",
+      "owasp-top10"
+    ],
+    "evidence_type": "standard",
+    "library_refs": [
+      "clerk"
+    ]
+  },
+  {
+    "id": "owasp-top-10",
+    "slug": "owasp-top-10",
+    "name": "OWASP Top 10",
+    "type": "security",
+    "category": "Seguridad",
+    "depth": "brief",
+    "level": "beginner",
+    "summary": "Un documento de consenso con los diez riesgos de seguridad más críticos en aplicaciones web. Sirve para concientizar, no como lista de verificación completa.",
+    "problem_solved": "Dar a quienes desarrollan un punto de partida común sobre los riesgos más importantes.",
+    "explanation": [
+      "La edición 2025 lista, en este orden: control de acceso roto, configuración de seguridad incorrecta, fallos en la cadena de suministro de software, fallos criptográficos, inyección, diseño inseguro, fallos de autenticación, fallos de integridad de software o datos, fallos de registro y alertas de seguridad, y manejo inadecuado de condiciones excepcionales.",
+      "OWASP lo describe como un documento de concientización para desarrolladores y para la seguridad de aplicaciones web. No es un estándar de verificación: para verificar controles, OWASP propone el ASVS. Conviene tomarlo como guía de por dónde empezar, no como garantía de que una aplicación es segura."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Como lista de riesgos a tener presentes desde los requisitos, el diseño y la revisión de código."
+    ],
+    "when_not_to_use": [
+      "Como único criterio para afirmar que una aplicación es segura."
+    ],
+    "pros": [],
+    "cons": [],
+    "tradeoffs": [],
+    "common_mistakes": [
+      "Tratarlo como una lista de verificación completa."
+    ],
+    "decision_questions": [
+      "¿Qué riesgos de la lista aplican a este proyecto?"
+    ],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [
+      {
+        "id": "quality-security",
+        "rel": "addresses"
+      },
+      {
+        "id": "owasp-asvs",
+        "rel": "often_with"
+      }
+    ],
+    "sources": [
+      "owasp-top10"
+    ],
+    "evidence_type": "industry_practice",
+    "library_refs": []
+  },
+  {
+    "id": "owasp-asvs",
+    "slug": "owasp-asvs",
+    "name": "OWASP ASVS",
+    "type": "security",
+    "category": "Seguridad",
+    "depth": "brief",
+    "level": "intermediate",
+    "summary": "El Application Security Verification Standard: una lista de requisitos de seguridad que sirve para diseñar, probar y verificar una aplicación.",
+    "problem_solved": "Tener requisitos de seguridad concretos y verificables, en lugar de decir «que sea seguro».",
+    "explanation": [
+      "ASVS ofrece una base para probar los controles técnicos de seguridad de una aplicación web y una lista de requisitos para el desarrollo seguro. La versión estable actual es la 5.0.0.",
+      "Se usa durante los requisitos (qué controles hacen falta), la arquitectura, las pruebas y la revisión. Tiene niveles de rigor creciente, que permiten elegir cuánto se exige según el riesgo de la aplicación."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Para derivar requisitos de seguridad y para verificar que se cumplan."
+    ],
+    "when_not_to_use": [],
+    "pros": [],
+    "cons": [],
+    "tradeoffs": [],
+    "common_mistakes": [
+      "Aplicar todo el estándar sin ajustar el nivel al riesgo del proyecto."
+    ],
+    "decision_questions": [
+      "¿Qué nivel de verificación corresponde al riesgo de la aplicación?"
+    ],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [
+      {
+        "id": "quality-security",
+        "rel": "addresses"
+      },
+      {
+        "id": "owasp-top-10",
+        "rel": "often_with"
+      }
+    ],
+    "sources": [
+      "owasp-asvs"
+    ],
+    "evidence_type": "standard",
+    "library_refs": []
+  },
+  {
+    "id": "unit-testing",
+    "slug": "unit-testing",
+    "name": "Tests unitarios",
+    "type": "testing",
+    "category": "Testing",
+    "depth": "brief",
+    "level": "beginner",
+    "summary": "Pruebas automáticas rápidas que verifican una pieza pequeña de lógica de forma aislada.",
+    "problem_solved": "Detectar errores de lógica en segundos y poder cambiar código con confianza.",
+    "explanation": [
+      "Un test unitario ejercita una función o una clase sin depender de la red ni de una base de datos reales. Es rápido y determinista, por lo que se corre constantemente.",
+      "En la pirámide de pruebas son la base: muchos, baratos y rápidos. Valen especialmente donde hay reglas de negocio (cálculos, validaciones, permisos), y poco donde solo se conectan piezas."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Lógica de negocio, validaciones y cálculos."
+    ],
+    "when_not_to_use": [
+      "Verificar solamente que dos piezas están conectadas (ahí van pruebas de integración)."
+    ],
+    "pros": [],
+    "cons": [],
+    "tradeoffs": [],
+    "common_mistakes": [
+      "Escribir tests que repiten la implementación sin proteger ningún comportamiento."
+    ],
+    "decision_questions": [
+      "¿Qué reglas de negocio no pueden romperse?"
+    ],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [
+      {
+        "id": "quality-maintainability",
+        "rel": "addresses"
+      },
+      {
+        "id": "integration-testing",
+        "rel": "often_with"
+      }
+    ],
+    "sources": [
+      "fowler-test-pyramid"
+    ],
+    "evidence_type": "expert_source",
+    "library_refs": []
+  },
+  {
+    "id": "integration-testing",
+    "slug": "integration-testing",
+    "name": "Tests de integración",
+    "type": "testing",
+    "category": "Testing",
+    "depth": "brief",
+    "level": "intermediate",
+    "summary": "Pruebas que verifican que varias piezas funcionan bien juntas: por ejemplo, la aplicación con su base de datos o con otro servicio.",
+    "problem_solved": "Encontrar los fallos que aparecen en las uniones entre componentes, que los tests unitarios no ven.",
+    "explanation": [
+      "Un test de integración ejercita un camino que atraviesa varias piezas reales (o casi reales), como un endpoint que consulta una base de datos de pruebas. Son más lentos y más frágiles que los unitarios, por lo que se escriben menos y se enfocan en los puntos de contacto.",
+      "Son los que más valor dan en integraciones con servicios externos, y en la comprobación de contratos entre frontend y backend."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Puntos de contacto entre componentes: base de datos, API, colas, servicios externos."
+    ],
+    "when_not_to_use": [
+      "Lógica que se puede verificar de forma aislada con tests unitarios."
+    ],
+    "pros": [],
+    "cons": [],
+    "tradeoffs": [],
+    "common_mistakes": [
+      "Depender de servicios externos reales y volver las pruebas inestables."
+    ],
+    "decision_questions": [
+      "¿Qué integraciones, si fallan, rompen el producto?"
+    ],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [
+      {
+        "id": "unit-testing",
+        "rel": "often_with"
+      },
+      {
+        "id": "e2e-testing",
+        "rel": "often_with"
+      }
+    ],
+    "sources": [
+      "fowler-test-pyramid"
+    ],
+    "evidence_type": "expert_source",
+    "library_refs": []
+  },
+  {
+    "id": "e2e-testing",
+    "slug": "e2e-testing",
+    "name": "Tests end-to-end (E2E)",
+    "type": "testing",
+    "category": "Testing",
+    "depth": "brief",
+    "level": "intermediate",
+    "summary": "Pruebas que recorren el producto como lo haría una persona, a través del navegador, de punta a punta.",
+    "problem_solved": "Verificar que los flujos más importantes funcionan de verdad, con todas las piezas reales juntas.",
+    "explanation": [
+      "Un test E2E abre el navegador, navega, completa formularios y comprueba lo que se ve. Son los más lentos y los más propensos a fallar por razones ajenas al código (tiempos, datos), por eso se reservan para pocos flujos críticos (registrarse, comprar, pagar).",
+      "Complementan a los unitarios y de integración; no los reemplazan. Con herramientas como Playwright también se pueden verificar aspectos de accesibilidad y de comportamiento en distintos navegadores."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Flujos críticos de negocio y regresiones visibles para el usuario."
+    ],
+    "when_not_to_use": [
+      "Cubrir cada detalle de lógica: es lento y frágil."
+    ],
+    "pros": [],
+    "cons": [],
+    "tradeoffs": [],
+    "common_mistakes": [
+      "Escribir demasiados tests E2E y que el conjunto sea lento e inestable."
+    ],
+    "decision_questions": [
+      "¿Cuáles son los tres flujos que no pueden romperse?"
+    ],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [
+      {
+        "id": "integration-testing",
+        "rel": "often_with"
+      }
+    ],
+    "sources": [
+      "playwright-docs",
+      "fowler-test-pyramid"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": []
+  },
+  {
+    "id": "logs-metrics-traces",
+    "slug": "logs-metrics-traces",
+    "name": "Registros, métricas y trazas",
+    "type": "observability",
+    "category": "Observabilidad",
+    "depth": "brief",
+    "level": "intermediate",
+    "summary": "Las tres señales con las que un sistema permite entender su comportamiento: qué pasó, cuánto y con qué frecuencia, y por dónde pasó una petición.",
+    "problem_solved": "Detectar y diagnosticar problemas en producción con evidencia en lugar de intuición.",
+    "explanation": [
+      "Los registros (logs) son eventos con detalle de lo ocurrido. Las métricas son valores numéricos agregados en el tiempo (tasa de errores, latencia). Las trazas siguen el recorrido de una petición a través de varios componentes.",
+      "OpenTelemetry es un proyecto abierto que estandariza cómo se generan y exportan estas señales, de modo que no se quede atado a un proveedor. Para un sistema pequeño, registros estructurados y algunas alertas sobre los síntomas que importan suelen bastar."
+    ],
+    "how_it_works": [],
+    "when_to_use": [
+      "Todo sistema en producción."
+    ],
+    "when_not_to_use": [],
+    "pros": [],
+    "cons": [],
+    "tradeoffs": [],
+    "common_mistakes": [
+      "Registrar contraseñas, tokens o datos personales."
+    ],
+    "decision_questions": [
+      "¿Qué señal me avisa primero de que algo está mal?"
+    ],
+    "alternatives": [],
+    "examples": [],
+    "related_entities": [
+      {
+        "id": "quality-observability",
+        "rel": "addresses"
+      }
+    ],
+    "sources": [
+      "otel-observability"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": []
+  }
+]

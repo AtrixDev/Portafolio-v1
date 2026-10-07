@@ -300,7 +300,7 @@
 
   // ── Mensajes ──
   let MSGS = [], FILTER = 'todos';
-  const REASONS = { auditoria: 'Auditoría gratis (cuenta conectada)', oferta: 'Oferta laboral', freelance: 'Pedido de web / freelance', consulta: 'Consulta', otro: 'Otro' };
+  const REASONS = { herramienta: 'Pidió un resultado (herramienta)', auditoria: 'Auditoría gratis (cuenta conectada)', oferta: 'Oferta laboral', freelance: 'Pedido de web / freelance', consulta: 'Consulta', otro: 'Otro' };
   async function loadMessages() {
     const list = $('msg-list'); list.innerHTML = '<p class="cp-empty">Cargando…</p>';
     try {
@@ -319,8 +319,9 @@
       const wa = /(?:\+?54)?\s?9?\s?\d{2,4}[\s-]?\d{3,4}[\s-]?\d{4}/.exec(m.message || '');
       return `<article class="cp-msg${m.read ? '' : ' is-unread'}">
         <header><div><strong>${esc(m.name)}</strong>${m.company ? `<span> · ${esc(m.company)}</span>` : ''}</div><time>${fecha}</time></header>
-        <p class="cp-msg-meta"><span class="cp-tag${m.reason === 'freelance' || m.reason === 'auditoria' ? ' is-hl' : ''}">${esc(REASONS[m.reason] || m.reason)}</span><a href="mailto:${esc(m.email)}">${esc(m.email)}</a></p>
+        <p class="cp-msg-meta"><span class="cp-tag${m.reason === 'freelance' || m.reason === 'auditoria' || m.reason === 'herramienta' ? ' is-hl' : ''}">${esc(REASONS[m.reason] || m.reason)}</span><a href="mailto:${esc(m.email)}">${esc(m.email)}</a></p>
         <div class="cp-msg-body">${esc(m.message)}</div>
+        ${m.resultadoId ? `<p class="cp-msg-meta"><a href="herramientas.html?r=${encodeURIComponent(m.resultadoId)}" target="_blank" rel="noopener">Ver el resultado (${esc(m.herramienta || '')})</a></p>` : ''}
         <div class="cp-msg-actions">
           <a class="btn-secondary cp-sm" href="mailto:${esc(m.email)}?subject=${encodeURIComponent('Re: tu mensaje en mi web')}">${icon('mail')}Responder</a>
           ${wa ? `<a class="btn-secondary cp-sm" href="https://wa.me/${wa[0].replace(/\D/g, '')}" target="_blank" rel="noopener">${icon('message')}WhatsApp</a>` : ''}

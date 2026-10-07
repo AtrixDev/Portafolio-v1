@@ -1,0 +1,880 @@
+TAP version 13
+# Subtest: cálculo válido: 201, id, link compartible, resultado del motor y versión
+ok 1 - cálculo válido: 201, id, link compartible, resultado del motor y versión
+  ---
+  duration_ms: 31.397737
+  ...
+# Subtest: entrada inválida: 400 con los errores por campo y NADA se persiste
+ok 2 - entrada inválida: 400 con los errores por campo y NADA se persiste
+  ---
+  duration_ms: 15.592621
+  ...
+# Subtest: EL SERVIDOR RECALCULA: métricas falsas del cliente (en el cuerpo o dentro de la entrada) se ignoran por completo
+ok 3 - EL SERVIDOR RECALCULA: métricas falsas del cliente (en el cuerpo o dentro de la entrada) se ignoran por completo
+  ---
+  duration_ms: 6.944981
+  ...
+# Subtest: la única puerta de entrada es `entrada`: el código del endpoint no lee ninguna otra cosa del cuerpo
+ok 4 - la única puerta de entrada es `entrada`: el código del endpoint no lee ninguna otra cosa del cuerpo
+  ---
+  duration_ms: 3.728487
+  ...
+# Subtest: PERSISTENCIA: qué queda guardado, con qué forma y con la versión del motor
+ok 5 - PERSISTENCIA: qué queda guardado, con qué forma y con la versión del motor
+  ---
+  duration_ms: 4.205187
+  ...
+# Subtest: RECUPERACIÓN POR LINK: GET resultado devuelve exactamente lo guardado
+ok 6 - RECUPERACIÓN POR LINK: GET resultado devuelve exactamente lo guardado
+  ---
+  duration_ms: 5.419096
+  ...
+# Subtest: REPRODUCIBLE: desde lo declarado y la versión guardadas se obtiene EXACTAMENTE el mismo resultado, supuestos y avisos incluidos
+ok 7 - REPRODUCIBLE: desde lo declarado y la versión guardadas se obtiene EXACTAMENTE el mismo resultado, supuestos y avisos incluidos
+  ---
+  duration_ms: 20.32186
+  ...
+# Subtest: HALLAZGO DE S6: la entrada NORMALIZADA reproduce los números pero NO los supuestos ni los avisos (por eso se guarda también lo declarado)
+ok 8 - HALLAZGO DE S6: la entrada NORMALIZADA reproduce los números pero NO los supuestos ni los avisos (por eso se guarda también lo declarado)
+  ---
+  duration_ms: 2.884607
+  ...
+# Subtest: lo declarado no arrastra claves ajenas ni métricas del cliente, y conserva la diferencia entre «no declarado» y «declarado en 0»
+ok 9 - lo declarado no arrastra claves ajenas ni métricas del cliente, y conserva la diferencia entre «no declarado» y «declarado en 0»
+  ---
+  duration_ms: 5.553589
+  ...
+# Subtest: PARIDAD (300 entradas con semilla fija): lo que devuelve y guarda la API es EXACTAMENTE lo que da el motor directo
+ok 10 - PARIDAD (300 entradas con semilla fija): lo que devuelve y guarda la API es EXACTAMENTE lo que da el motor directo
+  ---
+  duration_ms: 1417.733041
+  ...
+# Subtest: LÍMITES: entrada enorme → 413 sin persistir; el peor caso legítimo cabe y NO pierde datos
+ok 11 - LÍMITES: entrada enorme → 413 sin persistir; el peor caso legítimo cabe y NO pierde datos
+  ---
+  duration_ms: 5.869696
+  ...
+# Subtest: LÍMITE DE TASA: 30 cálculos por hora por IP, y otra IP no se ve afectada
+ok 12 - LÍMITE DE TASA: 30 cálculos por hora por IP, y otra IP no se ve afectada
+  ---
+  duration_ms: 32.204735
+  ...
+# Subtest: método y acción: GET calcular no existe
+ok 13 - método y acción: GET calcular no existe
+  ---
+  duration_ms: 0.86692
+  ...
+# Subtest: REUTILIZA F0: el lead después del resultado funciona con un resultado de rentabilidad (sin tocar el sistema de leads)
+ok 14 - REUTILIZA F0: el lead después del resultado funciona con un resultado de rentabilidad (sin tocar el sistema de leads)
+  ---
+  duration_ms: 4.056874
+  ...
+# Subtest: REGRESIÓN F0 por el endpoint: evento, resultado inexistente, lead inválido y honeypot siguen igual tras mover la lógica a lib/
+ok 15 - REGRESIÓN F0 por el endpoint: evento, resultado inexistente, lead inválido y honeypot siguen igual tras mover la lógica a lib/
+  ---
+  duration_ms: 2.075078
+  ...
+# Subtest: ESTRUCTURA: api/herramientas.js es un envoltorio fino y lib/herramientas.js no toca la base real
+ok 16 - ESTRUCTURA: api/herramientas.js es un envoltorio fino y lib/herramientas.js no toca la base real
+  ---
+  duration_ms: 1.224948
+  ...
+# Subtest: A: monotributo — ganancia 3.635, margen 24,23%, markup 60,58%
+ok 17 - A: monotributo — ganancia 3.635, margen 24,23%, markup 60,58%
+  ---
+  duration_ms: 8.298973
+  ...
+# Subtest: el desglose cierra: ingreso neto − Σ costos = ganancia, y el costo total es la suma de las filas
+ok 18 - el desglose cierra: ingreso neto − Σ costos = ganancia, y el costo total es la suma de las filas
+  ---
+  duration_ms: 1.70125
+  ...
+# Subtest: el desglose tiene un orden y unas filas fijas (la interfaz puede confiar en él)
+ok 19 - el desglose tiene un orden y unas filas fijas (la interfaz puede confiar en él)
+  ---
+  duration_ms: 0.805218
+  ...
+# Subtest: ganancia negativa: se informa y el margen es negativo
+ok 20 - ganancia negativa: se informa y el margen es negativo
+  ---
+  duration_ms: 0.938272
+  ...
+# Subtest: costo cero: markup null (no Infinity) y advertencia
+ok 21 - costo cero: markup null (no Infinity) y advertencia
+  ---
+  duration_ms: 0.811219
+  ...
+# Subtest: C: RI con cargos «incluido» — ingreso neto 10.000, comisión neta 1.400, ganancia 3.300, margen 33%
+ok 22 - C: RI con cargos «incluido» — ingreso neto 10.000, comisión neta 1.400, ganancia 3.300, margen 33%
+  ---
+  duration_ms: 0.703896
+  ...
+# Subtest: C2: las cuatro combinaciones de régimen × tratamiento del IVA de los cargos
+ok 23 - C2: las cuatro combinaciones de régimen × tratamiento del IVA de los cargos
+  ---
+  duration_ms: 0.87253
+  ...
+# Subtest: IVA del costo: el monotributista paga el IVA de lo que compra, el RI lo recupera
+ok 24 - IVA del costo: el monotributista paga el IVA de lo que compra, el RI lo recupera
+  ---
+  duration_ms: 1.113276
+  ...
+# Subtest: sin_iva: ningún tratamiento de IVA, sea cual sea lo que se declare
+ok 25 - sin_iva: ningún tratamiento de IVA, sea cual sea lo que se declare
+  ---
+  duration_ms: 0.503972
+  ...
+# Subtest: factorIva: tabla completa
+ok 26 - factorIva: tabla completa
+  ---
+  duration_ms: 0.510522
+  ...
+# Subtest: cargo fijo escalonado: toma el tramo que corresponde al precio (aplica mientras precio < hasta)
+ok 27 - cargo fijo escalonado: toma el tramo que corresponde al precio (aplica mientras precio < hasta)
+  ---
+  duration_ms: 0.88261
+  ...
+# Subtest: publicidad: TACOS = ACOS × participación; la base puede ser precio o neto
+ok 28 - publicidad: TACOS = ACOS × participación; la base puede ser precio o neto
+  ---
+  duration_ms: 0.719486
+  ...
+# Subtest: los defaults quedan registrados como supuestos, y solo si se usaron
+ok 29 - los defaults quedan registrados como supuestos, y solo si se usaron
+  ---
+  duration_ms: 5.481987
+  ...
+# Subtest: I: un porcentaje como 14 en vez de 0,14 se rechaza y se sugiere la fracción
+ok 30 - I: un porcentaje como 14 en vez de 0,14 se rechaza y se sugiere la fracción
+  ---
+  duration_ms: 2.273563
+  ...
+# Subtest: I: precio, costo y tipos inválidos
+ok 31 - I: precio, costo y tipos inválidos
+  ---
+  duration_ms: 2.282643
+  ...
+# Subtest: I: régimen obligatorio y sin default
+ok 32 - I: régimen obligatorio y sin default
+  ---
+  duration_ms: 1.610627
+  ...
+# Subtest: I: el tratamiento del IVA no tiene default cuando importa
+ok 33 - I: el tratamiento del IVA no tiene default cuando importa
+  ---
+  duration_ms: 3.567883
+  ...
+# Subtest: I: sin canal declarado hay advertencia (ganancia sobreestimada); sin impuestos también
+ok 34 - I: sin canal declarado hay advertencia (ganancia sobreestimada); sin impuestos también
+  ---
+  duration_ms: 2.16799
+  ...
+# Subtest: I: tramos inválidos, comisión que suma 100% y listas demasiado largas
+ok 35 - I: tramos inválidos, comisión que suma 100% y listas demasiado largas
+  ---
+  duration_ms: 2.048788
+  ...
+# Subtest: I: validar y evaluar nunca lanzan, con cualquier basura
+ok 36 - I: validar y evaluar nunca lanzan, con cualquier basura
+  ---
+  duration_ms: 2.965739
+  ...
+# Subtest: I: no muta la entrada, no comparte referencias y es reproducible
+ok 37 - I: no muta la entrada, no comparte referencias y es reproducible
+  ---
+  duration_ms: 2.491557
+  ...
+# Subtest: el resultado lleva la versión del motor
+ok 38 - el resultado lleva la versión del motor
+  ---
+  duration_ms: 0.4416
+  ...
+# Subtest: J: redondeo de presentación — mitad lejos de cero, sin -0, null si no es finito
+ok 39 - J: redondeo de presentación — mitad lejos de cero, sin -0, null si no es finito
+  ---
+  duration_ms: 2.691732
+  ...
+# Subtest: J: el motor no redondea el cálculo (solo la presentación lo hace)
+ok 40 - J: el motor no redondea el cálculo (solo la presentación lo hace)
+  ---
+  duration_ms: 1.971226
+  ...
+# Subtest: L: el núcleo solo se importa a sí mismo, sin Node, sin red, sin DOM, sin azar y sin Mercado Libre
+ok 41 - L: el núcleo solo se importa a sí mismo, sin Node, sin red, sin DOM, sin azar y sin Mercado Libre
+  ---
+  duration_ms: 29.861701
+  ...
+# Subtest: los cuatro operadores y el valor directo producen la misma entrada cuando significan lo mismo
+ok 42 - los cuatro operadores y el valor directo producen la misma entrada cuando significan lo mismo
+  ---
+  duration_ms: 30.872235
+  ...
+# Subtest: aplicarCambios devuelve una entrada NUEVA y no muta nada (ni la base ni los cambios)
+ok 43 - aplicarCambios devuelve una entrada NUEVA y no muta nada (ni la base ni los cambios)
+  ---
+  duration_ms: 1.490724
+  ...
+# Subtest: un campo no declarado sigue sin declararse (las advertencias se conservan en el escenario)
+ok 44 - un campo no declarado sigue sin declararse (las advertencias se conservan en el escenario)
+  ---
+  duration_ms: 6.556472
+  ...
+# Subtest: operadores sobre cargos escalonados: se aplican a cada tramo
+ok 45 - operadores sobre cargos escalonados: se aplican a cada tramo
+  ---
+  duration_ms: 2.032337
+  ...
+# Subtest: cambios inválidos: se explican uno por uno y nunca lanzan
+ok 46 - cambios inválidos: se explican uno por uno y nunca lanzan
+  ---
+  duration_ms: 2.862656
+  ...
+# Subtest: los 4 escenarios típicos sobre el caso A, con números calculados a mano
+ok 47 - los 4 escenarios típicos sobre el caso A, con números calculados a mano
+  ---
+  duration_ms: 5.16738
+  ...
+# Subtest: las métricas derivadas también cambian: el precio piso depende de costos y publicidad, no del precio cargado
+ok 48 - las métricas derivadas también cambian: el precio piso depende de costos y publicidad, no del precio cargado
+  ---
+  duration_ms: 3.577753
+  ...
+# Subtest: margen y markup se comparan en puntos; el desglose dice qué costo cambió
+ok 49 - margen y markup se comparan en puntos; el desglose dice qué costo cambió
+  ---
+  duration_ms: 3.328417
+  ...
+# Subtest: el desglose se compara por id: cambiar la cantidad de costos extra no desalinea nada
+ok 50 - el desglose se compara por id: cambiar la cantidad de costos extra no desalinea nada
+  ---
+  duration_ms: 2.506118
+  ...
+# Subtest: diferencias: null cuando falta un lado o la base es cero; «igual» cuando no cambia
+ok 51 - diferencias: null cuando falta un lado o la base es cero; «igual» cuando no cambia
+  ---
+  duration_ms: 5.393135
+  ...
+# Subtest: un escenario inválido no frena a los demás y explica por qué
+ok 52 - un escenario inválido no frena a los demás y explica por qué
+  ---
+  duration_ms: 2.106799
+  ...
+# Subtest: lista de escenarios y base inválidas
+ok 53 - lista de escenarios y base inválidas
+  ---
+  duration_ms: 7.033143
+  ...
+# Subtest: determinismo e independencia: mismo resultado siempre, y el orden de los escenarios no cambia sus números
+ok 54 - determinismo e independencia: mismo resultado siempre, y el orden de los escenarios no cambia sus números
+  ---
+  duration_ms: 17.942486
+  ...
+# Subtest: empate en el ranking: gana el que se pasó primero
+ok 55 - empate en el ranking: gana el que se pasó primero
+  ---
+  duration_ms: 3.89894
+  ...
+# Subtest: no muta lo que recibe
+ok 56 - no muta lo que recibe
+  ---
+  duration_ms: 11.877035
+  ...
+# Subtest: barrido de precio: la ganancia cruza el cero donde el piso dice (10.594)
+ok 57 - barrido de precio: la ganancia cruza el cero donde el piso dice (10.594)
+  ---
+  duration_ms: 4.902814
+  ...
+# Subtest: barrido de ACOS y de costo: el equilibrio sale de las inversas
+ok 58 - barrido de ACOS y de costo: el equilibrio sale de las inversas
+  ---
+  duration_ms: 7.223207
+  ...
+# Subtest: barrido de una variable sin inversa propia: sin «equilibrio», pero con cambio de signo
+ok 59 - barrido de una variable sin inversa propia: sin «equilibrio», pero con cambio de signo
+  ---
+  duration_ms: 8.958767
+  ...
+# Subtest: barrido: valores que hacen inválida la entrada no tiran el resto
+ok 60 - barrido: valores que hacen inválida la entrada no tiran el resto
+  ---
+  duration_ms: 3.513671
+  ...
+# Subtest: barrido: variable y valores inválidos
+ok 61 - barrido: variable y valores inválidos
+  ---
+  duration_ms: 2.779425
+  ...
+# Subtest: barrido: un cargo escalonado no es barrible; valores fuera de lo permitido
+ok 62 - barrido: un cargo escalonado no es barrible; valores fuera de lo permitido
+  ---
+  duration_ms: 7.571875
+  ...
+# Subtest: rango: equiespaciado, inclusivo y sin ruido de punto flotante
+ok 63 - rango: equiespaciado, inclusivo y sin ruido de punto flotante
+  ---
+  duration_ms: 1.908624
+  ...
+# Subtest: PROPIEDADES (400 casos con semilla fija): cada número de un escenario es EXACTAMENTE el de evaluar/inversas sobre la entrada con cambios
+ok 64 - PROPIEDADES (400 casos con semilla fija): cada número de un escenario es EXACTAMENTE el de evaluar/inversas sobre la entrada con cambios
+  ---
+  duration_ms: 810.941904
+  ...
+# Subtest: escenarios.js no tiene fórmulas económicas propias: no conoce IVA, comisiones ni factores
+ok 65 - escenarios.js no tiene fórmulas económicas propias: no conoce IVA, comisiones ni factores
+  ---
+  duration_ms: 4.872363
+  ...
+# Subtest: sin GROQ_API_KEY devuelve el fallback determinista
+ok 66 - sin GROQ_API_KEY devuelve el fallback determinista
+  ---
+  duration_ms: 6.995772
+  ...
+# Subtest: exige fallback y validar
+ok 67 - exige fallback y validar
+  ---
+  duration_ms: 2.097318
+  ...
+# Subtest: con clave y JSON válido usa la IA
+ok 68 - con clave y JSON válido usa la IA
+  ---
+  duration_ms: 2.831395
+  ...
+# Subtest: JSON inválido, error HTTP o red caída → fallback
+ok 69 - JSON inválido, error HTTP o red caída → fallback
+  ---
+  duration_ms: 1.583757
+  ...
+# Subtest: GROQ_API_KEY solo se lee en lib/ia.js y en el título opcional de lib/audit.js
+ok 70 - GROQ_API_KEY solo se lee en lib/ia.js y en el título opcional de lib/audit.js
+  ---
+  duration_ms: 49.651059
+  ...
+# Subtest: guardar → leer: el servidor es la única fuente, y se cuenta la métrica
+ok 71 - guardar → leer: el servidor es la única fuente, y se cuenta la métrica
+  ---
+  duration_ms: 29.103114
+  ...
+# Subtest: rechaza herramientas desconocidas e ids inválidos o inexistentes
+ok 72 - rechaza herramientas desconocidas e ids inválidos o inexistentes
+  ---
+  duration_ms: 0.876061
+  ...
+# Subtest: limpiarResumen recorta, normaliza y descarta basura
+ok 73 - limpiarResumen recorta, normaliza y descarta basura
+  ---
+  duration_ms: 0.86407
+  ...
+# Subtest: si no se puede leer nada, el veredicto lo dice y no inventa
+ok 74 - si no se puede leer nada, el veredicto lo dice y no inventa
+  ---
+  duration_ms: 0.46113
+  ...
+# Subtest: el 100/100 engañoso desapareció: 1 de 8 criterios → score null
+ok 75 - el 100/100 engañoso desapareció: 1 de 8 criterios → score null
+  ---
+  duration_ms: 1.528155
+  ...
+# Subtest: regresión: con datos completos el score no cambia (90) y la cobertura es total
+ok 76 - regresión: con datos completos el score no cambia (90) y la cobertura es total
+  ---
+  duration_ms: 0.470911
+  ...
+# Subtest: catálogo sin ganador (peso 55) sigue dando puntaje
+ok 77 - catálogo sin ganador (peso 55) sigue dando puntaje
+  ---
+  duration_ms: 0.847839
+  ...
+# Subtest: planDeAccion sin puntaje no dice «Sin acciones necesarias» ni inventa potencial
+ok 78 - planDeAccion sin puntaje no dice «Sin acciones necesarias» ni inventa potencial
+  ---
+  duration_ms: 1.529635
+  ...
+# Subtest: planDeAccion: «Sin acciones necesarias» solo si la cobertura es total
+ok 79 - planDeAccion: «Sin acciones necesarias» solo si la cobertura es total
+  ---
+  duration_ms: 0.88181
+  ...
+# Subtest: el resumen público dice «parcial», lista lo que no vio y no declara que está bien
+ok 80 - el resumen público dice «parcial», lista lo que no vio y no declara que está bien
+  ---
+  duration_ms: 2.188761
+  ...
+# Subtest: A: precio de equilibrio = 8.740 / 0,825 = 10.593,94 → $10.594 (redondeo hacia arriba, verificado)
+ok 81 - A: precio de equilibrio = 8.740 / 0,825 = 10.593,94 → $10.594 (redondeo hacia arriba, verificado)
+  ---
+  duration_ms: 11.358393
+  ...
+# Subtest: B: cargo fijo escalonado — el piso busca el tramo más barato que sirve
+ok 82 - B: cargo fijo escalonado — el piso busca el tramo más barato que sirve
+  ---
+  duration_ms: 1.172457
+  ...
+# Subtest: B: margen 30% — el tramo 1 no lo alcanza (máx. 21,4%) y se resuelve en el tramo 2: $16.648
+ok 83 - B: margen 30% — el tramo 1 no lo alcanza (máx. 21,4%) y se resuelve en el tramo 2: $16.648
+  ---
+  duration_ms: 1.865013
+  ...
+# Subtest: caso límite: el redondeo hacia arriba cruza de tramo y ahí ya no cumple — se sigue buscando
+ok 84 - caso límite: el redondeo hacia arriba cruza de tramo y ahí ya no cumple — se sigue buscando
+  ---
+  duration_ms: 1.023944
+  ...
+# Subtest: caso límite: piso NO estable — un salto de cargo lo rompe más arriba (se informa desde cuándo es estable)
+ok 85 - caso límite: piso NO estable — un salto de cargo lo rompe más arriba (se informa desde cuándo es estable)
+  ---
+  duration_ms: 1.625098
+  ...
+# Subtest: ganancia objetivo por unidad: (8.740 + 1.000) / 0,825 = 11.806,06 → $11.807
+ok 86 - ganancia objetivo por unidad: (8.740 + 1.000) / 0,825 = 11.806,06 → $11.807
+  ---
+  duration_ms: 0.718807
+  ...
+# Subtest: margen objetivo 20%: 8.740 / 0,625 = 13.984 exacto — el redondeo no sube un peso de más
+ok 87 - margen objetivo 20%: 8.740 / 0,625 = 13.984 exacto — el redondeo no sube un peso de más
+  ---
+  duration_ms: 2.827015
+  ...
+# Subtest: margen y ganancia a la vez se cumplen los dos
+ok 88 - margen y ganancia a la vez se cumplen los dos
+  ---
+  duration_ms: 0.934012
+  ...
+# Subtest: RI: el piso se verifica contra el cálculo directo (IVA de producto y de cargos)
+ok 89 - RI: el piso se verifica contra el cálculo directo (IVA de producto y de cargos)
+  ---
+  duration_ms: 1.384662
+  ...
+# Subtest: sin precio posible: cargos que se comen el ingreso (a = 0)
+ok 90 - sin precio posible: cargos que se comen el ingreso (a = 0)
+  ---
+  duration_ms: 0.744027
+  ...
+# Subtest: margen inalcanzable: se informa el techo (a / kP) en vez de un número absurdo
+ok 91 - margen inalcanzable: se informa el techo (a / kP) en vez de un número absurdo
+  ---
+  duration_ms: 1.041554
+  ...
+# Subtest: sin costos el piso es 0 (cualquier precio positivo gana)
+ok 92 - sin costos el piso es 0 (cualquier precio positivo gana)
+  ---
+  duration_ms: 0.609544
+  ...
+# Subtest: precio fuera de rango: más de $1.000.000.000
+ok 93 - precio fuera de rango: más de $1.000.000.000
+  ---
+  duration_ms: 0.466551
+  ...
+# Subtest: precioPiso devuelve equilibrio + objetivos declarados, y avisa si un cargo fijo constante puede cambiar con el precio
+ok 94 - precioPiso devuelve equilibrio + objetivos declarados, y avisa si un cargo fijo constante puede cambiar con el precio
+  ---
+  duration_ms: 1.463504
+  ...
+# Subtest: D: ACOS de equilibrio = 3.635 / 15.000 = 24,23% (y con ese ACOS la ganancia es 0)
+ok 95 - D: ACOS de equilibrio = 3.635 / 15.000 = 24,23% (y con ese ACOS la ganancia es 0)
+  ---
+  duration_ms: 1.208448
+  ...
+# Subtest: ACOS para un margen objetivo del 10%: (3.635 − 1.500) / 15.000 = 14,23%
+ok 96 - ACOS para un margen objetivo del 10%: (3.635 − 1.500) / 15.000 = 14,23%
+  ---
+  duration_ms: 0.542872
+  ...
+# Subtest: ACOS con participación: si solo la mitad de las ventas viene de ads, el ACOS tolerable se duplica y el TACOS no cambia
+ok 97 - ACOS con participación: si solo la mitad de las ventas viene de ads, el ACOS tolerable se duplica y el TACOS no cambia
+  ---
+  duration_ms: 2.719973
+  ...
+# Subtest: ACOS con RI y base neto: verificado contra el cálculo directo
+ok 98 - ACOS con RI y base neto: verificado contra el cálculo directo
+  ---
+  duration_ms: 0.931141
+  ...
+# Subtest: ACOS: casos límite — sin margen, sin ventas por ads, IVA de publicidad sin declarar
+ok 99 - ACOS: casos límite — sin margen, sin ventas por ads, IVA de publicidad sin declarar
+  ---
+  duration_ms: 0.608564
+  ...
+# Subtest: E: costo máximo para margen 20% = 15.000 − 2.100 − 2.740 − 525 − 3.000 = $6.635
+ok 100 - E: costo máximo para margen 20% = 15.000 − 2.100 − 2.740 − 525 − 3.000 = $6.635
+  ---
+  duration_ms: 3.167933
+  ...
+# Subtest: costo máximo sin objetivo = no perder plata: 15.000 − 2.100 − 2.740 − 525 = $9.635
+ok 101 - costo máximo sin objetivo = no perder plata: 15.000 − 2.100 − 2.740 − 525 = $9.635
+  ---
+  duration_ms: 0.382339
+  ...
+# Subtest: costo máximo: se devuelve en los términos en que se carga (con IVA si el costo lleva IVA)
+ok 102 - costo máximo: se devuelve en los términos en que se carga (con IVA si el costo lleva IVA)
+  ---
+  duration_ms: 0.477691
+  ...
+# Subtest: costo máximo con costos extra: se descuentan antes de repartir
+ok 103 - costo máximo con costos extra: se descuentan antes de repartir
+  ---
+  duration_ms: 1.012903
+  ...
+# Subtest: costo máximo: límites — IVA del costo sin declarar y objetivo inalcanzable aun regalado el producto
+ok 104 - costo máximo: límites — IVA del costo sin declarar y objetivo inalcanzable aun regalado el producto
+  ---
+  duration_ms: 0.638325
+  ...
+# Subtest: F: unidades de equilibrio y para un objetivo mensual
+ok 105 - F: unidades de equilibrio y para un objetivo mensual
+  ---
+  duration_ms: 0.919141
+  ...
+# Subtest: unidades: sin error de punto flotante en los exactos, y casos límite
+ok 106 - unidades: sin error de punto flotante en los exactos, y casos límite
+  ---
+  duration_ms: 0.524572
+  ...
+# Subtest: resolverObjetivos junta todo con los objetivos de la entrada
+ok 107 - resolverObjetivos junta todo con los objetivos de la entrada
+  ---
+  duration_ms: 0.901461
+  ...
+# Subtest: entrada inválida → ok:false con errores, sin lanzar
+ok 108 - entrada inválida → ok:false con errores, sin lanzar
+  ---
+  duration_ms: 1.431053
+  ...
+# Subtest: validar es idempotente: la entrada normalizada vuelve a normalizarse a sí misma
+ok 109 - validar es idempotente: la entrada normalizada vuelve a normalizarse a sí misma
+  ---
+  duration_ms: 0.935462
+  ...
+# Subtest: PROPIEDADES (600 entradas con semilla fija): el piso es mínimo y cumple; las inversas se revierten con el cálculo directo
+ok 110 - PROPIEDADES (600 entradas con semilla fija): el piso es mínimo y cumple; las inversas se revierten con el cálculo directo
+  ---
+  duration_ms: 790.922231
+  ...
+# Subtest: el corpus es determinista y cubre todo el motor
+ok 111 - el corpus es determinista y cubre todo el motor
+  ---
+  duration_ms: 2424.323211
+  ...
+# Subtest: el corpus no depende de nada de Node: es una función autocontenida (se puede ejecutar en un navegador)
+ok 112 - el corpus no depende de nada de Node: es una función autocontenida (se puede ejecutar en un navegador)
+  ---
+  duration_ms: 2.268543
+  ...
+# Subtest: el corpus detecta una diferencia: un motor alterado da otras huellas
+ok 113 - el corpus detecta una diferencia: un motor alterado da otras huellas
+  ---
+  duration_ms: 409.911807
+  ...
+# Subtest: dev-server sirve /js/motor/* idéntico a la fuente (bytes), como JavaScript, y nada más
+ok 114 - dev-server sirve /js/motor/* idéntico a la fuente (bytes), como JavaScript, y nada más
+  ---
+  duration_ms: 383.67064
+  ...
+# Subtest: build-deploy.py copia el motor al sitio público sin documentación, y el repo no guarda ninguna copia
+ok 115 - build-deploy.py copia el motor al sitio público sin documentación, y el repo no guarda ninguna copia
+  ---
+  duration_ms: 1.450813
+  ...
+# Subtest: ningún archivo del frontend define el motor: solo hay (a lo sumo) importaciones
+ok 116 - ningún archivo del frontend define el motor: solo hay (a lo sumo) importaciones
+  ---
+  duration_ms: 12.805836
+  ...
+# Subtest: DUPLICACIÓN CONOCIDA (a migrar con paridad): solo estos tres archivos calculan economía por unidad fuera del motor
+ok 117 - DUPLICACIÓN CONOCIDA (a migrar con paridad): solo estos tres archivos calculan economía por unidad fuera del motor
+  ---
+  duration_ms: 22.524921
+  ...
+# Subtest: los módulos del motor son JavaScript de navegador: solo import relativo a ./x.js, sin APIs de Node, y con sintaxis soportada
+ok 118 - los módulos del motor son JavaScript de navegador: solo import relativo a ./x.js, sin APIs de Node, y con sintaxis soportada
+  ---
+  duration_ms: 3.339187
+  ...
+# Subtest: el modelo extraído de importar.js es el real: reproduce lo que dio la página en un navegador (window.__importar.modelo, 02/10/2026)
+ok 119 - el modelo extraído de importar.js es el real: reproduce lo que dio la página en un navegador (window.__importar.modelo, 02/10/2026)
+  ---
+  duration_ms: 7.459022
+  ...
+# Subtest: verificación independiente (a mano) del ejemplo: ni importar.js ni el motor — solo aritmética
+ok 120 - verificación independiente (a mano) del ejemplo: ni importar.js ni el motor — solo aritmética
+  ---
+  duration_ms: 0.775008
+  ...
+# Subtest: PARIDAD: los 14 conceptos de venta coinciden en todos los casos comparables
+ok 121 - PARIDAD: los 14 conceptos de venta coinciden en todos los casos comparables
+  ---
+  duration_ms: 3.699726
+  ...
+# Subtest: PARIDAD: el caso base y el caso RI, concepto por concepto
+ok 122 - PARIDAD: el caso base y el caso RI, concepto por concepto
+  ---
+  duration_ms: 0.927301
+  ...
+# Subtest: PARIDAD: los casos límite coinciden también cuando «no hay valor» (cargos que tragan todo el ingreso: ambos dicen sin precio)
+ok 123 - PARIDAD: los casos límite coinciden también cuando «no hay valor» (cargos que tragan todo el ingreso: ambos dicen sin precio)
+  ---
+  duration_ms: 1.149987
+  ...
+# Subtest: DIFERENCIAS: exactamente dos entradas que el motor rechaza, con su causa — nada oculto
+ok 124 - DIFERENCIAS: exactamente dos entradas que el motor rechaza, con su causa — nada oculto
+  ---
+  duration_ms: 0.588364
+  ...
+# Subtest: DIFERENCIAS: importar.js convierte en silencio los números inválidos en 0; el motor los rechaza
+ok 125 - DIFERENCIAS: importar.js convierte en silencio los números inválidos en 0; el motor los rechaza
+  ---
+  duration_ms: 1.516095
+  ...
+# Subtest: LA PARIDAD DEPENDE DE UN SUPUESTO SIN VERIFICAR: con los cargos «adicional» deja de coincidir (el arnés sí lo detecta)
+ok 126 - LA PARIDAD DEPENDE DE UN SUPUESTO SIN VERIFICAR: con los cargos «adicional» deja de coincidir (el arnés sí lo detecta)
+  ---
+  duration_ms: 2.14409
+  ...
+# Subtest: el posible doble conteo de la financiación se cuantifica con el ejemplo (ilustrativo)
+ok 127 - el posible doble conteo de la financiación se cuantifica con el ejemplo (ilustrativo)
+  ---
+  duration_ms: 4.123576
+  ...
+# Subtest: el documento generado está al día con el código (si falla: node tools/paridad-importar.mjs --escribir)
+ok 128 - el documento generado está al día con el código (si falla: node tools/paridad-importar.mjs --escribir)
+  ---
+  duration_ms: 73.756617
+  ...
+# Subtest: la herramienta de paridad no modifica importar.js ni nada fuera de docs/
+ok 129 - la herramienta de paridad no modifica importar.js ni nada fuera de docs/
+  ---
+  duration_ms: 6.195193
+  ...
+# Subtest: los casos son reproducibles (semilla fija) y suficientes
+ok 130 - los casos son reproducibles (semilla fija) y suficientes
+  ---
+  duration_ms: 46.147029
+  ...
+# Subtest: num-ar: lee números como los escribe una persona en Argentina y rechaza lo que no es número
+ok 131 - num-ar: lee números como los escribe una persona en Argentina y rechaza lo que no es número
+  ---
+  duration_ms: 6.807647
+  ...
+# Subtest: el ejemplo arma exactamente el caso A (y queda rotulado como inventado en la pantalla)
+ok 132 - el ejemplo arma exactamente el caso A (y queda rotulado como inventado en la pantalla)
+  ---
+  duration_ms: 4.826122
+  ...
+# Subtest: formulario vacío: no manda ningún valor económico, solo el régimen visible; pide precio y costo
+ok 133 - formulario vacío: no manda ningún valor económico, solo el régimen visible; pide precio y costo
+  ---
+  duration_ms: 1.151017
+  ...
+# Subtest: el 0 escrito a propósito se manda; el campo vacío no
+ok 134 - el 0 escrito a propósito se manda; el campo vacío no
+  ---
+  duration_ms: 0.679016
+  ...
+# Subtest: ida y vuelta: entrada guardada → formulario → la misma entrada (con tramos, extras, publicidad y objetivos)
+ok 135 - ida y vuelta: entrada guardada → formulario → la misma entrada (con tramos, extras, publicidad y objetivos)
+  ---
+  duration_ms: 3.45895
+  ...
+# Subtest: textos que no son números y tramos incompletos van a «invalidos» y no se mandan
+ok 136 - textos que no son números y tramos incompletos van a «invalidos» y no se mandan
+  ---
+  duration_ms: 1.612538
+  ...
+# Subtest: cada error del motor apunta al control correcto, aunque haya filas vacías en el medio
+ok 137 - cada error del motor apunta al control correcto, aunque haya filas vacías en el medio
+  ---
+  duration_ms: 6.303105
+  ...
+# Subtest: A: veredicto, precios, costos, avisos y supuestos salen del resultado real del motor
+ok 138 - A: veredicto, precios, costos, avisos y supuestos salen del resultado real del motor
+  ---
+  duration_ms: 15.429307
+  ...
+# Subtest: pérdida: el veredicto lo decide el motor (aviso de ganancia negativa) y se dice «Perdés»
+ok 139 - pérdida: el veredicto lo decide el motor (aviso de ganancia negativa) y se dice «Perdés»
+  ---
+  duration_ms: 4.938034
+  ...
+# Subtest: ninguna cifra en pantalla es inventada: cada monto y porcentaje es el formato de un número del resultado
+ok 140 - ninguna cifra en pantalla es inventada: cada monto y porcentaje es el formato de un número del resultado
+  ---
+  duration_ms: 120.763025
+  ...
+# Subtest: invariancia: con un resultado fabricado e incoherente, la pantalla muestra esos números tal cual (no recalcula)
+ok 141 - invariancia: con un resultado fabricado e incoherente, la pantalla muestra esos números tal cual (no recalcula)
+  ---
+  duration_ms: 3.476291
+  ...
+# Subtest: escenarios: base, efecto decidido por el motor y escenario que no se puede calcular por falta de un dato
+ok 142 - escenarios: base, efecto decidido por el motor y escenario que no se puede calcular por falta de un dato
+  ---
+  duration_ms: 6.817058
+  ...
+# Subtest: resultado compartido: aviso de versión distinta y botón para usar los datos
+ok 143 - resultado compartido: aviso de versión distinta y botón para usar los datos
+  ---
+  duration_ms: 0.776368
+  ...
+# Subtest: los errores del motor se muestran con su texto, sin las pistas técnicas
+ok 144 - los errores del motor se muestran con su texto, sin las pistas técnicas
+  ---
+  duration_ms: 1.107126
+  ...
+# Subtest: todo texto que viene de afuera se escapa
+ok 145 - todo texto que viene de afuera se escapa
+  ---
+  duration_ms: 8.252281
+  ...
+# Subtest: los nombres de costos adicionales se recortan y los textos se escapan también con comillas
+ok 146 - los nombres de costos adicionales se recortan y los textos se escapan también con comillas
+  ---
+  duration_ms: 0.597924
+  ...
+# Subtest: caso con 3 unidades y objetivos: ganancia total, nota repetida una sola vez, anclas de accesibilidad existentes y barra consistente
+ok 147 - caso con 3 unidades y objetivos: ganancia total, nota repetida una sola vez, anclas de accesibilidad existentes y barra consistente
+  ---
+  duration_ms: 11.973347
+  ...
+# Subtest: la UI no hace cuentas con valores económicos (ni del motor ni del formulario)
+ok 148 - la UI no hace cuentas con valores económicos (ni del motor ni del formulario)
+  ---
+  duration_ms: 25.876219
+  ...
+# Subtest: capas: el formulario y el render no importan el motor; el orquestador lo usa solo desde js/motor/
+ok 149 - capas: el formulario y el render no importan el motor; el orquestador lo usa solo desde js/motor/
+  ---
+  duration_ms: 1.411413
+  ...
+# Subtest: la UI no redefine ninguna función del motor
+ok 150 - la UI no redefine ninguna función del motor
+  ---
+  duration_ms: 2.420956
+  ...
+# Subtest: ninguna clase con «ad-» (AdBlock las oculta) y ningún nombre de marketplace en la página
+ok 151 - ninguna clase con «ad-» (AdBlock las oculta) y ningún nombre de marketplace en la página
+  ---
+  duration_ms: 5.860536
+  ...
+# Subtest: la duplicación económica conocida sigue siendo solo importar.js, perdida.js y tracker.js (la UI nueva no suma otra)
+ok 152 - la duplicación económica conocida sigue siendo solo importar.js, perdida.js y tracker.js (la UI nueva no suma otra)
+  ---
+  duration_ms: 3.709466
+  ...
+# Subtest: el registro cubre TODOS los campos de la entrada normalizada (si aparece un campo nuevo, este test obliga a clasificarlo)
+ok 153 - el registro cubre TODOS los campos de la entrada normalizada (si aparece un campo nuevo, este test obliga a clasificarlo)
+  ---
+  duration_ms: 7.852452
+  ...
+# Subtest: OBLIGATORIOS: faltar el dato es un error con el código documentado
+ok 154 - OBLIGATORIOS: faltar el dato es un error con el código documentado
+  ---
+  duration_ms: 1.931765
+  ...
+# Subtest: OBLIGATORIOS: cuando la condición NO se cumple, no se exige (sin_iva, o sin cargos / sin costo / sin ads)
+ok 155 - OBLIGATORIOS: cuando la condición NO se cumple, no se exige (sin_iva, o sin cargos / sin costo / sin ads)
+  ---
+  duration_ms: 0.884211
+  ...
+# Subtest: DEFAULTS: cada uno hace lo que el registro dice (valor, supuesto registrado, aviso)
+ok 156 - DEFAULTS: cada uno hace lo que el registro dice (valor, supuesto registrado, aviso)
+  ---
+  duration_ms: 3.725076
+  ...
+# Subtest: DEFAULTS: un default «registrado» NO se anota cuando no se usa
+ok 157 - DEFAULTS: un default «registrado» NO se anota cuando no se usa
+  ---
+  duration_ms: 0.528873
+  ...
+# Subtest: BRECHAS CONOCIDAS (S1): estos defaults en 0 cambian el resultado en pesos y NO dejan supuesto ni aviso
+ok 158 - BRECHAS CONOCIDAS (S1): estos defaults en 0 cambian el resultado en pesos y NO dejan supuesto ni aviso
+  ---
+  duration_ms: 3.094381
+  ...
+# Subtest: el motor no usa las referencias: ni las importa ni contiene sus números
+ok 159 - el motor no usa las referencias: ni las importa ni contiene sus números
+  ---
+  duration_ms: 5.349133
+  ...
+# Subtest: sin comisión declarada el motor NO usa 14% ni 29%: la toma como 0 y avisa
+ok 160 - sin comisión declarada el motor NO usa 14% ni 29%: la toma como 0 y avisa
+  ---
+  duration_ms: 0.485592
+  ...
+# Subtest: las referencias están completas, con procedencia, y coinciden con los archivos de donde salen
+ok 161 - las referencias están completas, con procedencia, y coinciden con los archivos de donde salen
+  ---
+  duration_ms: 2.909567
+  ...
+# Subtest: lo observado en la API es internamente coherente (Premium = venta + financiación) y marcado como caso, no regla
+ok 162 - lo observado en la API es internamente coherente (Premium = venta + financiación) y marcado como caso, no regla
+  ---
+  duration_ms: 1.29907
+  ...
+# Subtest: formato es-AR sin Intl: miles con punto, decimales con coma, sin ceros de relleno, menos tipográfico
+ok 163 - formato es-AR sin Intl: miles con punto, decimales con coma, sin ceros de relleno, menos tipográfico
+  ---
+  duration_ms: 12.159591
+  ...
+# Subtest: rótulos de texto: ninguno menciona un marketplace ni inventa un código
+ok 164 - rótulos de texto: ninguno menciona un marketplace ni inventa un código
+  ---
+  duration_ms: 0.812999
+  ...
+# Subtest: A: resumen guardable — texto, números y filas esperados
+ok 165 - A: resumen guardable — texto, números y filas esperados
+  ---
+  duration_ms: 12.842087
+  ...
+# Subtest: con publicidad, objetivos, fijos y varias unidades aparecen todas las filas, en orden
+ok 166 - con publicidad, objetivos, fijos y varias unidades aparecen todas las filas, en orden
+  ---
+  duration_ms: 3.661515
+  ...
+# Subtest: a pérdida: lo dice el motor (GANANCIA_NEGATIVA) y la vista solo lo repite
+ok 167 - a pérdida: lo dice el motor (GANANCIA_NEGATIVA) y la vista solo lo repite
+  ---
+  duration_ms: 2.254222
+  ...
+# Subtest: sin solución: el motivo viene del motor y la vista lo traduce a texto
+ok 168 - sin solución: el motivo viene del motor y la vista lo traduce a texto
+  ---
+  duration_ms: 2.825695
+  ...
+# Subtest: avisos del motor: faltantes graves entran al resumen (máx. 2) y los de severidad baja no
+ok 169 - avisos del motor: faltantes graves entran al resumen (máx. 2) y los de severidad baja no
+  ---
+  duration_ms: 2.878966
+  ...
+# Subtest: NO RECALCULA: con resultados inventados e incoherentes muestra exactamente lo que recibe
+ok 170 - NO RECALCULA: con resultados inventados e incoherentes muestra exactamente lo que recibe
+  ---
+  duration_ms: 9.025179
+  ...
+# Subtest: NO DECIDE: «ok» depende solo de la advertencia del motor, no de comparar montos
+ok 171 - NO DECIDE: «ok» depende solo de la advertencia del motor, no de comparar montos
+  ---
+  duration_ms: 2.966309
+  ...
+# Subtest: ESTÁTICO: vista.js no contiene fórmulas — sin imports de cálculo, sin aritmética ni comparaciones sobre campos del motor
+ok 172 - ESTÁTICO: vista.js no contiene fórmulas — sin imports de cálculo, sin aritmética ni comparaciones sobre campos del motor
+  ---
+  duration_ms: 2.657491
+  ...
+# Subtest: el análisis estático DETECTA una fórmula escondida (se prueba con código roto a propósito)
+ok 173 - el análisis estático DETECTA una fórmula escondida (se prueba con código roto a propósito)
+  ---
+  duration_ms: 5.424075
+  ...
+# Subtest: PROPIEDADES (400 entradas con semilla fija): siempre un resumen válido, estable al limpiar, sin NaN ni undefined
+ok 174 - PROPIEDADES (400 entradas con semilla fija): siempre un resumen válido, estable al limpiar, sin NaN ni undefined
+  ---
+  duration_ms: 517.873728
+  ...
+1..174
+# tests 174
+# suites 0
+# pass 174
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3672.466001

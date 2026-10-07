@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sistema: IA aplicada a Mercado Libre | Darío Colángelo</title>
+  <title>Cómo trabajo: IA y datos aplicados a Mercado Libre | Darío Colángelo</title>
   <meta name="description" content="Cómo uso Claude y la API de Mercado Libre para auditar publicaciones, cuidar el margen y decidir con datos: skills rankeadas, método y prompts listos para usar.">
   <meta name="author" content="Darío Colángelo">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#efefec" media="(prefers-color-scheme: light)">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="IA aplicada a Mercado Libre | Darío Colángelo">
+  <meta property="og:title" content="Cómo trabajo: IA y datos aplicados a Mercado Libre | Darío Colángelo">
   <meta property="og:description" content="Cómo uso Claude y la API de Mercado Libre para auditar publicaciones, cuidar el margen y decidir con datos: skills rankeadas, método y prompts listos para usar.">
   <meta property="og:locale" content="es_AR">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ffe14a'/><text x='50%25' y='54%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-weight='bold' font-size='14' fill='%23141207'>DC</text></svg>">
@@ -31,12 +31,17 @@
 <nav id="site-nav" aria-label="Principal">
   <a href="index.html" class="nav-logo" aria-label="Darío Colángelo, inicio"><span class="nav-mark" aria-hidden="true">DC</span><span class="nav-name">Darío Colángelo</span></a>
   <ul class="nav-links">
-    <li><a href="index.html">CV</a></li>
-    <li><a href="herramientas.html">Herramientas</a></li>
-    <li><a href="lab.html">Lab ML</a></li>
-    <li><a href="sistema.html" class="active" aria-current="page">Sistema</a></li>
-    <li><a href="programacion.html">Base de datos</a></li>
-    <li><a href="web.html">Revisá tu web</a></li>
+    <li><a href="index.html#experiencia">Trayectoria</a></li>
+    <li class="nav-group" data-grupo="ml">
+      <a href="herramientas.html" class="nav-parent active" aria-current="true">Mercado Libre</a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-sub-ml" aria-label="Opciones de Mercado Libre"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+      <div class="nav-sub" id="nav-sub-ml" aria-label="Mercado Libre"><p class="nav-sub-h">Hacer</p><ul><li><a href="herramientas.html">Herramientas</a></li><li><a href="herramientas.html#chequeo">Chequeo de publicación</a></li><li><a href="rentabilidad.html">Rentabilidad</a></li><li><a href="importar.html">Importación</a></li><li><a href="perdida.html">Pérdida en publicidad</a></li><li><a href="sistema.html#auditar">Auditoría de cuenta</a></li><li><a href="informe-muestra.html">Informe de muestra</a></li></ul><p class="nav-sub-h">Aprender</p><ul><li><a href="lab.html">Guías</a></li></ul><p class="nav-sub-h">Entender</p><ul><li><a href="sistema.html" aria-current="page">Cómo trabajo</a></li></ul></div>
+    </li>
+    <li class="nav-group" data-grupo="web">
+      <a href="web.html" class="nav-parent">Desarrollo web</a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-sub-web" aria-label="Opciones de Desarrollo web"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+      <div class="nav-sub" id="nav-sub-web" aria-label="Desarrollo web"><ul><li><a href="web.html">Revisá tu web</a></li><li><a href="armar.html">Armá tu web</a></li><li><a href="programacion.html">Biblioteca web</a></li><li><a href="arquitecto.html">Project Architect</a></li></ul></div>
+    </li>
     <li><a href="contacto.html" class="nav-cta">Contacto</a></li>
   </ul>
   <div class="nav-actions">
@@ -50,12 +55,17 @@
   </div>
 </nav>
 <div class="mobile-menu" id="mobileMenu" aria-label="Menú">
-  <a href="index.html">CV</a>
-  <a href="herramientas.html">Herramientas</a>
-  <a href="lab.html">Lab ML</a>
-  <a href="sistema.html" class="active" aria-current="page">Sistema</a>
-  <a href="programacion.html">Base de datos</a>
-  <a href="web.html">Revisá tu web</a>
+  <a href="index.html#experiencia">Trayectoria</a>
+  <div class="mm-group" data-grupo="ml">
+    <a href="herramientas.html" class="active" aria-current="true">Mercado Libre</a>
+    <button type="button" class="mm-toggle" aria-expanded="false" aria-controls="mm-sub-ml" aria-label="Opciones de Mercado Libre"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+    <div class="mm-sub" id="mm-sub-ml"><p class="mm-sub-h">Hacer</p><ul><li><a href="herramientas.html">Herramientas</a></li><li><a href="herramientas.html#chequeo">Chequeo de publicación</a></li><li><a href="rentabilidad.html">Rentabilidad</a></li><li><a href="importar.html">Importación</a></li><li><a href="perdida.html">Pérdida en publicidad</a></li><li><a href="sistema.html#auditar">Auditoría de cuenta</a></li><li><a href="informe-muestra.html">Informe de muestra</a></li></ul><p class="mm-sub-h">Aprender</p><ul><li><a href="lab.html">Guías</a></li></ul><p class="mm-sub-h">Entender</p><ul><li><a href="sistema.html" aria-current="page">Cómo trabajo</a></li></ul></div>
+  </div>
+  <div class="mm-group" data-grupo="web">
+    <a href="web.html">Desarrollo web</a>
+    <button type="button" class="mm-toggle" aria-expanded="false" aria-controls="mm-sub-web" aria-label="Opciones de Desarrollo web"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+    <div class="mm-sub" id="mm-sub-web"><ul><li><a href="web.html">Revisá tu web</a></li><li><a href="armar.html">Armá tu web</a></li><li><a href="programacion.html">Biblioteca web</a></li><li><a href="arquitecto.html">Project Architect</a></li></ul></div>
+  </div>
   <a href="contacto.html">Contacto</a>
 </div>
 <!-- NAV:end -->
@@ -64,7 +74,7 @@
   <div class="ph-bg"></div>
   <div class="ph-grid"></div>
   <div class="ph-c">
-    <h1 class="ph-title">IA aplicada a<br><span class="grad">Mercado Libre</span></h1>
+    <h1 class="ph-title">Cómo trabajo<br><span class="grad">con IA y datos</span></h1>
     <p class="ph-sub">Uso IA para auditar publicaciones, cuidar el margen y decidir con datos, con una regla fija: ningún dato inventado y ningún cambio sin piloto y vuelta atrás.</p>
     <p class="ia-proof" id="ia-proof">Lo que construí para trabajar cuentas de Mercado Libre: un tablero que detecta <b id="ia-n-diag">10</b> tipos de problema, una auditoría que cualquiera puede correr sobre su cuenta y el método con el que uso IA sin inventar datos.</p>
     <aside class="ia-peek" id="ia-peek" aria-label="Vista previa de la demo en vivo" hidden></aside>
@@ -78,70 +88,6 @@
   <div class="dm" id="dm"><p class="ia-loading">Cargando la demo…</p></div>
 </div>
 
-<div class="cs alt reveal" id="tendencias">
-  <h2 class="ct">Qué está buscando la gente en Mercado Libre</h2>
-  <p class="ctxt">Elegí una categoría y mirá las búsquedas que más crecen, las más deseadas y las más populares, directo de la API de tendencias de Mercado Libre. Las tres primeras van de regalo; la lista completa te la paso yo.</p>
-  <div class="td">
-    <div class="td-side">
-      <label class="td-cat" for="td-cat">Categoría</label>
-      <div class="td-select"><select id="td-cat" disabled><option value="todas">Todo Mercado Libre</option></select></div>
-      <p class="td-fuente" id="td-fuente"></p>
-    </div>
-    <div class="td-ley">
-      <dl class="td-tipos">
-        <div><dt><span class="td-tipo" data-tipo="crece">Crece rápido</span></dt><dd>Las 10 búsquedas que más están subiendo. Acá se llega temprano.</dd></div>
-        <div><dt><span class="td-tipo" data-tipo="buscada">Muy buscada</span></dt><dd>Las 20 que más gente busca con intención de comprar.</dd></div>
-        <div><dt><span class="td-tipo" data-tipo="popular">Popular</span></dt><dd>Las 20 de siempre. Venden, pero suele haber mucha competencia.</dd></div>
-      </dl>
-      <p class="td-nota">Mercado Libre no publica cuántas veces se busca cada término, así que acá no vas a ver volúmenes inventados: el orden es el suyo.</p>
-    </div>
-    <div class="td-main" id="td-out" aria-live="polite"><div class="td-cargando" aria-busy="true" aria-label="Cargando tendencias"><span></span><span></span><span></span><span></span></div></div>
-  </div>
-</div>
-
-<div class="cs reveal" id="auditar">
-  <h2 class="ct">¿Tu cuenta vende todo lo que podría?</h2>
-  <p class="ctxt">Conectá tu cuenta de Mercado Libre y en unos minutos ves lo mismo que veo yo cuando audito a un cliente: la salud de la cuenta y los problemas que más plata te están costando. Gratis.</p>
-  <div class="au-caminos" id="au-caminos">
-    <section class="au-conectar" aria-labelledby="au-c-t">
-      <h3 id="au-c-t">Auditoría completa de tu cuenta</h3>
-      <ul class="au-recibis">
-        <li><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-activity"/></svg><span><b>En minutos, en esta pantalla:</b> la salud de tu cuenta en seis áreas y los tres problemas con más plata en juego.</span></li>
-        <li><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-file"/></svg><span><b>En 24 horas, en tu email:</b> el informe completo con el plan de diez acciones en orden, que te preparo yo.</span></li>
-      </ul>
-      <form class="au-cform" id="au-cform" novalidate>
-        <div class="au-cfields">
-          <label class="au-field"><span>Tu nombre</span><input name="nombre" autocomplete="name" required></label>
-          <label class="au-field"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
-          <label class="au-field"><span>WhatsApp <small>(opcional)</small></span><input name="whatsapp" type="tel" autocomplete="tel"></label>
-        </div>
-        <input class="au-hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button type="submit" class="btn-primary au-cbtn">Conectar mi cuenta de Mercado Libre <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></button>
-        <p class="au-legal"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-lock"/></svg>Te lleva a Mercado Libre a autorizar la conexión. Solo leo tus datos para la auditoría: no publico, no cambio precios ni respondo nada. La podés desconectar cuando quieras.</p>
-        <p class="au-err" id="au-cerr" role="alert" hidden></p>
-      </form>
-    </section>
-    <section class="au-rapido" aria-labelledby="au-r-t">
-      <h3 id="au-r-t">¿Solo querés mirar una publicación?</h3>
-      <p>Pegá el link y te muestro lo que Mercado Libre deja ver desde afuera.</p>
-      <form class="au-form" id="au-form" novalidate>
-        <label class="sr-only" for="au-url">Link de la publicación de Mercado Libre</label>
-        <input id="au-url" type="url" inputmode="url" autocomplete="off" placeholder="Link de la publicación" required>
-        <button type="submit" class="btn-secondary" id="au-go">Mirar</button>
-      </form>
-      <details class="au-help">
-        <summary>¿Qué link pego?</summary>
-        <ol>
-          <li>En la publicación tocá <b>Compartir</b> y después <b>Copiar link</b>: sirve tal cual.</li>
-          <li>O copiá la dirección de la página, desde la compu.</li>
-          <li>O pegá solo el número que dice «Publicación #…» abajo de todo.</li>
-        </ol>
-      </details>
-    </section>
-  </div>
-  <div id="au-out" aria-live="polite"></div>
-</div>
-
 <div class="cs alt reveal" id="diagnostico">
   <h2 class="ct">Qué problemas detecta y cómo se resuelven</h2>
   <p class="ctxt">Cada problema con la regla exacta con la que el sistema lo detecta, sus causas más probables, qué hacer y el número que confirma que se resolvió. No son reglas de dedo: las caídas se validan con pruebas estadísticas para no confundir ruido con problema.</p>
@@ -153,7 +99,6 @@
   <p class="ctxt">La IA acelera el análisis, pero en una cuenta real un dato inventado cuesta una moderación o una venta a pérdida. Estas son las reglas con las que la uso.</p>
   <ol class="ia-reglas" id="ia-principios"></ol>
 </div>
-
 
 <div class="cs alt reveal" id="skills">
   <h2 class="ct">Skills ordenadas por valor</h2>
@@ -191,6 +136,58 @@
   <dl class="ia-stack" id="ia-stack"></dl>
 </div>
 
+<div class="cs alt reveal" id="auditar">
+  <h2 class="ct">Auditoría de cuenta: ¿tu cuenta vende todo lo que podría?</h2>
+  <p class="ctxt">Conectá tu cuenta de Mercado Libre y en unos minutos ves lo mismo que veo yo cuando audito a un cliente: la salud de la cuenta y los problemas que más plata te están costando. Gratis.</p>
+  <div class="au-caminos" id="au-caminos">
+    <section class="au-conectar" aria-labelledby="au-c-t">
+      <h3 id="au-c-t">Auditoría completa de tu cuenta</h3>
+      <ul class="au-recibis">
+        <li><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-activity"/></svg><span><b>En minutos, en esta pantalla:</b> la salud de tu cuenta en seis áreas y los tres problemas con más plata en juego.</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-file"/></svg><span><b>En 24 horas, en tu email:</b> el informe completo con el plan de diez acciones en orden, que te preparo yo.</span></li>
+      </ul>
+      <form class="au-cform" id="au-cform" novalidate>
+        <div class="au-cfields">
+          <label class="au-field"><span>Tu nombre</span><input name="nombre" autocomplete="name" required></label>
+          <label class="au-field"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
+          <label class="au-field"><span>WhatsApp <small>(opcional)</small></span><input name="whatsapp" type="tel" autocomplete="tel"></label>
+        </div>
+        <input class="au-hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" class="btn-primary au-cbtn">Conectar mi cuenta de Mercado Libre <svg class="icon icon-end" aria-hidden="true"><use href="assets/icons.svg#i-arrow-right"/></svg></button>
+        <p class="au-legal"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-lock"/></svg>Te lleva a Mercado Libre a autorizar la conexión. Solo leo tus datos para la auditoría: no publico, no cambio precios ni respondo nada. La podés desconectar cuando quieras.</p>
+        <p class="au-err" id="au-cerr" role="alert" hidden></p>
+      </form>
+    </section>
+    <section class="au-rapido" aria-labelledby="au-r-t">
+      <h3 id="au-r-t">¿Solo querés revisar una publicación?</h3>
+      <p>Para una sola publicación no hace falta conectar la cuenta: pegás el link en el Chequeo de publicación, en Herramientas.</p>
+      <a class="btn-secondary" href="herramientas.html#chequeo">Ir al Chequeo de publicación</a>
+    </section>
+  </div>
+  <div id="au-out" aria-live="polite"></div>
+</div>
+
+<div class="cs reveal" id="tendencias">
+  <h2 class="ct">Qué está buscando la gente en Mercado Libre</h2>
+  <p class="ctxt">Elegí una categoría y mirá las búsquedas que más crecen, las más deseadas y las más populares, directo de la API de tendencias de Mercado Libre. Las tres primeras van de regalo; la lista completa te la paso yo.</p>
+  <div class="td">
+    <div class="td-side">
+      <label class="td-cat" for="td-cat">Categoría</label>
+      <div class="td-select"><select id="td-cat" disabled><option value="todas">Todo Mercado Libre</option></select></div>
+      <p class="td-fuente" id="td-fuente"></p>
+    </div>
+    <div class="td-ley">
+      <dl class="td-tipos">
+        <div><dt><span class="td-tipo" data-tipo="crece">Crece rápido</span></dt><dd>Las 10 búsquedas que más están subiendo. Acá se llega temprano.</dd></div>
+        <div><dt><span class="td-tipo" data-tipo="buscada">Muy buscada</span></dt><dd>Las 20 que más gente busca con intención de comprar.</dd></div>
+        <div><dt><span class="td-tipo" data-tipo="popular">Popular</span></dt><dd>Las 20 de siempre. Venden, pero suele haber mucha competencia.</dd></div>
+      </dl>
+      <p class="td-nota">Mercado Libre no publica cuántas veces se busca cada término, así que acá no vas a ver volúmenes inventados: el orden es el suyo.</p>
+    </div>
+    <div class="td-main" id="td-out" aria-live="polite"><div class="td-cargando" aria-busy="true" aria-label="Cargando tendencias"><span></span><span></span><span></span><span></span></div></div>
+  </div>
+</div>
+
 <div class="cs alt ia-cta reveal">
   <div class="ia-cta-in">
     <div>
@@ -206,17 +203,52 @@
 </div>
 
 <div class="nb">
-  <a href="lab.html">← Lab ML (teoría)</a>
+  <a href="lab.html">← Guías de Mercado Libre</a>
   <a href="contacto.html">Contacto →</a>
 </div>
 <footer>
   <p class="footer-name">Darío Colángelo<span>.</span></p>
-  <ul class="footer-links">
-    <li><a href="assets/Dario-Colangelo-CV.pdf" download><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-download"/></svg>CV en PDF</a></li>
-    <li><a href="https://www.linkedin.com/in/dariocolangelo/" target="_blank" rel="noopener">LinkedIn</a></li>
-    <li><a href="https://wa.me/541144474507" target="_blank" rel="noopener">WhatsApp</a></li>
-    <li><a href="mailto:daricolangelo@gmail.com">daricolangelo@gmail.com</a></li>
-  </ul>
+  <nav class="footer-index" aria-label="Mapa del sitio">
+    <div class="footer-col">
+      <h2>Darío Colángelo</h2>
+      <ul>
+        <li><a href="index.html#experiencia">Trayectoria</a></li>
+        <li><a href="index.html#caso-exito">Casos</a></li>
+        <li><a href="assets/Dario-Colangelo-CV.pdf" download><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-download"/></svg>CV en PDF</a></li>
+        <li><a href="https://www.linkedin.com/in/dariocolangelo/" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h2>Mercado Libre</h2>
+      <ul>
+        <li><a href="herramientas.html#chequeo">Chequeo de publicación</a></li>
+        <li><a href="rentabilidad.html">Rentabilidad</a></li>
+        <li><a href="importar.html">Importación</a></li>
+        <li><a href="perdida.html">Pérdida en publicidad</a></li>
+        <li><a href="sistema.html#auditar">Auditoría de cuenta</a></li>
+        <li><a href="informe-muestra.html">Informe de muestra</a></li>
+        <li><a href="lab.html">Guías</a></li>
+        <li><a href="sistema.html">Cómo trabajo</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h2>Desarrollo web</h2>
+      <ul>
+        <li><a href="web.html">Revisá tu web</a></li>
+        <li><a href="armar.html">Armá tu web</a></li>
+        <li><a href="programacion.html">Biblioteca web</a></li>
+        <li><a href="arquitecto.html">Project Architect</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h2>Contacto</h2>
+      <ul>
+        <li><a href="https://wa.me/541144474507" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="mailto:daricolangelo@gmail.com">Email</a></li>
+        <li><a href="contacto.html#formulario">Formulario</a></li>
+      </ul>
+    </div>
+  </nav>
   <div class="footer-note">
     <span>Analista de E-Commerce · CABA, Argentina</span>
     <a href="#contenido" class="footer-top"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-up"/></svg>Volver arriba</a>

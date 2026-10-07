@@ -46,9 +46,9 @@ document.querySelectorAll('.ct-copy').forEach(btn => {
   const motivo = new URLSearchParams(location.search).get('motivo');
   if (motivo && REASONS[motivo]) form.querySelector(`input[name="reason"][value="${motivo}"]`).checked = true;
   const asunto = new URLSearchParams(location.search).get('asunto'), pub = new URLSearchParams(location.search).get('pub');
-  if (asunto && asunto.startsWith('Quiero algo así:') && !msg.value) {   // viene del botón «Quiero algo así» de la Base de datos
+  if (asunto && asunto.startsWith('Quiero algo así:') && !msg.value) {   // viene del botón «Quiero algo así» de la Biblioteca web
     const que = asunto.slice(16).replace(/[\r\n]+/g, ' ').trim().slice(0, 90);
-    msg.value = `Hola Darío, vi «${que}» en tu Base de datos y quiero algo así para mi negocio.\nMi caso: `;
+    msg.value = `Hola Darío, vi «${que}» en tu Biblioteca web y quiero algo así para mi negocio.\nMi caso: `;
   }
   if (asunto === 'auditoria' && !msg.value) msg.value = `Hola Darío, usé la auditoría gratis de tu web y quiero la auditoría completa de mi cuenta de Mercado Libre.${pub && /^https?:\/\/[^\s]*mercadoli/i.test(pub) ? `\nLa publicación que revisé: ${pub}` : ''}`;
   else if (asunto === 'tendencias' && !msg.value) { const cat = (new URLSearchParams(location.search).get('cat') || '').slice(0, 60).replace(/[^\p{L}\p{N} ,.y-]/gu, ''); msg.value = `Hola Darío, usé el buscador de tendencias de tu web y quiero la lista completa${cat && cat !== 'Todo Mercado Libre' ? ` de ${cat}` : ''}. Vendo: `; }
@@ -61,6 +61,11 @@ document.querySelectorAll('.ct-copy').forEach(btn => {
     const acos = (new URLSearchParams(location.search).get('acos') || '').replace(/[^\d.,]/g, '').slice(0, 5);
     msg.value = `Hola Darío, usé la calculadora de Product Ads de tu web y quiero bajar el ACOS de mi cuenta de Mercado Libre.${acos ? ` Hoy lo tengo en ${acos.replace('.', ',')}%.` : ''}`;
     const r = form.querySelector('input[name="reason"][value="freelance"]'); if (r && !motivo) r.checked = true;
+  }
+  else if (['opiniones', 'competencia', 'radar', 'desarme', 'radar-mail', 'rentabilidad'].includes(asunto) && !msg.value) {
+    const que = { opiniones: 'el análisis de opiniones y preguntas de mis compradores', competencia: 'la vigilancia de mi competencia en el catálogo', radar: 'el radar de demanda',
+      desarme: 'que desarmes una de mis publicaciones', 'radar-mail': 'recibir el radar semanal por mail', rentabilidad: 'revisar la rentabilidad de mi producto con vos' }[asunto];
+    msg.value = `Hola Darío, vi tus herramientas y me interesa ${que}. Vendo: `;
   }
   else if (motivo === 'consulta' && !msg.value) msg.value = 'Hola Darío, ¿me podrías enviar una copia de tus certificados de Smartbeemo?';
 
@@ -133,7 +138,7 @@ document.querySelectorAll('.ct-copy').forEach(btn => {
     try {
       const res = await fetch(CONTACT_API, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(d), signal: AbortSignal.timeout(12000),
+        body: JSON.stringify({ ...d, asunto: /^[a-z0-9-]{1,30}$/.test(asunto || '') ? asunto : '' }), signal: AbortSignal.timeout(12000),
       });
       const out = await res.json().catch(() => null);
       if (res.ok && out?.ok) {

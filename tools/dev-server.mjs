@@ -14,6 +14,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT  = join(dirname(fileURLToPath(import.meta.url)), '..');
 const FRONT = join(ROOT, 'frontend');
 const API   = join(ROOT, 'backend', 'api');
+// El motor económico tiene UNA sola fuente (backend/lib/motor). El navegador lo carga como /js/motor/*.js; en el deploy lo copia tools/build-deploy.py.
+const MOTOR = join(ROOT, 'backend', 'lib', 'motor');
 const PORT  = Number(process.env.PORT || 3000);
 
 const envFile = join(ROOT, 'backend', '.env');
@@ -56,6 +58,12 @@ http.createServer(async (req, res) => {
       req.body = await readBody(req);
       const mod = await import(pathToFileURL(file).href);
       return await mod.default(req, vercelRes(res));
+    }
+    if (url.pathname.startsWith('/js/motor/')) {
+      const nombre = url.pathname.slice('/js/motor/'.length), file = join(MOTOR, nombre);
+      if (!/^[a-z]+\.js$/.test(nombre) || !existsSync(file)) { res.statusCode = 404; return res.end('No encontrado'); }
+      res.setHeader('Content-Type', TYPES['.js']);
+      return res.end(await readFile(file));
     }
     let path = normalize(decodeURIComponent(url.pathname)).replace(/^(\.\.[/\\])+/, '');
     if (path.endsWith('/')) path += 'index.html';

@@ -3,8 +3,10 @@
 Web personal de un analista de Mercado Libre que construye sus propias herramientas.
 **En vivo:** https://portafolio-v1-dun-ten.vercel.app
 
-- **Lab ML:** guías de conversión, ACOS, SEO, pricing y métricas en Mercado Libre.
-- **IA aplicada a Mercado Libre:** método de trabajo, skills rankeadas y biblioteca de prompts.
+- **Herramientas:** chequeo de publicación, rentabilidad, importación, pérdida en publicidad, auditoría de cuenta y más.
+- **Guías:** guías de conversión, ACOS, SEO, pricing y métricas en Mercado Libre (`lab.html`).
+- **Cómo trabajo:** IA y datos aplicados a Mercado Libre: demo del ML Tracker, diagnóstico, método, skills y prompts (`sistema.html`).
+- **Desarrollo web:** Revisá tu web, Armá tu web y la Biblioteca web (`programacion.html`).
 - **ML Tracker** (dentro del panel): analiza cuentas con la API oficial de Mercado Libre vía OAuth —
   tendencias con pruebas estadísticas, diagnóstico de caídas, motor de precios, rentabilidad real,
   stock, calidad y competencia en catálogo.
@@ -19,15 +21,19 @@ Web personal de un analista de Mercado Libre que construye sus propias herramien
 ```
 proyecto/
 ├── frontend/                 ← Lo que se publica (Vercel sirve esta carpeta)
-│   ├── index.html            ← CV
-│   ├── tracker.html          ← ML Tracker: presentación + auditoría en vivo
-│   ├── lab.html (+ 9 páginas)← Lab de Mercado Libre (ia.html: IA aplicada a ML)
-│   ├── programacion.html     ← Lab de Programación (base de conocimiento web)
-│   ├── contacto.html         ← Contacto (canales + formulario)
+│   ├── index.html            ← Inicio: CV / trayectoria
+│   ├── herramientas.html     ← Mercado Libre · Hacer: vitrina de herramientas (incluye el ÚNICO Chequeo de publicación)
+│   ├── rentabilidad · importar · perdida · informe-muestra .html  ← herramientas y muestra
+│   ├── sistema.html          ← Cómo trabajo (+ Auditoría de cuenta: el retorno de OAuth apunta a sistema.html?auditoria=…#auditar)
+│   ├── lab.html (+ 8 guías)  ← Guías de Mercado Libre
+│   ├── web.html · armar.html ← Desarrollo web: Revisá tu web · Armá tu web
+│   ├── programacion.html     ← Biblioteca web (base de conocimiento, ejemplos en prog-ejemplos/)
+│   ├── vinculado.html        ← vuelta de OAuth de un cliente; ia.html y tracker.html son redirects históricos
+│   ├── contacto.html         ← Contacto (canales + formulario; acepta ?asunto= y ?pub=)
 │   ├── admin.html            ← Panel: contenido, portfolio, mensajes, cuenta de ML
 │   ├── css/  root · shared · simulador · index · tracker · contacto · programacion · lab · page
 │   ├── js/   main (común) · score · simulador · index · tracker · contacto · programacion
-│   ├── data/weblab/          ← JSON del Lab de Programación (generado)
+│   ├── data/weblab/          ← JSON de la Biblioteca web (generado)
 │   └── assets/               ← icons.svg, fotos, CV en PDF
 │
 ├── backend/                  ← Funciones serverless (Vercel)
@@ -46,9 +52,9 @@ proyecto/
 │
 └── tools/                    ← Scripts de mantenimiento (no se publican)
     ├── dev-server.mjs        ← Servidor local: web + /api, sin instalar vercel
-    ├── site-shell.py         ← Unifica menú, tema y pie en todas las páginas
-    ├── build-weblab.py       ← Genera data/weblab/ (Lab de Programación)
-    └── weblab_curado.py      ← Contenido en castellano del Lab de Programación
+    ├── site-shell.py         ← Fuente única del menú (NAV), del pie y del resaltado activo (GRUPO_POR_PAGINA) en todas las páginas
+    ├── build-weblab.py       ← Genera data/weblab/ (Biblioteca web)
+    └── weblab_curado.py      ← Contenido en castellano de la Biblioteca web
 ```
 
 ## Ver local con todo funcionando
@@ -84,14 +90,13 @@ y la API pública responde 403). Por eso el servidor usa **tu** cuenta:
 2. Cargá `ML_APP_ID`, `ML_SECRET` y `ML_REDIRECT_URI` en Vercel y redeployá.
 3. Entrá a `admin.html` → **Mercado Libre** → **Vincular**. Aceptás en ML y volvés al admin.
 
-El token se renueva solo. Si se vence o lo revocás, `tracker.html` muestra "en mantenimiento"
-y el admin te avisa para volver a vincular.
+El token se renueva solo. Si se vence o lo revocás, el admin te avisa para volver a vincular.
 
 ## Mantenimiento
 
 - **Menú / pie de todas las páginas:** editá `NAV_ITEMS` en `tools/site-shell.py` y corré `python3 tools/site-shell.py`.
-- **Lab de Programación:** sumá fichas en `tools/weblab_curado.py` y corré `python3 tools/build-weblab.py`. Lo que viene de la skill ui-ux-pro-max (en inglés) se traduce con `tools/weblab_traducciones.json`; si el script avisa textos sin traducir, agregalos ahí.
-- **Skills de Claude (Lab de Programación):** editá `tools/weblab_skills.py` y corré `python3 tools/build-weblab.py`. Los ejemplos de tipos de web y los diagramas de arquitectura están en `EJEMPLOS` y `FLUJOS` de `tools/weblab_curado.py`; las vistas "Así se ve" se dibujan en `frontend/js/programacion-ejemplos.js`.
+- **Biblioteca web (programacion.html):** sumá fichas en `tools/weblab_curado.py` y corré `python3 tools/build-weblab.py`. Lo que viene de la skill ui-ux-pro-max (en inglés) se traduce con `tools/weblab_traducciones.json`; si el script avisa textos sin traducir, agregalos ahí.
+- **Skills de Claude (Biblioteca web):** editá `tools/weblab_skills.py` y corré `python3 tools/build-weblab.py`. Los ejemplos de tipos de web y los diagramas de arquitectura están en `EJEMPLOS` y `FLUJOS` de `tools/weblab_curado.py`; las vistas "Así se ve" se dibujan en `frontend/js/programacion-ejemplos.js`.
 - **Academia IA / página IA:** todo el contenido (skills, plan, prompts, sistemas, stack) está en `frontend/data/ia-meli.json`; lo leen `ia.html` (pública) y la sección Academia IA del admin (`js/academia.js`). El progreso se guarda en la colección `academia`; solo las skills marcadas "mostrar en la web" salen en `/api/academia?action=publico`. Las skills de Claude sueltas están en `../../Skills-MELI/skills/`.
 - **Capturas de resultados:** `frontend/assets/resultados/` (montos en pesos difuminados a propósito).
 - **Tema claro/oscuro:** los colores están como variables en `frontend/css/root.css`.
@@ -103,7 +108,7 @@ y el admin te avisa para volver a vincular.
 - **Tipos:** Bricolage Grotesque (títulos), Geist (texto), JetBrains Mono (datos y etiquetas `//`).
 - **Radios:** superficies 16px, controles 10px, botones y chips en píldora.
 - **Hojas:** `root.css` (tokens) → `shared.css` (nav, botones, pie, componentes del Lab) → hoja de la página → `surfaces.css` (vacía, última capa).
-- **Auditoría sin conexión a ML:** `tracker.html` ofrece una auditoría de ejemplo (caso Borner) calculada en el navegador, así la página nunca queda muerta.
+- **`tracker.html`** ya no es una página con contenido: redirige a `herramientas.html#tracker` (la demo pública está en `sistema.html#demo`).
 - El frontend anterior quedó en `_backup-frontend-2026-09-25-pre-rediseno/`.
 
 ## Publicar en Vercel (proyecto `portafolio-v1`)

@@ -78,9 +78,9 @@
 .pt-photo { position: absolute; left: calc(8% - 2px); top: 47%; width: 27%; margin: 0; }
 .pt-photo img { border-radius: 22px; border: 1px solid var(--line-strong); box-shadow: var(--edge), var(--shadow-lg); rotate: -3deg; transition: rotate .4s var(--ease-out); background: var(--surface-2); }
 @media (hover: hover) { .pt-photo:hover img { rotate: 0deg; } }
-.pt-photo figcaption { position: absolute; left: calc(100% - 1.4rem); bottom: -1rem; z-index: 1; display: grid; gap: .2rem; width: max-content; max-width: 22rem; padding: .6rem .8rem; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-md); }
-.pt-photo figcaption b { display: flex; align-items: center; gap: .45rem; font: 600 .82rem/1.2 var(--font-sans); white-space: nowrap; }
-.pt-photo figcaption i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px var(--ok-soft); }
+.pt-photo figcaption { position: absolute; left: calc(100% - 1.4rem); bottom: -1rem; z-index: 1; display: grid; gap: .2rem; width: max-content; max-width: min(17rem, 60vw); padding: .6rem .8rem; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-md); }
+.pt-photo figcaption b { display: flex; align-items: center; gap: .45rem; font: 600 .82rem/1.25 var(--font-sans); }
+.pt-photo figcaption i { flex: none; align-self: flex-start; margin-top: .25em; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px var(--ok-soft); }
 .pt-photo figcaption > span { font: 500 .74rem/1.2 var(--font-mono); color: var(--muted); }
 .pt-photo img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; object-position: 50% 20%; }
 .pt-art { aspect-ratio: 1 / .8; }

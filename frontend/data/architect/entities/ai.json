@@ -1,0 +1,556 @@
+[
+  {
+    "id": "ai-assistant",
+    "slug": "ai-assistant",
+    "name": "Asistente de IA",
+    "type": "ai_workflow",
+    "category": "IA",
+    "depth": "full",
+    "level": "beginner",
+    "summary": "Un modelo de lenguaje con el que se conversa para pensar, redactar, resumir o explorar ideas. La persona decide qué hacer con la respuesta.",
+    "problem_solved": "Acelerar tareas de pensamiento y de redacción sin integrar nada en el producto ni darle permisos sobre sistemas.",
+    "explanation": [
+      "Un asistente responde a lo que se le pregunta dentro de una conversación. No ejecuta acciones por su cuenta ni toca sistemas: produce texto (o código) que la persona lee, evalúa y, si corresponde, usa.",
+      "Es el nivel más simple y más seguro de usar IA. Sirve para aprender un concepto, comparar alternativas, redactar documentación o revisar un plan. Su límite es que solo conoce lo que está en la conversación y en su entrenamiento: no ve el código, los datos ni el estado real del proyecto salvo que se los pasen.",
+      "Conviene tratarlo como una fuente que puede equivocarse con seguridad: sus respuestas requieren verificación, sobre todo en detalles técnicos de versiones y de seguridad."
+    ],
+    "how_it_works": [
+      "La persona describe el problema y aporta contexto.",
+      "El modelo responde con texto.",
+      "La persona revisa, corrige y decide qué usar."
+    ],
+    "when_to_use": [
+      "Aprender, explorar alternativas, redactar o revisar ideas.",
+      "Antes de empezar a construir, para aclarar requisitos y riesgos."
+    ],
+    "when_not_to_use": [
+      "Cuando hace falta modificar código o sistemas de forma directa (ver asistencia en el código o agentes).",
+      "Cuando no se puede verificar lo que responde."
+    ],
+    "pros": [
+      "Simple: no hay nada que integrar.",
+      "Seguro: no actúa sobre sistemas.",
+      "Útil desde el primer día."
+    ],
+    "cons": [
+      "Sin acceso al contexto real del proyecto salvo que se pegue.",
+      "Puede responder con aparente seguridad algo incorrecto.",
+      "Todo el trabajo de aplicar lo que responde es manual."
+    ],
+    "tradeoffs": [
+      "Se gana seguridad y simplicidad a cambio de automatización."
+    ],
+    "alternatives": [
+      {
+        "id": "ai-assisted-coding",
+        "note": "El modelo trabaja sobre el código real del proyecto, con la persona revisando los cambios."
+      },
+      {
+        "id": "ai-workflow",
+        "note": "El modelo es un paso dentro de un proceso fijo definido en código."
+      },
+      {
+        "id": "ai-agent",
+        "note": "El modelo decide los pasos y usa herramientas por su cuenta."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Comparar dos bases de datos",
+        "text": "Se describe el proyecto y se le pide al asistente los pros y contras de dos opciones; la decisión y la verificación son de la persona."
+      }
+    ],
+    "common_mistakes": [
+      "Tomar sus respuestas como verdades sin verificar.",
+      "Pegar datos confidenciales sin revisar la política de uso."
+    ],
+    "decision_questions": [
+      "¿Alcanza con obtener una respuesta o hay que modificar algo?",
+      "¿Se puede verificar lo que responde?"
+    ],
+    "related_entities": [
+      {
+        "id": "ai-assisted-coding",
+        "rel": "contrasts_with"
+      },
+      {
+        "id": "quality-security",
+        "rel": "addresses"
+      }
+    ],
+    "sources": [
+      "anthropic-effective-agents"
+    ],
+    "evidence_type": "recommendation",
+    "library_refs": []
+  },
+  {
+    "id": "ai-assisted-coding",
+    "slug": "ai-assisted-coding",
+    "name": "Desarrollo asistido por IA",
+    "type": "ai_workflow",
+    "category": "IA",
+    "depth": "full",
+    "level": "intermediate",
+    "summary": "Una herramienta de IA que trabaja sobre el código real del proyecto: lo lee, propone o hace cambios, y la persona revisa y decide.",
+    "problem_solved": "Acelerar la escritura, la revisión y el cambio de código manteniendo a una persona al mando de lo que entra al proyecto.",
+    "explanation": [
+      "A diferencia de un asistente de chat, una herramienta de desarrollo asistido por IA (por ejemplo, un agente de línea de comandos o un editor con IA) tiene acceso al repositorio. Puede leer archivos, ejecutar comandos y editar código, normalmente con permisos que la persona autoriza.",
+      "Que use un modelo que decide pasos por su cuenta no lo convierte en «un agente autónomo» en el sentido de un sistema sin supervisión: en el uso típico, la persona define la tarea, revisa los cambios y decide si se aceptan. El valor está en la velocidad, y el riesgo en aceptar cambios sin entenderlos.",
+      "Funciona mejor con tareas bien delimitadas, con criterios de aceptación claros y con tests que verifiquen el resultado. Sin eso, el código generado puede parecer correcto y no serlo. Por eso encaja con una disciplina de especificar, implementar, probar y revisar."
+    ],
+    "how_it_works": [
+      "La persona describe la tarea y el criterio de aceptación.",
+      "La herramienta explora el código, propone o aplica cambios y puede correr tests.",
+      "La persona revisa el resultado, pide ajustes y decide qué integrar."
+    ],
+    "when_to_use": [
+      "Implementar funcionalidades acotadas con especificación clara.",
+      "Refactorizaciones, migraciones repetitivas, tests y documentación.",
+      "Exploración de un código desconocido."
+    ],
+    "when_not_to_use": [
+      "La tarea es ambigua y no hay forma de verificar el resultado.",
+      "Código crítico de seguridad sin revisión experta.",
+      "Cuando nadie va a revisar lo que se genera."
+    ],
+    "pros": [
+      "Acelera mucho tareas bien especificadas.",
+      "Trabaja sobre el contexto real del código.",
+      "Reduce trabajo repetitivo."
+    ],
+    "cons": [
+      "Puede generar código plausible pero incorrecto.",
+      "Si no se revisa, acumula deuda técnica y riesgos de seguridad.",
+      "Exige buenas especificaciones y tests."
+    ],
+    "tradeoffs": [
+      "Se gana velocidad a cambio de disciplina de revisión y de verificación."
+    ],
+    "alternatives": [
+      {
+        "id": "ai-assistant",
+        "note": "Más seguro y simple: no toca el código; sirve para pensar y decidir."
+      },
+      {
+        "id": "ai-agent",
+        "note": "Un sistema autónomo dentro de un producto, que decide pasos y usa herramientas sin una persona aprobando cada uno."
+      },
+      {
+        "id": "ai-workflow",
+        "note": "Un proceso predefinido con pasos de IA, para tareas repetibles dentro del producto."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Agregar un endpoint con tests",
+        "text": "Se especifica el endpoint y sus casos de error; la herramienta lo implementa y escribe los tests; la persona revisa y ejecuta la suite antes de integrar."
+      }
+    ],
+    "common_mistakes": [
+      "Pedir tareas enormes y vagas en un solo paso.",
+      "Aceptar cambios sin leerlos ni correr los tests.",
+      "No darle el contexto del proyecto y sus convenciones."
+    ],
+    "decision_questions": [
+      "¿La tarea tiene un criterio de aceptación verificable?",
+      "¿Quién revisa los cambios?",
+      "¿Hay tests que detecten una regresión?"
+    ],
+    "related_entities": [
+      {
+        "id": "ai-assistant",
+        "rel": "contrasts_with"
+      },
+      {
+        "id": "ai-agent",
+        "rel": "contrasts_with"
+      },
+      {
+        "id": "unit-testing",
+        "rel": "requires",
+        "note": "Sin tests, no hay cómo verificar lo que se genera."
+      },
+      {
+        "id": "quality-maintainability",
+        "rel": "addresses"
+      }
+    ],
+    "sources": [
+      "claude-code-docs"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": []
+  },
+  {
+    "id": "ai-workflow",
+    "slug": "ai-workflow",
+    "name": "Workflow con LLM",
+    "type": "ai_workflow",
+    "category": "IA",
+    "depth": "full",
+    "level": "intermediate",
+    "summary": "Un proceso con pasos definidos en código, donde algunos pasos usan un modelo de lenguaje. El camino lo fija el programador, no el modelo.",
+    "problem_solved": "Automatizar tareas repetibles que requieren interpretar lenguaje, con un comportamiento predecible y verificable.",
+    "explanation": [
+      "Anthropic define los workflows como sistemas donde los modelos y las herramientas se orquestan mediante caminos de código predefinidos. El flujo es conocido de antemano; el modelo resuelve pasos concretos, como clasificar, extraer o redactar.",
+      "Describe patrones comunes: encadenar llamadas (cada una procesa la salida de la anterior), enrutar la entrada a distintos tratamientos, paralelizar tareas independientes, un orquestador que reparte subtareas, y un evaluador que critica y mejora una salida.",
+      "Son más previsibles, baratos y fáciles de probar que un agente. Por eso, para tareas con pasos conocidos, suele ser la mejor opción: la recomendación general es buscar la solución más simple posible y sumar complejidad solo cuando hace falta."
+    ],
+    "how_it_works": [
+      "El código define los pasos y el orden.",
+      "En ciertos pasos se llama a un modelo con instrucciones y datos acotados.",
+      "El código valida la salida, decide el paso siguiente y maneja errores."
+    ],
+    "when_to_use": [
+      "La tarea tiene pasos conocidos y repetibles.",
+      "Se necesita previsibilidad, costo controlado y capacidad de probar cada paso.",
+      "Hay que interpretar lenguaje dentro de un proceso (clasificar, extraer, resumir)."
+    ],
+    "when_not_to_use": [
+      "No se pueden prever los pasos que la tarea va a necesitar.",
+      "Una sola llamada bien armada ya resuelve el problema."
+    ],
+    "pros": [
+      "Predecible y probable.",
+      "Costo y latencia más controlados que un agente.",
+      "Cada paso se puede validar."
+    ],
+    "cons": [
+      "Rígido ante casos que no se previeron.",
+      "Hay que diseñar y mantener el flujo."
+    ],
+    "tradeoffs": [
+      "Se gana control y previsibilidad a cambio de flexibilidad ante lo imprevisto."
+    ],
+    "alternatives": [
+      {
+        "id": "ai-agent",
+        "note": "El modelo decide sus propios pasos: más flexible, más caro y menos predecible."
+      },
+      {
+        "id": "ai-assistant",
+        "note": "Una conversación con una persona, sin integración al producto."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Clasificar y responder consultas",
+        "text": "Un paso clasifica la consulta, según la clase se elige una plantilla y otro paso redacta la respuesta; el código valida antes de enviarla."
+      }
+    ],
+    "common_mistakes": [
+      "Construir un agente cuando un workflow alcanzaba.",
+      "No validar la salida del modelo antes de actuar.",
+      "Meter todo en un único prompt gigante."
+    ],
+    "decision_questions": [
+      "¿Los pasos de la tarea se conocen de antemano?",
+      "¿Qué salida debe validarse antes de actuar?"
+    ],
+    "related_entities": [
+      {
+        "id": "ai-agent",
+        "rel": "contrasts_with"
+      },
+      {
+        "id": "message-queue",
+        "rel": "often_with"
+      }
+    ],
+    "sources": [
+      "anthropic-effective-agents"
+    ],
+    "evidence_type": "expert_source",
+    "library_refs": [],
+    "diagram": {
+      "purpose": "concept",
+      "title": "Workflow con LLM: el código fija los pasos",
+      "nodes": [
+        {
+          "id": "in",
+          "label": "Entrada",
+          "kind": "actor",
+          "layer": 0
+        },
+        {
+          "id": "p1",
+          "label": "Paso con LLM: clasificar",
+          "kind": "ai",
+          "layer": 1
+        },
+        {
+          "id": "r",
+          "label": "Código: elige el camino",
+          "kind": "backend",
+          "layer": 2
+        },
+        {
+          "id": "p2",
+          "label": "Paso con LLM: redactar",
+          "kind": "ai",
+          "layer": 3
+        },
+        {
+          "id": "v",
+          "label": "Código: valida la salida",
+          "kind": "backend",
+          "layer": 4
+        }
+      ],
+      "edges": [
+        {
+          "from": "in",
+          "to": "p1"
+        },
+        {
+          "from": "p1",
+          "to": "r"
+        },
+        {
+          "from": "r",
+          "to": "p2"
+        },
+        {
+          "from": "p2",
+          "to": "v"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ai-agent",
+    "slug": "ai-agent",
+    "name": "Agente de IA",
+    "type": "ai_agent_pattern",
+    "category": "IA",
+    "depth": "full",
+    "level": "advanced",
+    "summary": "Un sistema donde el modelo decide por su cuenta qué pasos dar y qué herramientas usar para cumplir un objetivo, en varias vueltas.",
+    "problem_solved": "Resolver tareas abiertas cuyos pasos no se pueden prever ni escribir de antemano.",
+    "explanation": [
+      "Según la definición de Anthropic, los agentes son sistemas donde el modelo dirige dinámicamente su propio proceso y el uso de herramientas, manteniendo el control sobre cómo cumplir la tarea. En cada vuelta, el agente observa el resultado de su acción y decide la siguiente, hasta terminar o necesitar ayuda.",
+      "Esa autonomía tiene un precio: más latencia y más costo, menos previsibilidad y más superficie de error, porque cada decisión puede ser equivocada y los errores se acumulan. Por eso se recomiendan solo cuando la tarea es abierta, no se puede fijar un camino de antemano y hay confianza en las decisiones del modelo, con límites claros, pruebas y supervisión.",
+      "El error más común es adoptar un agente por defecto cuando un workflow o una sola llamada bastaba."
+    ],
+    "how_it_works": [
+      "Se le da un objetivo y un conjunto de herramientas.",
+      "En cada vuelta, el modelo elige una acción, la herramienta se ejecuta y el resultado vuelve al modelo.",
+      "El ciclo termina al cumplir el objetivo o al alcanzar un límite (de pasos, de costo, o una condición que requiere a una persona)."
+    ],
+    "when_to_use": [
+      "Tareas abiertas cuyos pasos no se pueden prever.",
+      "Cuando se pueden establecer límites, verificaciones y permisos mínimos.",
+      "Cuando el valor de la autonomía compensa el costo y el riesgo."
+    ],
+    "when_not_to_use": [
+      "La tarea tiene pasos conocidos (usar un workflow).",
+      "Una sola llamada bien armada resuelve el problema.",
+      "No hay forma de limitar el alcance de sus acciones."
+    ],
+    "pros": [
+      "Resuelve problemas abiertos con flexibilidad.",
+      "Se adapta a situaciones imprevistas."
+    ],
+    "cons": [
+      "Más costo y latencia.",
+      "Menos predecible y más difícil de probar.",
+      "Los errores pueden acumularse en cada vuelta.",
+      "Necesita límites y supervisión."
+    ],
+    "tradeoffs": [
+      "Se gana flexibilidad a cambio de previsibilidad, costo y control."
+    ],
+    "alternatives": [
+      {
+        "id": "ai-workflow",
+        "note": "Camino fijo definido en código: más barato y verificable cuando los pasos se conocen."
+      },
+      {
+        "id": "ai-assisted-coding",
+        "note": "Una persona revisa cada cambio; no es autonomía sin supervisión."
+      },
+      {
+        "id": "multi-agent",
+        "note": "Varios agentes coordinados: solo cuando uno solo no alcanza, y con más complejidad."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Investigar un fallo en producción",
+        "text": "El agente consulta logs, formula hipótesis, prueba cambios en un entorno aislado y propone una corrección; una persona aprueba antes de aplicarla."
+      }
+    ],
+    "common_mistakes": [
+      "Darle permisos amplios en lugar de los mínimos necesarios.",
+      "No limitar pasos, costo ni tiempo.",
+      "Elegir un agente cuando bastaba un workflow."
+    ],
+    "decision_questions": [
+      "¿Se pueden prever los pasos de la tarea?",
+      "¿Qué límites y permisos mínimos necesita?",
+      "¿Quién supervisa y cuándo debe intervenir una persona?"
+    ],
+    "related_entities": [
+      {
+        "id": "ai-workflow",
+        "rel": "contrasts_with"
+      },
+      {
+        "id": "multi-agent",
+        "rel": "enables"
+      },
+      {
+        "id": "quality-security",
+        "rel": "addresses"
+      }
+    ],
+    "sources": [
+      "anthropic-effective-agents"
+    ],
+    "evidence_type": "expert_source",
+    "library_refs": [],
+    "diagram": {
+      "purpose": "concept",
+      "title": "Agente: el modelo decide el próximo paso en cada vuelta",
+      "nodes": [
+        {
+          "id": "obj",
+          "label": "Objetivo",
+          "kind": "actor",
+          "layer": 0
+        },
+        {
+          "id": "llm",
+          "label": "Modelo: decide el próximo paso",
+          "kind": "ai",
+          "layer": 1
+        },
+        {
+          "id": "tools",
+          "label": "Herramientas",
+          "kind": "external",
+          "layer": 2
+        },
+        {
+          "id": "per",
+          "label": "Persona: supervisa y aprueba",
+          "kind": "actor",
+          "layer": 2
+        }
+      ],
+      "edges": [
+        {
+          "from": "obj",
+          "to": "llm"
+        },
+        {
+          "from": "llm",
+          "to": "tools",
+          "label": "acción"
+        },
+        {
+          "from": "tools",
+          "to": "llm",
+          "label": "resultado"
+        },
+        {
+          "from": "llm",
+          "to": "per",
+          "label": "pide aprobación"
+        }
+      ]
+    }
+  },
+  {
+    "id": "multi-agent",
+    "slug": "multi-agent",
+    "name": "Sistema multiagente",
+    "type": "ai_agent_pattern",
+    "category": "IA",
+    "depth": "full",
+    "level": "advanced",
+    "summary": "Varios agentes coordinados, cada uno con su rol, contexto y herramientas. Más agentes no implica mejor resultado.",
+    "problem_solved": "Repartir un trabajo grande entre agentes especializados o con contextos separados, cuando un solo agente no alcanza.",
+    "explanation": [
+      "En un sistema multiagente, un agente coordinador (o un orquestador) divide el trabajo y delega partes a otros agentes, que pueden trabajar en paralelo y con su propio contexto. Herramientas de desarrollo con IA ofrecen versiones de esta idea, como subagentes especializados con instrucciones y permisos propios.",
+      "Puede ayudar cuando las subtareas son independientes, cuando conviene aislar el contexto de cada una o cuando se necesitan especializaciones distintas. A cambio, multiplica el costo, la latencia y los puntos donde algo puede fallar, y suma un problema nuevo: coordinar y mantener coherente lo que hace cada agente.",
+      "La regla práctica es empezar con lo más simple y agregar agentes solo cuando se mide que uno solo no alcanza. «Más agentes» no es una mejora en sí misma."
+    ],
+    "how_it_works": [
+      "Un coordinador divide la tarea en subtareas.",
+      "Cada subagente la ejecuta con su propio contexto, instrucciones y herramientas.",
+      "El coordinador reúne los resultados y los integra, o los verifica."
+    ],
+    "when_to_use": [
+      "Las subtareas son independientes y se pueden paralelizar.",
+      "Un solo contexto no alcanza o se contamina con demasiada información.",
+      "Hay roles claramente diferentes (por ejemplo, implementar y revisar)."
+    ],
+    "when_not_to_use": [
+      "Un solo agente o un workflow resuelven la tarea.",
+      "Las subtareas dependen fuertemente unas de otras.",
+      "No hay presupuesto para el costo adicional ni forma de coordinar."
+    ],
+    "pros": [
+      "Paralelización de trabajo independiente.",
+      "Contextos separados, menos ruido por agente.",
+      "Roles especializados."
+    ],
+    "cons": [
+      "Más costo y latencia.",
+      "Coordinación y coherencia difíciles.",
+      "Más superficie de error y más difícil de depurar."
+    ],
+    "tradeoffs": [
+      "Se gana capacidad de repartir trabajo a cambio de complejidad y costo de coordinación."
+    ],
+    "alternatives": [
+      {
+        "id": "ai-agent",
+        "note": "Un único agente: más simple; primero hay que comprobar que no alcanza."
+      },
+      {
+        "id": "ai-workflow",
+        "note": "Un camino fijo con pasos de IA, más predecible si los pasos se conocen."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Implementar y revisar",
+        "text": "Un agente implementa un cambio y otro, con instrucciones y permisos distintos, lo revisa y reporta problemas; una persona decide."
+      }
+    ],
+    "common_mistakes": [
+      "Asumir que más agentes mejora el resultado.",
+      "No definir cómo se coordinan ni cómo se resuelven contradicciones.",
+      "No medir si realmente un solo agente era insuficiente."
+    ],
+    "decision_questions": [
+      "¿Un solo agente o un workflow ya resuelve el problema?",
+      "¿Las subtareas son realmente independientes?",
+      "¿Cómo se coordinan y se verifican los resultados?"
+    ],
+    "related_entities": [
+      {
+        "id": "ai-agent",
+        "rel": "requires"
+      },
+      {
+        "id": "quality-cost",
+        "rel": "addresses"
+      }
+    ],
+    "sources": [
+      "anthropic-effective-agents",
+      "claude-code-subagents"
+    ],
+    "evidence_type": "expert_source",
+    "library_refs": []
+  }
+]

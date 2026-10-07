@@ -1,0 +1,606 @@
+[
+  {
+    "id": "http",
+    "slug": "http",
+    "name": "HTTP",
+    "type": "communication_pattern",
+    "category": "Comunicación",
+    "depth": "full",
+    "level": "beginner",
+    "summary": "El protocolo de la web: un cliente envía una petición y el servidor devuelve una respuesta. Base de casi todo lo demás.",
+    "problem_solved": "Dar un lenguaje común para que navegadores, aplicaciones y servidores se comuniquen por la red.",
+    "explanation": [
+      "HTTP funciona con un modelo de petición y respuesta: el cliente pide un recurso identificado por una URL, usando un método (GET para leer, POST para crear, etc.), y el servidor responde con un código de estado y un cuerpo. Cada petición es independiente: el servidor no guarda memoria de las anteriores, salvo lo que se envíe explícitamente (cookies, cabeceras).",
+      "Que sea sin estado es lo que permite escalar: cualquier copia del servidor puede atender cualquier petición. También es la base del caché web, porque las respuestas pueden reutilizarse bajo reglas explícitas.",
+      "Casi toda la comunicación entre un frontend y un backend usa HTTP, directa o indirectamente. Entender sus métodos, códigos de estado y cabeceras evita muchos errores de diseño de APIs."
+    ],
+    "how_it_works": [
+      "El cliente envía una petición con método, URL, cabeceras y, opcionalmente, un cuerpo.",
+      "El servidor procesa y responde con un código de estado (por ejemplo, 200, 404, 500), cabeceras y un cuerpo.",
+      "Las respuestas pueden cachearse según las cabeceras que las acompañan."
+    ],
+    "when_to_use": [
+      "Casi siempre que un cliente necesite pedirle algo a un servidor.",
+      "Para páginas, APIs y entrega de archivos."
+    ],
+    "when_not_to_use": [
+      "Cuando el servidor necesita enviar datos al cliente sin que este los pida (ver WebSocket).",
+      "Para comunicación interna que debe tolerar fallos y demoras entre servicios (ver colas)."
+    ],
+    "pros": [
+      "Universal y muy bien soportado.",
+      "Sin estado: escala con facilidad.",
+      "Se puede cachear."
+    ],
+    "cons": [
+      "El servidor no puede iniciar la comunicación por sí mismo en el modelo básico.",
+      "Cada petición tiene un costo de ida y vuelta."
+    ],
+    "tradeoffs": [
+      "Se gana simplicidad y escalabilidad a cambio de no tener comunicación iniciada por el servidor."
+    ],
+    "alternatives": [
+      {
+        "id": "websocket",
+        "note": "Mantiene una conexión abierta en ambos sentidos: sirve para actualizaciones en vivo, a cambio de más complejidad para escalar."
+      },
+      {
+        "id": "message-queue",
+        "note": "Comunicación asíncrona entre componentes, con entrega diferida y tolerancia a fallos."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Cargar una página de producto",
+        "text": "El navegador envía un GET a la URL del producto y el servidor responde con 200 y el HTML de la página."
+      }
+    ],
+    "common_mistakes": [
+      "Usar GET para operaciones que modifican datos.",
+      "Devolver siempre 200 aunque haya un error.",
+      "Ignorar las cabeceras de caché."
+    ],
+    "decision_questions": [
+      "¿El cliente siempre inicia la comunicación?",
+      "¿La respuesta es cacheable?"
+    ],
+    "related_entities": [
+      {
+        "id": "rest-api",
+        "rel": "enables"
+      },
+      {
+        "id": "websocket",
+        "rel": "contrasts_with"
+      }
+    ],
+    "sources": [
+      "rfc-9110",
+      "mdn-http-overview",
+      "mdn-http-caching"
+    ],
+    "evidence_type": "standard",
+    "library_refs": [],
+    "diagram": {
+      "purpose": "concept",
+      "title": "HTTP: petición y respuesta",
+      "nodes": [
+        {
+          "id": "cli",
+          "label": "Cliente",
+          "kind": "actor",
+          "layer": 0
+        },
+        {
+          "id": "srv",
+          "label": "Servidor",
+          "kind": "backend",
+          "layer": 1
+        }
+      ],
+      "edges": [
+        {
+          "from": "cli",
+          "to": "srv",
+          "label": "petición: método + URL"
+        },
+        {
+          "from": "srv",
+          "to": "cli",
+          "label": "respuesta: estado + cuerpo"
+        }
+      ]
+    }
+  },
+  {
+    "id": "rest-api",
+    "slug": "rest-api",
+    "name": "API REST",
+    "type": "communication_pattern",
+    "category": "Comunicación",
+    "depth": "full",
+    "level": "intermediate",
+    "summary": "Un estilo para diseñar APIs sobre HTTP donde los recursos se identifican con URLs y se manipulan con los métodos estándar.",
+    "problem_solved": "Exponer datos y operaciones de un backend de forma predecible, uniforme y fácil de consumir por cualquier cliente.",
+    "explanation": [
+      "REST proviene de la tesis de Roy Fielding y describe un estilo arquitectónico con restricciones: cliente-servidor, sin estado, cacheable, interfaz uniforme y sistema en capas. En la práctica, cuando se habla de «API REST» se suele referir a una API sobre HTTP que modela recursos (por ejemplo, /pedidos/42) y usa los métodos para operar sobre ellos.",
+      "Muchas APIs llamadas «REST» cumplen solo parte de esas restricciones y es correcto distinguir una API «RESTful» estricta de una API HTTP con JSON a secas. Lo importante es que sea coherente: nombres de recursos estables, códigos de estado correctos, errores con formato consistente y versionado pensado.",
+      "No es la única opción para un API: hay alternativas como GraphQL o RPC. REST suele ser un buen valor por defecto por su simplicidad y por aprovechar el caché HTTP."
+    ],
+    "how_it_works": [
+      "Cada recurso tiene una URL; los métodos HTTP indican la operación (GET, POST, PUT, PATCH, DELETE).",
+      "El servidor responde con una representación (habitualmente JSON) y un código de estado.",
+      "El cliente puede cachear respuestas y no depende de un estado guardado en el servidor."
+    ],
+    "when_to_use": [
+      "Un backend que expone datos y operaciones a un frontend o a terceros.",
+      "Cuando se valora la simplicidad y el caché HTTP."
+    ],
+    "when_not_to_use": [
+      "Comunicación en tiempo real con actualizaciones constantes (ver WebSocket).",
+      "Clientes con necesidades muy variables sobre qué campos pedir, donde otras opciones pueden encajar mejor."
+    ],
+    "pros": [
+      "Simple y muy conocido.",
+      "Aprovecha el caché y las herramientas de HTTP.",
+      "Fácil de probar y documentar."
+    ],
+    "cons": [
+      "Puede devolver más o menos datos de los necesarios.",
+      "Muchas «APIs REST» no siguen todas las restricciones, y eso genera confusión.",
+      "Operaciones complejas que no encajan en recursos exigen decisiones de diseño."
+    ],
+    "tradeoffs": [
+      "Se gana uniformidad y simplicidad a cambio de menos flexibilidad en qué datos se piden."
+    ],
+    "alternatives": [
+      {
+        "id": "websocket",
+        "note": "Para comunicación continua o iniciada por el servidor."
+      },
+      {
+        "id": "http",
+        "note": "REST es un estilo de uso de HTTP; HTTP solo es el protocolo, y puede usarse sin las restricciones de REST."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "API de pedidos",
+        "text": "GET /pedidos lista, POST /pedidos crea, GET /pedidos/42 lee uno, PATCH /pedidos/42 lo modifica."
+      }
+    ],
+    "common_mistakes": [
+      "Usar verbos en las URLs en lugar de recursos y métodos.",
+      "No definir un formato de error consistente.",
+      "No pensar el versionado hasta que es tarde."
+    ],
+    "decision_questions": [
+      "¿Quién consume la API: un frontend propio o terceros?",
+      "¿Qué recursos modela el dominio?",
+      "¿Cómo se van a versionar los cambios?"
+    ],
+    "related_entities": [
+      {
+        "id": "http",
+        "rel": "requires"
+      },
+      {
+        "id": "authentication-and-authorization",
+        "rel": "often_with"
+      },
+      {
+        "id": "quality-security",
+        "rel": "addresses"
+      }
+    ],
+    "sources": [
+      "fielding-rest",
+      "rfc-9110"
+    ],
+    "evidence_type": "expert_source",
+    "library_refs": [
+      "spa-api"
+    ]
+  },
+  {
+    "id": "websocket",
+    "slug": "websocket",
+    "name": "WebSocket",
+    "type": "communication_pattern",
+    "category": "Comunicación",
+    "depth": "full",
+    "level": "intermediate",
+    "summary": "Una conexión persistente y bidireccional entre navegador y servidor, para enviar datos en ambos sentidos sin repetir peticiones.",
+    "problem_solved": "Permitir que el servidor envíe actualizaciones al cliente en cuanto ocurren, como un chat, un tablero en vivo o notificaciones.",
+    "explanation": [
+      "Con HTTP, el cliente tiene que preguntar para enterarse de algo nuevo. Con WebSocket, tras un apretón de manos inicial sobre HTTP, la conexión queda abierta y cualquiera de los dos lados puede enviar mensajes en cualquier momento, con muy poca sobrecarga.",
+      "La contrapartida es que cada conexión abierta consume recursos del servidor y, como ya no hay peticiones independientes, escalar es más difícil: hay que repartir conexiones entre servidores y decidir cómo se comunican entre sí. También hay que manejar reconexiones y mensajes perdidos.",
+      "Antes de adoptarlo conviene preguntar si de verdad se necesita tiempo real: muchas veces consultar cada pocos segundos, o usar eventos enviados por el servidor, alcanza con menos complejidad."
+    ],
+    "how_it_works": [
+      "El cliente abre una conexión con un apretón de manos HTTP que se «actualiza» al protocolo WebSocket.",
+      "Ambos lados envían mensajes por la misma conexión mientras esté abierta.",
+      "Si se cae, el cliente debe reconectarse y resolver lo que se perdió."
+    ],
+    "when_to_use": [
+      "Chat, colaboración, juegos, tableros que se actualizan en vivo.",
+      "Cuando la latencia de las actualizaciones importa y el servidor inicia el envío."
+    ],
+    "when_not_to_use": [
+      "Las actualizaciones son poco frecuentes: alcanza con consultas periódicas.",
+      "El equipo no puede operar conexiones persistentes a escala."
+    ],
+    "pros": [
+      "Comunicación bidireccional de baja latencia.",
+      "Menos sobrecarga que repetir peticiones."
+    ],
+    "cons": [
+      "Más difícil de escalar y de balancear.",
+      "Hay que manejar reconexión y pérdida de mensajes.",
+      "No aprovecha el caché de HTTP."
+    ],
+    "tradeoffs": [
+      "Se gana inmediatez a cambio de complejidad operativa y de escala."
+    ],
+    "alternatives": [
+      {
+        "id": "http",
+        "note": "Consultas periódicas: más simples y suficientes si no hace falta inmediatez."
+      },
+      {
+        "id": "pub-sub",
+        "note": "No es una alternativa directa: suele usarse detrás para repartir los eventos a los servidores que mantienen las conexiones."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Chat de soporte",
+        "text": "Cuando un agente responde, el servidor envía el mensaje al navegador del cliente por la conexión abierta, sin que este tenga que preguntar."
+      }
+    ],
+    "common_mistakes": [
+      "Usarlo cuando alcanzaba con consultas cada pocos segundos.",
+      "No planificar la reconexión.",
+      "Olvidar autenticar la conexión."
+    ],
+    "decision_questions": [
+      "¿Qué tan rápido deben llegar las actualizaciones?",
+      "¿Cuántas conexiones simultáneas se esperan?",
+      "¿Qué pasa con los mensajes si el cliente se desconecta?"
+    ],
+    "related_entities": [
+      {
+        "id": "http",
+        "rel": "contrasts_with"
+      },
+      {
+        "id": "pub-sub",
+        "rel": "often_with"
+      }
+    ],
+    "sources": [
+      "rfc-6455",
+      "mdn-websockets"
+    ],
+    "evidence_type": "standard",
+    "library_refs": [],
+    "diagram": {
+      "purpose": "concept",
+      "title": "WebSocket: una conexión abierta en ambos sentidos",
+      "nodes": [
+        {
+          "id": "cli",
+          "label": "Navegador",
+          "kind": "actor",
+          "layer": 0
+        },
+        {
+          "id": "srv",
+          "label": "Servidor",
+          "kind": "backend",
+          "layer": 1
+        }
+      ],
+      "edges": [
+        {
+          "from": "cli",
+          "to": "srv",
+          "label": "abre la conexión (HTTP)"
+        },
+        {
+          "from": "cli",
+          "to": "srv",
+          "label": "mensajes"
+        },
+        {
+          "from": "srv",
+          "to": "cli",
+          "label": "mensajes"
+        }
+      ]
+    }
+  },
+  {
+    "id": "message-queue",
+    "slug": "message-queue",
+    "name": "Cola de mensajes",
+    "type": "communication_pattern",
+    "category": "Comunicación",
+    "depth": "full",
+    "level": "intermediate",
+    "summary": "Un intermediario que guarda mensajes hasta que un consumidor los procesa. Cada mensaje lo atiende un solo trabajador.",
+    "problem_solved": "Desacoplar a quien pide un trabajo de quien lo hace, absorber picos de carga y reintentar cuando algo falla.",
+    "explanation": [
+      "Un productor deja un mensaje en la cola y sigue con lo suyo. Uno o varios trabajadores toman mensajes y los procesan a su ritmo; cada mensaje lo recibe un trabajador. Si un trabajador falla, el mensaje puede volver a la cola para reintentarse.",
+      "Esto permite responder rápido al usuario, repartir la carga entre varios trabajadores y tolerar que un proceso se caiga sin perder el trabajo. También aplana los picos: si llegan mil pedidos de golpe, la cola los retiene y se procesan en orden a un ritmo sostenible.",
+      "La contrapartida es que el resultado deja de ser inmediato y hay que diseñar para duplicados (un mensaje puede entregarse más de una vez) y para fallos repetidos, normalmente con una cola de «mensajes muertos»."
+    ],
+    "how_it_works": [
+      "El productor publica un mensaje en la cola.",
+      "Un trabajador lo recibe, lo procesa y lo confirma; si no se confirma, vuelve a estar disponible.",
+      "Los mensajes que fallan repetidamente se apartan para revisarse."
+    ],
+    "when_to_use": [
+      "Tareas largas o costosas que no deben bloquear la respuesta.",
+      "Para absorber picos de carga.",
+      "Cuando una tarea debe reintentarse ante fallos."
+    ],
+    "when_not_to_use": [
+      "Se necesita el resultado en la misma petición.",
+      "La tarea es tan rápida que la cola agrega más complejidad que beneficio."
+    ],
+    "pros": [
+      "Desacopla productor y consumidor.",
+      "Absorbe picos y permite reintentos.",
+      "Escala los trabajadores de forma independiente."
+    ],
+    "cons": [
+      "Resultados asíncronos que hay que comunicar al usuario.",
+      "Hay que diseñar para duplicados y fallos repetidos.",
+      "Otra pieza que operar."
+    ],
+    "tradeoffs": [
+      "Se gana resiliencia y capacidad de absorción a cambio de resultados diferidos y de mayor complejidad."
+    ],
+    "alternatives": [
+      {
+        "id": "pub-sub",
+        "note": "Entrega cada mensaje a todos los suscriptores interesados, no a un solo trabajador."
+      },
+      {
+        "id": "http",
+        "note": "Llamada directa y síncrona: más simple, pero no tolera demoras ni fallos del receptor."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Enviar correos de confirmación",
+        "text": "Al confirmarse un pedido se encola un mensaje; un trabajador envía el correo y, si el proveedor falla, el mensaje se reintenta."
+      }
+    ],
+    "common_mistakes": [
+      "Suponer que cada mensaje se entrega exactamente una vez.",
+      "No limitar los reintentos y bloquear la cola con un mensaje defectuoso.",
+      "Usar una cola para algo que podía ser una llamada directa."
+    ],
+    "decision_questions": [
+      "¿Qué tareas pueden ser asíncronas?",
+      "¿Cuánto retraso es tolerable?",
+      "¿Qué pasa si una tarea falla repetidamente?"
+    ],
+    "related_entities": [
+      {
+        "id": "pub-sub",
+        "rel": "contrasts_with"
+      },
+      {
+        "id": "web-queue-worker",
+        "rel": "enables"
+      },
+      {
+        "id": "quality-reliability",
+        "rel": "addresses"
+      }
+    ],
+    "sources": [
+      "aws-sqs",
+      "azure-queue-load-leveling"
+    ],
+    "evidence_type": "official_documentation",
+    "library_refs": [],
+    "diagram": {
+      "purpose": "concept",
+      "title": "Cola de mensajes: cada mensaje lo procesa un solo trabajador",
+      "nodes": [
+        {
+          "id": "prod",
+          "label": "Productor",
+          "kind": "backend",
+          "layer": 0
+        },
+        {
+          "id": "cola",
+          "label": "Cola",
+          "kind": "queue",
+          "layer": 1
+        },
+        {
+          "id": "a",
+          "label": "Trabajador A",
+          "kind": "backend",
+          "layer": 2
+        },
+        {
+          "id": "b",
+          "label": "Trabajador B",
+          "kind": "backend",
+          "layer": 2
+        }
+      ],
+      "edges": [
+        {
+          "from": "prod",
+          "to": "cola",
+          "label": "publica"
+        },
+        {
+          "from": "cola",
+          "to": "a",
+          "label": "un mensaje a uno",
+          "async": true
+        },
+        {
+          "from": "cola",
+          "to": "b",
+          "label": "un mensaje a uno",
+          "async": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "pub-sub",
+    "slug": "pub-sub",
+    "name": "Publicación y suscripción (Pub/Sub)",
+    "type": "communication_pattern",
+    "category": "Comunicación",
+    "depth": "full",
+    "level": "advanced",
+    "summary": "Un productor publica un mensaje sobre un tema y cada suscriptor interesado recibe su propia copia.",
+    "problem_solved": "Avisar a muchas partes interesadas de un hecho sin que el productor las conozca ni espere por ellas.",
+    "explanation": [
+      "En pub/sub el productor publica un mensaje en un tema, sin saber quién escucha. Cada suscriptor del tema recibe una copia y la procesa de forma independiente. Se pueden agregar suscriptores nuevos sin modificar al productor.",
+      "Se diferencia de una cola en el reparto: en una cola cada mensaje lo recibe un solo consumidor (para repartir trabajo); en pub/sub lo reciben todos los suscriptores (para difundir un hecho). Muchos servicios combinan ambos: un tema que reparte a varias colas.",
+      "Sus desafíos son los de cualquier sistema asíncrono: entrega duplicada, orden y suscriptores que fallan. También hace menos visible quién reacciona a qué, así que documentar los temas y su contrato es parte del diseño."
+    ],
+    "how_it_works": [
+      "El productor publica un mensaje en un tema.",
+      "El intermediario lo entrega a cada suscriptor de ese tema.",
+      "Cada suscriptor lo procesa a su ritmo; los nuevos se suman sin tocar al productor."
+    ],
+    "when_to_use": [
+      "Un mismo hecho debe disparar varias reacciones independientes.",
+      "Se quiere poder agregar consumidores sin cambiar al productor."
+    ],
+    "when_not_to_use": [
+      "Solo hay un consumidor: una cola o una llamada directa es más simple.",
+      "Se necesita una respuesta del receptor para continuar."
+    ],
+    "pros": [
+      "Desacopla productores y consumidores.",
+      "Permite agregar reacciones sin modificar lo existente."
+    ],
+    "cons": [
+      "Es más difícil seguir el flujo de punta a punta.",
+      "Hay que diseñar para duplicados y orden.",
+      "Más infraestructura."
+    ],
+    "tradeoffs": [
+      "Se gana flexibilidad y extensibilidad a cambio de trazabilidad del flujo."
+    ],
+    "alternatives": [
+      {
+        "id": "message-queue",
+        "note": "Cada mensaje lo atiende un solo trabajador: para repartir trabajo, no para difundir un hecho."
+      }
+    ],
+    "examples": [
+      {
+        "kind": "educational_example",
+        "label": "Pedido pagado",
+        "text": "Se publica «pedido pagado» y se suscriben facturación, logística y analítica, cada una con su propia reacción."
+      }
+    ],
+    "common_mistakes": [
+      "Confundirlo con una cola de trabajo.",
+      "No versionar el formato de los mensajes.",
+      "Suponer entrega única y en orden."
+    ],
+    "decision_questions": [
+      "¿Cuántos consumidores distintos tiene el mismo hecho?",
+      "¿Pueden agregarse nuevos con el tiempo?"
+    ],
+    "related_entities": [
+      {
+        "id": "message-queue",
+        "rel": "contrasts_with"
+      },
+      {
+        "id": "event-driven",
+        "rel": "enables"
+      }
+    ],
+    "sources": [
+      "azure-publisher-subscriber",
+      "aws-sns",
+      "gcp-pubsub"
+    ],
+    "evidence_type": "official_framework",
+    "library_refs": [],
+    "diagram": {
+      "purpose": "concept",
+      "title": "Publicación y suscripción: cada suscriptor recibe su copia",
+      "nodes": [
+        {
+          "id": "prod",
+          "label": "Productor",
+          "kind": "backend",
+          "layer": 0
+        },
+        {
+          "id": "tema",
+          "label": "Tema",
+          "kind": "queue",
+          "layer": 1
+        },
+        {
+          "id": "f",
+          "label": "Suscriptor: facturación",
+          "kind": "backend",
+          "layer": 2
+        },
+        {
+          "id": "l",
+          "label": "Suscriptor: logística",
+          "kind": "backend",
+          "layer": 2
+        },
+        {
+          "id": "a",
+          "label": "Suscriptor: analítica",
+          "kind": "backend",
+          "layer": 2
+        }
+      ],
+      "edges": [
+        {
+          "from": "prod",
+          "to": "tema",
+          "label": "publica"
+        },
+        {
+          "from": "tema",
+          "to": "f",
+          "label": "copia",
+          "async": true
+        },
+        {
+          "from": "tema",
+          "to": "l",
+          "label": "copia",
+          "async": true
+        },
+        {
+          "from": "tema",
+          "to": "a",
+          "label": "copia",
+          "async": true
+        }
+      ]
+    }
+  }
+]

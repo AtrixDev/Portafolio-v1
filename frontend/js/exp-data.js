@@ -32,7 +32,7 @@ export const PUESTOS = [
     alcance: [['3,8', 'años en el programa']],
     hizo: ['Rol de <b>preceptor recreativo</b> dentro del programa Jornada Extendida.', '<b>Organización de actividades</b> y acompañamiento de alumnos.', '<b>Coordinación</b> con docentes y el equipo de la escuela.'],
     aporte: 'Ahí aprendí a comunicar, a tener paciencia y a coordinar equipos.',
-    conecta: ['Explicar lo complejo de forma simple: lo hago en cada informe de auditoría y en las guías del Lab.', 'Ver las guías del Lab', '/lab.html'],
+    conecta: ['Explicar lo complejo de forma simple: lo hago en cada informe de auditoría y en las Guías.', 'Ver las Guías', '/lab.html'],
     fuente: ['Qué es el programa Jornada Extendida', 'https://buenosaires.gob.ar/gcaba_historico/escuela-abierta-la-comunidad/jornada-extendida-aprende'],
   },
   {

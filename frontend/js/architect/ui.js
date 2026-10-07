@@ -1,0 +1,36 @@
+// js/architect/ui.js — Helpers de presentación (puros: devuelven strings HTML ya escapados). Sin acceso al DOM.
+import { ENTITY_TYPES, EVIDENCE_TYPES, LEVELS, EXAMPLE_KINDS, typeLabel } from './model.js';
+
+export const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+export const GROUP_ORDER = Object.freeze(['Producto', 'Arquitectura', 'Frontend', 'Backend y datos', 'Seguridad', 'Calidad', 'Operación', 'IA', 'Tecnologías y herramientas']);
+
+export const href = (id) => `#/c/${encodeURIComponent(id)}`;
+
+// Tono del badge de evidencia: lo respaldado por estándares y documentación es «ok»; lo propio se marca aparte, nunca como estándar.
+const EVIDENCE_TONE = { standard: 'ok', official_documentation: 'info', official_framework: 'info', expert_source: '', industry_practice: '', recommendation: 'warn', example: 'warn', opinion: 'bad' };
+export const evidenceBadge = (t, { help = false } = {}) => `<span class="ui-badge ${EVIDENCE_TONE[t] ? 'ui-badge--' + EVIDENCE_TONE[t] : ''}" ${help ? `title="${esc(EVIDENCE_TYPES[t]?.help || '')}"` : ''}>${esc(EVIDENCE_TYPES[t]?.label || t)}</span>`;
+export const levelBadge = l => `<span class="ui-badge">${esc(LEVELS[l] || l)}</span>`;
+export const typeBadge = t => `<span class="ui-badge ar-type">${esc(typeLabel(t))}</span>`;
+export const kindBadge = k => `<span class="ui-badge ${k === 'real_project' ? 'ui-badge--ok' : 'ui-badge--warn'}" title="${esc(EXAMPLE_KINDS[k]?.help || '')}">${esc(EXAMPLE_KINDS[k]?.label || k)}</span>`;
+
+export const list = (items, cls = '') => items?.length ? `<ul class="ar-list ${cls}">${items.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
+export const paras = items => (items || []).map(x => `<p>${esc(x)}</p>`).join('');
+
+/** Tarjeta del Explorer: todo el recuadro es un enlace. */
+export function card(e) {
+  return `<li><a class="ar-card ui-card" href="${href(e.id)}">
+    <span class="ar-card-kicker">${esc(typeLabel(e.type))}${e.diagram ? ' · con diagrama' : ''}</span>
+    <h3>${esc(e.name)}</h3>
+    <p>${esc(e.summary)}</p>
+    <span class="ar-card-badges">${levelBadge(e.level)}${evidenceBadge(e.evidence_type)}</span>
+  </a></li>`;
+}
+
+export const formatDate = s => { if (!s) return ''; const [y, m, d] = s.split('-'); return `${d}/${m}/${y}`; };
+
+/** Parseo de «#/ruta?x=1&y=2» → { path: ['c','id'], q: URLSearchParams } */
+export function parseHash(hash) {
+  const raw = String(hash || '').replace(/^#\/?/, ''), [p, qs = ''] = raw.split('?');
+  return { path: p.split('/').filter(Boolean).map(decodeURIComponent), q: new URLSearchParams(qs) };
+}
+export const typeGroup = t => ENTITY_TYPES[t]?.group;

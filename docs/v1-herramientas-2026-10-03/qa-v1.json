@@ -1,0 +1,498 @@
+[
+ [
+  "[d-dark] sin errores de JS",
+  true,
+  []
+ ],
+ [
+  "[d-dark] exactamente un h1 «Herramientas»",
+  true,
+  ""
+ ],
+ [
+  "[d-dark] h1 entre 40 y 72 px (68px), peso 700",
+  true,
+  ""
+ ],
+ [
+  "[d-dark] sin overflow horizontal",
+  true,
+  ""
+ ],
+ [
+  "[d-dark] el hero arranca debajo del header (108px vs nav 76px)",
+  true,
+  ""
+ ],
+ [
+  "[d-dark] ficha de Rentabilidad con ícono dibujado",
+  true,
+  ""
+ ],
+ [
+  "[d-dark] ítems del muelle ≥ 44px (mín 65)",
+  true,
+  ""
+ ],
+ [
+  "[d-dark] botones de la ficha ≥ 44px (mín 52)",
+  true,
+  ""
+ ],
+ [
+  "[d-dark] encabezados: grupos y ficha en H2, sin H3",
+  true,
+  ""
+ ],
+ [
+  "[d-dark] demo del Tracker real cargó",
+  true,
+  "PROBALO ACÁ\n\nEn vivo · cuenta de ejemplo\n\nVentas 28 días\n748"
+ ],
+ [
+  "[d-dark] #chequeo abre el Chequeo",
+  true,
+  ""
+ ],
+ [
+  "[d-dark] input del Chequeo ≥ 44px y 16px de texto (48/16)",
+  true,
+  ""
+ ],
+ [
+  "[d-dark] Chequeo renderiza su resultado",
+  true,
+  ""
+ ],
+ [
+  "[d-dark] campo de email del bloque compartir ≥ 44px (48)",
+  true,
+  ""
+ ],
+ [
+  "[d-dark] foco visible en ítem del muelle (outline solid, radio 12px)",
+  true,
+  ""
+ ],
+ [
+  "[d-dark] Enter abre la ficha (Auditoría)",
+  true,
+  ""
+ ],
+ [
+  "[d-dark] hover cambia el fondo del ítem",
+  true,
+  [
+   "rgba(0, 0, 0, 0)",
+   "rgb(26, 26, 29)"
+  ]
+ ],
+ [
+  "[d-dark] foco en botón conserva forma de píldora",
+  true,
+  ""
+ ],
+ [
+  "[d-dark] el botón de tema cambia el tema",
+  true,
+  ""
+ ],
+ [
+  "[d-light] sin errores de JS",
+  true,
+  []
+ ],
+ [
+  "[d-light] exactamente un h1 «Herramientas»",
+  true,
+  ""
+ ],
+ [
+  "[d-light] h1 entre 40 y 72 px (68px), peso 700",
+  true,
+  ""
+ ],
+ [
+  "[d-light] sin overflow horizontal",
+  true,
+  ""
+ ],
+ [
+  "[d-light] el hero arranca debajo del header (108px vs nav 76px)",
+  true,
+  ""
+ ],
+ [
+  "[d-light] ficha de Rentabilidad con ícono dibujado",
+  true,
+  ""
+ ],
+ [
+  "[d-light] ítems del muelle ≥ 44px (mín 65)",
+  true,
+  ""
+ ],
+ [
+  "[d-light] botones de la ficha ≥ 44px (mín 52)",
+  true,
+  ""
+ ],
+ [
+  "[d-light] encabezados: grupos y ficha en H2, sin H3",
+  true,
+  ""
+ ],
+ [
+  "[d-light] demo del Tracker real cargó",
+  true,
+  "PROBALO ACÁ\n\nEn vivo · cuenta de ejemplo\n\nVentas 28 días\n748"
+ ],
+ [
+  "[d-light] #chequeo abre el Chequeo",
+  true,
+  ""
+ ],
+ [
+  "[d-light] input del Chequeo ≥ 44px y 16px de texto (48/16)",
+  true,
+  ""
+ ],
+ [
+  "[d-light] Chequeo renderiza su resultado",
+  true,
+  ""
+ ],
+ [
+  "[d-light] campo de email del bloque compartir ≥ 44px (48)",
+  true,
+  ""
+ ],
+ [
+  "[d-light] foco visible en ítem del muelle (outline solid, radio 12px)",
+  true,
+  ""
+ ],
+ [
+  "[d-light] Enter abre la ficha (Auditoría)",
+  true,
+  ""
+ ],
+ [
+  "[d-light] hover cambia el fondo del ítem",
+  true,
+  [
+   "rgba(0, 0, 0, 0)",
+   "rgb(247, 247, 245)"
+  ]
+ ],
+ [
+  "[d-light] foco en botón conserva forma de píldora",
+  true,
+  ""
+ ],
+ [
+  "[d-light] el botón de tema cambia el tema",
+  true,
+  ""
+ ],
+ [
+  "[t-dark] sin errores de JS",
+  true,
+  []
+ ],
+ [
+  "[t-dark] exactamente un h1 «Herramientas»",
+  true,
+  ""
+ ],
+ [
+  "[t-dark] h1 entre 40 y 72 px (53px), peso 700",
+  true,
+  ""
+ ],
+ [
+  "[t-dark] sin overflow horizontal",
+  true,
+  ""
+ ],
+ [
+  "[t-dark] el hero arranca debajo del header (88px vs nav 64px)",
+  true,
+  ""
+ ],
+ [
+  "[t-dark] ficha de Rentabilidad con ícono dibujado",
+  true,
+  ""
+ ],
+ [
+  "[t-dark] ítems del muelle ≥ 44px (mín 65)",
+  true,
+  ""
+ ],
+ [
+  "[t-dark] botones de la ficha ≥ 44px (mín 52)",
+  true,
+  ""
+ ],
+ [
+  "[t-dark] encabezados: grupos y ficha en H2, sin H3",
+  true,
+  ""
+ ],
+ [
+  "[t-dark] demo del Tracker real cargó",
+  true,
+  "PROBALO ACÁ\n\nEn vivo · cuenta de ejemplo\n\nVentas 28 días\n748"
+ ],
+ [
+  "[t-dark] #chequeo abre el Chequeo",
+  true,
+  ""
+ ],
+ [
+  "[t-dark] input del Chequeo ≥ 44px y 16px de texto (48/16)",
+  true,
+  ""
+ ],
+ [
+  "[t-dark] Chequeo renderiza su resultado",
+  true,
+  ""
+ ],
+ [
+  "[t-dark] campo de email del bloque compartir ≥ 44px (48)",
+  true,
+  ""
+ ],
+ [
+  "[t-light] sin errores de JS",
+  true,
+  []
+ ],
+ [
+  "[t-light] exactamente un h1 «Herramientas»",
+  true,
+  ""
+ ],
+ [
+  "[t-light] h1 entre 40 y 72 px (53px), peso 700",
+  true,
+  ""
+ ],
+ [
+  "[t-light] sin overflow horizontal",
+  true,
+  ""
+ ],
+ [
+  "[t-light] el hero arranca debajo del header (88px vs nav 64px)",
+  true,
+  ""
+ ],
+ [
+  "[t-light] ficha de Rentabilidad con ícono dibujado",
+  true,
+  ""
+ ],
+ [
+  "[t-light] ítems del muelle ≥ 44px (mín 65)",
+  true,
+  ""
+ ],
+ [
+  "[t-light] botones de la ficha ≥ 44px (mín 52)",
+  true,
+  ""
+ ],
+ [
+  "[t-light] encabezados: grupos y ficha en H2, sin H3",
+  true,
+  ""
+ ],
+ [
+  "[t-light] demo del Tracker real cargó",
+  true,
+  "PROBALO ACÁ\n\nEn vivo · cuenta de ejemplo\n\nVentas 28 días\n748"
+ ],
+ [
+  "[t-light] #chequeo abre el Chequeo",
+  true,
+  ""
+ ],
+ [
+  "[t-light] input del Chequeo ≥ 44px y 16px de texto (48/16)",
+  true,
+  ""
+ ],
+ [
+  "[t-light] Chequeo renderiza su resultado",
+  true,
+  ""
+ ],
+ [
+  "[t-light] campo de email del bloque compartir ≥ 44px (48)",
+  true,
+  ""
+ ],
+ [
+  "[m-dark] sin errores de JS",
+  true,
+  []
+ ],
+ [
+  "[m-dark] exactamente un h1 «Herramientas»",
+  true,
+  ""
+ ],
+ [
+  "[m-dark] h1 entre 40 y 72 px (42px), peso 700",
+  true,
+  ""
+ ],
+ [
+  "[m-dark] sin overflow horizontal",
+  true,
+  ""
+ ],
+ [
+  "[m-dark] el hero arranca debajo del header (88px vs nav 64px)",
+  true,
+  ""
+ ],
+ [
+  "[m-dark] ficha de Rentabilidad con ícono dibujado",
+  true,
+  ""
+ ],
+ [
+  "[m-dark] ítems del muelle ≥ 44px (mín 65)",
+  true,
+  ""
+ ],
+ [
+  "[m-dark] botones de la ficha ≥ 44px (mín 52)",
+  true,
+  ""
+ ],
+ [
+  "[m-dark] encabezados: grupos y ficha en H2, sin H3",
+  true,
+  ""
+ ],
+ [
+  "[m-dark] demo del Tracker real cargó",
+  true,
+  "PROBALO ACÁ\n\nEn vivo · cuenta de ejemplo\n\nVentas 28 días\n748"
+ ],
+ [
+  "[m-dark] #chequeo abre el Chequeo",
+  true,
+  ""
+ ],
+ [
+  "[m-dark] input del Chequeo ≥ 44px y 16px de texto (48/16)",
+  true,
+  ""
+ ],
+ [
+  "[m-dark] Chequeo renderiza su resultado",
+  true,
+  ""
+ ],
+ [
+  "[m-dark] campo de email del bloque compartir ≥ 44px (192)",
+  true,
+  ""
+ ],
+ [
+  "[m-light] sin errores de JS",
+  true,
+  []
+ ],
+ [
+  "[m-light] exactamente un h1 «Herramientas»",
+  true,
+  ""
+ ],
+ [
+  "[m-light] h1 entre 40 y 72 px (42px), peso 700",
+  true,
+  ""
+ ],
+ [
+  "[m-light] sin overflow horizontal",
+  true,
+  ""
+ ],
+ [
+  "[m-light] el hero arranca debajo del header (88px vs nav 64px)",
+  true,
+  ""
+ ],
+ [
+  "[m-light] ficha de Rentabilidad con ícono dibujado",
+  true,
+  ""
+ ],
+ [
+  "[m-light] ítems del muelle ≥ 44px (mín 65)",
+  true,
+  ""
+ ],
+ [
+  "[m-light] botones de la ficha ≥ 44px (mín 52)",
+  true,
+  ""
+ ],
+ [
+  "[m-light] encabezados: grupos y ficha en H2, sin H3",
+  true,
+  ""
+ ],
+ [
+  "[m-light] demo del Tracker real cargó",
+  true,
+  "PROBALO ACÁ\n\nEn vivo · cuenta de ejemplo\n\nVentas 28 días\n748"
+ ],
+ [
+  "[m-light] #chequeo abre el Chequeo",
+  true,
+  ""
+ ],
+ [
+  "[m-light] input del Chequeo ≥ 44px y 16px de texto (48/16)",
+  true,
+  ""
+ ],
+ [
+  "[m-light] Chequeo renderiza su resultado",
+  true,
+  ""
+ ],
+ [
+  "[m-light] campo de email del bloque compartir ≥ 44px (192)",
+  true,
+  ""
+ ],
+ [
+  "?r= de Rentabilidad redirige a rentabilidad.html?r=",
+  true,
+  ""
+ ],
+ [
+  "?r= de Chequeo se dibuja en Herramientas",
+  true,
+  ""
+ ],
+ [
+  "menú global → «Chequeo de publicación» abre la ficha estando en Herramientas",
+  true,
+  ""
+ ],
+ [
+  "Rentabilidad sigue calculando",
+  true,
+  ""
+ ]
+]

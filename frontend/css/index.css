@@ -583,3 +583,16 @@ button.cert-link { font: inherit; font-size: inherit; cursor: pointer; }
 .caso-head { max-width: 60rem; margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
 .caso-head .section-intro { margin-top: .9rem; }
 .caso .tl-case { margin-top: 0; }
+
+/* ── Lo que construí: puente a cada área, sin decoración ── */
+.bu { border-top: 1px solid var(--section-line); }
+.bu-list { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(1rem, 2vw, 1.5rem); margin-top: 1.75rem; }
+.bu-list a { display: flex; flex-direction: column; gap: .5rem; height: 100%; padding: 1.25rem; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); color: var(--text); text-decoration: none; transition: border-color var(--t-fast); }
+.bu-list a:hover { border-color: var(--accent-line); }
+.bu-list small { font-size: .72rem; letter-spacing: .04em; color: var(--muted); }
+.bu-list h3 { font: 700 1.2rem/1.15 var(--font-display); letter-spacing: -.02em; }
+.bu-list p { font-size: .94rem; line-height: 1.5; color: var(--text-2); }
+.bu-go { display: inline-flex; align-items: center; gap: .4rem; margin-top: auto; padding-top: .5rem; font-size: .9rem; font-weight: 600; color: var(--accent-text); }
+.bu-go svg { width: 16px; height: 16px; }
+@media (max-width: 1000px) { .bu-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .bu-list { grid-template-columns: minmax(0, 1fr); } }

@@ -20,7 +20,7 @@
   <script>try{var t=localStorage.getItem('dc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
   <link rel="stylesheet" href="css/root.css">
   <link rel="stylesheet" href="css/shared.css">
-  <link rel="stylesheet" href="css/herr.css?v=2">
+  <link rel="stylesheet" href="css/herr.css?v=6">
   <link rel="stylesheet" href="css/surfaces.css">
 </head>
 <body>
@@ -30,12 +30,17 @@
 <nav id="site-nav" aria-label="Principal">
   <a href="index.html" class="nav-logo" aria-label="Darío Colángelo, inicio"><span class="nav-mark" aria-hidden="true">DC</span><span class="nav-name">Darío Colángelo</span></a>
   <ul class="nav-links">
-    <li><a href="index.html">CV</a></li>
-    <li><a href="herramientas.html" class="active" aria-current="page">Herramientas</a></li>
-    <li><a href="lab.html">Lab ML</a></li>
-    <li><a href="sistema.html">Sistema</a></li>
-    <li><a href="programacion.html">Base de datos</a></li>
-    <li><a href="web.html">Revisá tu web</a></li>
+    <li><a href="index.html#experiencia">Trayectoria</a></li>
+    <li class="nav-group" data-grupo="ml">
+      <a href="herramientas.html" class="nav-parent active" aria-current="page">Mercado Libre</a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-sub-ml" aria-label="Opciones de Mercado Libre"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+      <div class="nav-sub" id="nav-sub-ml" aria-label="Mercado Libre"><p class="nav-sub-h">Hacer</p><ul><li><a href="herramientas.html" aria-current="page">Herramientas</a></li><li><a href="herramientas.html#chequeo">Chequeo de publicación</a></li><li><a href="rentabilidad.html">Rentabilidad</a></li><li><a href="importar.html">Importación</a></li><li><a href="perdida.html">Pérdida en publicidad</a></li><li><a href="sistema.html#auditar">Auditoría de cuenta</a></li><li><a href="informe-muestra.html">Informe de muestra</a></li></ul><p class="nav-sub-h">Aprender</p><ul><li><a href="lab.html">Guías</a></li></ul><p class="nav-sub-h">Entender</p><ul><li><a href="sistema.html">Cómo trabajo</a></li></ul></div>
+    </li>
+    <li class="nav-group" data-grupo="web">
+      <a href="web.html" class="nav-parent">Desarrollo web</a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-sub-web" aria-label="Opciones de Desarrollo web"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+      <div class="nav-sub" id="nav-sub-web" aria-label="Desarrollo web"><ul><li><a href="web.html">Revisá tu web</a></li><li><a href="armar.html">Armá tu web</a></li><li><a href="programacion.html">Biblioteca web</a></li><li><a href="arquitecto.html">Project Architect</a></li></ul></div>
+    </li>
     <li><a href="contacto.html" class="nav-cta">Contacto</a></li>
   </ul>
   <div class="nav-actions">
@@ -49,37 +54,84 @@
   </div>
 </nav>
 <div class="mobile-menu" id="mobileMenu" aria-label="Menú">
-  <a href="index.html">CV</a>
-  <a href="herramientas.html" class="active" aria-current="page">Herramientas</a>
-  <a href="lab.html">Lab ML</a>
-  <a href="sistema.html">Sistema</a>
-  <a href="programacion.html">Base de datos</a>
-  <a href="web.html">Revisá tu web</a>
+  <a href="index.html#experiencia">Trayectoria</a>
+  <div class="mm-group" data-grupo="ml">
+    <a href="herramientas.html" class="active" aria-current="page">Mercado Libre</a>
+    <button type="button" class="mm-toggle" aria-expanded="false" aria-controls="mm-sub-ml" aria-label="Opciones de Mercado Libre"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+    <div class="mm-sub" id="mm-sub-ml"><p class="mm-sub-h">Hacer</p><ul><li><a href="herramientas.html" aria-current="page">Herramientas</a></li><li><a href="herramientas.html#chequeo">Chequeo de publicación</a></li><li><a href="rentabilidad.html">Rentabilidad</a></li><li><a href="importar.html">Importación</a></li><li><a href="perdida.html">Pérdida en publicidad</a></li><li><a href="sistema.html#auditar">Auditoría de cuenta</a></li><li><a href="informe-muestra.html">Informe de muestra</a></li></ul><p class="mm-sub-h">Aprender</p><ul><li><a href="lab.html">Guías</a></li></ul><p class="mm-sub-h">Entender</p><ul><li><a href="sistema.html">Cómo trabajo</a></li></ul></div>
+  </div>
+  <div class="mm-group" data-grupo="web">
+    <a href="web.html">Desarrollo web</a>
+    <button type="button" class="mm-toggle" aria-expanded="false" aria-controls="mm-sub-web" aria-label="Opciones de Desarrollo web"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+    <div class="mm-sub" id="mm-sub-web"><ul><li><a href="web.html">Revisá tu web</a></li><li><a href="armar.html">Armá tu web</a></li><li><a href="programacion.html">Biblioteca web</a></li><li><a href="arquitecto.html">Project Architect</a></li></ul></div>
+  </div>
   <a href="contacto.html">Contacto</a>
 </div>
 <!-- NAV:end -->
 
 <main id="contenido">
 <section class="hr" id="herramientas" aria-labelledby="t-hr">
-  <div class="hr-head">
-    <h2 id="t-hr">Herramientas</h2>
-    <p>Todo lo que construyo, ordenado por estado. Cada una tiene una demo para probar acá mismo y un botón a la versión completa.<small id="hr-count"></small></p>
-  </div>
+  <header class="hr-head">
+    <div class="ui-sh ui-sh--page">
+      <p class="ui-eyebrow">Mercado Libre</p>
+      <h1 class="ui-sh__title" id="t-hr">Herramientas</h1>
+      <p class="ui-sh__lead">Todo lo que construyo, ordenado por estado. Cada una tiene una demo para probar acá mismo y un botón a la versión completa.</p>
+    </div>
+    <div class="hr-meta">
+      <small id="hr-count"></small>
+      <p>¿Preferís leer primero? Están las <a href="lab.html">Guías de Mercado Libre</a>, o mirá <a href="sistema.html">cómo trabajo</a>.</p>
+    </div>
+  </header>
   <div class="hr-show">
     <nav class="hr-dock" id="hr-dock" aria-label="Herramientas por estado"></nav>
-    <article class="hr-stage" id="hr-stage" aria-live="polite"></article>
+    <article class="hr-stage ui-card ui-card--raised ui-card--lg" id="hr-stage" aria-live="polite"></article>
   </div>
 </section>
 </main>
 
 <footer>
   <p class="footer-name">Darío Colángelo<span>.</span></p>
-  <ul class="footer-links">
-    <li><a href="assets/Dario-Colangelo-CV.pdf" download><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-download"/></svg>CV en PDF</a></li>
-    <li><a href="https://www.linkedin.com/in/dariocolangelo/" target="_blank" rel="noopener">LinkedIn</a></li>
-    <li><a href="https://wa.me/541144474507" target="_blank" rel="noopener">WhatsApp</a></li>
-    <li><a href="mailto:daricolangelo@gmail.com">daricolangelo@gmail.com</a></li>
-  </ul>
+  <nav class="footer-index" aria-label="Mapa del sitio">
+    <div class="footer-col">
+      <h2>Darío Colángelo</h2>
+      <ul>
+        <li><a href="index.html#experiencia">Trayectoria</a></li>
+        <li><a href="index.html#caso-exito">Casos</a></li>
+        <li><a href="assets/Dario-Colangelo-CV.pdf" download><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-download"/></svg>CV en PDF</a></li>
+        <li><a href="https://www.linkedin.com/in/dariocolangelo/" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h2>Mercado Libre</h2>
+      <ul>
+        <li><a href="herramientas.html#chequeo">Chequeo de publicación</a></li>
+        <li><a href="rentabilidad.html">Rentabilidad</a></li>
+        <li><a href="importar.html">Importación</a></li>
+        <li><a href="perdida.html">Pérdida en publicidad</a></li>
+        <li><a href="sistema.html#auditar">Auditoría de cuenta</a></li>
+        <li><a href="informe-muestra.html">Informe de muestra</a></li>
+        <li><a href="lab.html">Guías</a></li>
+        <li><a href="sistema.html">Cómo trabajo</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h2>Desarrollo web</h2>
+      <ul>
+        <li><a href="web.html">Revisá tu web</a></li>
+        <li><a href="armar.html">Armá tu web</a></li>
+        <li><a href="programacion.html">Biblioteca web</a></li>
+        <li><a href="arquitecto.html">Project Architect</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h2>Contacto</h2>
+      <ul>
+        <li><a href="https://wa.me/541144474507" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="mailto:daricolangelo@gmail.com">Email</a></li>
+        <li><a href="contacto.html#formulario">Formulario</a></li>
+      </ul>
+    </div>
+  </nav>
   <div class="footer-note">
     <span>Analista de E-Commerce · CABA, Argentina</span>
     <a href="#contenido" class="footer-top"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-arrow-up"/></svg>Volver arriba</a>
@@ -87,6 +139,6 @@
 </footer>
 
 <script src="js/main.js"></script>
-<script type="module" src="js/herr.js?v=4"></script>
+<script type="module" src="js/herr.js?v=10"></script>
 </body>
 </html>
