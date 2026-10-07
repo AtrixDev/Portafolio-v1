@@ -199,6 +199,19 @@ with sync_playwright() as p:
         q = c.new_page(); q.goto(BASE + '#/c/web-queue-worker'); q.wait_for_selector('.ar-sec'); q.evaluate("document.getElementById('s-diagrama').scrollIntoView()"); q.wait_for_timeout(200)
         if OUT: q.screenshot(path=OUT + f'/diagrama-{sch}.png')
         c.close()
+    # ── proyectos con SSR (el que antes rompía los blueprints), enlaces corruptos y estados raros ──
+    PROY = {'saas': 'eyJ2IjoxLCJhIjp7InByb2R1Y3QiOiJzYWFzIiwidGVhbSI6InNvbG8ifSwicyI6W119', 'ecommerce': 'eyJ2IjoxLCJhIjp7InByb2R1Y3QiOiJlY29tbWVyY2UiLCJ0ZWFtIjoic29sbyJ9LCJzIjpbXX0', 'otro': 'eyJ2IjoxLCJhIjp7InByb2R1Y3QiOiJvdGhlciIsInRlYW0iOiJzb2xvIn0sInMiOltdfQ'}
+    c = br.new_context(viewport={'width': 390, 'height': 800}, reduced_motion='reduce'); c.route('**/api/*', lambda r: r.fulfill(status=404, json={}))
+    for nombre, enc in PROY.items():
+        for tab in ['decisiones', 'blueprint', 'adr', 'prompts', 'pack']:
+            q = c.new_page(); e2 = []; q.on('pageerror', lambda x: e2.append(str(x))); q.goto(BASE + f'#/proyecto/{tab}?p={enc}'); q.wait_for_timeout(300)
+            t = q.inner_text('main'); chk(f'[proyecto {nombre}] pestaña «{tab}» se muestra completa, sin errores ni overflow', not e2 and len(t) > 120 and not re.search(r'undefined|\[object|NaN', t) and overflow(q) <= 0, (e2[:1], len(t), overflow(q)))
+            q.close()
+    for nombre, h, esperado in [('concepto inexistente', '#/c/no-existe', 'No encontré'), ('enlace del proyecto corrupto', '#/proyecto?p=%%%basura', 'no se pudo leer'), ('filtros inválidos', '#/?q=%3Cscript%3E&g=Nada&n=zz&e=qq', 'Project Architect'), ('búsqueda sin resultados', '#/?q=xyzxyzxyz', 'Project Architect')]:
+        q = c.new_page(); e2 = []; q.on('pageerror', lambda x: e2.append(str(x))); q.goto(BASE + h); q.wait_for_timeout(300)
+        chk(f'[estado raro] {nombre}: mensaje claro y sin errores de JS', not e2 and esperado.lower() in q.inner_text('main').lower(), (e2[:1],)); q.close()
+    q = c.new_page(); e2 = []; q.on('pageerror', lambda x: e2.append(str(x))); q.goto(BASE); q.evaluate("localStorage.setItem('dc-architect-project','{{{no json')"); q.goto(BASE + '#/proyecto'); q.wait_for_timeout(300)
+    chk('[estado raro] proyecto guardado corrupto: arranca vacío sin romper', not e2 and q.locator('#ar-form').count() == 1, e2[:1]); q.close(); c.close()
     chk('Sin errores de JS durante toda la sesión', not errs, errs[:3])
     br.close()
 f = [r for r in R if not r[1]]

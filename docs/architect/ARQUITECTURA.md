@@ -65,11 +65,17 @@ backend/test/architect-*.test.mjs
 | 7 Prompt Generator | hecha | `prompts.js`, `prompts.json` |
 | 8 Project Pack | hecha | `pack.js`, `pack.json`, `views-project.js` |
 
-Verificación: `node --test backend/test/` → 248/248 (74 del Architect); `python3 tools/qa-architect.py` → 91/91 en Chromium (con `node tools/dev-server.mjs`).
+Verificación: `node --test backend/test/` → 250/250 (76 del Architect, incluido un barrido de 1500 proyectos aleatorios); `python3 tools/qa-architect.py` → 111/111 en Chromium (con `node tools/dev-server.mjs`).
 
 ## 7. Pendiente / límites declarados
 
 - El contenido inicial es una muestra (58 entidades) para validar el modelo, no la base final.
 - Solo 15 entidades tienen diagrama propio.
 - Las fuentes se verifican a mano con `tools/architect-verificar-fuentes.mjs`; no hay chequeo automático en CI.
-- Sin commit ni deploy: el proyecto no está bajo git.
+- Los atributos de las tecnologías (complejidad, costo, lock-in…) son criterio propio; solo Claude Code carece de alternativa cargada y el pack lo dice.
+- «Autenticación y autorización» es una sola ficha que enseña la diferencia; si se amplía el contenido conviene separarla en dos.
+- Las alternativas cercanas explican el porqué con la razón principal de la opción elegida, pero no cuantifican la diferencia.
+
+## 8. QA profundo (07/10/2026)
+
+Encontrado y corregido: SSR con cualquier producto lanzaba una excepción al armar el blueprint (etiqueta de 45 caracteres); el producto «otro» sin datos proponía sitio estático con base relacional; el sitio estático podía proponerse para productos con lógica propia; la cola de mensajes sugería operar un broker aunque el proyecto fuera chico; tres fuentes (ADR, C4) no se mostraban en ninguna parte; un hash mal formado lanzaba un error en `main.js`. Prueba nueva: `backend/test/architect-barrido.test.mjs`.

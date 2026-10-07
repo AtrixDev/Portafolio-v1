@@ -88,9 +88,12 @@ export function decisionsView(res, K, M, ctx) {
 <section aria-labelledby="h-abiertas"><h2 id="h-abiertas" class="ar-h2">Preguntas abiertas</h2>${res.open.length ? `<ul class="ar-list">${res.open.map(o => `<li><b>${esc(M.signals[o.signal]?.label || o.signal)}</b>: ${esc(o.why)} <button type="button" class="ar-link" data-editar-signal="${esc(o.signal)}">Responder</button></li>`).join('')}</ul>` : '<p class="ar-sub">No quedan preguntas abiertas que cambien las decisiones.</p>'}</section>`;
 }
 
+/** Enlace a una fuente del catálogo (si no existe, solo el texto: nunca rompe la vista). */
+const srcLink = (K, id, text) => { const s = K?.sources?.find(x => x.id === id); return s ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(text)}</a>` : esc(text); };
+
 // ═══ Blueprint ═══
 export function blueprintView(blueprints, K) {
-  return `<p class="ar-sub">Cada diagrama responde una pregunta distinta, por eso no hay uno solo con todo. Las piezas con enlace explican el concepto. Línea punteada: comunicación asíncrona.</p>` + blueprints.map(b => {
+  return `<p class="ar-sub">Cada diagrama responde una pregunta distinta, por eso no hay uno solo con todo (idea tomada de los niveles del ${srcLink(K, 'c4-model', 'modelo C4')}, sin seguir su notación al pie de la letra). Las piezas con enlace explican el concepto. Línea punteada: comunicación asíncrona.</p>` + blueprints.map(b => {
     const d = describeDiagram(b);
     return `<section class="ar-bp" aria-labelledby="bp-${esc(b.id)}"><h2 id="bp-${esc(b.id)}" class="ar-h2">${esc(b.title)}</h2>${DIAGRAM_PURPOSES[b.purpose] !== b.title ? `<p class="ar-sub"><span class="ui-badge">${esc(DIAGRAM_PURPOSES[b.purpose])}</span></p>` : ''}
       <div class="ar-diagram" tabindex="0" role="group" aria-label="${esc(b.title)} (se puede desplazar)">${renderDiagramSVG(b, { id: `bp-${b.id}` })}</div>
@@ -101,9 +104,9 @@ export function blueprintView(blueprints, K) {
 }
 
 // ═══ ADR ═══
-export function adrView(adrs, date) {
+export function adrView(adrs, date, K) {
   if (!adrs.length) return '<p class="ar-sub">Todavía no hay decisiones para registrar.</p>';
-  return `<p class="ar-sub">Un ADR registra <b>una decisión</b>, el contexto en que se tomó, las alternativas y cuándo revisarla. Estos son <b>propuestas</b> generadas con el criterio de este proyecto: revisalos antes de aceptarlos.</p>
+  return `<p class="ar-sub">Un ADR registra <b>una decisión</b>, el contexto en que se tomó, las alternativas y cuándo revisarla. Estos son <b>propuestas</b> generadas con el criterio de este proyecto: revisalos antes de aceptarlos. Formato: ${srcLink(K, 'nygard-adr', 'ADR de Michael Nygard')} ampliado con alternativas y condiciones de revisión (más sobre el formato en ${srcLink(K, 'adr-github', 'adr.github.io')}).</p>
   <p class="ar-actions"><button type="button" class="btn-secondary" data-copiar="adr-todos">Copiar todos (Markdown)</button><button type="button" class="btn-secondary" data-descargar="adr-todos">Descargar .md</button></p>` +
     adrs.map(a => `<details class="ar-adr ui-card"><summary><b>${esc(a.id)}</b> · ${esc(a.title)} <span class="ui-badge">${esc(a.status)}</span>${confBadge(a.confidence)}</summary>
       <div class="ar-adr-body">

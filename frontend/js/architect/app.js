@@ -95,7 +95,7 @@ async function render() {
       else {
         const { res, pack } = armarPack();
         const lead = { decisiones: 'Propuestas explicadas: por qué, qué se resigna, alternativas, cuándo reconsiderar y cuánta confianza hay.', blueprint: 'Los diagramas del sistema, separados por propósito.', adr: 'Una decisión de arquitectura por registro, listos para el repositorio.', prompts: 'Prompts con el contexto de tu proyecto para cada etapa del trabajo.', pack: 'Todo el material para arrancar, en un solo documento.' }[tab];
-        const cuerpo = tab === 'decisiones' ? decisionsView(res, K, PD.M, { product: pack.meta.product, idea: pack.meta.idea || 'Proyecto sin descripción' }) : tab === 'blueprint' ? blueprintView(pack.blueprints, K) : tab === 'adr' ? adrView(pack.adrs, hoy()) : tab === 'prompts' ? promptsView(pack.prompts) : packView(pack);
+        const cuerpo = tab === 'decisiones' ? decisionsView(res, K, PD.M, { product: pack.meta.product, idea: pack.meta.idea || 'Proyecto sin descripción' }) : tab === 'blueprint' ? blueprintView(pack.blueprints, K) : tab === 'adr' ? adrView(pack.adrs, hoy(), K) : tab === 'prompts' ? promptsView(pack.prompts) : packView(pack);
         root.innerHTML = resultsHead(TABS.find(t => t[0] === tab)[1], lead, tabsView(tab, qs)) + avisosHtml() + `<div class="ar-results-body">${cuerpo}</div><p class="ar-foot"><a class="link-arrow" href="#/proyecto${qs}">← Cambiar mis respuestas</a> <button type="button" class="ar-link" data-copiar-enlace>Copiar enlace del proyecto</button></p>`;
         setTitle(TABS.find(t => t[0] === tab)[1]);
       }

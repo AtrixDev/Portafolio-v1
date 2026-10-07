@@ -43,7 +43,7 @@ export function buildBlueprints(res, K, ctx = {}) {
   {
     const nodes = [{ id: 'client', label: 'Navegador del usuario', kind: 'actor', layer: 0 }];
     const edges = [];
-    const frontLabel = { 'static-site': 'Archivos estáticos (hosting o CDN)', ssg: 'Páginas generadas en la construcción (CDN)', ssr: 'Aplicación web con renderizado en el servidor', csr: 'Aplicación en el navegador (JavaScript)', 'hybrid-rendering': 'Frontend con renderizado híbrido' }[render] || 'Frontend';
+    const frontLabel = { 'static-site': 'Archivos estáticos (hosting o CDN)', ssg: 'Páginas generadas en la construcción (CDN)', ssr: 'App web con renderizado en el servidor', csr: 'Aplicación en el navegador (JavaScript)', 'hybrid-rendering': 'Frontend con renderizado híbrido' }[render] || 'Frontend';
     nodes.push({ id: 'front', label: frontLabel, kind: 'frontend', layer: 1, link: entity(render) });
     edges.push({ from: 'client', to: 'front', label: 'HTTP' });
     if (!noBackend) {

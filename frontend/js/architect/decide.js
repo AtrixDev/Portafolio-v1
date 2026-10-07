@@ -75,7 +75,7 @@ export function decide(rules, K, { signals, source, askable }) {
         tradeoffs: top.c.pseudo ? [] : (K.get(top.c.id).tradeoffs || []).slice(0, 2),
         revisit: top.c.revisit,
       }];
-      alternatives = scored.slice(1).map(s => ({ ...entry(s), better_when: s.c.better_when, why_not: s.neg.length ? s.neg : (s.total < top.total ? ['Tiene menos respaldo que la opción elegida con lo que se sabe del proyecto.'] : []), close: top.total - s.total <= 2 }));
+      alternatives = scored.slice(1).map(s => ({ ...entry(s), better_when: s.c.better_when, why_not: s.neg.length ? s.neg : (s.total < top.total ? [top.pos.length ? `Con lo que se sabe del proyecto, la elegida responde mejor: ${top.pos[0].charAt(0).toLowerCase()}${top.pos[0].slice(1)}` : 'Tiene menos respaldo que la opción elegida con lo que se sabe del proyecto.'] : []), close: top.total - s.total <= 2 }));
     } else {
       const th = d.threshold ?? rules.threshold_default;
       const inc = scored.filter(s => s.total >= th).sort((a, b) => b.total - a.total || a.i - b.i);

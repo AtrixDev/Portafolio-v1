@@ -39,7 +39,7 @@ export function buildPack({ M, state, res, K, packData, promptsData, date = '' }
     if (!techs.length) continue;
     const t = techs.map(x => {
       const alts = x.alternatives.map(a => `${K.get(a.id).name} (${a.note})`).join('; ');
-      return `- **${x.name}** — ${x.summary}\n${PROFILE_KEYS.map(k => `  - ${PROFILE_LABELS[k]}: ${x.profile[k].level} — ${x.profile[k].text}`).join('\n')}${alts ? `\n  - Alternativas: ${alts}` : ''}`;
+      return `- **${x.name}** — ${x.summary}\n${PROFILE_KEYS.map(k => `  - ${PROFILE_LABELS[k]}: ${x.profile[k].level} — ${x.profile[k].text}`).join('\n')}\n  - Alternativas: ${alts || 'todavía no hay otra cargada en la base (muestra inicial): compará equivalentes antes de elegir.'}`;
     }).join('\n');
     techSections.push(`### Para «${p.name}» (${d.title})\n${t}`);
   }

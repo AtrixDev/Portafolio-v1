@@ -134,7 +134,7 @@ if ('IntersectionObserver' in window) {
 /* Anclas estables: si el contenido de arriba crece después de cargar (datos que llegan tarde),
    el navegador queda desalineado. Se re-alinea mientras la página se acomoda y se frena apenas la persona toca el scroll. */
 (function () {
-  const id = decodeURIComponent(location.hash.slice(1));
+  let id = ''; try { id = decodeURIComponent(location.hash.slice(1)); } catch { /* hash mal formado: sin ancla que alinear */ }
   if (!id) return;
   let activo = true, ultimo = 0;
   const parar = () => { activo = false; };

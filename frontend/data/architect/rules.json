@@ -69,6 +69,28 @@
        },
        "delta": -10,
        "reason": "El tiempo real necesita conexiones y lógica de servidor."
+      },
+      {
+       "when": {
+        "s": "product",
+        "in": [
+         "ecommerce",
+         "saas",
+         "dashboard",
+         "management-system",
+         "marketplace"
+        ]
+       },
+       "delta": -8,
+       "reason": "Este tipo de producto necesita lógica y datos propios en el servidor: no alcanza con archivos publicados tal cual."
+      },
+      {
+       "when": {
+        "s": "product",
+        "is": "other"
+       },
+       "delta": -3,
+       "reason": "Todavía no se sabe si habrá cuentas, pagos o datos propios: no conviene asumir que alcanza con archivos pregenerados."
       }
      ],
      "better_when": "El contenido casi no cambia, no hay cuentas ni pagos y se busca el menor costo posible.",
@@ -150,6 +172,14 @@
        },
        "delta": -10,
        "reason": "El tiempo real no se resuelve con páginas pregeneradas."
+      },
+      {
+       "when": {
+        "s": "product",
+        "is": "other"
+       },
+       "delta": -3,
+       "reason": "Todavía no se sabe si habrá cuentas, pagos o datos propios: no conviene asumir que alcanza con archivos pregenerados."
       }
      ],
      "better_when": "El contenido es público, cambia a ritmo moderado y no depende de quién lo visita.",
@@ -1163,7 +1193,7 @@
         "is": "some"
        },
        "delta": 4,
-       "reason": "Hay tareas diferidas (correos, avisos): una cola simple las procesa fuera de la petición."
+       "reason": "Hay tareas diferidas (correos, avisos): conviene sacarlas de la petición con una cola simple. Para un proyecto chico puede ser una tabla de tareas en la misma base o un servicio administrado, sin operar un broker propio."
       },
       {
        "when": {
