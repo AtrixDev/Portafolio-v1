@@ -572,5 +572,148 @@
   "evidence_type": "official_documentation",
   "checked": "2026-10-07",
   "verification": "ok"
+ },
+ {
+  "id": "google-seo-starter",
+  "name": "Guía de inicio de SEO",
+  "organization": "Google Search Central",
+  "url": "https://developers.google.com/search/docs/fundamentals/seo-starter-guide",
+  "source_type": "guide",
+  "topic": "SEO básico: títulos, contenido y texto alternativo",
+  "evidence_type": "official_documentation",
+  "checked": "2026-10-07",
+  "verification": "ok"
+ },
+ {
+  "id": "schema-organization",
+  "name": "Organization",
+  "organization": "schema.org",
+  "url": "https://schema.org/Organization",
+  "source_type": "documentation",
+  "topic": "Datos estructurados de una organización",
+  "evidence_type": "official_documentation",
+  "checked": "2026-10-07",
+  "verification": "ok"
+ },
+ {
+  "id": "schema-reservation",
+  "name": "Reservation",
+  "organization": "schema.org",
+  "url": "https://schema.org/Reservation",
+  "source_type": "documentation",
+  "topic": "Datos estructurados de reservas",
+  "evidence_type": "official_documentation",
+  "checked": "2026-10-07",
+  "verification": "ok"
+ },
+ {
+  "id": "mdn-responsive-images",
+  "name": "Imágenes adaptables",
+  "organization": "MDN Web Docs",
+  "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Guides/Responsive_images",
+  "source_type": "documentation",
+  "topic": "Imágenes adaptables (srcset, picture)",
+  "evidence_type": "official_documentation",
+  "checked": "2026-10-07",
+  "verification": "ok"
+ },
+ {
+  "id": "postgres-range-exclusion",
+  "name": "Tipos de rango y restricciones de exclusión",
+  "organization": "PostgreSQL Global Development Group",
+  "url": "https://www.postgresql.org/docs/current/rangetypes.html",
+  "source_type": "documentation",
+  "topic": "Evitar reservas superpuestas",
+  "evidence_type": "official_documentation",
+  "checked": "2026-10-07",
+  "verification": "ok"
+ },
+ {
+  "id": "stripe-idempotency",
+  "name": "Solicitudes idempotentes",
+  "organization": "Stripe",
+  "url": "https://docs.stripe.com/api/idempotent_requests",
+  "source_type": "documentation",
+  "topic": "Reintentos seguros de pagos",
+  "evidence_type": "official_documentation",
+  "checked": "2026-10-07",
+  "verification": "ok"
+ },
+ {
+  "id": "stripe-connect",
+  "name": "Connect: plataformas y marketplaces",
+  "organization": "Stripe",
+  "url": "https://docs.stripe.com/connect",
+  "source_type": "documentation",
+  "topic": "Pagos divididos entre vendedores",
+  "evidence_type": "official_documentation",
+  "checked": "2026-10-07",
+  "verification": "ok"
+ },
+ {
+  "id": "pci-dss",
+  "name": "PCI DSS",
+  "organization": "PCI Security Standards Council",
+  "url": "https://www.pcisecuritystandards.org/standards/",
+  "source_type": "specification",
+  "topic": "Seguridad de datos de tarjetas",
+  "evidence_type": "standard",
+  "checked": "2026-10-07",
+  "verification": "ok"
+ },
+ {
+  "id": "azure-multitenant",
+  "name": "Arquitectura de soluciones multitenant",
+  "organization": "Microsoft · Azure Architecture Center",
+  "url": "https://learn.microsoft.com/en-us/azure/architecture/guide/multitenant/overview",
+  "source_type": "guide",
+  "topic": "Soluciones multitenant y SaaS",
+  "evidence_type": "official_framework",
+  "checked": "2026-10-07",
+  "verification": "ok"
+ },
+ {
+  "id": "azure-tenancy-models",
+  "name": "Modelos de tenencia",
+  "organization": "Microsoft · Azure Architecture Center",
+  "url": "https://learn.microsoft.com/en-us/azure/architecture/guide/multitenant/considerations/tenancy-models",
+  "source_type": "guide",
+  "topic": "Aislamiento y modelos de tenencia",
+  "evidence_type": "official_framework",
+  "checked": "2026-10-07",
+  "verification": "ok"
+ },
+ {
+  "id": "aws-saas-lens",
+  "name": "SaaS Lens",
+  "organization": "Amazon Web Services",
+  "url": "https://docs.aws.amazon.com/wellarchitected/latest/saas-lens/saas-lens.html",
+  "source_type": "guide",
+  "topic": "Buenas prácticas para SaaS multitenant",
+  "evidence_type": "official_framework",
+  "checked": "2026-10-07",
+  "verification": "ok"
+ },
+ {
+  "id": "azure-materialized-view",
+  "name": "Patrón de vista materializada",
+  "organization": "Microsoft · Azure Architecture Center",
+  "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/materialized-view",
+  "source_type": "guide",
+  "topic": "Vistas precalculadas para consultas",
+  "evidence_type": "official_framework",
+  "checked": "2026-10-07",
+  "verification": "ok"
+ },
+ {
+  "id": "owasp-authorization",
+  "name": "Hoja de referencia de autorización",
+  "organization": "OWASP",
+  "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+  "source_type": "guide",
+  "topic": "Permisos y mínimo privilegio",
+  "evidence_type": "industry_practice",
+  "checked": "2026-10-07",
+  "verification": "ok"
  }
 ]

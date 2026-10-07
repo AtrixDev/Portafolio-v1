@@ -31,7 +31,7 @@ with sync_playwright() as p:
     # ── Explorer ──
     pg.goto(BASE); pg.wait_for_selector('.ar-card'); 
     chk('Explorer: carga sin errores de JS', not errs, errs[:2])
-    chk('Explorer: 58 conceptos agrupados por área', pg.locator('.ar-card').count() == 58 and pg.locator('.ar-group').count() == 9, pg.locator('.ar-card').count())
+    chk('Explorer: 60 conceptos agrupados por área', pg.locator('.ar-card').count() == 60 and pg.locator('.ar-group').count() == 9, pg.locator('.ar-card').count())
     chk('Explorer: un solo h1', pg.locator('h1').count() == 1 and pg.inner_text('h1').strip() == 'Web Project Architect')
     chk('Explorer: sin ids duplicados', not ids_duplicados(pg), ids_duplicados(pg))
     pg.fill('#ar-q', 'colas'); pg.wait_for_timeout(300)
@@ -41,7 +41,7 @@ with sync_playwright() as p:
     pg.fill('#ar-q', 'zzzzqq'); pg.wait_for_timeout(300)
     chk('Búsqueda sin resultados: estado vacío con salida', pg.locator('.ar-empty').count() == 1 and pg.locator('.ar-empty [data-limpiar]').count() == 1)
     pg.click('.ar-empty [data-limpiar]'); pg.wait_for_selector('.ar-card')
-    chk('Quitar filtros restablece todo', pg.locator('.ar-card').count() == 58 and pg.input_value('#ar-q') == '')
+    chk('Quitar filtros restablece todo', pg.locator('.ar-card').count() == 60 and pg.input_value('#ar-q') == '')
     pg.click('.ar-chip[data-grupo="IA"]'); pg.wait_for_timeout(150)
     chk('Filtro por área IA: 7 resultados (5 de IA + 2 herramientas no; solo IA)', pg.locator('.ar-card').count() == 5, pg.locator('.ar-card').count())
     pg.select_option('#ar-evid', 'standard'); pg.wait_for_timeout(150)
@@ -77,7 +77,7 @@ with sync_playwright() as p:
     pg.goto(BASE + '#/proyecto'); pg.wait_for_selector('#ar-form')
     chk('Builder: primera pregunta abierta y con «por qué te pregunto»', 'Qué querés construir' in pg.inner_text('#ar-h1') and 'Por qué te pregunto' in pg.inner_text('.ar-why'))
     responder(pg, texto='Una tienda online de artesanías'); responder(pg, texto='Gente que compra regalos')
-    chk('Builder: tercera pregunta es el tipo de producto con 8 opciones (7 + «otro»)', pg.locator('input[name=ar-opt]').count() == 9, pg.locator('input[name=ar-opt]').count())
+    chk('Builder: tercera pregunta es el tipo de producto con 10 opciones (9 + «otro»)', pg.locator('input[name=ar-opt]').count() == 11, pg.locator('input[name=ar-opt]').count())
     pg.click('#ar-form button[type=submit]')
     chk('Builder: continuar sin elegir muestra un error accesible y no avanza', pg.locator('#ar-err:not([hidden])').count() == 1 and 'Elegí una opción' in pg.inner_text('#ar-err'))
     responder(pg, 'ecommerce')
@@ -236,6 +236,23 @@ with sync_playwright() as p:
     q.set_viewport_size({'width': 390, 'height': 800}); q.goto(BASE + '#/proyecto/decisiones?p=' + N4); q.wait_for_selector('.ar-cx'); chk('Complejidad práctica sin overflow en móvil', overflow(q) <= 0, overflow(q))
     if OUT: q.screenshot(path=OUT + '/complejidad-movil.png')
     q.close(); c.close()
+    # ── primera tanda de contenido: portfolio, reservas y fichas de arquitectura ──
+    PF = 'eyJ2IjoxLCJhIjp7InByb2R1Y3QiOiJwb3J0Zm9saW8iLCJ0ZWFtIjoic29sbyJ9LCJzIjpbXX0'; BK = 'eyJ2IjoxLCJhIjp7InByb2R1Y3QiOiJib29raW5nIiwidGVhbSI6InNvbG8ifSwicyI6W119'
+    c = br.new_context(viewport={'width': 1280, 'height': 900}, reduced_motion='reduce'); c.route('**/api/*', lambda r: r.fulfill(status=404, json={}))
+    q = c.new_page(); e3 = []; q.on('pageerror', lambda x: e3.append(str(x)))
+    for cid in ['monolith', 'modular-monolith', 'microservices', 'event-driven', 'web-queue-worker']:
+        q.goto(BASE + '#/c/' + cid); q.wait_for_selector('.ar-sec'); t = q.inner_text('article')
+        chk(f'Ficha {cid}: «Por qué elegirlo», «Por qué NO elegirlo» y «Cuándo una alternativa sería mejor»', all(x in t for x in ['Por qué elegirlo', 'Por qué NO elegirlo', 'Cuándo una alternativa sería mejor']) and 'Sería mejor' in t and 'Respalda:' in t and 'Ejemplo conceptual' in t)
+    for cid in ['portfolio', 'booking']:
+        q.goto(BASE + '#/c/' + cid); q.wait_for_selector('.ar-sec'); t = q.inner_text('article')
+        chk(f'Ficha {cid}: completa, con ejemplo sencillo y aplicado, y qué respalda cada fuente', 'Ejemplo conceptual' in t and 'Ejemplo educativo' in t and 'Respalda:' in t and 'Criterio de este proyecto' in t)
+    q.goto(BASE + '#/?q=portfolio'); q.wait_for_selector('.ar-card'); chk('Explorer encuentra Portfolio como concepto propio, distinto de Institucional', 'Portfolio' in q.inner_text('#ar-results') and q.locator('.ar-card', has_text='Portfolio').count() >= 1)
+    q.goto(BASE + '#/proyecto'); q.wait_for_selector('#ar-form'); q.fill('#ar-ans', 'a'); q.click('#ar-form button[type=submit]'); q.wait_for_timeout(150); q.fill('#ar-ans', 'b'); q.click('#ar-form button[type=submit]'); q.wait_for_timeout(200)
+    opts = q.inner_text('#ar-form'); chk('El Project Builder ofrece Portfolio y Reservas o turnos', 'Portfolio' in opts and 'Reservas o turnos' in opts, opts[:200])
+    for nombre, enc, nivel, esperado in [('portfolio', PF, 'Nivel 1', 'Sin backend propio'), ('booking', BK, 'Nivel 2', 'Monolito')]:
+        q.goto(BASE + '#/proyecto/decisiones?p=' + enc); q.wait_for_selector('.ar-cx'); t = q.inner_text('main')
+        chk(f'Proyecto {nombre}: {nivel} dentro de la zona habitual y propuesta «{esperado}»', nivel in q.inner_text('.ar-cx') and 'Dentro de la zona práctica habitual' in t and esperado in t, t[:120])
+    chk('Sin errores de JS en la primera tanda', not e3, e3[:2]); q.close(); c.close()
     chk('Sin errores de JS durante toda la sesión', not errs, errs[:3])
     br.close()
 f = [r for r in R if not r[1]]

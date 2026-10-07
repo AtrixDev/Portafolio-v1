@@ -279,7 +279,7 @@ test('nunca «usá X» a secas: toda elección trae razones, alternativas con «
         const p = d.picks[0]; assert.ok(p.reasons.length >= 1 && p.reasons.every(t => t.length > 15), `${d.id}: razones`);
         assert.ok(Array.isArray(p.revisit) && Array.isArray(p.tradeoffs));
         assert.ok(d.alternatives.length >= 1, `${d.id}: sin alternativas`);
-        for (const alt of d.alternatives) { assert.ok(alt.better_when.length > 15); assert.ok(Number.isFinite(alt.score)); assert.ok(alt.score <= p.score, `${d.id}: la elegida debe tener el mayor puntaje`); }
+        for (const alt of d.alternatives) { assert.ok(alt.better_when.length > 15); assert.ok(Number.isFinite(alt.score)); assert.ok(alt.fit === 'not_needed' || alt.score <= p.score, `${d.id}: la elegida debe tener el mayor puntaje entre las opciones justificadas`); }
         if (!p.entity) assert.ok(p.name && p.summary);
       }
       if (d.kind === 'set') for (const p of d.picks) assert.ok(p.reasons.length >= 1);

@@ -247,3 +247,5 @@
 .ar-cx-step[aria-current="step"] { box-shadow: inset 0 -3px 0 var(--accent, currentColor); }
 .ar-cx-lead { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3); margin: 0; }
 @media (max-width: 560px) { .ar-cx-meter { grid-template-columns: repeat(2, 1fr); } }
+.ar-src-note { display: block; font-size: var(--fs-sm); color: var(--text-2); max-width: 70ch; }
+.ar-src-note b { color: var(--text); font-weight: 600; }

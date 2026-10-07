@@ -13,8 +13,16 @@
      "label": "Sitio institucional"
     },
     {
+     "id": "portfolio",
+     "label": "Portfolio"
+    },
+    {
      "id": "ecommerce",
      "label": "E-commerce"
+    },
+    {
+     "id": "booking",
+     "label": "Reservas o turnos"
     },
     {
      "id": "saas",
@@ -393,6 +401,21 @@
    "integrations": "few",
    "data_shape": "relational"
   },
+  "portfolio": {
+   "content_edit": "sometimes",
+   "capture": "contact",
+   "auth": "none",
+   "payments": "none",
+   "sensitive_data": "none",
+   "public_seo": "yes",
+   "interactive": "low",
+   "realtime": "none",
+   "background": "none",
+   "files": "none",
+   "search": "none",
+   "integrations": "few",
+   "data_shape": "relational"
+  },
   "ecommerce": {
    "catalog": "medium",
    "auth": "users",
@@ -404,6 +427,20 @@
    "background": "some",
    "files": "uploads",
    "search": "basic",
+   "integrations": "few",
+   "data_shape": "relational"
+  },
+  "booking": {
+   "capture": "bookings",
+   "auth": "users",
+   "payments": "none",
+   "sensitive_data": "personal",
+   "public_seo": "yes",
+   "interactive": "medium",
+   "realtime": "none",
+   "background": "some",
+   "files": "none",
+   "search": "none",
    "integrations": "few",
    "data_shape": "relational"
   },
@@ -490,7 +527,9 @@
    "offer": [
     "landing",
     "institutional-site",
+    "portfolio",
     "ecommerce",
+    "booking",
     "saas",
     "dashboard",
     "management-system",
@@ -500,7 +539,9 @@
    "help": {
     "landing": "Una página con un solo objetivo: que alguien haga una cosa.",
     "institutional-site": "La presencia online de una organización, con varias secciones.",
+    "portfolio": "Mostrar tu trabajo y quién sos: proyectos, casos y cómo contactarte.",
     "ecommerce": "Una tienda con carrito y pagos.",
+    "booking": "Que la gente reserve o saque un turno para un servicio o un lugar.",
     "saas": "Un software por suscripción, con cuentas y datos por cliente.",
     "dashboard": "Una interfaz para ver y entender datos.",
     "management-system": "Un sistema interno para operar un negocio.",
@@ -524,7 +565,8 @@
     "s": "product",
     "in": [
      "landing",
-     "institutional-site"
+     "institutional-site",
+     "portfolio"
     ]
    },
    "tier": "core"
@@ -544,7 +586,8 @@
     "s": "product",
     "in": [
      "landing",
-     "institutional-site"
+     "institutional-site",
+     "portfolio"
     ]
    },
    "tier": "core"
@@ -584,6 +627,7 @@
     "s": "product",
     "in": [
      "ecommerce",
+     "booking",
      "saas",
      "marketplace",
      "other"
@@ -613,6 +657,7 @@
       "s": "product",
       "in": [
        "ecommerce",
+       "booking",
        "saas",
        "dashboard",
        "management-system",
@@ -703,6 +748,7 @@
     "s": "product",
     "in": [
      "ecommerce",
+     "booking",
      "saas",
      "marketplace",
      "other"
@@ -847,8 +893,13 @@
     "many"
    ],
    "show_if": {
-    "s": "product",
-    "not": "landing"
+    "not": {
+     "s": "product",
+     "in": [
+      "landing",
+      "portfolio"
+     ]
+    }
    },
    "tier": "fine"
   },

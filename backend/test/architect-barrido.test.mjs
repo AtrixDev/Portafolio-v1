@@ -72,7 +72,7 @@ test('barrido: 1500 proyectos aleatorios recorren decisiones, blueprints, ADR, p
     }
   }
   assert.ok(stats.hechos > 1000, 'el barrido debe ejercitar la mayoría de las sesiones');
-  assert.equal(stats.productos.size, 8, 'deben aparecer los 8 tipos de producto');
+  assert.equal(stats.productos.size, M.signals.product.values.length, 'deben aparecer todos los tipos de producto');
   for (const r of ['static-site', 'ssg', 'ssr', 'csr', 'hybrid-rendering', 'websocket', 'message-queue', 'web-queue-worker', 'search-engine', 'cache', 'object-storage', 'ai-workflow', 'none', 'no-backend']) assert.ok(stats.render.has(r), `el barrido nunca llegó a «${r}»: aflojar o ampliar las combinaciones`);
 });
 

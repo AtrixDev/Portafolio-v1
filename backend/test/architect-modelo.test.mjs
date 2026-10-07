@@ -23,7 +23,7 @@ test('todo el contenido real pasa la validación del modelo', () => {
 
 test('contenido inicial mínimo: los 30 conceptos pedidos existen, cada uno en su dimensión', () => {
   const pedido = {
-    product_type: ['landing', 'institutional-site', 'ecommerce', 'saas', 'dashboard', 'management-system', 'marketplace'],
+    product_type: ['landing', 'institutional-site', 'portfolio', 'ecommerce', 'booking', 'saas', 'dashboard', 'management-system', 'marketplace'],
     architecture_style: ['monolith', 'modular-monolith', 'microservices', 'event-driven', 'web-queue-worker'],
     rendering_strategy: ['static-site', 'ssg', 'ssr', 'csr', 'hybrid-rendering'],
     data_pattern: ['relational-database', 'nosql-database', 'cache', 'object-storage', 'search-engine'],
@@ -169,7 +169,7 @@ test('rechaza referencias rotas, duplicados y alternativas entre dimensiones dis
 });
 
 test('rechaza evidencia no respaldada: «estándar» sin fuente estándar, opinión con fuentes, fuente con evidencia propia', () => {
-  assert.match(conocimiento(r => { const e = ent(r, 'ecommerce'); e.evidence_type = 'standard'; }), /declara evidence_type «standard» pero ninguna de sus fuentes/);
+  assert.match(conocimiento(r => { const e = ent(r, 'monolith'); e.evidence_type = 'standard'; }), /declara evidence_type «standard» pero ninguna de sus fuentes/);
   assert.match(conocimiento(r => { const e = ent(r, 'microservices'); e.evidence_type = 'standard'; }), /ninguna de sus fuentes es de ese tipo/);
   assert.match(conocimiento(r => { const e = ent(r, 'ecommerce'); e.evidence_type = 'opinion'; e.sources = ['rfc-9110']; }), /una opinión no se presenta con fuentes/);
   assert.match(conocimiento(r => { r.sources[0].evidence_type = 'recommendation'; }), /evidence_type de una fuente debe ser uno de/);

@@ -42,7 +42,7 @@ backend/test/architect-*.test.mjs
 - **Alternativas** solo dentro de la misma familia, siempre con una nota «en qué se diferencia».
 - **Evidencia**: `standard · official_documentation · official_framework · expert_source · industry_practice · recommendation · example · opinion`. Reglas validadas: lo respaldado por una fuente necesita una fuente **de ese tipo**; una opinión no se muestra con fuentes; una fuente solo puede ser de los cinco primeros tipos; los tipos de producto son siempre `recommendation`.
 - **Ejemplos**: `real_project` exige URL; el contenido inicial no declara ninguno (no se infiere experiencia).
-- **Fuentes**: nombre, organización, URL https, tipo, tema, evidencia, `checked` (fecha) y `verification` (`ok` | `blocked`). 52 fuentes; 51 verificadas el 07/10/2026 (ISO bloquea bots).
+- **Fuentes**: nombre, organización, URL https, tipo, tema, evidencia, `checked` (fecha) y `verification` (`ok` | `blocked`). 65 fuentes; 64 verificadas el 07/10/2026 (ISO bloquea bots).
 
 ## 5. Qué se decidió sin pedir permiso (reversible)
 
@@ -65,11 +65,11 @@ backend/test/architect-*.test.mjs
 | 7 Prompt Generator | hecha | `prompts.js`, `prompts.json` |
 | 8 Project Pack | hecha | `pack.js`, `pack.json`, `views-project.js` |
 
-Verificación: `node --test backend/test/` → 266/266 (92 del Architect, incluido un barrido de 1500 proyectos aleatorios); `python3 tools/qa-architect.py` → 122/122 en Chromium (con `node tools/dev-server.mjs`).
+Verificación: `node --test backend/test/` → 273/273 (99 del Architect, incluido un barrido de 1500 proyectos aleatorios); `python3 tools/qa-architect.py` → 134/134 en Chromium (con `node tools/dev-server.mjs`).
 
 ## 7. Pendiente / límites declarados
 
-- El contenido inicial es una muestra (58 entidades) para validar el modelo, no la base final.
+- El contenido inicial es una muestra (60 entidades) para validar el modelo, no la base final.
 - Solo 15 entidades tienen diagrama propio.
 - Las fuentes se verifican a mano con `tools/architect-verificar-fuentes.mjs`; no hay chequeo automático en CI.
 - Los atributos de las tecnologías (complejidad, costo, lock-in…) son criterio propio; solo Claude Code carece de alternativa cargada y el pack lo dice.
@@ -109,3 +109,13 @@ Contextualiza la aplicación; **no limita la teoría** ni cambia qué se recomie
 ## 9. QA profundo (07/10/2026)
 
 Encontrado y corregido: SSR con cualquier producto lanzaba una excepción al armar el blueprint (etiqueta de 45 caracteres); el producto «otro» sin datos proponía sitio estático con base relacional; el sitio estático podía proponerse para productos con lógica propia; la cola de mensajes sugería operar un broker aunque el proyecto fuera chico; tres fuentes (ADR, C4) no se mostraban en ninguna parte; un hash mal formado lanzaba un error en `main.js`. Prueba nueva: `backend/test/architect-barrido.test.mjs`. Después se descubrió que ese barrido nunca respondía las preguntas de afinado (tiempo real, búsqueda, IA), por lo que no pasaba por WebSocket: una etiqueta de conexión de 35 caracteres rompía el blueprint con tiempo real. Corregido, y el barrido ahora exige haber recorrido las opciones principales y fuerza las raras (microservicios, eventos, pub/sub, agentes).
+
+## 10. Primera tanda de contenido real (07/10/2026)
+
+Cubre 9 tipos de producto (Landing, Institucional, **Portfolio**, E-commerce, **Reservas/turnos**, SaaS, Dashboard, Sistema de gestión, Marketplace) y 5 estilos de arquitectura (Monolito, Monolito modular, Microservicios, Orientada a eventos, Web-Queue-Worker). Portfolio y Reservas son tipos de producto propios (no sinónimos de Institucional ni de Landing) y entran en el Project Builder con sus preguntas, supuestos, datos de partida y requisitos funcionales.
+
+- **Piso de calidad** (`backend/test/architect-contenido.test.mjs`): cada ficha de la tanda exige explicación de tres párrafos, cómo funciona, cuándo sí y cuándo no, ventajas, desventajas, trade-offs, alternativas, errores comunes, preguntas para decidir, relaciones, niveles, un ejemplo sencillo **y** uno aplicado a un proyecto realista (`conceptual_example`, rotulado como caso imaginado), y fuentes.
+- **Hechos vs. criterio propio:** `source_notes` dice, fuente por fuente, qué hecho concreto respalda. Los tipos de producto siguen siendo `recommendation` aunque citen fuentes: cuándo conviene cada uno es criterio de este proyecto. Todas las fuentes nuevas se leyeron antes de citarlas.
+- **Arquitecturas:** la ficha usa «Por qué elegirlo», «Por qué NO elegirlo» y «Cuándo una alternativa sería mejor» (cada alternativa explica en qué condiciones ganaría). No hay rankings ni puntajes en el contenido; las arquitecturas se recomiendan solo en proporción al proyecto (`justified_when`).
+- **Justificación en tipos de producto:** no la llevan (un tipo de producto no se «recomienda» como un patrón); sí llevan `practical_level`, que fija el piso de complejidad del proyecto.
+- Se agregaron 13 fuentes (Google Search Central, schema.org, MDN, PostgreSQL, PCI SSC, Stripe, Azure, AWS, OWASP).

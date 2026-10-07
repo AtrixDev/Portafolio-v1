@@ -69,11 +69,13 @@ export function conceptView(K, id, biblioteca = new Map(), { idp = '', compact =
   const sec = mkSec(idp);
   const rels = K.relations(id), techs = K.technologies(id), alts = K.alternatives(id), srcs = K.sourcesOf(id);
   const full = e.depth === 'full';
+  // En un estilo de arquitectura la ficha responde tres preguntas con estas palabras exactas: por qué elegirlo, por qué no, y cuándo otra opción sería mejor.
+  const arq = e.type === 'architecture_style';
 
   const toc = [
     ['s-resumen', 'En 30 segundos'], e.diagram && ['s-diagrama', 'Diagrama'], ['s-explicacion', 'Explicación'], e.how_it_works.length && ['s-funciona', 'Cómo funciona'],
-    (e.when_to_use.length || e.when_not_to_use.length) && ['s-cuando', 'Cuándo usarlo y cuándo evitarlo'], (e.pros.length || e.cons.length) && ['s-vc', 'Ventajas y desventajas'], e.tradeoffs.length && ['s-tradeoffs', 'Trade-offs'],
-    alts.length && ['s-alternativas', 'Alternativas'], e.examples.length && ['s-ejemplos', 'Ejemplos'], e.common_mistakes.length && ['s-errores', 'Errores comunes'], e.decision_questions.length && ['s-preguntas', 'Preguntas para decidir'],
+    (e.when_to_use.length || e.when_not_to_use.length) && ['s-cuando', arq ? 'Por qué elegirlo y por qué no' : 'Cuándo usarlo y cuándo evitarlo'], (e.pros.length || e.cons.length) && ['s-vc', 'Ventajas y desventajas'], e.tradeoffs.length && ['s-tradeoffs', 'Trade-offs'],
+    alts.length && ['s-alternativas', arq ? 'Cuándo una alternativa sería mejor' : 'Alternativas'], e.examples.length && ['s-ejemplos', 'Ejemplos'], e.common_mistakes.length && ['s-errores', 'Errores comunes'], e.decision_questions.length && ['s-preguntas', 'Preguntas para decidir'],
     rels.length && ['s-relaciones', 'Relaciones'], techs.length && ['s-tecnologias', 'Tecnologías'], ['s-fuentes', 'Fuentes'],
   ].filter(Boolean);
 
@@ -84,7 +86,7 @@ export function conceptView(K, id, biblioteca = new Map(), { idp = '', compact =
 
   const evid = EVIDENCE_TYPES[e.evidence_type];
   const aviso = ['recommendation', 'opinion', 'example'].includes(e.evidence_type)
-    ? `<p class="ar-evidence ar-evidence--own"><b>Criterio de este proyecto, no un estándar.</b> ${esc(evid.help)} ${srcs.length ? 'Las fuentes de abajo son lecturas relacionadas.' : ''}</p>`
+    ? `<p class="ar-evidence ar-evidence--own"><b>Criterio de este proyecto, no un estándar.</b> ${esc(evid.help)} ${srcs.length ? 'Las fuentes respaldan los hechos que cada una cita (mirá «Respalda» en Fuentes); cuándo conviene usarlo es criterio nuestro.' : ''}</p>`
     : `<p class="ar-evidence"><b>Base de esta ficha: ${esc(evid.label.toLowerCase())}.</b> ${esc(evid.help)}</p>`;
 
   const lib = (e.library_refs || []).length ? `<p class="ar-lib">En la Biblioteca web: ${e.library_refs.map(r => `<a href="programacion.html#/f/${encodeURIComponent(r)}">${esc(biblioteca.get(r) || r)}</a>`).join(' · ')}</p>` : '';
@@ -92,7 +94,7 @@ export function conceptView(K, id, biblioteca = new Map(), { idp = '', compact =
   const relBody = rels.map(g => `<div class="ar-rel"><h3>${esc(g.label)}</h3><ul>${g.items.map(r => `<li><a href="${href(r.entity.id)}">${esc(r.entity.name)}</a> <span class="ar-rel-type">${esc(typeLabel(r.entity.type))}</span>${r.note ? `<span class="ar-note">${esc(r.note)}</span>` : ''}</li>`).join('')}</ul></div>`).join('');
   const altBody = alts.map(a => `<li class="ar-alt ui-card"><a href="${href(a.entity.id)}"><b>${esc(a.entity.name)}</b> <span class="ar-rel-type">${esc(typeLabel(a.entity.type))}</span></a><p>${esc(a.note)}</p></li>`).join('');
   const exBody = e.examples.map(x => `<li class="ar-ex ui-card">${kindBadge(x.kind)}<h3>${esc(x.label)}</h3><p>${esc(x.text)}</p>${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">Ver el proyecto</a>` : ''}</li>`).join('');
-  const srcBody = srcs.map(s => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}<span class="sr-only"> (se abre en otra pestaña)</span></a> <span class="ar-src-org">${esc(s.organization)}</span> ${evidenceBadge(s.evidence_type)}
+  const srcBody = srcs.map(s => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}<span class="sr-only"> (se abre en otra pestaña)</span></a> <span class="ar-src-org">${esc(s.organization)}</span> ${evidenceBadge(s.evidence_type)}${e.source_notes?.[s.id] ? `<span class="ar-src-note"><b>Respalda:</b> ${esc(e.source_notes[s.id])}</span>` : ''}
       <span class="ar-src-chk">${s.verification === 'ok' ? `Verificada el ${formatDate(s.checked)}` : 'No se pudo verificar automáticamente: revisá el enlace'}</span></li>`).join('');
 
   return `
@@ -112,10 +114,10 @@ ${compact ? '' : `<nav class="ar-crumbs" aria-label="Ruta"><a href="#/">Explorar
     ${diagram}
     ${sec('explicacion', 'Explicación', `<div class="ar-prose">${paras(e.explanation)}</div>`)}
     ${sec('funciona', 'Cómo funciona', e.how_it_works.length ? `<ol class="ar-steps">${e.how_it_works.map(x => `<li>${esc(x)}</li>`).join('')}</ol>` : '')}
-    ${sec('cuando', 'Cuándo usarlo y cuándo evitarlo', `<div class="ar-two"><div><h3>Conviene si…</h3>${list(e.when_to_use, 'is-ok')}</div><div><h3>Conviene evitarlo si…</h3>${list(e.when_not_to_use, 'is-bad')}</div></div>`)}
+    ${sec('cuando', arq ? 'Por qué elegirlo y por qué no' : 'Cuándo usarlo y cuándo evitarlo', `<div class="ar-two"><div><h3>${arq ? 'Por qué elegirlo' : 'Conviene si…'}</h3>${list(e.when_to_use, 'is-ok')}</div><div><h3>${arq ? 'Por qué NO elegirlo' : 'Conviene evitarlo si…'}</h3>${list(e.when_not_to_use, 'is-bad')}</div></div>`)}
     ${sec('vc', 'Ventajas y desventajas', `<div class="ar-two"><div><h3>Ventajas</h3>${list(e.pros, 'is-ok')}</div><div><h3>Desventajas</h3>${list(e.cons, 'is-bad')}</div></div>`)}
     ${sec('tradeoffs', 'Trade-offs', `<p class="ar-sub">Lo que se gana y lo que se paga al elegirlo.</p>${list(e.tradeoffs)}`)}
-    ${sec('alternativas', 'Alternativas', `<p class="ar-sub">Opciones de la misma dimensión y en qué se diferencian. Ninguna es mejor en abstracto.</p><ul class="ar-alts">${altBody}</ul>`)}
+    ${sec('alternativas', arq ? 'Cuándo una alternativa sería mejor' : 'Alternativas', `<p class="ar-sub">${arq ? 'Ninguna arquitectura es mejor en abstracto: cada alternativa gana cuando se dan las condiciones que se indican.' : 'Opciones de la misma dimensión y en qué se diferencian. Ninguna es mejor en abstracto.'}</p><ul class="ar-alts">${altBody}</ul>`)}
     ${sec('ejemplos', 'Ejemplos', `<p class="ar-sub">Los ejemplos son ilustrativos. Que haya uno acá no significa que sea un proyecto real ni que implique experiencia profesional.</p><ul class="ar-exs">${exBody}</ul>`)}
     ${sec('errores', 'Errores comunes', list(e.common_mistakes))}
     ${sec('preguntas', 'Preguntas para decidir', `<p class="ar-sub">Si no podés responderlas todavía, es una señal de que falta información antes de decidir.</p>${list(e.decision_questions)}`)}

@@ -1,840 +1,927 @@
 [
-  {
-    "id": "monolith",
-    "slug": "monolith",
-    "name": "Monolito",
-    "type": "architecture_style",
-    "category": "Estilos de arquitectura",
-    "depth": "full",
-    "level": "beginner",
-    "summary": "Toda la aplicación se construye, se prueba y se despliega como una sola unidad. Es el punto de partida más simple y, para muchos productos, el correcto.",
-    "problem_solved": "Construir y operar un producto con el menor costo de coordinación posible: un código, un despliegue, una base de datos.",
-    "explanation": [
-      "En un monolito, las distintas partes del sistema (usuarios, catálogo, pagos, reportes) viven en el mismo código y corren en el mismo proceso. Se comunican llamándose entre sí, sin red de por medio, y suelen compartir una base de datos.",
-      "«Monolito» no significa «desordenado». Un monolito bien organizado tiene límites internos claros entre áreas; uno mal organizado es una maraña donde todo depende de todo. La diferencia está en la disciplina del diseño, no en el estilo.",
-      "Sus virtudes son concretas: un solo despliegue, depuración sencilla, transacciones de base de datos que abarcan varias áreas, y poca infraestructura que operar. Sus riesgos aparecen con el tamaño: despliegues que afectan todo, builds lentos y equipos que se pisan."
-    ],
-    "how_it_works": [
-      "Un único proceso de aplicación expone la interfaz web o la API y accede a una base de datos compartida.",
-      "Los módulos internos se llaman con funciones, no con peticiones de red; una transacción puede abarcar varias áreas.",
-      "Se despliega como una unidad, y se escala corriendo más copias idénticas detrás de un balanceador."
-    ],
-    "when_to_use": [
-      "Un producto nuevo, donde todavía se están descubriendo los límites del dominio.",
-      "Un equipo chico que necesita avanzar rápido con poca infraestructura.",
-      "Hay transacciones que abarcan varias áreas y se quiere consistencia simple."
-    ],
-    "when_not_to_use": [
-      "Equipos grandes y autónomos que necesitan desplegar de forma independiente.",
-      "Partes del sistema con necesidades de escala o de tecnología radicalmente distintas.",
-      "Cuando el código ya es una maraña sin límites internos: conviene ordenarlo antes de decidir nada más."
-    ],
-    "pros": [
-      "Es lo más simple de construir, probar, desplegar y depurar.",
-      "Las transacciones entre áreas son directas y consistentes.",
-      "Poca infraestructura: menor costo operativo."
-    ],
-    "cons": [
-      "Sin disciplina, el código se acopla y se vuelve difícil de cambiar.",
-      "Cada cambio exige desplegar todo.",
-      "Escalar una parte implica escalar todo."
-    ],
-    "tradeoffs": [
-      "Se gana simplicidad operativa a cambio de menos independencia entre equipos.",
-      "Se gana consistencia transaccional a cambio de acoplamiento de despliegue."
-    ],
-    "alternatives": [
-      {
-        "id": "modular-monolith",
-        "note": "Mantiene un solo despliegue pero impone límites explícitos entre módulos, lo que facilita separar partes después."
-      },
-      {
-        "id": "microservices",
-        "note": "Separa en servicios desplegables por separado: más autonomía a cambio de una complejidad distribuida considerable."
-      },
-      {
-        "id": "web-queue-worker",
-        "note": "Agrega un proceso de trabajo en segundo plano conectado por una cola, sin llegar a repartir el dominio en servicios."
-      }
-    ],
-    "examples": [
-      {
-        "kind": "educational_example",
-        "label": "Tienda con panel de administración",
-        "text": "Una sola aplicación con catálogo, carrito, pedidos y administración, sobre una única base de datos relacional."
-      }
-    ],
-    "common_mistakes": [
-      "Confundir «monolito» con «mal diseñado»: la solución suele ser ordenarlo, no partirlo.",
-      "Dejar que cualquier módulo acceda a cualquier tabla sin reglas.",
-      "Pasar a microservicios por moda antes de tener el problema que resuelven."
-    ],
-    "decision_questions": [
-      "¿Cuántas personas van a trabajar en el código a la vez?",
-      "¿Hay partes que necesiten escalar de forma muy distinta?",
-      "¿Los límites del dominio ya son estables y conocidos?"
-    ],
-    "related_entities": [
-      {
-        "id": "modular-monolith",
-        "rel": "contrasts_with"
-      },
-      {
-        "id": "relational-database",
-        "rel": "often_with"
-      },
-      {
-        "id": "quality-maintainability",
-        "rel": "addresses"
-      }
-    ],
-    "sources": [
-      "fowler-monolith-first",
-      "azure-architecture-styles"
-    ],
-    "evidence_type": "expert_source",
-    "justification": "baseline",
-    "practical_level": 2,
-    "library_refs": [
-      "monolito"
-    ],
-    "diagram": {
-      "purpose": "concept",
-      "title": "Monolito: una sola aplicación con una sola base de datos",
-      "nodes": [
-        {
-          "id": "cliente",
-          "label": "Navegador o app",
-          "kind": "actor",
-          "layer": 0
-        },
-        {
-          "id": "app",
-          "label": "Una sola aplicación: todos los módulos",
-          "kind": "backend",
-          "layer": 1
-        },
-        {
-          "id": "db",
-          "label": "Base de datos compartida",
-          "kind": "data",
-          "layer": 2
-        }
-      ],
-      "edges": [
-        {
-          "from": "cliente",
-          "to": "app",
-          "label": "HTTP"
-        },
-        {
-          "from": "app",
-          "to": "db",
-          "label": "SQL"
-        }
-      ]
-    }
-  },
-  {
+ {
+  "id": "monolith",
+  "slug": "monolith",
+  "name": "Monolito",
+  "type": "architecture_style",
+  "category": "Estilos de arquitectura",
+  "depth": "full",
+  "level": "beginner",
+  "summary": "Toda la aplicación se construye, se prueba y se despliega como una sola unidad. Es el punto de partida más simple y, para muchos productos, el correcto.",
+  "problem_solved": "Construir y operar un producto con el menor costo de coordinación posible: un código, un despliegue, una base de datos.",
+  "explanation": [
+   "En un monolito, las distintas partes del sistema (usuarios, catálogo, pagos, reportes) viven en el mismo código y corren en el mismo proceso. Se comunican llamándose entre sí, sin red de por medio, y suelen compartir una base de datos.",
+   "«Monolito» no significa «desordenado». Un monolito bien organizado tiene límites internos claros entre áreas; uno mal organizado es una maraña donde todo depende de todo. La diferencia está en la disciplina del diseño, no en el estilo.",
+   "Sus virtudes son concretas: un solo despliegue, depuración sencilla, transacciones de base de datos que abarcan varias áreas, y poca infraestructura que operar. Sus riesgos aparecen con el tamaño: despliegues que afectan todo, builds lentos y equipos que se pisan."
+  ],
+  "how_it_works": [
+   "Un único proceso de aplicación expone la interfaz web o la API y accede a una base de datos compartida.",
+   "Los módulos internos se llaman con funciones, no con peticiones de red; una transacción puede abarcar varias áreas.",
+   "Se despliega como una unidad, y se escala corriendo más copias idénticas detrás de un balanceador."
+  ],
+  "when_to_use": [
+   "Un producto nuevo, donde todavía se están descubriendo los límites del dominio.",
+   "Un equipo chico que necesita avanzar rápido con poca infraestructura.",
+   "Hay transacciones que abarcan varias áreas y se quiere consistencia simple."
+  ],
+  "when_not_to_use": [
+   "Equipos grandes y autónomos que necesitan desplegar de forma independiente.",
+   "Partes del sistema con necesidades de escala o de tecnología radicalmente distintas.",
+   "Cuando el código ya es una maraña sin límites internos: conviene ordenarlo antes de decidir nada más."
+  ],
+  "pros": [
+   "Es lo más simple de construir, probar, desplegar y depurar.",
+   "Las transacciones entre áreas son directas y consistentes.",
+   "Poca infraestructura: menor costo operativo."
+  ],
+  "cons": [
+   "Sin disciplina, el código se acopla y se vuelve difícil de cambiar.",
+   "Cada cambio exige desplegar todo.",
+   "Escalar una parte implica escalar todo."
+  ],
+  "tradeoffs": [
+   "Se gana simplicidad operativa a cambio de menos independencia entre equipos.",
+   "Se gana consistencia transaccional a cambio de acoplamiento de despliegue."
+  ],
+  "alternatives": [
+   {
     "id": "modular-monolith",
-    "slug": "modular-monolith",
-    "name": "Monolito modular",
-    "type": "architecture_style",
-    "category": "Estilos de arquitectura",
-    "depth": "full",
-    "level": "intermediate",
-    "summary": "Un solo despliegue, pero con módulos de negocio separados por límites explícitos y con comunicación controlada entre ellos.",
-    "problem_solved": "Conservar la simplicidad operativa de un monolito sin perder la capacidad de entender, cambiar o separar partes del sistema más adelante.",
-    "explanation": [
-      "Un monolito modular organiza el código por áreas de negocio (por ejemplo, pedidos, catálogo, facturación), no por capas técnicas. Cada módulo expone una interfaz acotada y esconde su interior; los demás solo pueden usar esa interfaz.",
-      "Los límites se imponen con reglas: dependencias permitidas, datos propios de cada módulo y comunicación a través de contratos. Eso evita que el sistema se enrede y deja abierta la opción de extraer un módulo a un servicio si algún día hace falta.",
-      "Es una forma de obtener buena parte de los beneficios de los microservicios (límites claros, equipos con áreas propias) pagando solo el costo de un monolito."
-    ],
-    "how_it_works": [
-      "El código se divide en módulos por capacidad de negocio, cada uno con su interfaz pública.",
-      "Cada módulo posee sus datos; los demás no leen sus tablas directamente sino que piden lo que necesitan por la interfaz.",
-      "Herramientas de análisis o tests de arquitectura verifican que no se rompan los límites."
-    ],
-    "when_to_use": [
-      "Un producto que va a crecer y que conviene mantener ordenado desde el inicio.",
-      "Un equipo mediano que necesita autonomía por áreas sin pagar el costo de servicios distribuidos.",
-      "Se quiere dejar abierta la posibilidad de separar partes más adelante."
-    ],
-    "when_not_to_use": [
-      "Un producto muy pequeño donde la estructura extra no se justifica.",
-      "Cuando hay necesidades reales de escala o de tecnología independiente por área que exigen procesos separados."
-    ],
-    "pros": [
-      "Un solo despliegue y poca infraestructura, como un monolito.",
-      "Límites claros que facilitan el mantenimiento y la comprensión.",
-      "Permite extraer un módulo a un servicio si el caso lo justifica."
-    ],
-    "cons": [
-      "Los límites dependen de disciplina y de herramientas para que no se erosionen.",
-      "Si la base de datos es compartida sin reglas, la separación es solo aparente."
-    ],
-    "tradeoffs": [
-      "Se gana orden y flexibilidad futura a cambio de un esfuerzo de diseño inicial mayor que un monolito sin estructura."
-    ],
-    "alternatives": [
-      {
-        "id": "monolith",
-        "note": "Más simple todavía, pero sin límites explícitos entre áreas."
-      },
-      {
-        "id": "microservices",
-        "note": "Separa físicamente los módulos en servicios: más independencia de despliegue y escala a cambio de complejidad distribuida."
-      }
-    ],
-    "examples": [
-      {
-        "kind": "educational_example",
-        "label": "Plataforma de reservas",
-        "text": "Módulos de agenda, clientes, pagos y notificaciones en un solo despliegue, cada uno con su interfaz y sus propios datos."
-      }
-    ],
-    "common_mistakes": [
-      "Dividir en módulos pero dejar que todos lean las mismas tablas.",
-      "Crear demasiados módulos pequeños antes de entender el dominio.",
-      "No automatizar la verificación de los límites."
-    ],
-    "decision_questions": [
-      "¿Qué capacidades de negocio distintas tiene el producto?",
-      "¿Hay equipos que necesiten trabajar de forma independiente?",
-      "¿Es probable que una parte tenga que escalar o desplegarse por separado?"
-    ],
-    "related_entities": [
-      {
-        "id": "monolith",
-        "rel": "contrasts_with"
-      },
-      {
-        "id": "microservices",
-        "rel": "contrasts_with"
-      },
-      {
-        "id": "quality-maintainability",
-        "rel": "addresses"
-      }
-    ],
-    "sources": [
-      "shopify-modular-monolith",
-      "fowler-monolith-first"
-    ],
-    "evidence_type": "industry_practice",
-    "justification": "by_need",
-    "practical_level": 2,
-    "library_refs": [
-      "monolito"
-    ],
-    "diagram": {
-      "purpose": "concept",
-      "title": "Monolito modular: un despliegue, módulos con límites explícitos",
-      "nodes": [
-        {
-          "id": "cliente",
-          "label": "Navegador o app",
-          "kind": "actor",
-          "layer": 0
-        },
-        {
-          "id": "cat",
-          "label": "Módulo Catálogo",
-          "kind": "backend",
-          "layer": 1
-        },
-        {
-          "id": "ped",
-          "label": "Módulo Pedidos",
-          "kind": "backend",
-          "layer": 1
-        },
-        {
-          "id": "fac",
-          "label": "Módulo Facturación",
-          "kind": "backend",
-          "layer": 1
-        },
-        {
-          "id": "db",
-          "label": "Una base de datos, tablas por módulo",
-          "kind": "data",
-          "layer": 2
-        }
-      ],
-      "edges": [
-        {
-          "from": "cliente",
-          "to": "ped",
-          "label": "HTTP"
-        },
-        {
-          "from": "ped",
-          "to": "cat",
-          "label": "interfaz pública"
-        },
-        {
-          "from": "ped",
-          "to": "fac",
-          "label": "interfaz pública"
-        },
-        {
-          "from": "cat",
-          "to": "db"
-        },
-        {
-          "from": "ped",
-          "to": "db"
-        },
-        {
-          "from": "fac",
-          "to": "db"
-        }
-      ]
-    }
-  },
-  {
-    "id": "microservices",
-    "slug": "microservices",
-    "name": "Microservicios",
-    "type": "architecture_style",
-    "category": "Estilos de arquitectura",
-    "depth": "full",
-    "level": "advanced",
-    "summary": "El sistema se divide en servicios pequeños, autónomos y desplegables por separado, que se comunican por la red.",
-    "problem_solved": "Permitir que equipos grandes desplieguen y escalen partes del sistema de forma independiente, a cambio de aceptar la complejidad de un sistema distribuido.",
-    "explanation": [
-      "Cada microservicio se encarga de una capacidad de negocio, tiene su propio código y su propia base de datos, y se despliega sin coordinarse con los demás. Se comunican por red, con APIs o mensajes.",
-      "Los beneficios (despliegue independiente, equipos autónomos, escala selectiva, aislamiento de fallos) son reales, pero tienen un precio alto: aparecen la latencia y los fallos de red, la consistencia eventual entre datos, la dificultad de probar y depurar, y la necesidad de operar muchos servicios.",
-      "Por eso la recomendación más repetida por quienes los describen es no empezar por acá: primero un monolito bien ordenado, y partirlo cuando haya una razón concreta. Sin cultura de automatización, monitoreo y despliegue continuo, los microservicios suelen empeorar las cosas."
-    ],
-    "how_it_works": [
-      "Cada servicio expone una API o consume mensajes y es dueño de sus datos.",
-      "Un punto de entrada (gateway) dirige las peticiones a los servicios, y los servicios se llaman entre sí o se avisan por eventos.",
-      "Cada servicio se construye, prueba y despliega por separado, con su propio ciclo de vida."
-    ],
-    "when_to_use": [
-      "Hay varios equipos que necesitan desplegar de forma independiente.",
-      "Partes del sistema tienen necesidades de escala o de tecnología muy distintas.",
-      "Ya existe un monolito cuyos límites de negocio se conocen y duele no poder separarlos."
-    ],
-    "when_not_to_use": [
-      "Un producto nuevo o un equipo chico: el costo de coordinar supera el beneficio.",
-      "No hay automatización de pruebas y despliegue, ni monitoreo distribuido.",
-      "Los límites del dominio todavía no son estables."
-    ],
-    "pros": [
-      "Despliegue independiente por servicio.",
-      "Escala selectiva de las partes que lo necesitan.",
-      "Equipos autónomos con tecnologías propias.",
-      "Un fallo puede quedar aislado en un servicio."
-    ],
-    "cons": [
-      "Complejidad de un sistema distribuido: latencia, fallos parciales, versiones.",
-      "Consistencia de datos entre servicios mucho más difícil que con una sola base.",
-      "Probar, depurar y monitorear exige más herramientas y práctica.",
-      "Mayor costo de infraestructura y de operación."
-    ],
-    "tradeoffs": [
-      "Se gana autonomía y escala selectiva a cambio de complejidad distribuida.",
-      "Se gana aislamiento de fallos a cambio de más puntos de fallo posibles (la red)."
-    ],
-    "alternatives": [
-      {
-        "id": "modular-monolith",
-        "note": "Da límites claros con un solo despliegue; suele ser el paso previo recomendado."
-      },
-      {
-        "id": "monolith",
-        "note": "La opción más simple cuando no hay una razón medida para separar."
-      },
-      {
-        "id": "event-driven",
-        "note": "No es excluyente: los microservicios suelen comunicarse por eventos, pero un estilo orientado a eventos también puede vivir dentro de un monolito."
-      }
-    ],
-    "examples": [
-      {
-        "kind": "educational_example",
-        "label": "Plataforma grande de comercio",
-        "text": "Servicios separados de catálogo, pedidos, pagos e inventario, con equipos distintos a cargo de cada uno y comunicación por API y eventos."
-      }
-    ],
-    "common_mistakes": [
-      "Adoptarlos desde el primer día sin un problema que los justifique.",
-      "Compartir una única base de datos entre servicios, perdiendo la autonomía que se buscaba.",
-      "Partir sin conocer los límites del dominio y terminar con un «monolito distribuido»."
-    ],
-    "decision_questions": [
-      "¿Cuántos equipos van a trabajar y necesitan desplegar por separado?",
-      "¿Qué parte tiene necesidades de escala o tecnología distintas y por qué?",
-      "¿Existe automatización de despliegue, pruebas y monitoreo?",
-      "¿Se conocen bien los límites del dominio?"
-    ],
-    "related_entities": [
-      {
-        "id": "event-driven",
-        "rel": "often_with"
-      },
-      {
-        "id": "message-queue",
-        "rel": "often_with"
-      },
-      {
-        "id": "pub-sub",
-        "rel": "often_with"
-      },
-      {
-        "id": "rest-api",
-        "rel": "often_with"
-      },
-      {
-        "id": "quality-scalability",
-        "rel": "addresses"
-      },
-      {
-        "id": "quality-observability",
-        "rel": "requires",
-        "note": "Sin observabilidad distribuida, depurar es muy costoso."
-      }
-    ],
-    "sources": [
-      "azure-microservices-style",
-      "fowler-microservices",
-      "fowler-microservice-prerequisites",
-      "fowler-monolith-first"
-    ],
-    "evidence_type": "official_framework",
-    "justification": "strong_reason",
-    "practical_level": 4,
-    "library_refs": [
-      "microservicios"
-    ],
-    "diagram": {
-      "purpose": "concept",
-      "title": "Microservicios: servicios autónomos, cada uno con sus datos",
-      "nodes": [
-        {
-          "id": "cliente",
-          "label": "Navegador o app",
-          "kind": "actor",
-          "layer": 0
-        },
-        {
-          "id": "gw",
-          "label": "Puerta de entrada (gateway)",
-          "kind": "infra",
-          "layer": 1
-        },
-        {
-          "id": "cat",
-          "label": "Servicio de Catálogo",
-          "kind": "backend",
-          "layer": 2
-        },
-        {
-          "id": "ped",
-          "label": "Servicio de Pedidos",
-          "kind": "backend",
-          "layer": 2
-        },
-        {
-          "id": "pag",
-          "label": "Servicio de Pagos",
-          "kind": "backend",
-          "layer": 2
-        },
-        {
-          "id": "dbc",
-          "label": "Datos de Catálogo",
-          "kind": "data",
-          "layer": 3
-        },
-        {
-          "id": "dbp",
-          "label": "Datos de Pedidos",
-          "kind": "data",
-          "layer": 3
-        },
-        {
-          "id": "dbg",
-          "label": "Datos de Pagos",
-          "kind": "data",
-          "layer": 3
-        }
-      ],
-      "edges": [
-        {
-          "from": "cliente",
-          "to": "gw",
-          "label": "HTTP"
-        },
-        {
-          "from": "gw",
-          "to": "cat"
-        },
-        {
-          "from": "gw",
-          "to": "ped"
-        },
-        {
-          "from": "gw",
-          "to": "pag"
-        },
-        {
-          "from": "ped",
-          "to": "pag",
-          "label": "API o evento",
-          "async": true
-        },
-        {
-          "from": "cat",
-          "to": "dbc"
-        },
-        {
-          "from": "ped",
-          "to": "dbp"
-        },
-        {
-          "from": "pag",
-          "to": "dbg"
-        }
-      ]
-    }
-  },
-  {
-    "id": "event-driven",
-    "slug": "event-driven",
-    "name": "Arquitectura orientada a eventos",
-    "type": "architecture_style",
-    "category": "Estilos de arquitectura",
-    "depth": "full",
-    "level": "advanced",
-    "summary": "Los componentes se comunican emitiendo y reaccionando a eventos («algo ocurrió») en lugar de llamarse directamente.",
-    "problem_solved": "Desacoplar a quien produce un hecho de quienes reaccionan a él, para poder agregar o cambiar reacciones sin tocar al productor.",
-    "explanation": [
-      "Un evento es el registro de que algo ocurrió («se creó un pedido»). El productor lo emite sin saber quién lo recibirá; uno o varios consumidores reaccionan a su manera: enviar un correo, descontar stock, actualizar un reporte.",
-      "Esto desacopla en el tiempo y en el conocimiento: el productor no espera a los consumidores ni depende de ellos. Se pueden agregar nuevos consumidores sin modificar el sistema existente.",
-      "El precio es que el flujo deja de ser evidente: no hay una llamada que seguir de principio a fin. Aparecen preguntas difíciles, como qué pasa si un evento se entrega dos veces, si llega fuera de orden o si un consumidor falla. Con «evento» pueden referirse a cosas muy distintas (notificación, transferencia de estado, event sourcing), así que conviene aclarar de cuál se habla."
-    ],
-    "how_it_works": [
-      "Los productores publican eventos en un canal (cola, tópico o log de eventos).",
-      "Un intermediario (broker) los entrega a los consumidores interesados.",
-      "Cada consumidor procesa los eventos de forma independiente y de manera asíncrona."
-    ],
-    "when_to_use": [
-      "Varias partes del sistema necesitan reaccionar a un mismo hecho.",
-      "Se quiere que un fallo de un consumidor no frene al productor.",
-      "El procesamiento puede ser asíncrono y escalar por separado."
-    ],
-    "when_not_to_use": [
-      "El flujo es simple y secuencial: una llamada directa es más clara.",
-      "Se necesita una respuesta inmediata y consistente a quien pide.",
-      "El equipo no tiene práctica con consistencia eventual, reintentos e idempotencia."
-    ],
-    "pros": [
-      "Bajo acoplamiento entre quien produce y quien consume.",
-      "Permite agregar reacciones sin tocar el productor.",
-      "Escala de forma independiente por consumidor.",
-      "Absorbe picos de carga cuando se combina con colas."
-    ],
-    "cons": [
-      "El flujo completo es más difícil de seguir y de depurar.",
-      "Hay que resolver entrega duplicada, orden y fallos de consumidores.",
-      "Consistencia eventual: los datos no se actualizan todos a la vez."
-    ],
-    "tradeoffs": [
-      "Se gana desacople a cambio de claridad del flujo.",
-      "Se gana resiliencia ante picos a cambio de consistencia inmediata."
-    ],
-    "alternatives": [
-      {
-        "id": "web-queue-worker",
-        "note": "Una versión acotada de la idea: una cola entre el frente web y un trabajador, sin una red de eventos."
-      },
-      {
-        "id": "monolith",
-        "note": "Con llamadas directas, el flujo es más fácil de seguir si no hace falta desacoplar."
-      }
-    ],
-    "examples": [
-      {
-        "kind": "educational_example",
-        "label": "Pedido creado",
-        "text": "Al crearse un pedido se emite un evento; un consumidor envía el correo de confirmación, otro descuenta stock y otro actualiza las métricas, sin que el servicio de pedidos los conozca."
-      }
-    ],
-    "common_mistakes": [
-      "Suponer que cada evento se entrega exactamente una vez: hay que diseñar para duplicados.",
-      "Usar eventos para todo, incluso donde una llamada directa es más simple.",
-      "No definir el formato y la versión de los eventos como un contrato."
-    ],
-    "decision_questions": [
-      "¿Cuántas partes necesitan reaccionar al mismo hecho?",
-      "¿Es aceptable que algunas reacciones se demoren (consistencia eventual)?",
-      "¿Hay forma de manejar duplicados y fallos de consumidores?"
-    ],
-    "related_entities": [
-      {
-        "id": "pub-sub",
-        "rel": "requires"
-      },
-      {
-        "id": "message-queue",
-        "rel": "often_with"
-      },
-      {
-        "id": "microservices",
-        "rel": "often_with"
-      },
-      {
-        "id": "quality-reliability",
-        "rel": "addresses"
-      },
-      {
-        "id": "quality-observability",
-        "rel": "requires"
-      }
-    ],
-    "sources": [
-      "azure-event-driven-style",
-      "fowler-event-driven"
-    ],
-    "evidence_type": "official_framework",
-    "justification": "strong_reason",
-    "practical_level": 4,
-    "library_refs": [],
-    "diagram": {
-      "purpose": "concept",
-      "title": "Arquitectura orientada a eventos",
-      "nodes": [
-        {
-          "id": "prod",
-          "label": "Productor (Pedidos)",
-          "kind": "backend",
-          "layer": 0
-        },
-        {
-          "id": "br",
-          "label": "Canal de eventos (broker)",
-          "kind": "queue",
-          "layer": 1
-        },
-        {
-          "id": "c1",
-          "label": "Envía el correo",
-          "kind": "backend",
-          "layer": 2
-        },
-        {
-          "id": "c2",
-          "label": "Descuenta el stock",
-          "kind": "backend",
-          "layer": 2
-        },
-        {
-          "id": "c3",
-          "label": "Actualiza las métricas",
-          "kind": "backend",
-          "layer": 2
-        }
-      ],
-      "edges": [
-        {
-          "from": "prod",
-          "to": "br",
-          "label": "publica «pedido creado»"
-        },
-        {
-          "from": "br",
-          "to": "c1",
-          "label": "entrega",
-          "async": true
-        },
-        {
-          "from": "br",
-          "to": "c2",
-          "label": "entrega",
-          "async": true
-        },
-        {
-          "from": "br",
-          "to": "c3",
-          "label": "entrega",
-          "async": true
-        }
-      ]
-    }
-  },
-  {
+    "note": "Sería mejor si el producto va a crecer en capacidades o lo van a tocar varias personas a la vez: mantiene un solo despliegue pero impone límites explícitos entre módulos."
+   },
+   {
     "id": "web-queue-worker",
-    "slug": "web-queue-worker",
-    "name": "Web-Queue-Worker",
-    "type": "architecture_style",
-    "category": "Estilos de arquitectura",
-    "depth": "full",
-    "level": "intermediate",
-    "summary": "Un frente web atiende las peticiones y deja el trabajo pesado o lento a un proceso trabajador, comunicados por una cola de mensajes.",
-    "problem_solved": "Evitar que tareas largas o costosas (enviar correos, procesar archivos, generar informes) bloqueen la respuesta al usuario.",
-    "explanation": [
-      "La arquitectura tiene dos componentes centrales: un frente web que maneja las peticiones de los clientes y un trabajador que realiza tareas intensivas, flujos largos o procesos por lotes. El frente se comunica con el trabajador mediante una cola de mensajes.",
-      "Es un paso intermedio muy útil entre un monolito y una arquitectura de servicios: el sistema sigue siendo simple, pero lo lento sale del camino de la petición. Ambas partes no guardan estado, así que se pueden escalar de forma independiente.",
-      "Su riesgo principal es que el frente y el trabajador crezcan hasta ser dos monolitos grandes, o que compartan esquemas de datos y código y generen dependencias ocultas. También hay un punto fino: si el frente escribe en la base de datos y falla antes de enviar el mensaje, el trabajador nunca procesa su parte; técnicas como el outbox transaccional lo resuelven."
-    ],
-    "how_it_works": [
-      "El usuario hace una petición al frente web, que responde rápido y encola un mensaje si hay trabajo pesado.",
-      "El trabajador toma los mensajes de la cola y los procesa de forma asíncrona (o corre por horario para tareas por lotes).",
-      "Una base de datos (y, opcionalmente, un caché y un CDN) completan el sistema; el trabajador es opcional si no hay tareas largas."
-    ],
-    "when_to_use": [
-      "Una aplicación con un dominio relativamente simple.",
-      "Hay operaciones largas o por lotes que no deberían bloquear al usuario.",
-      "Se prefieren servicios administrados a manejar infraestructura propia."
-    ],
-    "when_not_to_use": [
-      "No hay tareas largas o costosas: un trabajador no aporta nada.",
-      "Se necesita una respuesta con el resultado final dentro de la misma petición, sin esperar a un proceso aparte."
-    ],
-    "pros": [
-      "Arquitectura directa y fácil de entender.",
-      "Despliegue y gestión sencillos.",
-      "Separación clara de responsabilidades entre el frente y el trabajador.",
-      "El frente y el trabajador escalan de forma independiente."
-    ],
-    "cons": [
-      "Sin cuidado, frente y trabajador crecen hasta ser monolitos difíciles de mantener.",
-      "Compartir esquemas o código genera dependencias ocultas.",
-      "Hay que manejar el caso de escribir en la base y no llegar a encolar."
-    ],
-    "tradeoffs": [
-      "Se gana capacidad de respuesta rápida al usuario a cambio de resultados asíncronos que hay que comunicar.",
-      "Se gana desacople a cambio de agregar una cola y un proceso más que operar."
-    ],
-    "alternatives": [
-      {
-        "id": "monolith",
-        "note": "Si no hay trabajo pesado o largo, todo en un proceso es más simple."
-      },
-      {
-        "id": "event-driven",
-        "note": "Cuando muchas partes necesitan reaccionar a los mismos hechos, el estilo orientado a eventos generaliza esta idea."
-      },
-      {
-        "id": "microservices",
-        "note": "Reparte el dominio en servicios; mucho más complejo que separar solo lo lento."
-      }
-    ],
-    "examples": [
-      {
-        "kind": "educational_example",
-        "label": "Procesar imágenes subidas",
-        "text": "El frente recibe la imagen y responde enseguida; el trabajador, avisado por la cola, genera las miniaturas y actualiza el registro."
-      }
-    ],
-    "common_mistakes": [
-      "Mandar a la cola todo, incluso lo que el frente podría resolver directo.",
-      "No manejar reintentos ni duplicados en el trabajador.",
-      "Compartir modelos de datos entre frente y trabajador sin un contrato."
-    ],
-    "decision_questions": [
-      "¿Hay tareas que tarden más de unos pocos segundos?",
-      "¿Cuánta demora aceptable hay entre pedir y obtener el resultado?",
-      "¿Qué pasa si una tarea falla a mitad de camino?"
-    ],
-    "related_entities": [
-      {
-        "id": "message-queue",
-        "rel": "requires"
-      },
-      {
-        "id": "relational-database",
-        "rel": "often_with"
-      },
-      {
-        "id": "cache",
-        "rel": "often_with"
-      },
-      {
-        "id": "quality-scalability",
-        "rel": "addresses"
-      },
-      {
-        "id": "quality-reliability",
-        "rel": "addresses"
-      }
-    ],
-    "sources": [
-      "azure-web-queue-worker",
-      "azure-queue-load-leveling"
-    ],
-    "evidence_type": "official_framework",
-    "justification": "by_need",
-    "practical_level": 3,
-    "library_refs": [],
-    "diagram": {
-      "purpose": "concept",
-      "title": "Web-Queue-Worker: el trabajo lento sale del camino de la petición",
-      "nodes": [
-        {
-          "id": "cliente",
-          "label": "Navegador o app",
-          "kind": "actor",
-          "layer": 0
-        },
-        {
-          "id": "web",
-          "label": "Frontend web (API)",
-          "kind": "frontend",
-          "layer": 1
-        },
-        {
-          "id": "db",
-          "label": "Base de datos",
-          "kind": "data",
-          "layer": 2
-        },
-        {
-          "id": "cola",
-          "label": "Cola de mensajes",
-          "kind": "queue",
-          "layer": 2
-        },
-        {
-          "id": "wk",
-          "label": "Trabajador",
-          "kind": "backend",
-          "layer": 3
-        }
-      ],
-      "edges": [
-        {
-          "from": "cliente",
-          "to": "web",
-          "label": "petición"
-        },
-        {
-          "from": "web",
-          "to": "db",
-          "label": "lee y escribe"
-        },
-        {
-          "from": "web",
-          "to": "cola",
-          "label": "encola el trabajo",
-          "async": true
-        },
-        {
-          "from": "cola",
-          "to": "wk",
-          "label": "entrega",
-          "async": true
-        },
-        {
-          "from": "wk",
-          "to": "db",
-          "label": "guarda el resultado"
-        }
-      ]
+    "note": "Sería mejor si aparecen tareas largas o pesadas (informes, archivos, correos masivos) que no deberían bloquear la respuesta: suma un trabajador y una cola sin repartir el dominio."
+   },
+   {
+    "id": "microservices",
+    "note": "Sería mejor si hay varios equipos que necesitan desplegar y escalar por separado y los límites del dominio ya se conocen, aceptando la complejidad distribuida."
+   }
+  ],
+  "examples": [
+   {
+    "kind": "educational_example",
+    "label": "Tienda con panel de administración",
+    "text": "Una sola aplicación con catálogo, carrito, pedidos y administración, sobre una única base de datos relacional."
+   },
+   {
+    "kind": "conceptual_example",
+    "label": "Sistema de turnos de un consultorio",
+    "text": "Una sola aplicación web con su base relacional, que se despliega con un único comando y se respalda con una copia diaria. Turnos, pacientes y cobros comparten transacciones simples, y el código se ordena por carpetas según cada área para que siga siendo fácil de cambiar."
+   }
+  ],
+  "common_mistakes": [
+   "Confundir «monolito» con «mal diseñado»: la solución suele ser ordenarlo, no partirlo.",
+   "Dejar que cualquier módulo acceda a cualquier tabla sin reglas.",
+   "Pasar a microservicios por moda antes de tener el problema que resuelven."
+  ],
+  "decision_questions": [
+   "¿Cuántas personas van a trabajar en el código a la vez?",
+   "¿Hay partes que necesiten escalar de forma muy distinta?",
+   "¿Los límites del dominio ya son estables y conocidos?"
+  ],
+  "related_entities": [
+   {
+    "id": "modular-monolith",
+    "rel": "contrasts_with"
+   },
+   {
+    "id": "relational-database",
+    "rel": "often_with"
+   },
+   {
+    "id": "quality-maintainability",
+    "rel": "addresses"
+   },
+   {
+    "id": "web-queue-worker",
+    "rel": "often_with",
+    "note": "Es el primer paso natural cuando aparece trabajo pesado."
+   },
+   {
+    "id": "quality-cost",
+    "rel": "addresses",
+    "note": "Menos piezas que operar."
+   }
+  ],
+  "sources": [
+   "fowler-monolith-first",
+   "azure-architecture-styles"
+  ],
+  "evidence_type": "expert_source",
+  "justification": "baseline",
+  "practical_level": 2,
+  "library_refs": [
+   "monolito"
+  ],
+  "diagram": {
+   "purpose": "concept",
+   "title": "Monolito: una sola aplicación con una sola base de datos",
+   "nodes": [
+    {
+     "id": "cliente",
+     "label": "Navegador o app",
+     "kind": "actor",
+     "layer": 0
+    },
+    {
+     "id": "app",
+     "label": "Una sola aplicación: todos los módulos",
+     "kind": "backend",
+     "layer": 1
+    },
+    {
+     "id": "db",
+     "label": "Base de datos compartida",
+     "kind": "data",
+     "layer": 2
     }
+   ],
+   "edges": [
+    {
+     "from": "cliente",
+     "to": "app",
+     "label": "HTTP"
+    },
+    {
+     "from": "app",
+     "to": "db",
+     "label": "SQL"
+    }
+   ]
+  },
+  "source_notes": {
+   "fowler-monolith-first": "Argumenta empezar por un monolito: los microservicios tienen un costo adicional y acertar los límites desde el inicio es difícil (posición de un autor reconocido, no un estándar).",
+   "azure-architecture-styles": "Marco general: cada estilo impone restricciones con ventajas y costos, y la elección debe partir del problema y de los requisitos no funcionales, no del estilo en sí."
   }
+ },
+ {
+  "id": "modular-monolith",
+  "slug": "modular-monolith",
+  "name": "Monolito modular",
+  "type": "architecture_style",
+  "category": "Estilos de arquitectura",
+  "depth": "full",
+  "level": "intermediate",
+  "summary": "Un solo despliegue, pero con módulos de negocio separados por límites explícitos y con comunicación controlada entre ellos.",
+  "problem_solved": "Conservar la simplicidad operativa de un monolito sin perder la capacidad de entender, cambiar o separar partes del sistema más adelante.",
+  "explanation": [
+   "Un monolito modular organiza el código por áreas de negocio (por ejemplo, pedidos, catálogo, facturación), no por capas técnicas. Cada módulo expone una interfaz acotada y esconde su interior; los demás solo pueden usar esa interfaz.",
+   "Los límites se imponen con reglas: dependencias permitidas, datos propios de cada módulo y comunicación a través de contratos. Eso evita que el sistema se enrede y deja abierta la opción de extraer un módulo a un servicio si algún día hace falta.",
+   "Es una forma de obtener buena parte de los beneficios de los microservicios (límites claros, equipos con áreas propias) pagando solo el costo de un monolito."
+  ],
+  "how_it_works": [
+   "El código se divide en módulos por capacidad de negocio, cada uno con su interfaz pública.",
+   "Cada módulo posee sus datos; los demás no leen sus tablas directamente sino que piden lo que necesitan por la interfaz.",
+   "Herramientas de análisis o tests de arquitectura verifican que no se rompan los límites."
+  ],
+  "when_to_use": [
+   "Un producto que va a crecer y que conviene mantener ordenado desde el inicio.",
+   "Un equipo mediano que necesita autonomía por áreas sin pagar el costo de servicios distribuidos.",
+   "Se quiere dejar abierta la posibilidad de separar partes más adelante."
+  ],
+  "when_not_to_use": [
+   "Un producto muy pequeño donde la estructura extra no se justifica.",
+   "Cuando hay necesidades reales de escala o de tecnología independiente por área que exigen procesos separados.",
+   "Todavía no se conocen los límites del dominio: dividir en módulos demasiado pronto puede fijar límites equivocados."
+  ],
+  "pros": [
+   "Un solo despliegue y poca infraestructura, como un monolito.",
+   "Límites claros que facilitan el mantenimiento y la comprensión.",
+   "Permite extraer un módulo a un servicio si el caso lo justifica."
+  ],
+  "cons": [
+   "Los límites dependen de disciplina y de herramientas para que no se erosionen.",
+   "Si la base de datos es compartida sin reglas, la separación es solo aparente.",
+   "Definir buenos módulos antes de conocer bien el dominio puede salir mal y es costoso de corregir."
+  ],
+  "tradeoffs": [
+   "Se gana orden y flexibilidad futura a cambio de un esfuerzo de diseño inicial mayor que un monolito sin estructura.",
+   "Se gana la opción de separar partes más adelante a cambio de sostener hoy límites que nadie ve en producción."
+  ],
+  "alternatives": [
+   {
+    "id": "monolith",
+    "note": "Sería mejor si el producto es chico o su dominio tan acotado que los límites internos no se justifican: es todavía más simple."
+   },
+   {
+    "id": "web-queue-worker",
+    "note": "Sería mejor si lo que duele no es el orden del código sino el trabajo lento dentro de la petición."
+   },
+   {
+    "id": "microservices",
+    "note": "Sería mejor si un módulo ya necesita desplegarse, escalar o evolucionar con independencia real y hay capacidad de operar servicios distribuidos."
+   }
+  ],
+  "examples": [
+   {
+    "kind": "educational_example",
+    "label": "Plataforma de reservas",
+    "text": "Módulos de agenda, clientes, pagos y notificaciones en un solo despliegue, cada uno con su interfaz y sus propios datos."
+   },
+   {
+    "kind": "conceptual_example",
+    "label": "Gestión de una red de gimnasios",
+    "text": "Módulos de socios, clases, pagos y notificaciones en un solo despliegue. Cada módulo expone una interfaz y es dueño de sus tablas, y un test de arquitectura falla si «pagos» usa clases internas de «socios». Si algún día «notificaciones» necesitara escalar aparte, se podría extraer por su interfaz."
+   }
+  ],
+  "common_mistakes": [
+   "Dividir en módulos pero dejar que todos lean las mismas tablas.",
+   "Crear demasiados módulos pequeños antes de entender el dominio.",
+   "No automatizar la verificación de los límites."
+  ],
+  "decision_questions": [
+   "¿Qué capacidades de negocio distintas tiene el producto?",
+   "¿Hay equipos que necesiten trabajar de forma independiente?",
+   "¿Es probable que una parte tenga que escalar o desplegarse por separado?"
+  ],
+  "related_entities": [
+   {
+    "id": "monolith",
+    "rel": "contrasts_with"
+   },
+   {
+    "id": "microservices",
+    "rel": "contrasts_with"
+   },
+   {
+    "id": "quality-maintainability",
+    "rel": "addresses"
+   },
+   {
+    "id": "relational-database",
+    "rel": "often_with",
+    "note": "Cada módulo es dueño de sus tablas dentro de una misma base."
+   },
+   {
+    "id": "web-queue-worker",
+    "rel": "often_with"
+   }
+  ],
+  "sources": [
+   "shopify-modular-monolith",
+   "fowler-monolith-first"
+  ],
+  "evidence_type": "industry_practice",
+  "justification": "by_need",
+  "practical_level": 2,
+  "library_refs": [
+   "monolito"
+  ],
+  "diagram": {
+   "purpose": "concept",
+   "title": "Monolito modular: un despliegue, módulos con límites explícitos",
+   "nodes": [
+    {
+     "id": "cliente",
+     "label": "Navegador o app",
+     "kind": "actor",
+     "layer": 0
+    },
+    {
+     "id": "cat",
+     "label": "Módulo Catálogo",
+     "kind": "backend",
+     "layer": 1
+    },
+    {
+     "id": "ped",
+     "label": "Módulo Pedidos",
+     "kind": "backend",
+     "layer": 1
+    },
+    {
+     "id": "fac",
+     "label": "Módulo Facturación",
+     "kind": "backend",
+     "layer": 1
+    },
+    {
+     "id": "db",
+     "label": "Una base de datos, tablas por módulo",
+     "kind": "data",
+     "layer": 2
+    }
+   ],
+   "edges": [
+    {
+     "from": "cliente",
+     "to": "ped",
+     "label": "HTTP"
+    },
+    {
+     "from": "ped",
+     "to": "cat",
+     "label": "interfaz pública"
+    },
+    {
+     "from": "ped",
+     "to": "fac",
+     "label": "interfaz pública"
+    },
+    {
+     "from": "cat",
+     "to": "db"
+    },
+    {
+     "from": "ped",
+     "to": "db"
+    },
+    {
+     "from": "fac",
+     "to": "db"
+    }
+   ]
+  },
+  "source_notes": {
+   "shopify-modular-monolith": "Experiencia documentada de una empresa: monolito modular con herramientas que verifican las dependencias entre componentes y con equipos responsables de cada uno. Reconoce que casi ningún componente tiene todavía un límite completo.",
+   "fowler-monolith-first": "Advierte que muchos sistemas acumulan demasiadas dependencias entre módulos, lo que dificulta separarlos después: razón para imponer límites desde temprano."
+  }
+ },
+ {
+  "id": "microservices",
+  "slug": "microservices",
+  "name": "Microservicios",
+  "type": "architecture_style",
+  "category": "Estilos de arquitectura",
+  "depth": "full",
+  "level": "advanced",
+  "summary": "El sistema se divide en servicios pequeños, autónomos y desplegables por separado, que se comunican por la red.",
+  "problem_solved": "Permitir que equipos grandes desplieguen y escalen partes del sistema de forma independiente, a cambio de aceptar la complejidad de un sistema distribuido.",
+  "explanation": [
+   "Cada microservicio se encarga de una capacidad de negocio, tiene su propio código y su propia base de datos, y se despliega sin coordinarse con los demás. Se comunican por red, con APIs o mensajes.",
+   "Los beneficios (despliegue independiente, equipos autónomos, escala selectiva, aislamiento de fallos) son reales, pero tienen un precio alto: aparecen la latencia y los fallos de red, la consistencia eventual entre datos, la dificultad de probar y depurar, y la necesidad de operar muchos servicios.",
+   "Por eso la recomendación más repetida por quienes los describen es no empezar por acá: primero un monolito bien ordenado, y partirlo cuando haya una razón concreta. Sin cultura de automatización, monitoreo y despliegue continuo, los microservicios suelen empeorar las cosas."
+  ],
+  "how_it_works": [
+   "Cada servicio expone una API o consume mensajes y es dueño de sus datos.",
+   "Un punto de entrada (gateway) dirige las peticiones a los servicios, y los servicios se llaman entre sí o se avisan por eventos.",
+   "Cada servicio se construye, prueba y despliega por separado, con su propio ciclo de vida."
+  ],
+  "when_to_use": [
+   "Hay varios equipos que necesitan desplegar de forma independiente.",
+   "Partes del sistema tienen necesidades de escala o de tecnología muy distintas.",
+   "Ya existe un monolito cuyos límites de negocio se conocen y duele no poder separarlos."
+  ],
+  "when_not_to_use": [
+   "Un producto nuevo o un equipo chico: el costo de coordinar supera el beneficio.",
+   "No hay automatización de pruebas y despliegue, ni monitoreo distribuido.",
+   "Los límites del dominio todavía no son estables.",
+   "No se puede sostener la operación que exige: la guía de Azure pide evaluar si hay capacidad para operar un sistema altamente distribuido."
+  ],
+  "pros": [
+   "Despliegue independiente por servicio.",
+   "Escala selectiva de las partes que lo necesitan.",
+   "Equipos autónomos con tecnologías propias.",
+   "Un fallo puede quedar aislado en un servicio."
+  ],
+  "cons": [
+   "Complejidad de un sistema distribuido: latencia, fallos parciales, versiones.",
+   "Consistencia de datos entre servicios mucho más difícil que con una sola base.",
+   "Probar, depurar y monitorear exige más herramientas y práctica.",
+   "Mayor costo de infraestructura y de operación."
+  ],
+  "tradeoffs": [
+   "Se gana autonomía y escala selectiva a cambio de complejidad distribuida.",
+   "Se gana aislamiento de fallos a cambio de más puntos de fallo posibles (la red)."
+  ],
+  "alternatives": [
+   {
+    "id": "modular-monolith",
+    "note": "Sería mejor si lo que se busca es orden y autonomía por áreas sin pagar la complejidad distribuida; suele ser el paso previo."
+   },
+   {
+    "id": "monolith",
+    "note": "Sería mejor si no hay una razón medida para separar: un solo despliegue es lo más simple de operar y depurar."
+   },
+   {
+    "id": "web-queue-worker",
+    "note": "Sería mejor si solo hay una parte lenta que separar: un trabajador con una cola lo resuelve sin repartir el dominio."
+   },
+   {
+    "id": "event-driven",
+    "note": "Sería un complemento más que un reemplazo si el problema principal es que muchas partes reaccionen a los mismos hechos y no el despliegue independiente."
+   }
+  ],
+  "examples": [
+   {
+    "kind": "educational_example",
+    "label": "Plataforma grande de comercio",
+    "text": "Servicios separados de catálogo, pedidos, pagos e inventario, con equipos distintos a cargo de cada uno y comunicación por API y eventos."
+   },
+   {
+    "kind": "conceptual_example",
+    "label": "Plataforma de comercio con cuatro equipos",
+    "text": "Cuatro equipos, cada uno con su servicio (catálogo, pedidos, pagos y envíos), su base de datos y su propio pipeline de despliegue. Un gateway recibe las peticiones, la observabilidad es centralizada y las partes se avisan por eventos. Se llegó ahí desde un monolito modular, extrayendo primero el servicio que cambiaba a otro ritmo y tenía un equipo propio."
+   }
+  ],
+  "common_mistakes": [
+   "Adoptarlos desde el primer día sin un problema que los justifique.",
+   "Compartir una única base de datos entre servicios, perdiendo la autonomía que se buscaba.",
+   "Partir sin conocer los límites del dominio y terminar con un «monolito distribuido»."
+  ],
+  "decision_questions": [
+   "¿Cuántos equipos van a trabajar y necesitan desplegar por separado?",
+   "¿Qué parte tiene necesidades de escala o tecnología distintas y por qué?",
+   "¿Existe automatización de despliegue, pruebas y monitoreo?",
+   "¿Se conocen bien los límites del dominio?"
+  ],
+  "related_entities": [
+   {
+    "id": "event-driven",
+    "rel": "often_with"
+   },
+   {
+    "id": "message-queue",
+    "rel": "often_with"
+   },
+   {
+    "id": "pub-sub",
+    "rel": "often_with"
+   },
+   {
+    "id": "rest-api",
+    "rel": "often_with"
+   },
+   {
+    "id": "quality-scalability",
+    "rel": "addresses"
+   },
+   {
+    "id": "quality-observability",
+    "rel": "requires",
+    "note": "Sin observabilidad distribuida, depurar es muy costoso."
+   }
+  ],
+  "sources": [
+   "azure-microservices-style",
+   "fowler-microservices",
+   "fowler-microservice-prerequisites",
+   "fowler-monolith-first"
+  ],
+  "evidence_type": "official_framework",
+  "justification": "strong_reason",
+  "practical_level": 4,
+  "library_refs": [
+   "microservicios"
+  ],
+  "diagram": {
+   "purpose": "concept",
+   "title": "Microservicios: servicios autónomos, cada uno con sus datos",
+   "nodes": [
+    {
+     "id": "cliente",
+     "label": "Navegador o app",
+     "kind": "actor",
+     "layer": 0
+    },
+    {
+     "id": "gw",
+     "label": "Puerta de entrada (gateway)",
+     "kind": "infra",
+     "layer": 1
+    },
+    {
+     "id": "cat",
+     "label": "Servicio de Catálogo",
+     "kind": "backend",
+     "layer": 2
+    },
+    {
+     "id": "ped",
+     "label": "Servicio de Pedidos",
+     "kind": "backend",
+     "layer": 2
+    },
+    {
+     "id": "pag",
+     "label": "Servicio de Pagos",
+     "kind": "backend",
+     "layer": 2
+    },
+    {
+     "id": "dbc",
+     "label": "Datos de Catálogo",
+     "kind": "data",
+     "layer": 3
+    },
+    {
+     "id": "dbp",
+     "label": "Datos de Pedidos",
+     "kind": "data",
+     "layer": 3
+    },
+    {
+     "id": "dbg",
+     "label": "Datos de Pagos",
+     "kind": "data",
+     "layer": 3
+    }
+   ],
+   "edges": [
+    {
+     "from": "cliente",
+     "to": "gw",
+     "label": "HTTP"
+    },
+    {
+     "from": "gw",
+     "to": "cat"
+    },
+    {
+     "from": "gw",
+     "to": "ped"
+    },
+    {
+     "from": "gw",
+     "to": "pag"
+    },
+    {
+     "from": "ped",
+     "to": "pag",
+     "label": "API o evento",
+     "async": true
+    },
+    {
+     "from": "cat",
+     "to": "dbc"
+    },
+    {
+     "from": "ped",
+     "to": "dbp"
+    },
+    {
+     "from": "pag",
+     "to": "dbg"
+    }
+   ]
+  },
+  "source_notes": {
+   "azure-microservices-style": "Documenta los beneficios (despliegue independiente, equipos pequeños, aislamiento de fallos, escala por servicio) y los desafíos (complejidad, consistencia de datos, gestión, versionado y habilidades necesarias).",
+   "fowler-microservices": "Define el estilo y sus características: servicios autónomos, organizados por capacidad de negocio y desplegables por separado.",
+   "fowler-microservice-prerequisites": "Enumera capacidades que conviene tener antes de adoptar microservicios, como despliegue rápido y monitoreo básico.",
+   "fowler-monolith-first": "Sostiene que conviene empezar por un monolito y separar cuando se conocen los límites (posición de un autor, no un estándar)."
+  }
+ },
+ {
+  "id": "event-driven",
+  "slug": "event-driven",
+  "name": "Arquitectura orientada a eventos",
+  "type": "architecture_style",
+  "category": "Estilos de arquitectura",
+  "depth": "full",
+  "level": "advanced",
+  "summary": "Los componentes se comunican emitiendo y reaccionando a eventos («algo ocurrió») en lugar de llamarse directamente.",
+  "problem_solved": "Desacoplar a quien produce un hecho de quienes reaccionan a él, para poder agregar o cambiar reacciones sin tocar al productor.",
+  "explanation": [
+   "Un evento es el registro de que algo ocurrió («se creó un pedido»). El productor lo emite sin saber quién lo recibirá; uno o varios consumidores reaccionan a su manera: enviar un correo, descontar stock, actualizar un reporte.",
+   "Esto desacopla en el tiempo y en el conocimiento: el productor no espera a los consumidores ni depende de ellos. Se pueden agregar nuevos consumidores sin modificar el sistema existente.",
+   "El precio es que el flujo deja de ser evidente: no hay una llamada que seguir de principio a fin. Aparecen preguntas difíciles, como qué pasa si un evento se entrega dos veces, si llega fuera de orden o si un consumidor falla. Con «evento» pueden referirse a cosas muy distintas (notificación, transferencia de estado, event sourcing), así que conviene aclarar de cuál se habla."
+  ],
+  "how_it_works": [
+   "Los productores publican eventos en un canal (cola, tópico o log de eventos).",
+   "Un intermediario (broker) los entrega a los consumidores interesados.",
+   "Cada consumidor procesa los eventos de forma independiente y de manera asíncrona."
+  ],
+  "when_to_use": [
+   "Varias partes del sistema necesitan reaccionar a un mismo hecho.",
+   "Se quiere que un fallo de un consumidor no frene al productor.",
+   "El procesamiento puede ser asíncrono y escalar por separado."
+  ],
+  "when_not_to_use": [
+   "El flujo es simple y secuencial: una llamada directa es más clara y no justifica el costo operativo de un broker.",
+   "Se necesita una respuesta inmediata y consistente a quien pide.",
+   "No hay capacidad de operar y depurar sistemas asíncronos distribuidos: la guía de Azure lo cita como condición en contra, por el costo permanente de depuración, monitoreo y recuperación de errores."
+  ],
+  "pros": [
+   "Bajo acoplamiento entre quien produce y quien consume.",
+   "Permite agregar reacciones sin tocar el productor.",
+   "Escala de forma independiente por consumidor.",
+   "Absorbe picos de carga cuando se combina con colas."
+  ],
+  "cons": [
+   "El flujo completo es más difícil de seguir y de depurar.",
+   "Hay que resolver entrega duplicada, orden y fallos de consumidores.",
+   "Consistencia eventual: los datos no se actualizan todos a la vez."
+  ],
+  "tradeoffs": [
+   "Se gana desacople a cambio de claridad del flujo.",
+   "Se gana resiliencia ante picos a cambio de consistencia inmediata."
+  ],
+  "alternatives": [
+   {
+    "id": "web-queue-worker",
+    "note": "Sería mejor si lo único que hace falta es sacar trabajo lento de la petición hacia un trabajador: una cola alcanza, sin una red de eventos."
+   },
+   {
+    "id": "monolith",
+    "note": "Sería mejor si el flujo es simple y secuencial o se necesita consistencia inmediata: las llamadas directas son más fáciles de seguir."
+   },
+   {
+    "id": "modular-monolith",
+    "note": "Sería mejor si lo que se busca es desacoplar áreas dentro de un mismo despliegue: módulos con límites claros, sin un broker que operar."
+   }
+  ],
+  "examples": [
+   {
+    "kind": "educational_example",
+    "label": "Pedido creado",
+    "text": "Al crearse un pedido se emite un evento; un consumidor envía el correo de confirmación, otro descuenta stock y otro actualiza las métricas, sin que el servicio de pedidos los conozca."
+   },
+   {
+    "kind": "conceptual_example",
+    "label": "Plataforma de entregas de comida",
+    "text": "Cuando un pedido pasa a «listo» se publica un evento: logística asigna un repartidor, notificaciones avisa al cliente y analítica actualiza métricas. Cada evento lleva un identificador de correlación para seguirlo entre servicios, los consumidores toleran duplicados y los eventos que fallan van a una cola de mensajes muertos para revisarlos."
+   }
+  ],
+  "common_mistakes": [
+   "Suponer que cada evento se entrega exactamente una vez: hay que diseñar para duplicados.",
+   "Usar eventos para todo, incluso donde una llamada directa es más simple.",
+   "No definir el formato y la versión de los eventos como un contrato."
+  ],
+  "decision_questions": [
+   "¿Cuántas partes necesitan reaccionar al mismo hecho?",
+   "¿Es aceptable que algunas reacciones se demoren (consistencia eventual)?",
+   "¿Hay forma de manejar duplicados y fallos de consumidores?"
+  ],
+  "related_entities": [
+   {
+    "id": "pub-sub",
+    "rel": "requires"
+   },
+   {
+    "id": "message-queue",
+    "rel": "often_with"
+   },
+   {
+    "id": "microservices",
+    "rel": "often_with"
+   },
+   {
+    "id": "quality-reliability",
+    "rel": "addresses"
+   },
+   {
+    "id": "quality-observability",
+    "rel": "requires"
+   }
+  ],
+  "sources": [
+   "azure-event-driven-style",
+   "fowler-event-driven"
+  ],
+  "evidence_type": "official_framework",
+  "justification": "strong_reason",
+  "practical_level": 4,
+  "library_refs": [],
+  "diagram": {
+   "purpose": "concept",
+   "title": "Arquitectura orientada a eventos",
+   "nodes": [
+    {
+     "id": "prod",
+     "label": "Productor (Pedidos)",
+     "kind": "backend",
+     "layer": 0
+    },
+    {
+     "id": "br",
+     "label": "Canal de eventos (broker)",
+     "kind": "queue",
+     "layer": 1
+    },
+    {
+     "id": "c1",
+     "label": "Envía el correo",
+     "kind": "backend",
+     "layer": 2
+    },
+    {
+     "id": "c2",
+     "label": "Descuenta el stock",
+     "kind": "backend",
+     "layer": 2
+    },
+    {
+     "id": "c3",
+     "label": "Actualiza las métricas",
+     "kind": "backend",
+     "layer": 2
+    }
+   ],
+   "edges": [
+    {
+     "from": "prod",
+     "to": "br",
+     "label": "publica «pedido creado»"
+    },
+    {
+     "from": "br",
+     "to": "c1",
+     "label": "entrega",
+     "async": true
+    },
+    {
+     "from": "br",
+     "to": "c2",
+     "label": "entrega",
+     "async": true
+    },
+    {
+     "from": "br",
+     "to": "c3",
+     "label": "entrega",
+     "async": true
+    }
+   ]
+  },
+  "source_notes": {
+   "azure-event-driven-style": "Describe productores, consumidores y canales; cuándo conviene (varios subsistemas procesan el mismo evento, tiempo real, desacople) y cuándo no (flujos simples, consistencia fuerte, falta de capacidad de operar sistemas asíncronos); y los desafíos: entrega, orden, duplicados, consistencia eventual y observabilidad.",
+   "fowler-event-driven": "Distingue los distintos significados de «evento» (notificación, transferencia de estado, event sourcing), por eso conviene aclarar de cuál se habla."
+  }
+ },
+ {
+  "id": "web-queue-worker",
+  "slug": "web-queue-worker",
+  "name": "Web-Queue-Worker",
+  "type": "architecture_style",
+  "category": "Estilos de arquitectura",
+  "depth": "full",
+  "level": "intermediate",
+  "summary": "Un frente web atiende las peticiones y deja el trabajo pesado o lento a un proceso trabajador, comunicados por una cola de mensajes.",
+  "problem_solved": "Evitar que tareas largas o costosas (enviar correos, procesar archivos, generar informes) bloqueen la respuesta al usuario.",
+  "explanation": [
+   "La arquitectura tiene dos componentes centrales: un frente web que maneja las peticiones de los clientes y un trabajador que realiza tareas intensivas, flujos largos o procesos por lotes. El frente se comunica con el trabajador mediante una cola de mensajes.",
+   "Es un paso intermedio muy útil entre un monolito y una arquitectura de servicios: el sistema sigue siendo simple, pero lo lento sale del camino de la petición. Ambas partes no guardan estado, así que se pueden escalar de forma independiente.",
+   "Su riesgo principal es que el frente y el trabajador crezcan hasta ser dos monolitos grandes, o que compartan esquemas de datos y código y generen dependencias ocultas. También hay un punto fino: si el frente escribe en la base de datos y falla antes de enviar el mensaje, el trabajador nunca procesa su parte; técnicas como el outbox transaccional lo resuelven."
+  ],
+  "how_it_works": [
+   "El usuario hace una petición al frente web, que responde rápido y encola un mensaje si hay trabajo pesado.",
+   "El trabajador toma los mensajes de la cola y los procesa de forma asíncrona (o corre por horario para tareas por lotes).",
+   "Una base de datos (y, opcionalmente, un caché y un CDN) completan el sistema; el trabajador es opcional si no hay tareas largas."
+  ],
+  "when_to_use": [
+   "Una aplicación con un dominio relativamente simple.",
+   "Hay operaciones largas o por lotes que no deberían bloquear al usuario.",
+   "Se prefieren servicios administrados a manejar infraestructura propia."
+  ],
+  "when_not_to_use": [
+   "No hay tareas largas o costosas: un trabajador no aporta nada.",
+   "Se necesita una respuesta con el resultado final dentro de la misma petición, sin esperar a un proceso aparte.",
+   "El dominio es complejo y varios equipos necesitan evolucionar partes por separado: la guía de Azure ubica este estilo en dominios relativamente simples."
+  ],
+  "pros": [
+   "Arquitectura directa y fácil de entender.",
+   "Despliegue y gestión sencillos.",
+   "Separación clara de responsabilidades entre el frente y el trabajador.",
+   "El frente y el trabajador escalan de forma independiente."
+  ],
+  "cons": [
+   "Sin cuidado, frente y trabajador crecen hasta ser monolitos difíciles de mantener.",
+   "Compartir esquemas o código genera dependencias ocultas.",
+   "Hay que manejar el caso de escribir en la base y no llegar a encolar."
+  ],
+  "tradeoffs": [
+   "Se gana capacidad de respuesta rápida al usuario a cambio de resultados asíncronos que hay que comunicar.",
+   "Se gana desacople a cambio de agregar una cola y un proceso más que operar."
+  ],
+  "alternatives": [
+   {
+    "id": "monolith",
+    "note": "Sería mejor si no hay trabajo pesado o largo: todo en un proceso es más simple."
+   },
+   {
+    "id": "modular-monolith",
+    "note": "Sería mejor si el problema es el orden interno del código y no el trabajo lento dentro de la petición."
+   },
+   {
+    "id": "event-driven",
+    "note": "Sería mejor si muchas partes necesitan reaccionar a los mismos hechos: el estilo orientado a eventos generaliza esta idea."
+   },
+   {
+    "id": "microservices",
+    "note": "Sería mejor si el dominio es complejo y hay varios equipos que necesitan desplegar por separado; separar solo lo lento no alcanza para eso."
+   }
+  ],
+  "examples": [
+   {
+    "kind": "educational_example",
+    "label": "Procesar imágenes subidas",
+    "text": "El frente recibe la imagen y responde enseguida; el trabajador, avisado por la cola, genera las miniaturas y actualiza el registro."
+   },
+   {
+    "kind": "conceptual_example",
+    "label": "Informes en PDF de un sistema de gestión",
+    "text": "El frente recibe el pedido del informe y responde «lo estamos generando». El trabajador toma el mensaje de la cola, arma el PDF, lo deja en el almacenamiento y avisa a la persona. Los reintentos son limitados, la tarea tolera duplicados y se usa un outbox transaccional para que un pedido guardado nunca quede sin su mensaje."
+   }
+  ],
+  "common_mistakes": [
+   "Mandar a la cola todo, incluso lo que el frente podría resolver directo.",
+   "No manejar reintentos ni duplicados en el trabajador.",
+   "Compartir modelos de datos entre frente y trabajador sin un contrato."
+  ],
+  "decision_questions": [
+   "¿Hay tareas que tarden más de unos pocos segundos?",
+   "¿Cuánta demora aceptable hay entre pedir y obtener el resultado?",
+   "¿Qué pasa si una tarea falla a mitad de camino?"
+  ],
+  "related_entities": [
+   {
+    "id": "message-queue",
+    "rel": "requires"
+   },
+   {
+    "id": "relational-database",
+    "rel": "often_with"
+   },
+   {
+    "id": "cache",
+    "rel": "often_with"
+   },
+   {
+    "id": "quality-scalability",
+    "rel": "addresses"
+   },
+   {
+    "id": "quality-reliability",
+    "rel": "addresses"
+   }
+  ],
+  "sources": [
+   "azure-web-queue-worker",
+   "azure-queue-load-leveling"
+  ],
+  "evidence_type": "official_framework",
+  "justification": "by_need",
+  "practical_level": 3,
+  "library_refs": [],
+  "diagram": {
+   "purpose": "concept",
+   "title": "Web-Queue-Worker: el trabajo lento sale del camino de la petición",
+   "nodes": [
+    {
+     "id": "cliente",
+     "label": "Navegador o app",
+     "kind": "actor",
+     "layer": 0
+    },
+    {
+     "id": "web",
+     "label": "Frontend web (API)",
+     "kind": "frontend",
+     "layer": 1
+    },
+    {
+     "id": "db",
+     "label": "Base de datos",
+     "kind": "data",
+     "layer": 2
+    },
+    {
+     "id": "cola",
+     "label": "Cola de mensajes",
+     "kind": "queue",
+     "layer": 2
+    },
+    {
+     "id": "wk",
+     "label": "Trabajador",
+     "kind": "backend",
+     "layer": 3
+    }
+   ],
+   "edges": [
+    {
+     "from": "cliente",
+     "to": "web",
+     "label": "petición"
+    },
+    {
+     "from": "web",
+     "to": "db",
+     "label": "lee y escribe"
+    },
+    {
+     "from": "web",
+     "to": "cola",
+     "label": "encola el trabajo",
+     "async": true
+    },
+    {
+     "from": "cola",
+     "to": "wk",
+     "label": "entrega",
+     "async": true
+    },
+    {
+     "from": "wk",
+     "to": "db",
+     "label": "guarda el resultado"
+    }
+   ]
+  },
+  "source_notes": {
+   "azure-web-queue-worker": "Define el estilo (frente web, cola y trabajador), cuándo usarlo (dominio relativamente simple, tareas largas o por lotes), sus beneficios y el riesgo de escribir en la base y no llegar a encolar, que se mitiga con un outbox transaccional.",
+   "azure-queue-load-leveling": "Patrón que usa una cola como amortiguador para suavizar los picos de carga entre quien pide el trabajo y quien lo procesa."
+  }
+ }
 ]

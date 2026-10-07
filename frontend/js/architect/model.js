@@ -169,6 +169,11 @@ export function validateEntity(e, where = '') {
     }
   });
   if (!isStrArr(e.sources)) bad('sources debe ser una lista de ids de fuentes');
+  // source_notes: qué hecho concreto respalda cada fuente (separa lo documentado de lo que es criterio propio)
+  if (e.source_notes !== undefined) {
+    if (!e.source_notes || typeof e.source_notes !== 'object' || Array.isArray(e.source_notes)) bad('source_notes debe ser un objeto {fuente: qué respalda}');
+    else for (const [k, v] of Object.entries(e.source_notes)) { if (!isStr(v)) bad(`source_notes.${k} debe ser un texto`); if (!(e.sources || []).includes(k)) bad(`source_notes menciona «${k}», que no está en sources`); }
+  }
   if (e.library_refs !== undefined && !isStrArr(e.library_refs)) bad('library_refs debe ser una lista de ids de la Biblioteca web');
   if ('technologies' in e) bad('technologies no se escribe a mano: se deriva de las relaciones «implements»');
   if (e.diagram !== undefined) err.push(...validateDiagram(e.diagram, `${at}: `));

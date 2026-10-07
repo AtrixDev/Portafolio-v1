@@ -49,6 +49,36 @@
    ],
    "relations": []
   },
+  "portfolio": {
+   "entities": [
+    {
+     "name": "Proyecto",
+     "fields": [
+      "título",
+      "resumen",
+      "rol",
+      "año",
+      "tecnologías o herramientas",
+      "imágenes",
+      "enlace al resultado",
+      "destacado",
+      "orden"
+     ],
+     "note": "Si son pocos, pueden vivir en archivos del propio sitio y no en una base de datos."
+    },
+    {
+     "name": "Contacto (mensaje)",
+     "fields": [
+      "nombre",
+      "email",
+      "mensaje",
+      "fecha"
+     ],
+     "note": "Si el formulario lo maneja un servicio externo, esta entidad vive allá."
+    }
+   ],
+   "relations": []
+  },
   "ecommerce": {
    "entities": [
     {
@@ -106,6 +136,64 @@
     "Pedido 1—N Línea de pedido",
     "Producto 1—N Línea de pedido",
     "Pedido 1—N Pago"
+   ]
+  },
+  "booking": {
+   "entities": [
+    {
+     "name": "Servicio",
+     "fields": [
+      "nombre",
+      "duración",
+      "precio",
+      "activo"
+     ]
+    },
+    {
+     "name": "Recurso o profesional",
+     "fields": [
+      "nombre",
+      "servicios que atiende",
+      "activo"
+     ]
+    },
+    {
+     "name": "Disponibilidad",
+     "fields": [
+      "recurso",
+      "día de la semana",
+      "desde",
+      "hasta",
+      "bloqueos y excepciones"
+     ]
+    },
+    {
+     "name": "Reserva",
+     "fields": [
+      "servicio",
+      "recurso",
+      "cliente",
+      "inicio",
+      "fin",
+      "estado",
+      "fecha de creación"
+     ],
+     "note": "Evitar dos reservas superpuestas del mismo recurso es una regla de datos, no solo de pantalla: algunas bases (por ejemplo PostgreSQL) permiten declararla como restricción."
+    },
+    {
+     "name": "Cliente",
+     "fields": [
+      "nombre",
+      "email o teléfono"
+     ]
+    }
+   ],
+   "relations": [
+    "Servicio N—N Recurso",
+    "Recurso 1—N Disponibilidad",
+    "Recurso 1—N Reserva",
+    "Cliente 1—N Reserva",
+    "Servicio 1—N Reserva"
    ]
   },
   "saas": {
@@ -915,12 +1003,27 @@
    "Publicar y actualizar contenido sin depender de un desarrollador.",
    "Ser encontrable en buscadores."
   ],
+  "portfolio": [
+   "Presentar quién sos y qué hacés en una página de inicio clara.",
+   "Mostrar proyectos o casos con imágenes, rol, tecnologías y resultado.",
+   "Ver el detalle de cada proyecto: problema, proceso, resultado y enlaces.",
+   "Poder contactarte con un formulario o enlaces directos.",
+   "Opcional: CV descargable y enlaces a perfiles profesionales."
+  ],
   "ecommerce": [
    "Navegar y buscar productos con filtros.",
    "Ver el detalle de un producto con precio, imágenes y disponibilidad.",
    "Armar un carrito y completar la compra con pago.",
    "Recibir confirmación del pedido y poder seguirlo.",
    "Gestionar productos, stock y pedidos desde un panel."
+  ],
+  "booking": [
+   "Ver los servicios con su duración y precio.",
+   "Elegir un horario disponible según la agenda y las reglas (duración, anticipación mínima).",
+   "Reservar dejando datos de contacto y recibir una confirmación.",
+   "Cancelar o reprogramar dentro de los plazos permitidos.",
+   "Gestionar disponibilidad, bloqueos y reservas desde un panel.",
+   "Recibir recordatorios automáticos antes del turno."
   ],
   "saas": [
    "Registrarse, iniciar sesión y administrar la cuenta de la organización.",

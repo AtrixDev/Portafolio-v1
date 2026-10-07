@@ -75,6 +75,7 @@
         "s": "product",
         "in": [
          "ecommerce",
+         "booking",
          "saas",
          "dashboard",
          "management-system",
@@ -118,7 +119,8 @@
           "s": "product",
           "in": [
            "landing",
-           "institutional-site"
+           "institutional-site",
+           "portfolio"
           ]
          },
          {
@@ -436,7 +438,8 @@
           "s": "product",
           "in": [
            "landing",
-           "institutional-site"
+           "institutional-site",
+           "portfolio"
           ]
          },
          {
@@ -463,6 +466,7 @@
           "s": "product",
           "in": [
            "ecommerce",
+           "booking",
            "saas",
            "dashboard",
            "management-system",
@@ -540,8 +544,10 @@
         "in": [
          "landing",
          "institutional-site",
+         "portfolio",
          "dashboard",
-         "management-system"
+         "management-system",
+         "booking"
         ]
        },
        "delta": 1,
@@ -638,7 +644,8 @@
         "s": "product",
         "in": [
          "landing",
-         "institutional-site"
+         "institutional-site",
+         "portfolio"
         ]
        },
        "delta": -3,
@@ -1054,7 +1061,8 @@
           "s": "product",
           "in": [
            "landing",
-           "institutional-site"
+           "institutional-site",
+           "portfolio"
           ]
          },
          {
@@ -1986,7 +1994,9 @@
       "in": [
        "landing",
        "ecommerce",
-       "institutional-site"
+       "booking",
+       "institutional-site",
+       "portfolio"
       ]
      },
      "delta": 1,
