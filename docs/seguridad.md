@@ -1,6 +1,6 @@
 # Calidad base: SEO técnico, accesibilidad y seguridad de la API (07/10/2026)
 
-Pruebas: `node --test backend/test/sitio-calidad.test.mjs` (22). Todo se publica con `python3 tools/build-deploy.py` y `vercel deploy --prod` desde `.deploy/`; **hasta ese deploy, los cambios de API y de cabeceras no están en producción**.
+Pruebas: `node --test backend/test/sitio-calidad.test.mjs` (23). Se publica con `python3 tools/build-deploy.py` y `vercel deploy --prod` desde `.deploy/`. **Ya está en producción** (ver «Estado y validación»).
 
 ## SEO técnico
 - `tools/seo-tecnico.py` (idempotente; `--check` para verificar) pone `canonical` + `og:url` en las 21 páginas indexables y genera `frontend/robots.txt` y `frontend/sitemap.xml`. Hay que correrlo al crear una página.
@@ -31,7 +31,18 @@ Pruebas: `node --test backend/test/sitio-calidad.test.mjs` (22). Todo se publica
 ### Cabeceras (`tools/build-deploy.py` → `vercel.json`)
 `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-Frame-Options: SAMEORIGIN`, `Permissions-Policy` (sin cámara, micrófono, geolocalización, pagos ni USB) y una CSP **mínima**: `base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'`. Se verificó que ninguna página ni los iframes de la Biblioteca generan violaciones. HSTS lo agrega Vercel.
 
-### Pendiente a propósito
-- **CSP de scripts y estilos** (`script-src`/`style-src`): el sitio usa scripts y estilos en línea y Google Fonts; exige un inventario previo y probarla primero en `Content-Security-Policy-Report-Only`.
-- 172 usos de `innerHTML` sin escape evidente en una búsqueda por texto: revisar caso por caso con un helper único.
-- El token de admin vive en `sessionStorage`: aceptable mientras no haya XSS; la CSP de scripts es la mitigación real.
+## Estado y validación (cierre de la etapa, 07/10/2026)
+- **Desplegado** a producción el 07/10/2026 (deployment `portafolio-v1-wy7wu36sm`, 17:38 hora argentina).
+- **Verificado en producción** (QA post-deploy): las 26 páginas sin errores de JS; las 6 cabeceras en todas; `robots.txt` y `sitemap.xml` idénticos a los del repo (21 URLs, todas 200); canonical correcto; CORS por origen; parámetros `?r=`, `?asunto=`, `?pub=` y `?auditoria=`; navegación; Architect 134/134; 128 archivos servidos con SHA-256 idéntico al local. Tests locales: 296/296.
+- **Flujo «Vincular» con Mercado Libre:** validado por Darío en producción, con su cuenta real, de punta a punta (admin → Cuentas → Vincular con el ticket de 2 minutos → autorización en Mercado Libre → vuelta al panel). Funcionó correctamente. Era el único flujo que había cambiado de comportamiento y que no se había podido cubrir con pruebas automáticas.
+- Con esto queda **cerrada la etapa de profesionalización base** del portfolio (SEO técnico, accesibilidad base y seguridad de la API).
+
+## Backlog técnico futuro
+Nada de esto está en curso; son decisiones y trabajos para fases posteriores.
+1. **Apagar el `?t=` con la sesión completa (`ADMIN_QUERY_TOKEN=off`).** Cuando termine el período de migración: las sesiones emitidas antes del deploy duran 30 días, así que desde el **06/11/2026** ya no queda ninguna vigente. Definir la variable en Vercel y redeployar (no requiere cambios de código); luego probar «Vincular» una vez más. El ticket de 2 minutos sigue funcionando.
+2. **CSP más estricta (`script-src`/`style-src`), si se decide hacerla.** Requiere inventariar scripts y estilos en línea y Google Fonts, y probarla primero en `Content-Security-Policy-Report-Only`. Es la mitigación real para el token en `sessionStorage`.
+3. **Auditoría de `innerHTML`/XSS.** Había 172 usos sin escape evidente en una búsqueda por texto (es una señal, no un bug confirmado): revisar caso por caso con un helper único de escape.
+4. **CI.** Hoy los tests (`node --test backend/test/`, 296) y los QA de navegador (`tools/qa-architect.py`) se corren a mano. Un pipeline mínimo con los tests y `tools/seo-tecnico.py --check`; el chequeo de fuentes de Architect (`tools/architect-verificar-fuentes.mjs`) podría correr programado.
+5. **Mejoras de performance** (no se tocó nada en esta etapa): `defer` en los 7 scripts de `programacion.html`, dimensiones de las imágenes de la home, peso de `experimentos/` y `prog-ejemplos/` que se publican, CV en PDF de 2,6 MB, imagen `og:image` y galería alojadas en el CDN de Mercado Libre, y Google Fonts autoalojadas.
+6. **Otras mejoras de accesibilidad pendientes:** confirmar que `arquitecto.html` renderiza su `<h1>` (el HTML estático no lo trae), revisar el contraste y el foco de las pantallas con más JS (Tracker, Biblioteca web) y probar con lector de pantalla; `vinculado.html` queda sin skip link a propósito.
+7. **Otros:** subir los commits locales a `origin` (la rama `main` lleva 16 de adelanto), y datos estructurados propios (`Person`, `WebSite`) si interesa el SEO.
